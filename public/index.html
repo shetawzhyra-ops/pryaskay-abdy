@@ -808,6 +808,143 @@
         </div>
       </section>
 
+      <!-- ================= DUAL FEATURED SECTIONS: 1. DREAM SUBMISSION & 2. POEMS OF M. AZAD ================= -->
+      <section id="landingFeaturedDualSection" class="my-5 sm:my-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          
+          <!-- 1. بەشی ناردنی خەون بۆ لێکدانەوە (Dream Submission Section) -->
+          <div class="glass-card rounded-3xl p-4 sm:p-6 flex flex-col justify-between border border-amber-800/15 shadow-lg relative overflow-hidden group hover:border-amber-700/30 transition-all duration-300">
+            <div class="absolute -top-12 -left-12 w-36 h-36 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div>
+              <!-- Card Top Header -->
+              <div class="flex items-center justify-between gap-2 mb-3 pb-3 border-b border-amber-900/10">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-700 flex items-center justify-center text-lg shrink-0 shadow-sm">
+                    <span>🌙</span>
+                  </div>
+                  <div>
+                    <h3 class="font-black text-sm sm:text-base text-amber-950 flex items-center gap-1.5">
+                      <span>ناردنی خەون بۆ تەعبیرکردن</span>
+                    </h3>
+                    <p class="text-[10px] sm:text-[11px] text-amber-800/80 font-bold">لە لایەن مامۆستا و ئەدمین</p>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 text-[10px] font-black flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>کارایە</span>
+                </span>
+              </div>
+
+              <!-- Brief Intro Description -->
+              <p class="text-xs text-amber-900/90 leading-relaxed mb-3 font-medium">
+                خەونەکەت بە نهێنی بنووسە تا لەلایەن مامۆستا و ئەدمینی سایت تەعبیری تەواو و دروستی بۆ بکرێت.
+              </p>
+
+              <!-- Quick Dream Submission Form -->
+              <form id="landingQuickDreamForm" onsubmit="handleLandingQuickDreamSubmit(event)" class="space-y-2.5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-[11px] font-bold text-amber-900 mb-1">ناوی تۆ (یان خوازراو):</label>
+                    <input type="text" id="quickDreamName" placeholder="ناوت بنووسە..." required class="w-full px-3 py-2 text-xs rounded-xl bg-white/95 border border-amber-900/20 text-amber-950 focus:outline-none focus:border-amber-500 shadow-sm">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-amber-900 mb-1">ڕەگەز:</label>
+                    <div class="grid grid-cols-2 gap-1.5">
+                      <label class="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl border border-amber-900/15 bg-white/90 text-xs font-bold text-sky-800 cursor-pointer hover:border-sky-400">
+                        <input type="radio" name="quickDreamGender" value="male" checked class="text-sky-600 focus:ring-0">
+                        <span>نێر (کوڕ)</span>
+                      </label>
+                      <label class="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl border border-amber-900/15 bg-white/90 text-xs font-bold text-pink-800 cursor-pointer hover:border-pink-400">
+                        <input type="radio" name="quickDreamGender" value="female" class="text-pink-600 focus:ring-0">
+                        <span>مێ (کچ)</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-bold text-amber-900 mb-1">دەقی خەونەکە:</label>
+                  <textarea id="quickDreamContent" rows="3" required placeholder="خەونەکەت بە تەواوی لێرە بنووسە..." class="w-full px-3 py-2 text-xs rounded-xl bg-white/95 border border-amber-900/20 text-amber-950 focus:outline-none focus:border-amber-500 shadow-sm resize-none"></textarea>
+                </div>
+
+                <button type="submit" id="btnSubmitQuickDream" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-black text-xs sm:text-sm shadow-md transition-all active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer">
+                  <i class="fa-solid fa-paper-plane text-xs"></i>
+                  <span>ناردنی خەون بۆ لێکدانەوە</span>
+                </button>
+              </form>
+            </div>
+
+            <!-- Bottom Direct Action -->
+            <div class="mt-3.5 pt-3 border-t border-amber-900/10 flex items-center justify-between text-xs">
+              <span class="text-[11px] text-amber-800 font-semibold flex items-center gap-1">
+                <i class="fa-solid fa-shield-halved text-amber-600"></i>
+                <span>نهێنی و پارێزراوە</span>
+              </span>
+              <button type="button" onclick="openDreamSection()" class="text-amber-850 hover:text-amber-950 font-black text-xs flex items-center gap-1 underline decoration-amber-500/50 cursor-pointer">
+                <span>چاتی دەنگی و ڕاستەوخۆ</span>
+                <i class="fa-solid fa-chevron-left text-[10px]"></i>
+              </button>
+            </div>
+          </div>
+
+
+          <!-- 2. بەشی شیعرەکانی م. ئازاد (Poems of M. Azad Section) -->
+          <div class="glass-card rounded-3xl p-4 sm:p-6 flex flex-col justify-between border border-amber-800/15 shadow-lg relative overflow-hidden group hover:border-amber-700/30 transition-all duration-300">
+            <div class="absolute -top-12 -right-12 w-36 h-36 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div>
+              <!-- Card Top Header -->
+              <div class="flex items-center justify-between gap-2 mb-3 pb-3 border-b border-amber-900/10">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-700 flex items-center justify-center text-lg shrink-0 shadow-sm">
+                    <i class="fa-solid fa-feather-pointed"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-black text-sm sm:text-base text-amber-950 flex items-center gap-1.5">
+                      <span>شیعرەکانی م. ئازاد</span>
+                    </h3>
+                    <p class="text-[10px] sm:text-[11px] text-amber-800/80 font-bold">خاوەنی ماڵپەڕ</p>
+                  </div>
+                </div>
+
+                <!-- Add Poem Button (STRICTLY for M. Azad only) -->
+                <button 
+                  type="button" 
+                  id="btnOpenAddPoemModal" 
+                  onclick="openAddPoemModal()" 
+                  class="hidden px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-black text-xs shadow-md transition active:scale-95 items-center gap-1.5 cursor-pointer"
+                  title="دانانی شیعری نوێ"
+                >
+                  <i class="fa-solid fa-plus text-[10px]"></i>
+                  <span>شیعری نوێ</span>
+                </button>
+              </div>
+
+              <!-- Poems Feed Container -->
+              <div id="landingPoemsList" class="space-y-3 min-h-[220px] max-h-[340px] overflow-y-auto pr-1">
+                <div class="p-6 text-center text-amber-800/70 text-xs font-bold">
+                  <i class="fa-solid fa-spinner fa-spin text-amber-600 text-base mb-1.5 block"></i>
+                  <span>شیعرەکان باردەکرێن...</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Footer Note -->
+            <div class="mt-3.5 pt-3 border-t border-amber-900/10 flex items-center justify-between text-xs">
+              <span class="text-[11px] text-amber-800 font-semibold flex items-center gap-1">
+                <i class="fa-solid fa-pen-nib text-amber-600 text-[11px]"></i>
+                <span>هۆنراوە و بەرهەمی م. ئازاد</span>
+              </span>
+              <span class="text-[10px] text-amber-700 font-bold bg-amber-500/15 px-2 py-0.5 rounded-full border border-amber-500/25">
+                تایبەت
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       <!-- Reserved Space for Posts, Publications & Announcements (بۆشایی بڵاوکراوە و ئاگادارییەکان) -->
       <section id="announcementsSection" class="space-y-4">
         <!-- Section Header with Sequential Carousel Controls -->
@@ -7362,5 +7499,47 @@
   <script src="/js/palettes.js?v=2.0&t=1795055000"></script>
   <!-- Main Application Logic -->
   <script src="/js/app.js?v=69.0&t=1794963898133"></script>
+
+  <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->
+  <div id="addPoemModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-md">
+    <div class="glass-card rounded-3xl w-full max-w-lg border border-amber-900/25 p-5 sm:p-6 shadow-2xl relative overflow-hidden bg-[#fdf6ee]">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-amber-900/15">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-2xl bg-amber-500/20 text-amber-700 flex items-center justify-center text-base border border-amber-500/30">
+            <i class="fa-solid fa-feather-pointed"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-sm sm:text-base text-amber-950">دانانی شیعری نوێ</h3>
+            <p class="text-[11px] text-amber-800 font-bold">تایبەت بە م. ئازاد (خاوەنی ماڵپەڕ)</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeAddPoemModal()" class="w-8 h-8 rounded-xl bg-white border border-amber-900/20 text-amber-900 hover:text-black flex items-center justify-center text-sm cursor-pointer" title="داخستن">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="addPoemForm" onsubmit="handleAddNewPoem(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-amber-950 mb-1">ناونیشانی شیعر:</label>
+          <input type="text" id="newPoemTitle" required placeholder="ناونیشانی شیعر بنووسە..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl bg-white border border-amber-900/25 text-amber-950 focus:outline-none focus:border-amber-500 shadow-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-amber-950 mb-1">دەق و دێڕەکانی شیعرەکە:</label>
+          <textarea id="newPoemContent" rows="6" required placeholder="دێڕەکانی شیعر بنووسە (هەر دێڕێک لە خەتێکی نوێدا)..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl bg-white border border-amber-900/25 text-amber-950 focus:outline-none focus:border-amber-500 shadow-sm leading-relaxed"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeAddPoemModal()" class="px-4 py-2 rounded-xl bg-white border border-amber-900/20 text-amber-900 text-xs font-bold hover:bg-amber-50 transition cursor-pointer">
+            پەشیمانبوونەوە
+          </button>
+          <button type="submit" id="btnSaveNewPoem" class="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white text-xs sm:text-sm font-black shadow transition flex items-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-check"></i>
+            <span>بڵاوکردنەوەی شیعر</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

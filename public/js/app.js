@@ -535,6 +535,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   initAppFontSize();
   initDrawerSettingsState();
   fetchDreamAvailability();
+  loadLandingPoems();
+  checkAzadPoemPrivilege();
   if (typeof initAuthLanguageNotice === 'function') {
     initAuthLanguageNotice();
   }
@@ -961,6 +963,7 @@ async function fetchCurrentUser() {
 
 // Update UI based on user role & name
 function updateUserUI() {
+  checkAzadPoemPrivilege();
   if (!currentUser) return;
 
   const headerNameElem = document.getElementById('headerFullName');
@@ -24765,3 +24768,334 @@ if (typeof window !== "undefined") {
   }, { passive: true });
 })();
 
+
+
+// ================= LANDING DUAL FEATURED SECTIONS: DREAMS & POEMS =================
+
+// 1. Quick Dream Submission from Landing Page
+async function handleLandingQuickDreamSubmit(e) {
+  e.preventDefault();
+  const nameInput = document.getElementById('quickDreamName');
+  const genderInput = document.querySelector('input[name="quickDreamGender"]:checked');
+  const contentInput = document.getElementById('quickDreamContent');
+  const submitBtn = document.getElementById('btnSubmitQuickDream');
+
+  const name = nameInput ? nameInput.value.trim() : '';
+  const gender = genderInput ? genderInput.value : 'male';
+  const content = contentInput ? contentInput.value.trim() : '';
+
+  if (!name || !content) {
+    alert('تکایە ناوت و دەقی خەونەکەت بنووسە.');
+    return;
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> چاوەڕێبە...';
+  }
+
+  try {
+    const curToken = token || localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
+    const startHeaders = { 'Content-Type': 'application/json' };
+    if (curToken) startHeaders['Authorization'] = `Bearer ${curToken}`;
+
+    const res = await fetch('/api/dream/start', {
+      method: 'POST',
+      headers: startHeaders,
+      body: JSON.stringify({ name, gender })
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      alert(data.error || 'نەتوانرا خەونەکە بنێردرێت، تکایە دووبارە هەوڵبدەرەوە.');
+      return;
+    }
+
+    if (data.token) {
+      localStorage.setItem('seereen_dream_token', data.token);
+    }
+    currentDreamSession = data.session;
+
+    // Send the dream content as the first message
+    await fetch('/api/dream/message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-dream-token': data.token
+      },
+      body: JSON.stringify({
+        sessionId: data.session.id,
+        content: content
+      })
+    });
+
+    if (contentInput) contentInput.value = '';
+
+    openDreamChatModalWithSession(data.session, [{
+      id: Date.now(),
+      sender_type: 'dreamer',
+      sender_name: name,
+      content: content,
+      media_type: 'text',
+      created_at: Date.now()
+    }]);
+
+    if (data.token) initDreamSocket(data.token);
+
+    if (typeof showLiveToastNotification === 'function') {
+      showLiveToastNotification('خەونەکەت بەسەرکەوتوویی گەیشتە دەست مامۆستا و ئەدمین بۆ تەعبیرکردن ✨', 'emerald');
+    }
+  } catch (err) {
+    console.error('Error submitting dream:', err);
+    alert('کێشەیەک لە پەیوەندی لەگەڵ سێرڤەر ڕوویدا');
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane text-xs"></i> <span>ناردنی خەون بۆ لێکدانەوە</span>';
+    }
+  }
+}
+
+// 2. Poems of Teacher Azad (شیعرەکانی مامۆستا ئازاد)
+let landingPoemsData = [];
+
+async function loadLandingPoems() {
+  const container = document.getElementById('landingPoemsList');
+  if (!container) return;
+
+  try {
+    const res = await fetch('/api/poems');
+    const data = await res.json();
+    if (data.success && Array.isArray(data.poems)) {
+      landingPoemsData = data.poems;
+      renderLandingPoems();
+    }
+  } catch (err) {
+    console.error('Error loading poems:', err);
+  }
+}
+
+function renderLandingPoems() {
+  const container = document.getElementById('landingPoemsList');
+  if (!container) return;
+
+  if (!landingPoemsData || landingPoemsData.length === 0) {
+    container.innerHTML = `
+      <div class="p-6 text-center text-amber-900/60 text-xs font-bold">
+        <i class="fa-solid fa-feather text-amber-600/50 text-xl mb-2 block"></i>
+        <span>هێشتا هیچ شیعرێک بڵاونەکراوەتەوە</span>
+      </div>
+    `;
+    return;
+  }
+
+  const isAzad = isAzadUserLoggedIn();
+
+  container.innerHTML = landingPoemsData.map(poem => {
+    const d = new Date(poem.created_at);
+    const dateStr = d.toLocaleDateString('ckb-IQ', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+
+    const deleteBtn = isAzad ? `
+      <button onclick="deletePoem(${poem.id})" class="text-rose-600 hover:text-rose-800 text-xs p-1 rounded hover:bg-rose-100/50 transition cursor-pointer" title="سڕینەوەی ئەم شیعرە">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+    ` : '';
+
+    return `
+      <div class="p-3.5 sm:p-4 rounded-2xl bg-white/90 border border-amber-900/15 shadow-sm hover:shadow transition-all">
+        <div class="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-amber-900/10">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
+            <h4 class="font-black text-xs sm:text-sm text-amber-950 truncate">${escapeHtml(poem.title)}</h4>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <span class="text-[10px] text-amber-800/70 font-bold">${dateStr}</span>
+            ${deleteBtn}
+          </div>
+        </div>
+
+        <div class="my-2 p-3 bg-amber-50/70 rounded-xl border border-amber-900/10 text-center font-serif text-xs sm:text-sm text-amber-950 leading-loose whitespace-pre-line shadow-inner select-text">
+${escapeHtml(poem.content)}
+        </div>
+
+        <div class="flex items-center justify-between text-xs pt-1.5">
+          <span class="text-[11px] text-amber-900 font-black flex items-center gap-1">
+            <i class="fa-solid fa-pen-nib text-amber-600 text-[10px]"></i>
+            <span>${escapeHtml(poem.author || 'م. ئازاد')}</span>
+          </span>
+
+          <div class="flex items-center gap-2">
+            <button onclick="sharePoem(${poem.id})" class="text-amber-800 hover:text-amber-950 text-xs p-1 rounded transition cursor-pointer" title="هاوبەشکردن / کۆپیکردن">
+              <i class="fa-solid fa-share-nodes"></i>
+            </button>
+            <button onclick="reactToPoem(${poem.id})" class="flex items-center gap-1 text-[11px] font-black text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100/80 px-2.5 py-1 rounded-xl border border-rose-200/80 transition active:scale-95 cursor-pointer">
+              <i class="fa-solid fa-heart text-rose-500 text-[11px]"></i>
+              <span id="poemLikesCount_${poem.id}">${poem.likes || 0}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function isAzadUserLoggedIn() {
+  if (!currentUser) return false;
+  const uname = (currentUser.username || '').toLowerCase().trim();
+  return uname === 'azad' || currentUser.id === 6 || (currentUser.role === 'super_admin' && (uname === 'azad' || (currentUser.full_name || '').includes('ئازاد')));
+}
+
+function checkAzadPoemPrivilege() {
+  const addBtn = document.getElementById('btnOpenAddPoemModal');
+  if (addBtn) {
+    if (isAzadUserLoggedIn()) {
+      addBtn.classList.remove('hidden');
+      addBtn.classList.add('flex');
+    } else {
+      addBtn.classList.add('hidden');
+      addBtn.classList.remove('flex');
+    }
+  }
+
+  // Pre-fill quick dream name if user logged in
+  const quickDreamName = document.getElementById('quickDreamName');
+  if (quickDreamName && currentUser && currentUser.full_name && !quickDreamName.value) {
+    quickDreamName.value = currentUser.full_name;
+  }
+
+  renderLandingPoems();
+}
+
+function openAddPoemModal() {
+  if (!isAzadUserLoggedIn()) {
+    alert('تەنها مامۆستا ئازاد دەسەڵاتی دانانی شیعری هەیە.');
+    return;
+  }
+  const modal = document.getElementById('addPoemModal');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeAddPoemModal() {
+  const modal = document.getElementById('addPoemModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+async function handleAddNewPoem(e) {
+  e.preventDefault();
+  const titleInput = document.getElementById('newPoemTitle');
+  const contentInput = document.getElementById('newPoemContent');
+  const btn = document.getElementById('btnSaveNewPoem');
+
+  const title = titleInput ? titleInput.value.trim() : '';
+  const content = contentInput ? contentInput.value.trim() : '';
+
+  if (!title || !content) {
+    alert('تکایە ناونیشان و دەقی شیعرەکە بنووسە.');
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> لە بڵاوکردنەوەدایە...';
+  }
+
+  try {
+    const curToken = token || localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
+    const res = await fetch('/api/poems', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${curToken}`
+      },
+      body: JSON.stringify({ title, content })
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      alert(data.error || 'نەتوانرا شیعرەکە بڵاوبکرێتەوە');
+      return;
+    }
+
+    closeAddPoemModal();
+    if (titleInput) titleInput.value = '';
+    if (contentInput) contentInput.value = '';
+
+    await loadLandingPoems();
+
+    if (typeof showLiveToastNotification === 'function') {
+      showLiveToastNotification('شیعرەکەت بەسەرکەوتوویی بڵاوکرایەوە مامۆستا ئازاد 🪶', 'amber');
+    } else {
+      alert('شیعرەکەت بەسەرکەوتوویی بڵاوکرایەوە مامۆستا ئازاد 🪶');
+    }
+  } catch (err) {
+    console.error('Error adding poem:', err);
+    alert('هەڵەیەک لە پەیوەندی سێرڤەر ڕوویدا');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>بڵاوکردنەوەی شیعر</span>';
+    }
+  }
+}
+
+async function deletePoem(id) {
+  if (!confirm('ئایا دڵنیایت لە سڕینەوەی ئەم شیعرە؟')) return;
+
+  try {
+    const curToken = token || localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
+    const res = await fetch(`/api/poems/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${curToken}`
+      }
+    });
+    const data = await res.json();
+    if (data.success) {
+      landingPoemsData = landingPoemsData.filter(p => p.id !== id);
+      renderLandingPoems();
+    } else {
+      alert(data.error || 'نەتوانرا بسڕدرێتەوە');
+    }
+  } catch (e) {
+    console.error('Error deleting poem:', e);
+  }
+}
+
+async function reactToPoem(id) {
+  try {
+    const res = await fetch(`/api/poems/${id}/react`, {
+      method: 'POST',
+      headers: {
+        'x-client-id': localStorage.getItem('client_id') || ('client_' + Math.random().toString(36).substring(2))
+      }
+    });
+    const data = await res.json();
+    if (data && typeof data.likes === 'number') {
+      const el = document.getElementById(`poemLikesCount_${id}`);
+      if (el) el.innerText = data.likes;
+      const poem = landingPoemsData.find(p => p.id === id);
+      if (poem) poem.likes = data.likes;
+    }
+  } catch (e) {
+    console.error('Error reacting to poem:', e);
+  }
+}
+
+function sharePoem(id) {
+  const poem = landingPoemsData.find(p => p.id === id);
+  if (!poem) return;
+  const shareText = `📜 ${poem.title}\n\n${poem.content}\n\n✍️ ${poem.author || 'م. ئازاد'}\n🌐 پریاسکەی عەبدی: ${window.location.origin}`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(shareText).then(() => {
+      alert('دەقی شیعرەکە کۆپی کرا بۆ کلیپبۆرد 📋');
+    }).catch(() => {
+      alert(shareText);
+    });
+  } else {
+    alert(shareText);
+  }
+}

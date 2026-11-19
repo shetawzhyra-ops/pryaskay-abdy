@@ -63,6 +63,23 @@ function initDb() {
       created_at INTEGER NOT NULL
     );
 
+    CREATE TABLE IF NOT EXISTS poems (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      author TEXT NOT NULL DEFAULT 'م. ئازاد',
+      likes INTEGER NOT NULL DEFAULT 0,
+      created_at INTEGER NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS poem_reactions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      poem_id INTEGER NOT NULL,
+      client_id TEXT NOT NULL,
+      created_at INTEGER NOT NULL,
+      UNIQUE(poem_id, client_id)
+    );
+
 
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -3472,7 +3489,54 @@ const classrooms = {
   }
 };
 
+
+// ================= POEMS OF TEACHER AZAD HELPERS =================
+const poemsDb = {
+  getAll() {
+    try {
+      return db.prepare('SELECT * FROM poems ORDER BY id DESC').all();
+    } catch (e) {
+      return [];
+    }
+  },
+  getById(id) {
+    try {
+      return db.prepare('SELECT * FROM poems WHERE id = ?').get(id);
+    } catch (e) {
+      return null;
+    }
+  },
+  create(title, content, author = 'م. ئازاد') {
+    const now = Date.now();
+    const res = db.prepare('INSERT INTO poems (title, content, author, likes, created_at) VALUES (?, ?, ?, 0, ?)').run(title, content, author, now);
+    return { id: Number(res.lastInsertRowid), title, content, author, likes: 0, created_at: now };
+  },
+  delete(id) {
+    try {
+      db.prepare('DELETE FROM poem_reactions WHERE poem_id = ?').run(id);
+      return db.prepare('DELETE FROM poems WHERE id = ?').run(id);
+    } catch (e) {
+      return false;
+    }
+  },
+  like(poemId, clientId) {
+    try {
+      db.prepare('INSERT INTO poem_reactions (poem_id, client_id, created_at) VALUES (?, ?, ?)').run(poemId, clientId, Date.now());
+      db.prepare('UPDATE poems SET likes = likes + 1 WHERE id = ?').run(poemId);
+      const row = db.prepare('SELECT likes FROM poems WHERE id = ?').get(poemId);
+      return { success: true, likes: row ? row.likes : 0, liked: true };
+    } catch (e) {
+      db.prepare('DELETE FROM poem_reactions WHERE poem_id = ? AND client_id = ?').run(poemId, clientId);
+      db.prepare('UPDATE poems SET likes = MAX(0, likes - 1) WHERE id = ?').run(poemId);
+      const row = db.prepare('SELECT likes FROM poems WHERE id = ?').get(poemId);
+      return { success: true, likes: row ? row.likes : 0, liked: false };
+    }
+  }
+};
+
 module.exports = {
+  poemsDb,
+  poems: poemsDb,
   db,
   classrooms,
   announcements: announcementsDb,

@@ -327,6 +327,95 @@ app.get('/api/sections', (req, res) => {
   }
 });
 
+
+// ================= POEMS OF M. AZAD (تایبەت بە شیعرەکانی مامۆستا ئازاد) =================
+app.get('/api/poems', (req, res) => {
+  try {
+    const list = poemsDb.getAll();
+    res.json({ success: true, poems: list });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'هەڵە لە هێنانی شیعرەکان' });
+  }
+});
+
+app.post('/api/poems', (req, res) => {
+  try {
+    // Authenticate user
+    let authedUser = null;
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        authedUser = users.findById(decoded.id);
+      } catch (e) {}
+    }
+
+    if (!authedUser) {
+      return res.status(401).json({ success: false, error: 'تکایە سەرەتا بچۆ ژوورەوە' });
+    }
+
+    const uname = (authedUser.username || '').toLowerCase().trim();
+    const isAzad = uname === 'azad' || authedUser.id === 6 || (authedUser.role === 'super_admin' && (uname === 'azad' || (authedUser.full_name || '').includes('ئازاد')));
+
+    if (!isAzad) {
+      return res.status(403).json({ success: false, error: 'تەنها مامۆستا ئازاد (خاوەنی ماڵپەڕ) دەسەڵاتی دانانی شیعری هەیە' });
+    }
+
+    const { title, content } = req.body;
+    if (!title || !content || !title.trim() || !content.trim()) {
+      return res.status(400).json({ success: false, error: 'تکایە ناونیشان و دەقی شیعرەکە بنووسە' });
+    }
+
+    const poem = poemsDb.create(title.trim(), content.trim(), 'م. ئازاد');
+    if (io) io.emit('new_poem_published', poem);
+    res.json({ success: true, poem });
+  } catch (err) {
+    console.error('Error posting poem:', err);
+    res.status(500).json({ success: false, error: 'هەڵە ڕوویدا لە بڵاوکردنەوەی شیعر' });
+  }
+});
+
+app.delete('/api/poems/:id', (req, res) => {
+  try {
+    let authedUser = null;
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        authedUser = users.findById(decoded.id);
+      } catch (e) {}
+    }
+
+    if (!authedUser) {
+      return res.status(401).json({ success: false, error: 'تکایە بچۆ ژوورەوە' });
+    }
+
+    const uname = (authedUser.username || '').toLowerCase().trim();
+    const isAzad = uname === 'azad' || authedUser.id === 6 || (authedUser.role === 'super_admin' && (uname === 'azad' || (authedUser.full_name || '').includes('ئازاد')));
+
+    if (!isAzad) {
+      return res.status(403).json({ success: false, error: 'تەنها مامۆستا ئازاد دەتوانێت شیعر بسڕێتەوە' });
+    }
+
+    poemsDb.delete(req.params.id);
+    if (io) io.emit('poem_deleted', { id: Number(req.params.id) });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'هەڵە لە سڕینەوەی شیعر' });
+  }
+});
+
+app.post('/api/poems/:id/react', (req, res) => {
+  try {
+    const clientId = req.headers['x-client-id'] || req.ip || 'anon_' + Date.now();
+    const result = poemsDb.like(req.params.id, clientId);
+    if (io) io.emit('poem_liked', { id: Number(req.params.id), likes: result.likes });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Error reacting to poem' });
+  }
+});
+
 app.get('/api/announcements', (req, res) => {
   try {
     const list = getAnnouncements();
