@@ -2993,52 +2993,48 @@ body.in-app {
    ORIGINAL CYBER-SAPPHIRE & OBSIDIAN BRANDING EFFECTS
    ============================================================ */
 
-/* Animated Sliding "فێرگە" Logo */
-@keyframes fergaUnderLogo {
-  /* 0% - 8%: Hidden completely under/behind the logo box */
-  0% {
-    transform: translateX(110%) scale(0.85);
+/* Animated Sliding "پریاسکەی عەبدی" Logo from behind emblem */
+@keyframes pryaskaUnderLogo {
+  /* 0% to 36.5% (3.0 seconds): Hidden completely behind the logo */
+  0%, 36.5% {
+    transform: translateX(115%) scale(0.85);
     opacity: 0;
     filter: blur(4px);
+    pointer-events: none;
   }
-  /* 8% - 24%: Slides out smoothly from under the logo to the left */
-  14% {
+  /* 36.5% to 43.9% (0.6s): Slides out smoothly from behind the logo to the left */
+  41% {
     opacity: 1;
     filter: blur(0px);
   }
-  20% {
-    transform: translateX(-3px) scale(1.02);
-  }
-  24% {
-    transform: translateX(0) scale(1);
-    opacity: 1;
-  }
-  /* 24% - 76%: Rests proudly in full clear view (~2.6 seconds) */
-  74% {
+  43.9% {
     transform: translateX(0) scale(1);
     opacity: 1;
     filter: blur(0px);
+    pointer-events: auto;
   }
-  /* 76% - 90%: Glides smoothly back under the logo */
-  84% {
-    opacity: 0.7;
+  /* 43.9% to 92.6% (4.0 seconds): Stays out proudly in full clear view */
+  92.6% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+    filter: blur(0px);
+    pointer-events: auto;
   }
-  90% {
-    transform: translateX(110%) scale(0.85);
-    opacity: 0;
-    filter: blur(4px);
+  /* 92.6% to 100% (0.6s): Slides smoothly back inside behind the logo */
+  97% {
+    opacity: 0.5;
   }
-  /* 90% - 100%: Stays completely under the logo until the 5s mark completes */
   100% {
-    transform: translateX(110%) scale(0.85);
+    transform: translateX(115%) scale(0.85);
     opacity: 0;
     filter: blur(4px);
+    pointer-events: none;
   }
 }
 
 .logo-text-animated {
   display: inline-block;
-  animation: fergaUnderLogo 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: pryaskaUnderLogo 8.2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
   transform-origin: right center;
   will-change: transform, opacity, filter;
 }
@@ -4142,7 +4138,7 @@ body.in-landing {
 
 /* Steadily Visible, Dignified Brand Word "فێرگە" */
 .landing-brand-word {
-  animation: none !important;
+  /* animation enabled */
   background-image: linear-gradient(to left, #ffffff 0%, #fef3c7 48%, #fcd34d 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
