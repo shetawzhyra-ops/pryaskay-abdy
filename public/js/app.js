@@ -7708,7 +7708,7 @@ async function openUserProfileModal(userId) {
         execSubtitle.textContent = 'سەرپەرشتیاری پڕۆژە';
       }
       if (execRoleBadge) {
-        execRoleBadge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ئەدمین';
+        execRoleBadge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> م. ئازاد';
       }
       if (execAuthority) {
         execAuthority.innerHTML = '<i class="fa-solid fa-bolt"></i> کۆنتڕۆڵی گشتی';
