@@ -326,7 +326,7 @@ function renderRoleBadge(role, gender) {
   } else if (role === 'teacher') {
     return `<span class="role-text-teacher inline-flex items-center gap-1 font-black text-[11px] select-none" title="مامۆستا"><i class="fa-solid fa-graduation-cap text-[10px]"></i> مامۆستا</span>`;
   } else if (role === 'admin') {
-    return `<span class="role-text-admin inline-flex items-center gap-1 font-black text-[11px] select-none" title="ئەدمین"><i class="fa-solid fa-shield-halved text-[9px]"></i> ئەدمین</span>`;
+    return `<span class="role-text-admin inline-flex items-center gap-1 font-black text-[11px] select-none" title="م. ئازاد"><i class="fa-solid fa-shield-halved text-[9px]"></i> م. ئازاد</span>`;
   } else if (role === 'new_student') {
     const badgeClass = isGirl ? 'badge-new-student-girl' : 'badge-new-student';
     return `<span class="${badgeClass} px-2 py-0.5 rounded-md text-[10px] font-bold inline-flex items-center gap-1 shadow">🔰 قوتابی تازە</span>`;
@@ -355,7 +355,7 @@ function isMasterSuperAdmin(user) {
   if (!user) return false;
   if (user.role === 'super_admin') return true;
   const uname = (user.username || '').toLowerCase();
-  return uname === 'hemntjabar' || uname === 'hemn' || uname === 'admin' || user.id === 1;
+  return uname === 'azad' || uname === 'hemntjabar' || uname === 'hemn' || uname === 'admin' || user.id === 1;
 }
 
 const ALL_SPECIAL_BADGES = ['white', 'blue', 'green', 'black', 'red', 'purple'];
@@ -974,7 +974,7 @@ function updateUserUI() {
     roleBadgeElem.innerHTML = '<i class="fa-solid fa-graduation-cap text-[9px]"></i> مامۆستا';
   } else if (currentUser.role === 'admin') {
     roleBadgeElem.className = 'role-text-admin text-[10px] font-black hidden sm:inline-flex items-center gap-1';
-    roleBadgeElem.innerHTML = '<i class="fa-solid fa-shield-halved text-[9px]"></i> ئەدمین';
+    roleBadgeElem.innerHTML = '<i class="fa-solid fa-shield-halved text-[9px]"></i> م. ئازاد';
   } else if (currentUser.role === 'new_student') {
     roleBadgeElem.className = `${isGirl ? 'badge-new-student-girl' : 'badge-new-student'} text-[9px] px-1.5 py-0.2 rounded font-bold hidden sm:inline-block`;
     roleBadgeElem.innerText = 'قوتابی تازە 🔰';

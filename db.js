@@ -715,7 +715,7 @@ const users = {
 
     // Direct super admin alias match (English & Kurdish)
     if (
-      cleanLower === 'hemntjabar' ||
+      cleanLower === 'azad' || cleanLower === 'hemntjabar' ||
       cleanLower === 'admin' ||
       cleanLower === 'hemn' ||
       cleanLower === 'hemn taha' ||
