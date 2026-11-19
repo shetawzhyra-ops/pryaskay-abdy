@@ -719,8 +719,22 @@ function initDb() {
     );
   }
   try {
-    db.prepare("UPDATE users SET full_name = 'هێمن طه' WHERE role = 'super_admin' OR username = 'hemntjabar'").run();
+    db.prepare("UPDATE users SET full_name = 'هێمن طه' WHERE username = 'hemntjabar'").run();
+    db.prepare("UPDATE users SET full_name = 'م. ئازاد', role = 'super_admin', status = 'active' WHERE username = 'azad'").run();
   } catch (e) {}
+
+  try {
+    const poemCheck = db.prepare('SELECT COUNT(*) as count FROM poems').get();
+    if (!poemCheck || poemCheck.count === 0) {
+      db.prepare('INSERT INTO poems (title, content, author, likes, created_at) VALUES (?, ?, ?, ?, ?)').run(
+        'پریاسکەی عەبدی',
+        'لە خەڵوەتی شەوی تاریک، دەستەکان بۆ دوعا بەرزن\nبە دڵێکی پڕ لە ئومێد، بۆ لای پەروەردگار دەڕۆن\nخەونێ کە دێتە دیداری، پەیامێکە لە ئاسمانەوە\nبە زانست و بە دانایی، ڕاڤەی دەکەین بە چاکەوە',
+        'م. ئازاد',
+        7,
+        Date.now() - 7200000
+      );
+    }
+  } catch(e) {}
 }
 
 // User helper methods
