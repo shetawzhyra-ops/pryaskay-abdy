@@ -713,7 +713,19 @@ const users = {
     const clean = identifier.trim();
     const cleanLower = clean.toLowerCase();
 
-    // Direct super admin alias match (English & Kurdish)
+    // 1. Match exact user by username or full_name first
+    const stmt = db.prepare(`
+      SELECT * FROM users 
+      WHERE username = ? COLLATE NOCASE 
+         OR full_name = ? COLLATE NOCASE
+         OR REPLACE(LOWER(username), ' ', '') = REPLACE(LOWER(?), ' ', '')
+         OR REPLACE(LOWER(full_name), ' ', '') = REPLACE(LOWER(?), ' ', '')
+      LIMIT 1
+    `);
+    const found = stmt.get(clean, clean, clean, clean);
+    if (found) return found;
+
+    // 2. Fallback alias match if user record not directly named
     if (
       cleanLower === 'azad' || cleanLower === 'hemntjabar' ||
       cleanLower === 'admin' ||
@@ -732,17 +744,8 @@ const users = {
       if (superAdmin) return superAdmin;
     }
 
-    // Match by username or full_name
-    const stmt = db.prepare(`
-      SELECT * FROM users 
-      WHERE username = ? COLLATE NOCASE 
-         OR full_name = ? COLLATE NOCASE
-         OR REPLACE(LOWER(username), ' ', '') = REPLACE(LOWER(?), ' ', '')
-         OR REPLACE(LOWER(full_name), ' ', '') = REPLACE(LOWER(?), ' ', '')
-      LIMIT 1
-    `);
-    const found = stmt.get(clean, clean, clean, clean);
-    if (found) return found;
+    return null;
+  },
 
     // Partial match on full_name or username
     const partialStmt = db.prepare(`

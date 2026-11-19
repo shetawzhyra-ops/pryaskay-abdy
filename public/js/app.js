@@ -714,21 +714,24 @@ function switchAuthTab(tab) {
   const registerForm = document.getElementById('registerForm');
   const forgotForm = document.getElementById('forgotForm');
 
+  const activeTabClass = 'flex-1 py-2 text-sm font-black rounded-xl transition duration-200 bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 text-white shadow border border-amber-400/60 active';
+  const inactiveTabClass = 'flex-1 py-2 text-sm font-bold rounded-xl transition duration-200 text-amber-900/80 hover:text-amber-950 border border-transparent';
+
   if (tab === 'login') {
-    if (tabLogin) tabLogin.className = 'flex-1 py-2 text-sm font-black rounded-xl transition duration-200 bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow border border-sky-400/40';
-    if (tabRegister) tabRegister.className = 'flex-1 py-2 text-sm font-bold rounded-xl transition duration-200 text-slate-400 hover:text-white border border-transparent';
+    if (tabLogin) tabLogin.className = activeTabClass;
+    if (tabRegister) tabRegister.className = inactiveTabClass;
     if (loginForm) loginForm.classList.remove('hidden');
     if (registerForm) registerForm.classList.add('hidden');
     if (forgotForm) forgotForm.classList.add('hidden');
   } else if (tab === 'register') {
-    if (tabRegister) tabRegister.className = 'flex-1 py-2 text-sm font-black rounded-xl transition duration-200 bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow border border-sky-400/40';
-    if (tabLogin) tabLogin.className = 'flex-1 py-2 text-sm font-bold rounded-xl transition duration-200 text-slate-400 hover:text-white border border-transparent';
+    if (tabRegister) tabRegister.className = activeTabClass;
+    if (tabLogin) tabLogin.className = inactiveTabClass;
     if (registerForm) registerForm.classList.remove('hidden');
     if (loginForm) loginForm.classList.add('hidden');
     if (forgotForm) forgotForm.classList.add('hidden');
   } else if (tab === 'forgot') {
-    if (tabLogin) tabLogin.className = 'flex-1 py-2 text-sm font-bold rounded-xl transition duration-200 text-slate-400 hover:text-white border border-transparent';
-    if (tabRegister) tabRegister.className = 'flex-1 py-2 text-sm font-bold rounded-xl transition duration-200 text-slate-400 hover:text-white border border-transparent';
+    if (tabLogin) tabLogin.className = inactiveTabClass;
+    if (tabRegister) tabRegister.className = inactiveTabClass;
     if (forgotForm) forgotForm.classList.remove('hidden');
     if (loginForm) loginForm.classList.add('hidden');
     if (registerForm) registerForm.classList.add('hidden');
@@ -13886,7 +13889,7 @@ async function loadPrivateStaffList() {
       html += `
         <div class="pt-1 pb-1 px-1 text-[11px] font-bold text-purple-400 flex items-center gap-1">
           <i class="fa-solid fa-shield-halved"></i>
-          <span>ئەدمین</span>
+          <span>م. ئازاد (خاوەنی ماڵپەڕ)</span>
         </div>
       `;
       html += superAdmins.map(s => renderStaffCardHtml(s)).join('');
@@ -13911,10 +13914,11 @@ async function loadPrivateStaffList() {
 
 function renderStaffCardHtml(s) {
   const isCurrent = activePrivateOtherUser && activePrivateOtherUser.id === s.id;
-  const activeBg = isCurrent ? 'bg-sky-600/20 border-sky-500/50' : 'bg-slate-900/80 hover:bg-slate-800/80 border-slate-800';
-  const roleBadge = (s.role === 'super_admin' || s.role === 'admin')
-    ? `<span class="role-text-admin text-xs font-black inline-flex items-center gap-1 select-none"><i class="fa-solid fa-shield-halved text-[10px]"></i> ئەدمین</span>`
-    : `<span class="role-text-teacher text-xs font-black inline-flex items-center gap-1 select-none"><i class="fa-solid fa-graduation-cap text-[10px]"></i> مامۆستا</span>`;
+  const activeBg = isCurrent ? 'bg-amber-100/90 border-amber-400/80' : 'bg-white hover:bg-amber-50/70 border-amber-900/15';
+  const isAzadOrAdmin = (s.username === 'azad' || s.role === 'super_admin' || s.role === 'admin');
+  const roleBadge = isAzadOrAdmin
+    ? `<span class="role-text-admin text-xs font-black inline-flex items-center gap-1 select-none text-purple-700 bg-purple-100/90 px-2 py-0.5 rounded-lg border border-purple-300/60"><i class="fa-solid fa-shield-halved text-[10px]"></i> م. ئازاد</span>`
+    : `<span class="role-text-teacher text-xs font-black inline-flex items-center gap-1 select-none text-emerald-700 bg-emerald-100/90 px-2 py-0.5 rounded-lg border border-emerald-300/60"><i class="fa-solid fa-graduation-cap text-[10px]"></i> مامۆستا</span>`;
   const onlineDot = s.is_online 
     ? `<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-500/30" title="لەسەر هێڵە"></span>`
     : `<span class="w-2.5 h-2.5 rounded-full bg-slate-600" title="دەرەوەی هێڵە"></span>`;
@@ -13925,7 +13929,7 @@ function renderStaffCardHtml(s) {
       class="p-2.5 rounded-2xl border cursor-pointer transition ${activeBg} flex items-center justify-between gap-2 shadow-sm"
     >
       <div class="flex items-center gap-2.5 min-w-0">
-        <div class="relative w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs shrink-0 shadow">
+        <div class="relative w-8 h-8 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-xs shrink-0 shadow">
           ${getGenderEmoji(s.gender)}
           <span class="absolute -bottom-0.5 -right-0.5">${onlineDot}</span>
         </div>

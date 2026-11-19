@@ -26,7 +26,9 @@
       --bg-sufi-sage: #86b89c;
       --card-warm-sand: rgba(253, 246, 238, 0.97);
     }
-    html, body, body.in-landing, body.light-mode, body.light-theme {
+    
+    /* 1. Global Page Backgrounds (Landing & Inside App) */
+    html, body, body.in-landing, body.in-app, body.light-mode, body.light-theme, #mainApp {
       background-color: #86b89c !important;
       background: #86b89c !important;
       background-image: radial-gradient(ellipse 80% 55% at 50% -10%, rgba(52, 211, 153, 0.28) 0%, transparent 65%), radial-gradient(circle at 85% 18%, rgba(110, 231, 183, 0.20) 0%, transparent 45%), radial-gradient(circle at 12% 65%, rgba(16, 185, 129, 0.22) 0%, transparent 55%), linear-gradient(180deg, #a7d3ba 0%, #8cbe9f 50%, #72a988 100%) !important;
@@ -35,6 +37,8 @@
     .landing-grid-pattern {
       background-image: linear-gradient(to right, rgba(16, 185, 129, 0.09) 1px, transparent 1px), linear-gradient(to bottom, rgba(16, 185, 129, 0.09) 1px, transparent 1px) !important;
     }
+    
+    /* 2. Landing Cards & Core Containers */
     .glass-card, .hero-compact-card, .landing-hero-stage, .landing-ann-card, .landing-pillar-card, .fb-post-card, .reaction-bar, .dream-voice-player {
       background: rgba(253, 246, 238, 0.97) !important;
       border: 1px solid rgba(180, 83, 9, 0.16) !important;
@@ -68,6 +72,311 @@
       -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
       border-bottom: 1px solid rgba(180, 83, 9, 0.16) !important;
       box-shadow: 0 8px 30px -8px rgba(180, 83, 9, 0.08) !important;
+    }
+
+    /* 3. AUTH SCREEN & LOGIN MODAL (Sufi Sage & Warm Sand Theme) */
+    #authScreen {
+      background: rgba(45, 82, 63, 0.65) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+    }
+    #authScreen .auth-royal-card {
+      background: rgba(253, 246, 238, 0.98) !important;
+      border: 1px solid rgba(180, 83, 9, 0.22) !important;
+      box-shadow: 0 25px 65px -15px rgba(69, 26, 3, 0.2), 0 0 35px rgba(245, 158, 11, 0.15) !important;
+      color: #451a03 !important;
+    }
+    #authScreen .auth-royal-card .w-48 {
+      display: none !important;
+    }
+    #authScreen button[onclick="closeAuthScreen()"] {
+      background: rgba(253, 246, 238, 0.95) !important;
+      border: 1px solid rgba(180, 83, 9, 0.25) !important;
+      color: #78350f !important;
+      box-shadow: 0 4px 12px rgba(69, 26, 3, 0.08) !important;
+    }
+    #authScreen button[onclick="closeAuthScreen()"]:hover {
+      background: #ffffff !important;
+      color: #451a03 !important;
+    }
+    #authLangBtn {
+      background: rgba(253, 246, 238, 0.95) !important;
+      border: 1px solid rgba(180, 83, 9, 0.25) !important;
+      color: #b45309 !important;
+      box-shadow: 0 4px 12px rgba(69, 26, 3, 0.08) !important;
+    }
+    #authLangDropdown {
+      background: rgba(253, 246, 238, 0.98) !important;
+      border: 1px solid rgba(180, 83, 9, 0.25) !important;
+      box-shadow: 0 15px 35px rgba(69, 26, 3, 0.15) !important;
+    }
+    #authLangDropdown button {
+      color: #78350f !important;
+    }
+    #authLangDropdown button:hover,
+    #authLangDropdown button.bg-amber-400\/15 {
+      background: rgba(180, 83, 9, 0.12) !important;
+      color: #451a03 !important;
+    }
+    #authLangNotice {
+      background: rgba(253, 246, 238, 0.98) !important;
+      border: 1px solid rgba(180, 83, 9, 0.28) !important;
+      box-shadow: 0 15px 35px rgba(69, 26, 3, 0.15) !important;
+      color: #451a03 !important;
+    }
+    #authLangNotice p, #authLangNotice span {
+      color: #451a03 !important;
+    }
+    #authLangNotice .w-3.h-3 {
+      background: rgba(253, 246, 238, 0.98) !important;
+      border-top-color: rgba(180, 83, 9, 0.28) !important;
+      border-left-color: rgba(180, 83, 9, 0.28) !important;
+    }
+    #authScreen h1 {
+      background: none !important;
+      -webkit-background-clip: unset !important;
+      -webkit-text-fill-color: #451a03 !important;
+      color: #451a03 !important;
+      filter: none !important;
+    }
+    #authScreen .flex.bg-slate-950\/80 {
+      background: rgba(180, 83, 9, 0.08) !important;
+      border: 1px solid rgba(180, 83, 9, 0.16) !important;
+    }
+    #tabLogin.active, #tabRegister.active {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3) !important;
+      border: 1px solid rgba(245, 158, 11, 0.5) !important;
+    }
+    #tabLogin:not(.active), #tabRegister:not(.active) {
+      background: transparent !important;
+      color: #78350f !important;
+      border-color: transparent !important;
+    }
+    #authScreen label {
+      color: #78350f !important;
+    }
+    #authScreen input[type="text"],
+    #authScreen input[type="password"],
+    #authScreen input[type="email"],
+    #authScreen select {
+      background: #ffffff !important;
+      border: 1px solid rgba(180, 83, 9, 0.25) !important;
+      color: #451a03 !important;
+    }
+    #authScreen input:focus {
+      border-color: #d97706 !important;
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25) !important;
+    }
+    #authScreen input::placeholder {
+      color: #a16207 !important;
+      opacity: 0.65 !important;
+    }
+    #authScreen .text-slate-400 {
+      color: #a16207 !important;
+    }
+    #authForgotPassLink {
+      color: #b45309 !important;
+    }
+    #authForgotPassLink:hover {
+      color: #d97706 !important;
+    }
+    #loginSubmitBtn, #regSubmitBtn, #forgotSubmitBtn {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(245, 158, 11, 0.5) !important;
+      box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.35) !important;
+    }
+    #loginSubmitBtn:hover, #regSubmitBtn:hover, #forgotSubmitBtn:hover {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+    }
+
+    /* 4. MAIN APP HEADER & NAVIGATION */
+    #mainApp > header {
+      background: rgba(253, 246, 238, 0.95) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border-bottom: 1px solid rgba(180, 83, 9, 0.18) !important;
+      box-shadow: 0 4px 20px -4px rgba(180, 83, 9, 0.08) !important;
+      color: #451a03 !important;
+    }
+    #mainApp > header h2 {
+      background: none !important;
+      -webkit-background-clip: unset !important;
+      -webkit-text-fill-color: #451a03 !important;
+      color: #451a03 !important;
+    }
+    #mainApp > header #onlineCountText {
+      color: #78350f !important;
+    }
+    #mainApp > header button {
+      color: #78350f !important;
+    }
+    #mainApp > header button:hover {
+      color: #451a03 !important;
+      background: rgba(180, 83, 9, 0.08) !important;
+    }
+    #mainApp > header div[onclick="openMyProfile()"] {
+      background: rgba(180, 83, 9, 0.08) !important;
+      border: 1px solid rgba(180, 83, 9, 0.18) !important;
+      color: #451a03 !important;
+    }
+    #mainApp > header div[onclick="openMyProfile()"]:hover {
+      background: rgba(180, 83, 9, 0.14) !important;
+    }
+    #headerFullName {
+      color: #451a03 !important;
+    }
+
+    /* 5. MAIN MENU DRAWER */
+    #mainMenuDrawerBackdrop {
+      background: rgba(45, 82, 63, 0.6) !important;
+      backdrop-filter: blur(10px) !important;
+    }
+    #mainMenuDrawerPanel {
+      background: rgba(253, 246, 238, 0.98) !important;
+      border-left: 1px solid rgba(180, 83, 9, 0.2) !important;
+      box-shadow: -10px 0 35px rgba(69, 26, 3, 0.15) !important;
+      color: #451a03 !important;
+    }
+    #mainMenuDrawerPanel > div:first-child {
+      background: rgba(253, 246, 238, 0.95) !important;
+      border-bottom: 1px solid rgba(180, 83, 9, 0.16) !important;
+    }
+    #mainMenuDrawerPanel h3 {
+      color: #451a03 !important;
+    }
+    #mainMenuDrawerPanel p {
+      color: #78350f !important;
+    }
+    #mainMenuDrawerPanel button[onclick="closeMainMenuDrawer()"] {
+      background: #ffffff !important;
+      border: 1px solid rgba(180, 83, 9, 0.2) !important;
+      color: #78350f !important;
+    }
+    #mainMenuDrawerPanel div[onclick*="openMyProfile"] {
+      background: #ffffff !important;
+      border: 1px solid rgba(180, 83, 9, 0.18) !important;
+      box-shadow: 0 4px 14px rgba(69, 26, 3, 0.06) !important;
+    }
+    #drawerUserName {
+      color: #451a03 !important;
+    }
+    #drawerGeneralHeader, #drawerCustomGroupsSection span {
+      color: #451a03 !important;
+    }
+    .drawer-tool-btn {
+      background: #ffffff !important;
+      border: 1px solid rgba(180, 83, 9, 0.16) !important;
+      color: #451a03 !important;
+      box-shadow: 0 2px 8px rgba(69, 26, 3, 0.04) !important;
+    }
+    .drawer-tool-btn:hover {
+      background: rgba(253, 246, 238, 0.9) !important;
+      border-color: rgba(180, 83, 9, 0.3) !important;
+    }
+    .drawer-tool-title {
+      color: #451a03 !important;
+    }
+    .drawer-tool-icon-box {
+      background: rgba(180, 83, 9, 0.1) !important;
+      border: 1px solid rgba(180, 83, 9, 0.18) !important;
+      color: #b45309 !important;
+    }
+    .drawer-tool-badge {
+      background: rgba(180, 83, 9, 0.08) !important;
+      border: 1px solid rgba(180, 83, 9, 0.15) !important;
+      color: #78350f !important;
+    }
+
+    /* 6. ALL MODALS ACROSS THE PLATFORM */
+    div[id$="Modal"]:not(#authScreen) {
+      background: rgba(45, 82, 63, 0.6) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+    }
+    div[id$="Modal"] > div.bg-slate-900,
+    div[id$="Modal"] > div.bg-slate-950,
+    div[id$="Modal"] > div.bg-slate-900\/95,
+    div[id$="Modal"] > div.bg-slate-950\/90,
+    div[id$="Modal"] > div.bg-slate-950\/85,
+    div[id$="Modal"] > div > div.bg-slate-900,
+    div[id$="Modal"] > div > div.bg-slate-950,
+    #userProfileModalDialog,
+    .modal-content,
+    .executive-modal-box {
+      background: rgba(253, 246, 238, 0.98) !important;
+      border: 1px solid rgba(180, 83, 9, 0.22) !important;
+      box-shadow: 0 25px 65px -15px rgba(69, 26, 3, 0.2), 0 0 35px rgba(245, 158, 11, 0.12) !important;
+      color: #451a03 !important;
+    }
+    div[id$="Modal"] h2,
+    div[id$="Modal"] h3,
+    div[id$="Modal"] h4,
+    div[id$="Modal"] .font-black {
+      color: #451a03 !important;
+    }
+    div[id$="Modal"] p,
+    div[id$="Modal"] span.text-slate-300,
+    div[id$="Modal"] span.text-slate-400 {
+      color: #78350f !important;
+    }
+    div[id$="Modal"] input,
+    div[id$="Modal"] textarea,
+    div[id$="Modal"] select {
+      background: #ffffff !important;
+      border: 1px solid rgba(180, 83, 9, 0.22) !important;
+      color: #451a03 !important;
+    }
+    div[id$="Modal"] input::placeholder,
+    div[id$="Modal"] textarea::placeholder {
+      color: #a16207 !important;
+      opacity: 0.7 !important;
+    }
+    div[id$="Modal"] button.bg-slate-800,
+    div[id$="Modal"] button.bg-slate-850 {
+      background: #ffffff !important;
+      border: 1px solid rgba(180, 83, 9, 0.2) !important;
+      color: #78350f !important;
+    }
+    div[id$="Modal"] button.bg-slate-800:hover,
+    div[id$="Modal"] button.bg-slate-850:hover {
+      background: rgba(253, 246, 238, 0.95) !important;
+      color: #451a03 !important;
+    }
+
+    /* 7. CLASSROOMS & LOBBY */
+    .classroom-card,
+    #classroomsLobbyView .grid > div,
+    #classroomsList > div {
+      background: rgba(253, 246, 238, 0.97) !important;
+      border: 1px solid rgba(180, 83, 9, 0.18) !important;
+      box-shadow: 0 10px 25px -5px rgba(180, 83, 9, 0.08) !important;
+      color: #451a03 !important;
+    }
+    .classroom-card h3,
+    .classroom-card .font-black {
+      color: #451a03 !important;
+    }
+    .classroom-card p {
+      color: #78350f !important;
+    }
+
+    /* 8. CHAT AREA & INPUT BAR */
+    #chatInputBar, #customGroupInputBar {
+      background: rgba(253, 246, 238, 0.96) !important;
+      border-top: 1px solid rgba(180, 83, 9, 0.18) !important;
+      box-shadow: 0 -4px 20px -4px rgba(180, 83, 9, 0.08) !important;
+    }
+    #messageInput, #customGroupTextInput {
+      background: #ffffff !important;
+      border: 1px solid rgba(180, 83, 9, 0.22) !important;
+      color: #451a03 !important;
+    }
+    #messageInput::placeholder, #customGroupTextInput::placeholder {
+      color: #a16207 !important;
+      opacity: 0.7 !important;
     }
   </style>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -888,10 +1197,10 @@
       </div>
 
       <div class="flex bg-slate-950/80 p-1 rounded-2xl mb-5 border border-slate-800">
-        <button id="tabLogin" onclick="switchAuthTab('login')" class="flex-1 py-2 text-sm font-black rounded-xl transition duration-200 bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow border border-sky-400/40">
+        <button id="tabLogin" onclick="switchAuthTab('login')" class="flex-1 py-2 text-sm font-black rounded-xl transition duration-200 bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 text-white shadow border border-amber-400/60 active">
           چوونەژوورەوە
         </button>
-        <button id="tabRegister" onclick="switchAuthTab('register')" class="flex-1 py-2 text-sm font-bold rounded-xl transition duration-200 text-slate-400 hover:text-white">
+        <button id="tabRegister" onclick="switchAuthTab('register')" class="flex-1 py-2 text-sm font-bold rounded-xl transition duration-200 text-amber-900/80 hover:text-amber-950">
           خۆتۆمارکردن
         </button>
       </div>
@@ -931,7 +1240,7 @@
           </div>
         </div>
 
-        <button type="submit" id="loginSubmitBtn" class="w-full py-3 bg-gradient-to-r from-sky-600 via-sky-500 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-black rounded-xl shadow-lg shadow-sky-600/30 border border-sky-400/40 transition flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]">
+        <button type="submit" id="loginSubmitBtn" class="w-full py-3 bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-black rounded-xl shadow-lg shadow-amber-600/30 border border-amber-400/50 transition flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]">
           <span id="loginSubmitBtnText">چوونەژوورەوە</span>
           <i class="fa-solid fa-arrow-left"></i>
         </button>
@@ -983,7 +1292,7 @@
           </div>
         </div>
 
-        <button type="submit" id="regSubmitBtn" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+        <button type="submit" id="regSubmitBtn" class="w-full py-3 bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-black rounded-xl shadow-lg shadow-amber-600/30 border border-amber-400/50 transition flex items-center justify-center gap-2">
           <span>ناردنی داواکاری خۆتۆمارکردن</span>
           <i class="fa-solid fa-paper-plane"></i>
         </button>
@@ -1032,7 +1341,7 @@
           </div>
         </div>
 
-        <button type="submit" id="forgotSubmitBtn" class="w-full py-3 bg-gradient-to-r from-sky-600 via-sky-500 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-black rounded-xl shadow-lg shadow-sky-600/30 border border-sky-400/40 transition flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
+        <button type="submit" id="forgotSubmitBtn" class="w-full py-3 bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-black rounded-xl shadow-lg shadow-amber-600/30 border border-amber-400/50 transition flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
           <span>ناردنی داواکاری بۆ سوپەر ئەدمین</span>
           <i class="fa-solid fa-paper-plane"></i>
         </button>
