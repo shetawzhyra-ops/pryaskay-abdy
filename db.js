@@ -744,9 +744,6 @@ const users = {
       if (superAdmin) return superAdmin;
     }
 
-    return null;
-  },
-
     // Partial match on full_name or username
     const partialStmt = db.prepare(`
       SELECT * FROM users 
