@@ -72,7 +72,7 @@
         currentUser = await res.json();
         const role = (currentUser.role || '').toLowerCase();
         const username = (currentUser.username || '').toLowerCase();
-        const isAzad = role === 'azad' || role === 'owner' || role === 'super_admin' || role === 'admin' || username.includes('azad');
+        const isAzad = username === 'azad' || currentUser.id === 6 || (role === 'super_admin' && (username === 'azad' || (currentUser.full_name || '').includes('ئازاد')));
         
         const adminBtn = document.getElementById('adminPoemActionContainer');
         if (adminBtn && isAzad) {

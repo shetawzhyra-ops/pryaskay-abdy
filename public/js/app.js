@@ -295,6 +295,10 @@ function formatUserDisplayName(user) {
   const uname = (user.username || '').toLowerCase().trim();
   const isSuper = user.role === 'super_admin' || uname === 'admin' || uname === 'hemntjabar';
 
+  if (uname === 'azad' || user.id === 6 || (user.full_name || '').includes('ئازاد')) {
+    return 'م. ئازاد 🛡️';
+  }
+
   if (user.role === 'guest') {
     prefix = '👁️ ';
   } else if (user.role === 'new_student') {
@@ -1023,13 +1027,17 @@ function updateUserUI() {
     }
   }
   if (drawerName) {
-    const nick = currentUser.username || currentUser.full_name;
-    const real = currentUser.full_name;
-    if (real && real.toLowerCase() !== nick.toLowerCase()) {
-      drawerName.innerHTML = `<span class="block font-black text-xs truncate ${getUserNameClass(currentUser)}">${escapeHtml(nick)}</span><span class="block text-[10px] text-slate-400 font-normal truncate mt-0.5">${escapeHtml(real)}</span>`;
+    if (isAzadUserLoggedIn()) {
+      drawerName.innerHTML = `<span class="block font-black text-xs truncate ${getUserNameClass(currentUser)}">م. ئازاد</span>`;
     } else {
-      drawerName.innerText = nick;
-      drawerName.className = `font-black text-xs truncate ${getUserNameClass(currentUser)}`;
+      const nick = currentUser.username || currentUser.full_name;
+      const real = currentUser.full_name;
+      if (real && real.toLowerCase() !== nick.toLowerCase()) {
+        drawerName.innerHTML = `<span class="block font-black text-xs truncate ${getUserNameClass(currentUser)}">${escapeHtml(nick)}</span><span class="block text-[10px] text-slate-400 font-normal truncate mt-0.5">${escapeHtml(real)}</span>`;
+      } else {
+        drawerName.innerText = nick;
+        drawerName.className = `font-black text-xs truncate ${getUserNameClass(currentUser)}`;
+      }
     }
   }
   if (drawerRole) {
@@ -7529,20 +7537,30 @@ async function openUserProfileModal(userId) {
     }
 
     const isProfStarGlowing = Boolean(prof.is_star_glowing || (prof.last_star_awarded_at && (Date.now() - Number(prof.last_star_awarded_at) <= 48 * 60 * 60 * 1000)));
-    const profNickname = prof.username || prof.full_name;
-    const canSee = canSeeRealFullName(currentUser) || isMe;
+    const isProfAzad = (prof.username || '').toLowerCase() === 'azad' || prof.id === 6 || (prof.full_name || '').includes('ئازاد');
 
-    fullNameEl.innerText = profNickname;
-    fullNameEl.className = `font-black text-base ${getUserNameClass(prof)} ${isProfStarGlowing ? 'user-name-star-glow' : ''}`;
-    
-    if (canSee && prof.full_name && prof.full_name.toLowerCase() !== profNickname.toLowerCase()) {
-      usernameEl.innerText = `ناوی سیانی: ${prof.full_name}`;
-      usernameEl.className = 'text-xs text-slate-400 font-normal mt-0.5 block select-text';
-      usernameEl.classList.remove('hidden');
+    if (isProfAzad) {
+      fullNameEl.innerText = 'م. ئازاد';
+      fullNameEl.className = `font-black text-base ${getUserNameClass(prof)} ${isProfStarGlowing ? 'user-name-star-glow' : ''}`;
+      usernameEl.innerText = '';
+      usernameEl.className = 'hidden';
+      usernameEl.classList.add('hidden');
     } else {
-      usernameEl.innerText = `@${profNickname}`;
-      usernameEl.className = 'text-xs text-slate-400/80 font-normal mt-0.5 block select-text';
-      usernameEl.classList.remove('hidden');
+      const profNickname = prof.username || prof.full_name;
+      const canSee = canSeeRealFullName(currentUser) || isMe;
+
+      fullNameEl.innerText = profNickname;
+      fullNameEl.className = `font-black text-base ${getUserNameClass(prof)} ${isProfStarGlowing ? 'user-name-star-glow' : ''}`;
+      
+      if (canSee && prof.full_name && prof.full_name.toLowerCase() !== profNickname.toLowerCase()) {
+        usernameEl.innerText = `ناوی سیانی: ${prof.full_name}`;
+        usernameEl.className = 'text-xs text-slate-400 font-normal mt-0.5 block select-text';
+        usernameEl.classList.remove('hidden');
+      } else {
+        usernameEl.innerText = `@${profNickname}`;
+        usernameEl.className = 'text-xs text-slate-400/80 font-normal mt-0.5 block select-text';
+        usernameEl.classList.remove('hidden');
+      }
     }
     if (genderEl) {
       genderEl.innerHTML = '';
@@ -25301,14 +25319,50 @@ function isAzadUserLoggedIn() {
 }
 
 function checkAzadPoemPrivilege() {
+  const isAzad = isAzadUserLoggedIn();
+
   const addBtn = document.getElementById('btnOpenAddPoemModal');
   if (addBtn) {
-    if (isAzadUserLoggedIn()) {
+    if (isAzad) {
       addBtn.classList.remove('hidden');
       addBtn.classList.add('flex');
     } else {
       addBtn.classList.add('hidden');
       addBtn.classList.remove('flex');
+    }
+  }
+
+  // Button on the landing page featured section (تەنها بۆ ئەکاونتی م. ئازاد)
+  const landingAddBtn = document.getElementById('btnLandingAddPoemAzad');
+  if (landingAddBtn) {
+    if (isAzad) {
+      landingAddBtn.classList.remove('hidden');
+      landingAddBtn.classList.add('flex');
+    } else {
+      landingAddBtn.classList.add('hidden');
+      landingAddBtn.classList.remove('flex');
+    }
+  }
+
+  // Button in user profile modal (تەنها بۆ ئەکاونتی م. ئازاد)
+  const profPoemBox = document.getElementById('profPublishPoemContainer');
+  if (profPoemBox) {
+    if (isAzad) {
+      profPoemBox.classList.remove('hidden');
+    } else {
+      profPoemBox.classList.add('hidden');
+    }
+  }
+
+  // Button in drawer menu (تەنها بۆ ئەکاونتی م. ئازاد)
+  const drawerPoemBtn = document.getElementById('drawerAzadAddPoemBtn');
+  if (drawerPoemBtn) {
+    if (isAzad) {
+      drawerPoemBtn.classList.remove('hidden');
+      drawerPoemBtn.classList.add('flex');
+    } else {
+      drawerPoemBtn.classList.add('hidden');
+      drawerPoemBtn.classList.remove('flex');
     }
   }
 

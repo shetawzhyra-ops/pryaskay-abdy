@@ -6718,35 +6718,49 @@
           </button>
 
           <!-- Button 2: شیعرەکانی م. ئازاد (کردنەوەی پەڕەی تایبەت بە شیعرەکان) -->
-          <a 
-            href="/poems"
-            class="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-sky-600/35 bg-gradient-to-br from-sky-500/25 via-white/95 to-sky-500/15 dark:from-slate-900/95 dark:via-sky-950/50 dark:to-slate-900/95 shadow-lg flex items-center justify-between gap-3 sm:gap-4 cursor-pointer backdrop-blur-xl no-underline"
-            title="شیعرەکانی م. ئازاد — کردنەوەی دیوانی شیعرەکان"
-          >
-            <div class="absolute -top-10 -left-10 w-32 h-32 bg-sky-400/25 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+          <div class="flex flex-col gap-2">
+            <a 
+              href="/poems"
+              class="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-sky-600/35 bg-gradient-to-br from-sky-500/25 via-white/95 to-sky-500/15 dark:from-slate-900/95 dark:via-sky-950/50 dark:to-slate-900/95 shadow-lg flex items-center justify-between gap-3 sm:gap-4 cursor-pointer backdrop-blur-xl no-underline"
+              title="شیعرەکانی م. ئازاد — کردنەوەی دیوانی شیعرەکان"
+            >
+              <div class="absolute -top-10 -left-10 w-32 h-32 bg-sky-400/25 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
 
-            <div class="flex items-center gap-3.5 sm:gap-4 min-w-0 relative z-10">
-              <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-sky-400 to-indigo-600 text-white flex items-center justify-center text-xl sm:text-2xl shadow-md shrink-0 group-hover:scale-105 group-hover:-rotate-6 transition-transform">
-                <i class="fa-solid fa-feather-pointed"></i>
-              </div>
-              <div class="min-w-0">
-                <div class="flex items-center gap-2 mb-1">
-                  <h3 class="font-black text-sm sm:text-base md:text-lg text-slate-950 dark:text-white group-hover:text-sky-700 dark:group-hover:text-sky-300 transition-colors">
-                    شیعرەکانی م. ئازاد
-                  </h3>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-900 dark:text-sky-300 border border-sky-500/30">تایبەت</span>
+              <div class="flex items-center gap-3.5 sm:gap-4 min-w-0 relative z-10">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-sky-400 to-indigo-600 text-white flex items-center justify-center text-xl sm:text-2xl shadow-md shrink-0 group-hover:scale-105 group-hover:-rotate-6 transition-transform">
+                  <i class="fa-solid fa-feather-pointed"></i>
                 </div>
-                <p class="text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 font-semibold truncate">
-                  دیوانی هۆنراوە و بەرهەمە ئەدەبییەکان
-                </p>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 mb-1">
+                    <h3 class="font-black text-sm sm:text-base md:text-lg text-slate-950 dark:text-white group-hover:text-sky-700 dark:group-hover:text-sky-300 transition-colors">
+                      شیعرەکانی م. ئازاد
+                    </h3>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-900 dark:text-sky-300 border border-sky-500/30">تایبەت</span>
+                  </div>
+                  <p class="text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 font-semibold truncate">
+                    دیوانی هۆنراوە و بەرهەمە ئەدەبییەکان
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <div class="shrink-0 relative z-10 flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-sky-500/25 border border-sky-500/50 text-sky-950 dark:text-sky-300 font-black text-xs group-hover:bg-sky-500 group-hover:text-white transition-all shadow-sm">
-              <span>دیوان</span>
-              <i class="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-1 transition-transform"></i>
-            </div>
-          </a>
+              <div class="shrink-0 relative z-10 flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-sky-500/25 border border-sky-500/50 text-sky-950 dark:text-sky-300 font-black text-xs group-hover:bg-sky-500 group-hover:text-white transition-all shadow-sm">
+                <span>دیوان</span>
+                <i class="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-1 transition-transform"></i>
+              </div>
+            </a>
+
+            <!-- Dedicated Write Poem Button (ONLY for M. Azad on the landing page) -->
+            <button 
+              id="btnLandingAddPoemAzad" 
+              type="button" 
+              onclick="openAddPoemModal()" 
+              class="hidden w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-black text-xs shadow-lg shadow-amber-500/20 border border-amber-300/40 items-center justify-center gap-2 transition active:scale-95 cursor-pointer"
+              title="دانانی شیعری نوێ لەلایەن مامۆستا ئازاد"
+            >
+              <i class="fa-solid fa-feather-pointed text-sm"></i>
+              <span>+ نووسینی شیعری نوێ</span>
+            </button>
+          </div>
 
           <!-- Button 3: کورتە وتار (کردنەوەی پەڕەی تایبەت بە کورتە وتارەکانی قوتابیان) -->
           <a 
@@ -13846,6 +13860,17 @@
 
             </a>
 
+            <!-- Azad Poem Button (دانانی شیعری نوێ بۆ م. ئازاد) -->
+            <button id="drawerAzadAddPoemBtn" onclick="closeMainMenuDrawer(); openAddPoemModal();" class="hidden drawer-tool-btn group !border-amber-500/40 !bg-gradient-to-r !from-amber-950/40 !via-slate-900 !to-slate-950 hover:!border-amber-400">
+              <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <div class="drawer-tool-icon-box !bg-amber-500/20 !border-amber-400/40 !text-amber-300">
+                  <i class="fa-solid fa-feather-pointed"></i>
+                </div>
+                <span class="drawer-tool-title !text-amber-200">دانانی شیعری نوێ</span>
+              </div>
+              <span class="drawer-tool-badge !bg-amber-500/20 !text-amber-300 !border-amber-400/30">م. ئازاد</span>
+            </button>
+
             <!-- Article Moderation Button (پەسەندکردنی کورتە وتارەکان) -->
             <button id="drawerArticlesAdminBtn" onclick="closeMainMenuDrawer(); openArticlesAdminModal();" class="hidden drawer-tool-btn group !border-emerald-500/40 !bg-gradient-to-r !from-emerald-950/40 !via-slate-900 !to-teal-950/40 hover:!border-emerald-400">
               <div class="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -19786,6 +19811,25 @@
 
 
 
+
+        <!-- Teacher Azad: Publish Poem Card (تەنها بۆ ئەکاونتی م. ئازاد) -->
+        <div id="profPublishPoemContainer" class="hidden p-4 rounded-3xl bg-gradient-to-br from-amber-400/15 via-slate-950 to-sky-500/15 border-2 border-amber-400/40 shadow-xl shadow-amber-500/10 space-y-3">
+          <div class="flex items-center justify-between border-b border-amber-400/25 pb-2.5">
+            <div class="flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-600 text-slate-950 font-black flex items-center justify-center text-base shadow-md">
+                <i class="fa-solid fa-feather-pointed"></i>
+              </span>
+              <div>
+                <h4 class="font-black text-sm text-white">بەشی شیعرەکانی م. ئازاد</h4>
+                <p class="text-[11px] text-amber-300/80">بڵاوکردنەوەی شیعر و هۆنراوە بۆ دیوانی وێبسایت</p>
+              </div>
+            </div>
+          </div>
+          <button type="button" onclick="closeUserProfileModal(); openAddPoemModal();" class="w-full py-2.5 px-3 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-110 text-slate-950 font-black text-xs rounded-xl shadow-lg shadow-amber-500/25 border border-amber-300/60 flex items-center justify-center gap-1.5 active:scale-95 transition cursor-pointer">
+            <i class="fa-solid fa-plus-circle text-sm"></i>
+            <span>+ نووسینی شیعری نوێ</span>
+          </button>
+        </div>
 
         <div id="profCoursesViewCard" class="hidden p-3.5 rounded-2xl bg-slate-950/80 border border-amber-400/30 space-y-2.5 shadow-sm">
 
