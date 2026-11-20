@@ -7994,6 +7994,10 @@ async function openUserProfileModal(userId) {
       superAdminActions.classList.add('hidden');
     }
 
+    // Load student's short articles in profile
+    if (typeof loadProfileArticles === 'function') {
+      loadProfileArticles(prof.id, isMe);
+    }
   } catch (err) {
     fullNameEl.innerText = 'هەڵەیەک ڕوویدا';
   }
@@ -8003,6 +8007,129 @@ function closeUserProfileModal() {
   document.getElementById('userProfileModal').classList.add('hidden');
   currentProfileUserId = null;
   currentProfileUser = null;
+}
+
+// =========================================================================
+// STUDENT SHORT ARTICLES IN PROFILE (کورتە وتارەکانی قوتابیان لە پڕۆفایلدا)
+// =========================================================================
+function openProfileNewArticleModal() {
+  const modal = document.getElementById('modalProfileArticle');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeProfileNewArticleModal() {
+  const modal = document.getElementById('modalProfileArticle');
+  if (modal) modal.classList.add('hidden');
+}
+
+async function handleProfileSubmitArticle(e) {
+  e.preventDefault();
+  const titleInput = document.getElementById('profArticleTitleInput');
+  const contentInput = document.getElementById('profArticleContentInput');
+  const btn = document.getElementById('profArticleSubmitBtn');
+
+  const title = titleInput ? titleInput.value.trim() : '';
+  const content = contentInput ? contentInput.value.trim() : '';
+
+  if (!title || !content) {
+    alert('تکایە ناونیشان و دەقی کورتە وتارەکە بنووسە');
+    return;
+  }
+
+  try {
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>لە چاوەڕوانیدا...</span>';
+    }
+
+    const res = await fetch('/api/articles', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ title, content })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      closeProfileNewArticleModal();
+      if (titleInput) titleInput.value = '';
+      if (contentInput) contentInput.value = '';
+      alert('دەستخۆش! وتارەکەت بە سەرکەوتوویی نێردرا.\n\nتێبینی: بەپێی یاسای فێرگە، هیچ وتارێک ڕاستەوخۆ بڵاو نابێتەوە هەتاوەکو لەلایەن ئەدمین و دەستەی بەڕێوەبەرایەتییەوە پێداچوونەوەی بۆ نەکرێت و پەسەند نەکرێت.');
+      if (currentUser) {
+        loadProfileArticles(currentUser.id, true);
+      }
+    } else {
+      alert(data.error || 'هەڵە لە ناردنی وتار');
+    }
+  } catch (err) {
+    alert('هەڵە لە پەیوەندی بە سێرڤەر');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i><span>ناردن بۆ چاودێری</span>';
+    }
+  }
+}
+
+async function loadProfileArticles(userId, isMe) {
+  const listEl = document.getElementById('profMyArticlesList');
+  if (!listEl) return;
+
+  try {
+    let endpoint = '/api/articles';
+    let headers = {};
+    if (isMe && token) {
+      endpoint = '/api/articles/my';
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const res = await fetch(endpoint, { headers });
+    const data = await res.json();
+    if (!data.success || !Array.isArray(data.articles)) {
+      listEl.innerHTML = '<p class="text-[11px] text-slate-400 text-center py-2">هیچ کورتە وتارێک بەردەست نییە.</p>';
+      return;
+    }
+
+    let userArticles = data.articles;
+    if (!isMe) {
+      userArticles = userArticles.filter(a => Number(a.author_id) === Number(userId));
+    }
+
+    if (userArticles.length === 0) {
+      listEl.innerHTML = '<p class="text-[11px] text-slate-400 text-center py-2">هیچ کورتە وتارێکت نەنووسیوە هێشتا.</p>';
+      return;
+    }
+
+    const html = userArticles.map(a => {
+      let statusBadge = '<span class="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">⏳ چاوەڕوانی پەسەندکردن</span>';
+      if (a.status === 'approved') {
+        statusBadge = '<span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">✓ بڵاوکراوەتەوە</span>';
+      } else if (a.status === 'rejected') {
+        statusBadge = '<span class="text-[9px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">✕ ڕەتکراوەتەوە</span>';
+      }
+
+      return `
+        <div class="p-2.5 rounded-2xl bg-slate-900/90 border border-emerald-500/25 flex items-center justify-between gap-2">
+          <div class="min-w-0 flex-1">
+            <h5 class="text-xs font-bold text-white truncate">${escapeHtml(a.title)}</h5>
+            <div class="flex items-center gap-2 mt-0.5 text-[10px] text-slate-400">
+              <span>❤️ ${a.likes || 0}</span>
+              ${a.approved_by ? `<span class="text-emerald-400">بەڕێوەبەر: ${escapeHtml(a.approved_by)}</span>` : ''}
+            </div>
+          </div>
+          <div class="shrink-0">
+            ${statusBadge}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    listEl.innerHTML = html;
+  } catch (e) {
+    listEl.innerHTML = '<p class="text-[11px] text-slate-400 text-center py-2">هەڵە لە بارکردنی وتارەکان.</p>';
+  }
 }
 
 // =========================================================================
@@ -25099,3 +25226,211 @@ function sharePoem(id) {
     alert(shareText);
   }
 }
+
+
+
+
+// ==========================================================================
+
+// DIRECT DREAM PROMPT & POEMS MODAL HANDLERS
+
+// ==========================================================================
+
+
+
+function openDirectDreamPrompt() {
+
+  const modal = document.getElementById('dreamDirectPromptModal');
+
+  if (!modal) return;
+
+  modal.classList.remove('hidden');
+
+
+
+  const nameInput = document.getElementById('directDreamerName');
+
+  if (nameInput) {
+
+    const storedName = (currentUser && currentUser.full_name) 
+
+      ? currentUser.full_name 
+
+      : (localStorage.getItem('pryaska_last_dreamer_name') || '');
+
+    if (storedName) nameInput.value = storedName;
+
+    setTimeout(() => { nameInput.focus(); }, 120);
+
+  }
+
+
+
+  const storedGender = (currentUser && currentUser.gender) 
+
+    ? currentUser.gender 
+
+    : (localStorage.getItem('pryaska_last_dreamer_gender') || 'male');
+
+  const radio = document.querySelector(`input[name="directDreamerGender"][value="${storedGender}"]`);
+
+  if (radio) radio.checked = true;
+
+}
+
+
+
+function closeDirectDreamPrompt() {
+
+  const modal = document.getElementById('dreamDirectPromptModal');
+
+  if (modal) modal.classList.add('hidden');
+
+}
+
+
+
+async function handleDirectDreamSubmit(e) {
+
+  if (e) e.preventDefault();
+
+  const nameInput = document.getElementById('directDreamerName');
+
+  const name = nameInput ? nameInput.value.trim() : '';
+
+  if (!name) {
+
+    alert('تکایە ناوت بنووسە');
+
+    if (nameInput) nameInput.focus();
+
+    return;
+
+  }
+
+
+
+  const genderRadio = document.querySelector('input[name="directDreamerGender"]:checked');
+
+  const gender = genderRadio ? genderRadio.value : 'male';
+
+
+
+  try {
+
+    localStorage.setItem('pryaska_last_dreamer_name', name);
+
+    localStorage.setItem('pryaska_last_dreamer_gender', gender);
+
+  } catch (err) {}
+
+
+
+  const btn = document.getElementById('btnSubmitDirectDream');
+
+  if (btn) {
+
+    btn.disabled = true;
+
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>داخڵبوون...</span>';
+
+  }
+
+
+
+  try {
+
+    const res = await fetch('/api/dream/start', {
+
+      method: 'POST',
+
+      headers: { 'Content-Type': 'application/json' },
+
+      body: JSON.stringify({ name, gender, isGuestTest: true })
+
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+
+      alert(data.error || 'هەڵەیەک ڕوویدا لە دروستکردنی چاتی خەون');
+
+      if (btn) {
+
+        btn.disabled = false;
+
+        btn.innerHTML = '<span>داخڵبوون بۆ چاتی خەون</span><i class="fa-solid fa-arrow-left text-xs"></i>';
+
+      }
+
+      return;
+
+    }
+
+
+
+    localStorage.setItem('seereen_dream_token', data.token);
+
+    currentDreamSession = data.session;
+
+    closeDirectDreamPrompt();
+
+    openDreamChatModalWithSession(data.session, data.messages);
+
+    initDreamSocket(data.token);
+
+  } catch (err) {
+
+    console.error('Error starting dream chat:', err);
+
+    alert('پەیوەندی لەگەڵ سێرڤەر ناتەواوە');
+
+  } finally {
+
+    if (btn) {
+
+      btn.disabled = false;
+
+      btn.innerHTML = '<span>داخڵبوون بۆ چاتی خەون</span><i class="fa-solid fa-arrow-left text-xs"></i>';
+
+    }
+
+  }
+
+}
+
+
+
+function openPoemsModal() {
+
+  const modal = document.getElementById('poemsModal');
+
+  if (!modal) return;
+
+  modal.classList.remove('hidden');
+
+  if (typeof loadLandingPoems === 'function') {
+
+    loadLandingPoems();
+
+  }
+
+  if (typeof checkAzadPoemPrivilege === 'function') {
+
+    checkAzadPoemPrivilege();
+
+  }
+
+}
+
+
+
+function closePoemsModal() {
+
+  const modal = document.getElementById('poemsModal');
+
+  if (modal) modal.classList.add('hidden');
+
+}
+

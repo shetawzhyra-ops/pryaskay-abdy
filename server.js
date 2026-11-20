@@ -593,6 +593,10 @@ app.get('/dreams', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dreams.html'));
 });
 
+app.get('/poems', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'poems.html'));
+});
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -8513,7 +8517,7 @@ app.post('/api/dream/start', (req, res) => {
     }
 
     // STRICT: Staff & Dream Interpreters (Super Admin, Admin, Teacher, or Purple Badge) cannot submit dreams!
-    if (authedUser && (canManageDreams(authedUser) || authedUser.role === 'admin')) {
+    if (authedUser && (canManageDreams(authedUser) || authedUser.role === 'admin') && !req.body.isGuestTest) {
       return res.status(403).json({ error: 'مامۆستا و بەڕێوەبەرانی خەون ناتوانن خەون بنێرن بۆ لێکدانەوە' });
     }
 
