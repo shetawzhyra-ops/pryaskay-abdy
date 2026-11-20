@@ -1154,6 +1154,15 @@ function updateUserUI() {
       drawerDreamPostsManageBtn.classList.remove('hidden');
       drawerDreamPostsManageBtn.classList.add('flex');
     }
+    const drawerArticlesAdminBtn = document.getElementById('drawerArticlesAdminBtn');
+    if (drawerArticlesAdminBtn) {
+      drawerArticlesAdminBtn.classList.remove('hidden');
+      drawerArticlesAdminBtn.classList.add('flex');
+    }
+    if (typeof checkPendingArticlesCount === 'function') {
+      checkPendingArticlesCount();
+    }
+
     loadDreamSessionsCount();
   } else {
     if (dreamAdminNavBtn) {
@@ -8133,6 +8142,219 @@ async function loadProfileArticles(userId, isMe) {
 }
 
 // =========================================================================
+
+// =========================================================================
+// ADMIN ARTICLES MODERATION (بەڕێوەبردن و پەسەندکردنی کورتە وتارەکان)
+// =========================================================================
+window._adminAllArticles = [];
+window._adminArtFilter = 'pending';
+
+function openArticlesAdminModal() {
+  const modal = document.getElementById('modalAdminArticles');
+  if (modal) modal.classList.remove('hidden');
+  loadAdminArticles();
+}
+
+function closeArticlesAdminModal() {
+  const modal = document.getElementById('modalAdminArticles');
+  if (modal) modal.classList.add('hidden');
+}
+
+async function loadAdminArticles() {
+  const listEl = document.getElementById('adminArticlesList');
+  if (!listEl) return;
+  listEl.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">بارکردنی وتارەکان...</p>';
+
+  try {
+    const res = await fetch('/api/admin/articles', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (data.success && Array.isArray(data.articles)) {
+      window._adminAllArticles = data.articles;
+      updateAdminArticlesPendingBadge();
+      renderAdminArticlesList();
+    } else {
+      listEl.innerHTML = `<p class="text-xs text-rose-400 text-center py-6">${data.error || 'هەڵە لە هێنانی وتارەکان'}</p>`;
+    }
+  } catch (e) {
+    listEl.innerHTML = '<p class="text-xs text-rose-400 text-center py-6">هەڵە لە پەیوەندی بە سێرڤەر</p>';
+  }
+}
+
+function updateAdminArticlesPendingBadge() {
+  const pendingCount = (window._adminAllArticles || []).filter(a => a.status === 'pending').length;
+  const countBadge = document.getElementById('adminArtPendingCountBadge');
+  if (countBadge) countBadge.innerText = pendingCount;
+  
+  const drawerBadge = document.getElementById('drawerArticlesPendingBadge');
+  if (drawerBadge) {
+    drawerBadge.innerText = pendingCount;
+    if (pendingCount > 0) {
+      drawerBadge.classList.remove('hidden');
+    } else {
+      drawerBadge.classList.add('hidden');
+    }
+  }
+}
+
+async function checkPendingArticlesCount() {
+  if (!token) return;
+  try {
+    const res = await fetch('/api/admin/articles', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (data.success && Array.isArray(data.articles)) {
+      window._adminAllArticles = data.articles;
+      updateAdminArticlesPendingBadge();
+    }
+  } catch (e) {}
+}
+
+function filterAdminArticles(filter) {
+  window._adminArtFilter = filter;
+  ['tabAdminArtPending', 'tabAdminArtApproved', 'tabAdminArtAll'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white hover:bg-white/5 border border-transparent';
+  });
+
+  const activeBtnId = filter === 'pending' ? 'tabAdminArtPending' : (filter === 'approved' ? 'tabAdminArtApproved' : 'tabAdminArtAll');
+  const activeBtn = document.getElementById(activeBtnId);
+  if (activeBtn) {
+    activeBtn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+  }
+
+  renderAdminArticlesList();
+}
+
+function renderAdminArticlesList() {
+  const listEl = document.getElementById('adminArticlesList');
+  if (!listEl) return;
+
+  let list = window._adminAllArticles || [];
+  if (window._adminArtFilter === 'pending') {
+    list = list.filter(a => a.status === 'pending');
+  } else if (window._adminArtFilter === 'approved') {
+    list = list.filter(a => a.status === 'approved');
+  }
+
+  if (list.length === 0) {
+    listEl.innerHTML = `
+      <div class="text-center py-8 text-slate-400 space-y-2">
+        <i class="fa-solid fa-folder-open text-2xl text-slate-500"></i>
+        <p class="text-xs">هیچ وتارێک لەم بەشەدا نییە.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const html = list.map(art => {
+    let statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">⏳ چاوەڕوانی پەسەندکردن</span>';
+    if (art.status === 'approved') {
+      statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">✓ پەسەندکراوە</span>';
+    } else if (art.status === 'rejected') {
+      statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">✕ ڕەتکراوەتەوە</span>';
+    }
+
+    return `
+      <div class="p-4 rounded-2xl bg-slate-800/90 border border-slate-700/80 shadow space-y-2.5">
+        <div class="flex items-center justify-between gap-2 border-b border-white/5 pb-2">
+          <div class="flex items-center gap-2 min-w-0">
+            <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center shrink-0">
+              ${escapeHtml((art.author_name || 'ق')[0])}
+            </div>
+            <div class="min-w-0">
+              <h5 class="text-xs font-black text-white truncate">${escapeHtml(art.author_name)} <span class="text-[10px] font-normal text-slate-400">(${art.author_role === 'student' ? 'فێرخواز' : 'ئەندام'})</span></h5>
+              <p class="text-[10px] text-slate-400">${new Date(art.created_at).toLocaleString('ckb')}</p>
+            </div>
+          </div>
+          <div class="shrink-0">
+            ${statusBadge}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-black text-emerald-300 mb-1">${escapeHtml(art.title)}</h4>
+          <p class="text-xs text-slate-300 leading-relaxed max-h-36 overflow-y-auto whitespace-pre-wrap">${escapeHtml(art.content)}</p>
+        </div>
+
+        <div class="flex items-center justify-between pt-2 border-t border-white/5 gap-2">
+          <div class="text-[10px] text-slate-400">
+            ${art.approved_by ? `<span>لەلایەن: ${escapeHtml(art.approved_by)}</span>` : ''}
+          </div>
+          <div class="flex items-center gap-2">
+            ${art.status === 'pending' || art.status === 'rejected' ? `
+              <button type="button" onclick="handleAdminArticleStatus(${art.id}, 'approved')" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 shadow transition cursor-pointer">
+                <i class="fa-solid fa-check"></i>
+                <span>قبوڵکردن</span>
+              </button>
+            ` : ''}
+            ${art.status === 'pending' || art.status === 'approved' ? `
+              <button type="button" onclick="handleAdminArticleStatus(${art.id}, 'rejected')" class="px-3 py-1.5 rounded-xl bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 border border-amber-500/40 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+                <span>ڕەتکردنەوە</span>
+              </button>
+            ` : ''}
+            <button type="button" onclick="handleAdminArticleDelete(${art.id})" class="w-8 h-8 rounded-xl bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 flex items-center justify-center transition cursor-pointer" title="سڕینەوە">
+              <i class="fa-solid fa-trash-can text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  listEl.innerHTML = html;
+}
+
+async function handleAdminArticleStatus(articleId, status) {
+  try {
+    const res = await fetch(`/api/admin/articles/${articleId}/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ status })
+    });
+    const data = await res.json();
+    if (data.success) {
+      const art = (window._adminAllArticles || []).find(a => a.id === articleId);
+      if (art) art.status = status;
+      updateAdminArticlesPendingBadge();
+      renderAdminArticlesList();
+      alert(status === 'approved' ? 'وتارەکە پەسەندکرا و بە سەرکەوتوویی بڵاوبووەوە!' : 'وتارەکە ڕەتکرایەوە.');
+    } else {
+      alert(data.error || 'هەڵە لە گۆڕینی دۆخی وتار');
+    }
+  } catch (e) {
+    alert('هەڵە لە پەیوەندی بە سێرڤەر');
+  }
+}
+
+async function handleAdminArticleDelete(articleId) {
+  if (!confirm('ئایا دڵنیایت لە سڕینەوەی ئەم وتارە؟')) return;
+  try {
+    const res = await fetch(`/api/admin/articles/${articleId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (data.success) {
+      window._adminAllArticles = (window._adminAllArticles || []).filter(a => a.id !== articleId);
+      updateAdminArticlesPendingBadge();
+      renderAdminArticlesList();
+    } else {
+      alert(data.error || 'هەڵە لە سڕینەوەی وتار');
+    }
+  } catch (e) {
+    alert('هەڵە لە پەیوەندی بە سێرڤەر');
+  }
+}
+
+
 // PUBLISH DREAM POST (بەشی بڵاوکردنەوەی پۆست لە خەونە لێکدراوەکان)
 // =========================================================================
 let pdpMediaRecorder = null;

@@ -80,6 +80,30 @@ function initDb() {
       UNIQUE(poem_id, client_id)
     );
 
+    CREATE TABLE IF NOT EXISTS articles (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      author_id INTEGER,
+      author_name TEXT NOT NULL,
+      author_avatar TEXT DEFAULT '',
+      author_role TEXT DEFAULT 'student',
+      status TEXT NOT NULL DEFAULT 'pending',
+      approved_by TEXT DEFAULT '',
+      approved_at INTEGER,
+      likes INTEGER NOT NULL DEFAULT 0,
+      created_at INTEGER NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS article_reactions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      article_id INTEGER NOT NULL,
+      client_id TEXT NOT NULL,
+      created_at INTEGER NOT NULL,
+      UNIQUE(article_id, client_id)
+    );
+
+
 
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -3505,6 +3529,91 @@ const classrooms = {
 
 
 // ================= POEMS OF TEACHER AZAD HELPERS =================
+
+// ================= STUDENT SHORT ARTICLES HELPERS =================
+const articlesDb = {
+  getApproved() {
+    try {
+      return db.prepare("SELECT * FROM articles WHERE status = 'approved' ORDER BY id DESC").all();
+    } catch (e) {
+      return [];
+    }
+  },
+  getAll() {
+    try {
+      return db.prepare("SELECT * FROM articles ORDER BY CASE WHEN status = 'pending' THEN 0 WHEN status = 'approved' THEN 1 ELSE 2 END, id DESC").all();
+    } catch (e) {
+      return [];
+    }
+  },
+  getByAuthor(authorId) {
+    try {
+      return db.prepare("SELECT * FROM articles WHERE author_id = ? ORDER BY id DESC").all(authorId);
+    } catch (e) {
+      return [];
+    }
+  },
+  getById(id) {
+    try {
+      return db.prepare("SELECT * FROM articles WHERE id = ?").get(id);
+    } catch (e) {
+      return null;
+    }
+  },
+  create({ title, content, author_id, author_name, author_avatar = '', author_role = 'student' }) {
+    const now = Date.now();
+    const res = db.prepare(`
+      INSERT INTO articles (title, content, author_id, author_name, author_avatar, author_role, status, likes, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, 'pending', 0, ?)
+    `).run(title, content, author_id, author_name, author_avatar, author_role, now);
+    return {
+      id: Number(res.lastInsertRowid),
+      title,
+      content,
+      author_id,
+      author_name,
+      author_avatar,
+      author_role,
+      status: 'pending',
+      likes: 0,
+      created_at: now
+    };
+  },
+  updateStatus(id, status, approved_by = '') {
+    try {
+      const now = Date.now();
+      db.prepare(`
+        UPDATE articles SET status = ?, approved_by = ?, approved_at = ? WHERE id = ?
+      `).run(status, approved_by, now, id);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  },
+  delete(id) {
+    try {
+      db.prepare('DELETE FROM article_reactions WHERE article_id = ?').run(id);
+      return db.prepare('DELETE FROM articles WHERE id = ?').run(id);
+    } catch (e) {
+      return false;
+    }
+  },
+  like(articleId, clientId) {
+    try {
+      db.prepare('INSERT INTO article_reactions (article_id, client_id, created_at) VALUES (?, ?, ?)').run(articleId, clientId, Date.now());
+      db.prepare('UPDATE articles SET likes = likes + 1 WHERE id = ?').run(articleId);
+      const row = db.prepare('SELECT likes FROM articles WHERE id = ?').get(articleId);
+      return { success: true, likes: row ? row.likes : 0, liked: true };
+    } catch (e) {
+      db.prepare('DELETE FROM article_reactions WHERE article_id = ? AND client_id = ?').run(articleId, clientId);
+      db.prepare('UPDATE articles SET likes = MAX(0, likes - 1) WHERE id = ?').run(articleId);
+      const row = db.prepare('SELECT likes FROM articles WHERE id = ?').get(articleId);
+      return { success: true, likes: row ? row.likes : 0, liked: false };
+    }
+  }
+};
+
+
 const poemsDb = {
   getAll() {
     try {
@@ -3549,6 +3658,8 @@ const poemsDb = {
 };
 
 module.exports = {
+  articlesDb,
+  articles: articlesDb,
   poemsDb,
   poems: poemsDb,
   db,

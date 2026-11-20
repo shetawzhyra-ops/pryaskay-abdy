@@ -13,7 +13,7 @@ let archiver;
 try { archiver = require('archiver'); } catch (e) {}
 let DatabaseSync;
 try { DatabaseSync = require('node:sqlite').DatabaseSync; } catch (e) {}
-const { db, classrooms, initDb, users, poemsDb, messages, questions, library, dreamSessions, dreamMessages, settings, passwordResets, privateMessages, messageReactions, profileChangeRequests, pushSubscriptions, calculateStars, liveRecordings, recordedLessons, lessonTeachers, lessonFolders, lessonProgress, getDreamTeacherAlias, aiSecurity, advisorDb, buttonClicks, customGroups, pollsDb, alarmsDb, complaints, attendanceDb, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, getDreamPosts, reactToDreamPost, createDreamPost, deleteDreamPost, updateDreamPost } = require('./db');
+const { db, classrooms, initDb, users, poemsDb, articlesDb, messages, questions, library, dreamSessions, dreamMessages, settings, passwordResets, privateMessages, messageReactions, profileChangeRequests, pushSubscriptions, calculateStars, liveRecordings, recordedLessons, lessonTeachers, lessonFolders, lessonProgress, getDreamTeacherAlias, aiSecurity, advisorDb, buttonClicks, customGroups, pollsDb, alarmsDb, complaints, attendanceDb, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, getDreamPosts, reactToDreamPost, createDreamPost, deleteDreamPost, updateDreamPost } = require('./db');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'seereen_group_chat_super_secret_key_2026';
 const PORT = process.env.PORT || 7000;
@@ -416,6 +416,185 @@ app.post('/api/poems/:id/react', (req, res) => {
   }
 });
 
+// ================= STUDENT SHORT ARTICLES (کورتە وتارەکانی قوتابیان) =================
+// 1. Get all approved articles (Public)
+app.get('/api/articles', (req, res) => {
+  try {
+    const list = articlesDb.getApproved();
+    res.json({ success: true, articles: list });
+  } catch (err) {
+    console.error('Error fetching articles:', err);
+    res.status(500).json({ success: false, error: 'هەڵە لە هێنانی کورتە وتارەکان' });
+  }
+});
+
+// 2. Get user's own articles (Logged-in Student / User)
+app.get('/api/articles/my', (req, res) => {
+  try {
+    let authedUser = null;
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        authedUser = users.findById(decoded.id);
+      } catch (e) {}
+    }
+    if (!authedUser) {
+      return res.status(401).json({ success: false, error: 'تکایە سەرەتا بچۆ ژوورەوە' });
+    }
+    const myArticles = articlesDb.getByAuthor(authedUser.id);
+    res.json({ success: true, articles: myArticles });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'هەڵە لە هێنانی وتارەکانت' });
+  }
+});
+
+// 3. Submit a new short article (Student / User) - Created with status 'pending'
+app.post('/api/articles', (req, res) => {
+  try {
+    let authedUser = null;
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        authedUser = users.findById(decoded.id);
+      } catch (e) {}
+    }
+    if (!authedUser) {
+      return res.status(401).json({ success: false, error: 'تکایە سەرەتا بچۆ ژوورەوە بۆ ناردنی وتار' });
+    }
+    if (authedUser.is_blocked) {
+      return res.status(403).json({ success: false, error: 'هەژمارەکەت بلۆک کراوە' });
+    }
+
+    const { title, content } = req.body;
+    if (!title || !title.trim() || !content || !content.trim()) {
+      return res.status(400).json({ success: false, error: 'تکایە ناونیشان و دەقی کورتە وتارەکە بنووسە' });
+    }
+
+    const article = articlesDb.create({
+      title: title.trim(),
+      content: content.trim(),
+      author_id: authedUser.id,
+      author_name: authedUser.full_name || authedUser.username,
+      author_avatar: authedUser.avatar || '',
+      author_role: authedUser.role || 'student'
+    });
+
+    if (typeof io !== 'undefined' && io) {
+      io.emit('new_article_submitted', {
+        id: article.id,
+        title: article.title,
+        author_name: article.author_name
+      });
+    }
+
+    res.json({
+      success: true,
+      article,
+      message: 'وتارەکەت بە سەرکەوتوویی نێردرا و پاش پەسەندکردنی بەڕێوەبەرایەتی بڵاودەکرێتەوە.'
+    });
+  } catch (err) {
+    console.error('Error submitting article:', err);
+    res.status(500).json({ success: false, error: 'هەڵە لە ناردنی کورتە وتار' });
+  }
+});
+
+// 4. Admin: Get all articles (including pending, approved, rejected)
+app.get('/api/admin/articles', (req, res) => {
+  try {
+    let authedUser = null;
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        authedUser = users.findById(decoded.id);
+      } catch (e) {}
+    }
+    if (!authedUser || (authedUser.role !== 'admin' && authedUser.role !== 'super_admin' && authedUser.role !== 'teacher')) {
+      return res.status(403).json({ success: false, error: 'دەسەڵاتی ئەدمین یان مامۆستات نییە' });
+    }
+
+    const list = articlesDb.getAll();
+    res.json({ success: true, articles: list });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'هەڵە لە هێنانی وتارەکان' });
+  }
+});
+
+// 5. Admin: Update article status (approve or reject)
+app.put('/api/admin/articles/:id/status', (req, res) => {
+  try {
+    let authedUser = null;
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        authedUser = users.findById(decoded.id);
+      } catch (e) {}
+    }
+    if (!authedUser || (authedUser.role !== 'admin' && authedUser.role !== 'super_admin' && authedUser.role !== 'teacher')) {
+      return res.status(403).json({ success: false, error: 'دەسەڵاتی ئەدمین یان مامۆستات نییە' });
+    }
+
+    const { status } = req.body;
+    if (!['approved', 'rejected', 'pending'].includes(status)) {
+      return res.status(400).json({ success: false, error: 'دۆخی نادروستە' });
+    }
+
+    const ok = articlesDb.updateStatus(req.params.id, status, authedUser.full_name || authedUser.username);
+    if (ok) {
+      if (typeof io !== 'undefined' && io) {
+        io.emit('article_status_updated', {
+          id: Number(req.params.id),
+          status,
+          approved_by: authedUser.full_name || authedUser.username
+        });
+      }
+      res.json({ success: true });
+    } else {
+      res.status(404).json({ success: false, error: 'وتارەکە نەدۆزرایەوە' });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'هەڵە لە گۆڕینی دۆخی وتار' });
+  }
+});
+
+// 6. Admin: Delete article
+app.delete('/api/admin/articles/:id', (req, res) => {
+  try {
+    let authedUser = null;
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        authedUser = users.findById(decoded.id);
+      } catch (e) {}
+    }
+    if (!authedUser || (authedUser.role !== 'admin' && authedUser.role !== 'super_admin' && authedUser.role !== 'teacher')) {
+      return res.status(403).json({ success: false, error: 'دەسەڵاتی ئەدمین یان مامۆستات نییە' });
+    }
+
+    articlesDb.delete(req.params.id);
+    if (typeof io !== 'undefined' && io) io.emit('article_deleted', { id: Number(req.params.id) });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'هەڵە لە سڕینەوەی وتار' });
+  }
+});
+
+// 7. React / Like Article
+app.post('/api/articles/:id/react', (req, res) => {
+  try {
+    const clientId = req.headers['x-client-id'] || req.ip || 'anon_' + Date.now();
+    const result = articlesDb.like(req.params.id, clientId);
+    if (typeof io !== 'undefined' && io) io.emit('article_liked', { id: Number(req.params.id), likes: result.likes });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Error reacting to article' });
+  }
+});
+
 app.get('/api/announcements', (req, res) => {
   try {
     const list = getAnnouncements();
@@ -595,6 +774,10 @@ app.get('/dreams', (req, res) => {
 
 app.get('/poems', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'poems.html'));
+});
+
+app.get('/articles', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'articles.html'));
 });
 
 app.get('/', (req, res) => {

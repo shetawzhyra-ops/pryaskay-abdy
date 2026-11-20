@@ -3166,6 +3166,11 @@
 
 
 
+    <!-- Quranic Calligraphy Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/css/style.css?v=70.0&t=1795118000">
 
 
@@ -5300,6 +5305,172 @@
 
 
 
+
+
+    <!-- ================= QURANIC AYAH INTRO SPLASH ================= -->
+  <div id="quranIntroSplash" class="quran-intro-overlay" role="dialog" aria-modal="true" aria-label="ئایەتی پیرۆز">
+    <!-- Ambient Stars & Celestial Particle Glow -->
+    <div class="quran-stars-layer"></div>
+    <div class="quran-radial-glow"></div>
+    
+    <!-- Skip button -->
+    <button id="skipQuranIntro" class="quran-skip-btn" type="button" title="تێپەڕاندنی سەرەتا">
+      <span>تێپەڕاندن</span>
+      <i class="fa-solid fa-angles-left text-xs mr-1"></i>
+    </button>
+    
+    <!-- Central Spiritual Card -->
+    <div class="quran-card animate-quran-card">
+      <!-- Decorative Arch / Crescent Ornament Top -->
+      <div class="quran-arch-ornament">
+        <svg width="48" height="48" viewBox="0 0 100 100" class="mx-auto" fill="none">
+          <defs>
+            <linearGradient id="quranGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fef08a" />
+              <stop offset="50%" stop-color="#eab308" />
+              <stop offset="100%" stop-color="#ca8a04" />
+            </linearGradient>
+          </defs>
+          <rect x="25" y="25" width="50" height="50" rx="5" transform="rotate(0 50 50)" stroke="url(#quranGoldGrad)" stroke-width="2.5" fill="rgba(234, 179, 8, 0.08)"/>
+          <rect x="25" y="25" width="50" height="50" rx="5" transform="rotate(45 50 50)" stroke="url(#quranGoldGrad)" stroke-width="2.5" fill="rgba(234, 179, 8, 0.08)"/>
+          <circle cx="50" cy="50" r="13" stroke="url(#quranGoldGrad)" stroke-width="2" fill="rgba(234, 179, 8, 0.15)"/>
+          <circle cx="50" cy="50" r="4" fill="url(#quranGoldGrad)"/>
+        </svg>
+      </div>
+
+      <!-- Bismillah -->
+      <div class="quran-bismillah">
+        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+      </div>
+      
+      <!-- Quranic Ayah Box -->
+      <div class="quran-verse-container">
+        <span class="quran-bracket">﴿</span>
+        <span id="quranAyahText" class="quran-ayah-text"></span>
+        <span id="quranCursor" class="quran-cursor"></span>
+        <span id="quranBracketEnd" class="quran-bracket opacity-0 transition-opacity duration-500">﴾</span>
+      </div>
+      
+      <!-- Surah & Verse Badge -->
+      <div id="quranAyahMeta" class="quran-meta-badge opacity-0 transform translate-y-3 transition-all duration-700">
+        <div class="quran-meta-line"></div>
+        <div class="quran-meta-pill">
+          <i class="fa-solid fa-book-quran text-amber-300 text-sm"></i>
+          <span class="text-amber-100 font-semibold tracking-wide">سورة يوسف: ١٠٠</span>
+        </div>
+        <div class="quran-meta-line"></div>
+      </div>
+      
+      <!-- Subtle instruction -->
+      <div class="quran-hint-text">
+        <span>بۆ بەردەوامبوون کلیک بکە یان چاوەڕێ بکە...</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      function initQuranSplashIntro() {
+        var splash = document.getElementById('quranIntroSplash');
+        if (!splash) return;
+        
+        var textEl = document.getElementById('quranAyahText');
+        var cursorEl = document.getElementById('quranCursor');
+        var bracketEnd = document.getElementById('quranBracketEnd');
+        var metaEl = document.getElementById('quranAyahMeta');
+        var skipBtn = document.getElementById('skipQuranIntro');
+        
+        var ayahText = 'هَٰذَا تَأْوِيلُ رُؤْيَايَ مِن قَبْلُ قَدْ جَعَلَهَا رَبِّي حَقًّا ۖ';
+        // Match base character plus combining marks (harakat/diacritics)
+        var regex = /.[ً-ٰٟۖ-ۭ]*/gu;
+        var clusters = ayahText.match(regex) || ayahText.split('');
+        
+        var currentIndex = 0;
+        var isDismissed = false;
+        var typeTimer = null;
+        var autoDismissTimer = null;
+        
+        function dismiss() {
+          if (isDismissed) return;
+          isDismissed = true;
+          if (typeTimer) clearTimeout(typeTimer);
+          if (autoDismissTimer) clearTimeout(autoDismissTimer);
+          
+          splash.classList.add('quran-intro-fadeout');
+          setTimeout(function() {
+            try {
+              splash.remove();
+            } catch (e) {
+              splash.style.display = 'none';
+            }
+          }, 950);
+        }
+        
+        // Skip on click anywhere
+        splash.addEventListener('click', function(e) {
+          dismiss();
+        });
+        
+        if (skipBtn) {
+          skipBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dismiss();
+          });
+        }
+        
+        // Skip on key press
+        window.addEventListener('keydown', function onKey(e) {
+          if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
+            dismiss();
+            window.removeEventListener('keydown', onKey);
+          }
+        });
+        
+        // Begin typewriter animation
+        setTimeout(function() {
+          function typeNext() {
+            if (isDismissed) return;
+            if (currentIndex < clusters.length) {
+              textEl.textContent += clusters[currentIndex];
+              currentIndex++;
+              var isSpace = clusters[currentIndex - 1] === ' ';
+              var delay = isSpace ? 35 : 55;
+              typeTimer = setTimeout(typeNext, delay);
+            } else {
+              // Typing complete
+              if (cursorEl) cursorEl.style.display = 'none';
+              if (bracketEnd) {
+                bracketEnd.classList.remove('opacity-0');
+                bracketEnd.classList.add('opacity-100');
+              }
+              
+              // Reveal Surah & Ayah badge smoothly
+              setTimeout(function() {
+                if (isDismissed) return;
+                if (metaEl) {
+                  metaEl.classList.remove('opacity-0', 'translate-y-3');
+                  metaEl.classList.add('opacity-100', 'translate-y-0');
+                }
+                
+                // Allow user 2.2 seconds to read before auto-fading
+                autoDismissTimer = setTimeout(function() {
+                  dismiss();
+                }, 2200);
+              }, 300);
+            }
+          }
+          
+          typeNext();
+        }, 350);
+      }
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initQuranSplashIntro);
+      } else {
+        initQuranSplashIntro();
+      }
+    })();
+  </script>
 
 
   <!-- ================= PUBLIC LANDING PAGE (VISITORS) ================= -->
@@ -13653,6 +13824,21 @@
 
 
             </a>
+
+            <!-- Article Moderation Button (پەسەندکردنی کورتە وتارەکان) -->
+            <button id="drawerArticlesAdminBtn" onclick="closeMainMenuDrawer(); openArticlesAdminModal();" class="hidden drawer-tool-btn group !border-emerald-500/40 !bg-gradient-to-r !from-emerald-950/40 !via-slate-900 !to-teal-950/40 hover:!border-emerald-400">
+              <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <div class="drawer-tool-icon-box !bg-emerald-500/20 !border-emerald-400/40 !text-emerald-300">
+                  <i class="fa-solid fa-pen-nib"></i>
+                </div>
+                <span class="drawer-tool-title !text-emerald-200">پەسەندکردنی کورتە وتار</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span id="drawerArticlesPendingBadge" class="hidden px-2 py-0.5 bg-amber-500 text-slate-950 text-[10px] font-black rounded-full shadow animate-pulse">0</span>
+                <span class="drawer-tool-badge !bg-emerald-500/20 !text-emerald-300 !border-emerald-400/30">ئەدمین</span>
+              </div>
+            </button>
+
 
 
 
@@ -59419,6 +59605,47 @@
 
 
     <!-- Modal: Write Article From Profile -->
+    <!-- Modal: Admin Articles Moderation (بەڕێوەبردنی کورتە وتارەکان بۆ ستاف) -->
+  <div id="modalAdminArticles" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-md">
+    <div class="w-full max-w-2xl bg-slate-900 border-2 border-emerald-500/40 rounded-3xl p-5 sm:p-7 shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
+      <!-- Header -->
+      <div class="flex items-center justify-between pb-3.5 border-b border-white/10 relative z-10">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-lg">
+            <i class="fa-solid fa-feather-pointed"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-base sm:text-lg text-white">بەڕێوەبردنی کورتە وتارەکانی فێرخوازان</h3>
+            <p class="text-xs text-emerald-300/80">پێداچوونەوە، پەسەندکردن یان ڕەتکردنەوەی وتارەکان</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeArticlesAdminModal()" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="flex items-center gap-2 py-3 border-b border-white/5 relative z-10">
+        <button type="button" onclick="filterAdminArticles('pending')" id="tabAdminArtPending" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+          <span>چاوەڕوانکراو (پێویست بە بڕیار)</span>
+          <span id="adminArtPendingCountBadge" class="mr-1 px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black">0</span>
+        </button>
+        <button type="button" onclick="filterAdminArticles('approved')" id="tabAdminArtApproved" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white hover:bg-white/5 border border-transparent">
+          پەسەندکراوەکان
+        </button>
+        <button type="button" onclick="filterAdminArticles('all')" id="tabAdminArtAll" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white hover:bg-white/5 border border-transparent">
+          هەموو
+        </button>
+      </div>
+
+      <!-- Articles list container -->
+      <div id="adminArticlesList" class="flex-1 overflow-y-auto space-y-3.5 py-3 pr-1 relative z-10">
+        <p class="text-xs text-slate-400 text-center py-6">بارکردنی وتارەکان...</p>
+      </div>
+    </div>
+  </div>
+
+
   <div id="modalProfileArticle" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md">
     <div class="w-full max-w-lg bg-slate-900 border-2 border-emerald-500/40 rounded-3xl p-5 sm:p-7 shadow-2xl relative overflow-hidden flex flex-col max-h-[92vh]">
       <div class="flex items-center justify-between pb-3.5 border-b border-white/10 relative z-10">
