@@ -605,6 +605,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 });
 
 function showAuthScreen() {
+  try { sessionStorage.setItem('has_visited_section', 'true'); } catch (e) {}
   const landing = document.getElementById('landingPage');
   if (landing) {
     landing.classList.add('hidden');
@@ -626,6 +627,7 @@ function showAuthScreen() {
 }
 
 function showMainApp() {
+  try { sessionStorage.setItem('has_visited_section', 'true'); } catch (e) {}
   localStorage.setItem('ferga_view', 'app');
   document.documentElement.classList.add('in-app-mode');
   const landing = document.getElementById('landingPage');

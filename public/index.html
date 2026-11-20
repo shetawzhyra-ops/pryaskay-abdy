@@ -5358,6 +5358,39 @@
 
   <script>
     (function() {
+      // Check immediately if user has navigated to other sections during this session
+      var splash = document.getElementById('quranIntroSplash');
+      var hasVisitedSection = false;
+      try {
+        hasVisitedSection = sessionStorage.getItem('has_visited_section') === 'true';
+        if (!hasVisitedSection && document.referrer) {
+          var refUrl = new URL(document.referrer);
+          if (refUrl.origin === window.location.origin && refUrl.pathname !== '/' && refUrl.pathname !== '') {
+            hasVisitedSection = true;
+            sessionStorage.setItem('has_visited_section', 'true');
+          }
+        }
+      } catch (e) {}
+
+      if (hasVisitedSection) {
+        if (splash) {
+          splash.style.display = 'none';
+          splash.remove();
+        }
+        return;
+      }
+
+      // Track whenever user clicks any link to another section or page
+      document.addEventListener('click', function(e) {
+        var a = e.target.closest('a');
+        if (a && a.getAttribute('href')) {
+          var href = a.getAttribute('href');
+          if (href && (href.startsWith('/dreams') || href.startsWith('/poems') || href.startsWith('/articles') || (href.startsWith('/') && href !== '/' && href !== '/#'))) {
+            try { sessionStorage.setItem('has_visited_section', 'true'); } catch(e) {}
+          }
+        }
+      }, true);
+
       function initQuranSplashIntro() {
         var splash = document.getElementById('quranIntroSplash');
         if (!splash) return;
