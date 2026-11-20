@@ -5602,28 +5602,25 @@ body.light-theme #drawerStaffHeader {
 }
 
 .quran-verse-container {
-  margin: 18px 0;
-  min-height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  margin: 16px 0;
+  min-height: 105px;
+  text-align: center;
   line-height: 2.3;
 }
 
 .quran-bracket {
   font-family: 'Amiri Quran', 'Scheherazade New', 'Amiri', serif;
-  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
   color: #d4af37;
   text-shadow: 0 0 18px rgba(212, 175, 55, 0.6);
-  margin: 0 8px;
+  margin: 0 6px;
   vertical-align: middle;
-  display: inline-block;
+  display: inline;
 }
 
 .quran-ayah-text {
   font-family: 'Amiri Quran', 'Scheherazade New', 'Amiri', serif;
-  font-size: clamp(1.65rem, 3.9vw, 2.75rem);
+  font-size: clamp(1.35rem, 3.4vw, 2.45rem);
   font-weight: 600;
   color: #fffbf0;
   text-shadow: 
@@ -5718,21 +5715,27 @@ body.light-theme #drawerStaffHeader {
 
 @media (max-width: 640px) {
   .quran-card {
-    padding: 32px 18px;
-    width: 94%;
+    padding: 28px 14px;
+    width: 95%;
   }
   .quran-verse-container {
-    min-height: 100px;
+    min-height: 85px;
+    margin: 12px 0;
+    line-height: 2.1;
+  }
+  .quran-ayah-text {
+    font-size: clamp(1.15rem, 4.4vw, 1.35rem);
   }
   .quran-bracket {
-    margin: 0 4px;
+    font-size: clamp(1.3rem, 5vw, 1.6rem);
+    margin: 0 3px;
   }
   .quran-meta-line {
     max-width: 40px;
   }
   .quran-skip-btn {
-    top: 16px;
-    left: 16px;
+    top: 14px;
+    left: 14px;
     padding: 6px 14px;
     font-size: 0.78rem;
   }
