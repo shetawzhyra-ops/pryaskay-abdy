@@ -987,16 +987,17 @@ const LANDING_CARD_PALETTES = [
     "id": "card-warm-sand",
     "category": "light",
     "name": "خیز و بیابان (Warm Sand)",
-    "hex": "#fdf6ee",
-    "bg": "rgba(253, 246, 238, 0.97)",
-    "border": "rgba(180, 83, 9, 0.16)",
-    "titleColor": "#451a03",
-    "textColor": "#78350f",
-    "accentColor": "#b45309",
-    "iconBg": "rgba(180, 83, 9, 0.14)",
-    "tagBg": "rgba(180, 83, 9, 0.12)",
-    "tagText": "#92400e",
-    "shadow": "0 12px 32px -8px rgba(180, 83, 9, 0.08)"
+    "hex": "#e8d8c3",
+    "bg": "linear-gradient(165deg, rgba(239, 227, 209, 0.98) 0%, rgba(228, 212, 189, 0.97) 100%)",
+    "border": "rgba(156, 120, 78, 0.30)",
+    "titleColor": "#361c0c",
+    "textColor": "#54371f",
+    "descColor": "#54371f",
+    "accentColor": "#9a5113",
+    "iconBg": "rgba(160, 120, 70, 0.18)",
+    "tagBg": "rgba(160, 120, 70, 0.15)",
+    "tagText": "#7a3e0b",
+    "shadow": "0 16px 38px -10px rgba(50, 35, 20, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55)"
   },
   {
     "id": "card-lavender-mist",
@@ -1628,16 +1629,23 @@ function applyLandingCardPaletteToDoc(colorId, doc) {
     styleTag.id = 'dynamicLandingCardStyle';
     doc.head.appendChild(styleTag);
   }
-  var css = '.glass-card, .hero-compact-card, .landing-hero-stage, .landing-ann-card, .landing-pillar-card, .fb-post-card, .reaction-bar, .dream-voice-player, .modal-content {' +
+  var css = '.glass-card, .hero-compact-card, .landing-hero-stage, .landing-ann-card, .landing-pillar-card, .fb-post-card, .reaction-bar, .dream-voice-player, .modal-content, #dreamsGatewaySection .glass-card, #dreamsGatewaySection .landing-dreams-banner, #landingFeaturedDualSection button, #landingFeaturedDualSection a, .landing-feature-tab, .classroom-lobby-card, #membersSidebar, #classroomMembersSidebar {' +
     'background: ' + palette.bg + ' !important;' +
     'border: 1px solid ' + palette.border + ' !important;' +
     'box-shadow: ' + palette.shadow + ' !important;' +
     'color: ' + palette.textColor + ' !important;' +
   '}' +
   '.fb-post-card { border-color: ' + palette.border + ' !important; }' +
-  '.fb-post-title, .landing-pillar-title, #heroTitle, #dreamsPageTitle { color: ' + palette.titleColor + ' !important; }' +
-  '#dreamsPageSubtitle { color: ' + (palette.descColor || palette.textColor) + ' !important; }' +
-  '.fb-post-text { color: ' + palette.textColor + ' !important; }';
+  '.fb-post-title, .landing-pillar-title, #heroTitle, #dreamsPageTitle, .landing-ann-card h4, #dreamGatewayTitle, #sectionsHeaderTitle, #postsHeaderTitle, .classroom-lobby-card h3, #membersSidebar h3, #drawerUserName { color: ' + palette.titleColor + ' !important; }' +
+  '#heroSubtitle, .landing-hero-subtitle, #dreamsPageSubtitle, #dreamGatewayDesc, #sectionsHeaderSubtitle, #postsHeaderSubtitle, .classroom-lobby-card p, #classroomsLobbyView p { color: ' + (palette.descColor || palette.textColor) + ' !important; }' +
+  '.landing-navbar-premium, #dreamsHeader, #poemsHeader, #articlesHeader, #mainApp > header { background: rgba(236, 222, 202, 0.95) !important; border-bottom: 1px solid ' + palette.border + ' !important; }' +
+  '#btnDialectDropdown.landing-dialect-pill, #btnDialectDropdown, #btnBackToHome { background: rgba(222, 204, 180, 0.95) !important; border-color: rgba(160, 120, 70, 0.38) !important; color: #381e0a !important; }' +
+  '.landing-brand-word, .logo-text-animated, .brand-title { color: #361c0c !important; background: transparent !important; background-image: none !important; -webkit-background-clip: unset !important; background-clip: unset !important; -webkit-text-fill-color: #361c0c !important; filter: none !important; text-shadow: none !important; } .brand-title { color: #361c0c !important; background: none !important; -webkit-background-clip: unset !important; -webkit-text-fill-color: #361c0c !important; filter: none !important; }' +
+  '#dreamsGatewaySection #dreamGatewayTitle { color: ' + palette.titleColor + ' !important; }' +
+  '#dreamsGatewaySection #dreamGatewayDesc { color: ' + (palette.descColor || palette.textColor) + ' !important; }' +
+  '#dreamsGatewaySection .landing-dreams-badge { background: rgba(160, 120, 70, 0.15) !important; border: 1px solid rgba(160, 120, 70, 0.3) !important; color: #85430e !important; }' +
+  '#dreamsGatewaySection .landing-dreams-orb { background: rgba(160, 120, 70, 0.15) !important; border: 1px solid rgba(160, 120, 70, 0.3) !important; }' +
+  '.fb-post-text { color: ' + palette.textColor + ' !important; }' +'#landingFeaturedDualSection h3 { color: ' + palette.titleColor + ' !important; }' +'#landingFeaturedDualSection p { color: ' + (palette.descColor || palette.textColor) + ' !important; }' +'#landingFeaturedDualSection span[class*="rounded-xl"], #landingFeaturedDualSection div[class*="rounded-xl"] { background: rgba(217, 119, 6, 0.15) !important; border: 1px solid rgba(180, 83, 9, 0.35) !important; color: #78350f !important; font-weight: 800 !important; }' +'#mainApp, #classroomsLobbyView, #chatView { background-color: #86b89c !important; }' +'#classroomsLobbyView { background: transparent !important; }' +'#membersListContainer > div { background: rgba(247, 240, 228, 0.95) !important; border: 1px solid rgba(156, 120, 78, 0.22) !important; color: #361c0c !important; }' +'#membersListContainer > div .font-bold, #membersListContainer > div .font-black { color: #361c0c !important; }' +'#classroomsSearchInput, #membersSearchInput { background: #fbf7f0 !important; border: 1px solid rgba(156, 120, 78, 0.35) !important; color: #361c0c !important; }';
   styleTag.innerHTML = css;
 }
 

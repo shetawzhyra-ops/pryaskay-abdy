@@ -206,7 +206,7 @@
 
 
 
-      --card-warm-sand: rgba(253, 246, 238, 0.97);
+      --card-warm-sand: rgba(235, 218, 196, 0.97);
 
 
 
@@ -238,7 +238,7 @@
 
 
 
-    html, body, body.in-landing, body.in-app, body.light-mode, body.light-theme, #mainApp {
+    html, body, body.in-landing, body.in-app, body.light-mode, body.light-theme, #mainApp, #classroomsLobbyView, #chatView, main {
 
 
 
@@ -326,7 +326,7 @@
 
 
 
-    .glass-card, .hero-compact-card, .landing-hero-stage, .landing-ann-card, .landing-pillar-card, .fb-post-card, .reaction-bar, .dream-voice-player {
+    .glass-card, .hero-compact-card, .landing-hero-stage, .landing-ann-card, .landing-pillar-card, .fb-post-card, .reaction-bar, .dream-voice-player, #dreamsGatewaySection .glass-card, #dreamsGatewaySection .landing-dreams-banner, #landingFeaturedDualSection button, #landingFeaturedDualSection a, .landing-feature-tab, .classroom-lobby-card, #membersSidebar, #classroomMembersSidebar {
 
 
 
@@ -334,7 +334,7 @@
 
 
 
-      background: rgba(253, 246, 238, 0.97) !important;
+      background: linear-gradient(165deg, rgba(241, 228, 209, 0.98) 0%, rgba(228, 211, 188, 0.97) 100%) !important;
 
 
 
@@ -342,7 +342,7 @@
 
 
 
-      border: 1px solid rgba(180, 83, 9, 0.16) !important;
+      border: 1px solid rgba(156, 120, 78, 0.28) !important;
 
 
 
@@ -350,7 +350,7 @@
 
 
 
-      box-shadow: 0 12px 32px -8px rgba(180, 83, 9, 0.08) !important;
+      box-shadow: 0 16px 38px -10px rgba(50, 35, 20, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
 
 
 
@@ -358,7 +358,7 @@
 
 
 
-      color: #78350f !important;
+      color: #54371f !important;
 
 
 
@@ -406,7 +406,7 @@
 
 
 
-    #heroTitle, #annActiveTitle, .fb-post-title {
+    #heroTitle, #annActiveTitle, .fb-post-title, #dreamGatewayTitle, #sectionsHeaderTitle, #postsHeaderTitle, .classroom-lobby-card h3, #membersSidebar h3 {
 
 
 
@@ -414,7 +414,7 @@
 
 
 
-      color: #451a03 !important;
+      color: #361c0c !important;
 
 
 
@@ -438,7 +438,7 @@
 
 
 
-    .landing-pillar-desc, #heroSubtitle, #annActiveContent, .fb-post-text {
+    .landing-pillar-desc, #heroSubtitle, #annActiveContent, .fb-post-text, #dreamGatewayDesc, #sectionsHeaderSubtitle, #postsHeaderSubtitle, .classroom-lobby-card p, #classroomsLobbyView p {
 
 
 
@@ -446,7 +446,7 @@
 
 
 
-      color: #78350f !important;
+      color: #54371f !important;
 
 
 
@@ -478,7 +478,7 @@
 
 
 
-      border: 1px solid rgba(180, 83, 9, 0.16) !important;
+      border: 1px solid rgba(156, 120, 78, 0.28) !important;
 
 
 
@@ -518,7 +518,7 @@
 
 
 
-      border: 1px solid rgba(180, 83, 9, 0.16) !important;
+      border: 1px solid rgba(156, 120, 78, 0.28) !important;
 
 
 
@@ -550,7 +550,8 @@
 
 
 
-      background: rgba(253, 246, 238, 0.92) !important;
+      background: rgba(235, 220, 198, 0.94) !important;
+      border-bottom: 1px solid rgba(156, 120, 78, 0.24) !important;
 
 
 
@@ -574,7 +575,7 @@
 
 
 
-      border-bottom: 1px solid rgba(180, 83, 9, 0.16) !important;
+      border-bottom: 1px solid rgba(156, 120, 78, 0.28) !important;
 
 
 
@@ -605,6 +606,120 @@
 
 
 
+
+    
+    /* Sage Green & Beige Extra Enhancements */
+    #landingFeaturedDualSection button,
+    #landingFeaturedDualSection a,
+    .landing-feature-tab {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98) 0%, rgba(228, 212, 189, 0.97) 100%) !important;
+      border: 1px solid rgba(156, 120, 78, 0.30) !important;
+      box-shadow: 0 14px 30px -8px rgba(50, 35, 20, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    }
+    #landingFeaturedDualSection h3 {
+      color: #361c0c !important;
+    }
+    #landingFeaturedDualSection p {
+      color: #54371f !important;
+    }
+    #dreamsGatewaySection .landing-dreams-banner,
+    #dreamsGatewaySection .glass-card {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98) 0%, rgba(228, 212, 189, 0.97) 100%) !important;
+      border: 1px solid rgba(156, 120, 78, 0.30) !important;
+      box-shadow: 0 16px 38px -10px rgba(50, 35, 20, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    }
+    #dreamsGatewaySection #dreamGatewayTitle {
+      color: #361c0c !important;
+    }
+    #dreamsGatewaySection #dreamGatewayDesc {
+      color: #54371f !important;
+    }
+    #dreamsGatewaySection .landing-dreams-badge {
+      background: rgba(180, 83, 9, 0.12) !important;
+      border: 1px solid rgba(156, 120, 78, 0.28) !important;
+      color: #78350f !important;
+    }
+    #dreamsGatewaySection .landing-dreams-orb {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+      border: 1px solid rgba(245, 158, 11, 0.40) !important;
+    }
+    #classroomsLobbyView,
+    #chatView {
+      background-color: transparent !important;
+    }
+    .classroom-lobby-card {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98) 0%, rgba(228, 212, 189, 0.97) 100%) !important;
+      border: 1px solid rgba(156, 120, 78, 0.30) !important;
+      box-shadow: 0 12px 28px -8px rgba(50, 35, 20, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    }
+    .classroom-lobby-card h3 {
+      color: #361c0c !important;
+    }
+    .classroom-lobby-card p,
+    .classroom-lobby-card span {
+      color: #54371f !important;
+    }
+    #membersSidebar,
+    #classroomMembersSidebar {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98) 0%, rgba(228, 212, 189, 0.97) 100%) !important;
+      border-right: 1px solid rgba(156, 120, 78, 0.28) !important;
+      border-left: 1px solid rgba(156, 120, 78, 0.28) !important;
+    }
+    #membersListContainer > div {
+      background: rgba(247, 240, 228, 0.95) !important;
+      border: 1px solid rgba(156, 120, 78, 0.22) !important;
+      color: #361c0c !important;
+    }
+    #membersListContainer > div .font-bold,
+    #membersListContainer > div .font-black {
+      color: #361c0c !important;
+    }
+    #membersListContainer > div .text-slate-400,
+    #membersListContainer > div .text-slate-500 {
+      color: #785336 !important;
+    }
+    #classroomsSearchInput,
+    #membersSearchInput {
+      background: #fbf7f0 !important;
+      border: 1px solid rgba(156, 120, 78, 0.35) !important;
+      color: #361c0c !important;
+    }
+    #classroomsSearchInput::placeholder,
+    #membersSearchInput::placeholder {
+      color: #8c6846 !important;
+    }
+    
+    .landing-brand-word,
+    .logo-text-animated,
+    .brand-title {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+      -webkit-background-clip: unset !important;
+      background-clip: unset !important;
+      -webkit-text-fill-color: #361c0c !important;
+      color: #361c0c !important;
+      filter: none !important;
+      text-shadow: none !important;
+    }
+
+    .brand-title {
+      background: none !important;
+      -webkit-background-clip: unset !important;
+      -webkit-text-fill-color: #361c0c !important;
+      color: #361c0c !important;
+      filter: none !important;
+    }
+    #btnBackToHome,
+    #btnDialectDropdown {
+      background: rgba(239, 227, 209, 0.95) !important;
+      border: 1px solid rgba(156, 120, 78, 0.35) !important;
+      color: #361c0c !important;
+    }
+    #btnBackToHome i,
+    #btnDialectDropdown i {
+      color: #85430e !important;
+    }
 
     /* 3. AUTH SCREEN & LOGIN MODAL (Sufi Sage & Warm Sand Theme) */
 
@@ -1846,478 +1961,80 @@
 
 
 
-    /* 5. MAIN MENU DRAWER */
-
-
-
-
-
-
-
+    /* 5. MAIN MENU DRAWER (Harmonized Warm Beige & Light Beige) */
     #mainMenuDrawerBackdrop {
-
-
-
-
-
-
-
       background: rgba(45, 82, 63, 0.6) !important;
-
-
-
-
-
-
-
       backdrop-filter: blur(10px) !important;
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
     #mainMenuDrawerPanel {
-
-
-
-
-
-
-
-      background: rgba(253, 246, 238, 0.98) !important;
-
-
-
-
-
-
-
-      border-left: 1px solid rgba(180, 83, 9, 0.2) !important;
-
-
-
-
-
-
-
-      box-shadow: -10px 0 35px rgba(69, 26, 3, 0.15) !important;
-
-
-
-
-
-
-
-      color: #451a03 !important;
-
-
-
-
-
-
-
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98) 0%, rgba(228, 212, 189, 0.97) 100%) !important;
+      border-left: 1px solid rgba(156, 120, 78, 0.28) !important;
+      box-shadow: -12px 0 40px rgba(50, 35, 20, 0.15) !important;
+      color: #361c0c !important;
     }
-
-
-
-
-
-
-
     #mainMenuDrawerPanel > div:first-child {
-
-
-
-
-
-
-
-      background: rgba(253, 246, 238, 0.95) !important;
-
-
-
-
-
-
-
-      border-bottom: 1px solid rgba(180, 83, 9, 0.16) !important;
-
-
-
-
-
-
-
+      background: rgba(235, 219, 198, 0.98) !important;
+      border-bottom: 1px solid rgba(156, 120, 78, 0.25) !important;
     }
-
-
-
-
-
-
-
     #mainMenuDrawerPanel h3 {
-
-
-
-
-
-
-
-      color: #451a03 !important;
-
-
-
-
-
-
-
+      color: #361c0c !important;
     }
-
-
-
-
-
-
-
     #mainMenuDrawerPanel p {
-
-
-
-
-
-
-
-      color: #78350f !important;
-
-
-
-
-
-
-
+      color: #54371f !important;
     }
-
-
-
-
-
-
-
     #mainMenuDrawerPanel button[onclick="closeMainMenuDrawer()"] {
-
-
-
-
-
-
-
-      background: #ffffff !important;
-
-
-
-
-
-
-
-      border: 1px solid rgba(180, 83, 9, 0.2) !important;
-
-
-
-
-
-
-
-      color: #78350f !important;
-
-
-
-
-
-
-
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.28) !important;
+      color: #361c0c !important;
     }
-
-
-
-
-
-
-
+    #mainMenuDrawerPanel button[onclick="closeMainMenuDrawer()"]:hover {
+      background: rgba(241, 230, 214, 0.98) !important;
+    }
     #mainMenuDrawerPanel div[onclick*="openMyProfile"] {
-
-
-
-
-
-
-
-      background: #ffffff !important;
-
-
-
-
-
-
-
-      border: 1px solid rgba(180, 83, 9, 0.18) !important;
-
-
-
-
-
-
-
-      box-shadow: 0 4px 14px rgba(69, 26, 3, 0.06) !important;
-
-
-
-
-
-
-
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.25) !important;
+      box-shadow: 0 4px 12px rgba(50, 35, 20, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
     }
-
-
-
-
-
-
-
     #drawerUserName {
-
-
-
-
-
-
-
-      color: #451a03 !important;
-
-
-
-
-
-
-
+      color: #361c0c !important;
     }
-
-
-
-
-
-
-
-    #drawerGeneralHeader, #drawerCustomGroupsSection span {
-
-
-
-
-
-
-
-      color: #451a03 !important;
-
-
-
-
-
-
-
+    #drawerGeneralHeader, #drawerStaffHeader, #drawerCustomGroupsSection span {
+      color: #361c0c !important;
     }
-
-
-
-
-
-
-
-    .drawer-tool-btn {
-
-
-
-
-
-
-
-      background: #ffffff !important;
-
-
-
-
-
-
-
-      border: 1px solid rgba(180, 83, 9, 0.16) !important;
-
-
-
-
-
-
-
-      color: #451a03 !important;
-
-
-
-
-
-
-
-      box-shadow: 0 2px 8px rgba(69, 26, 3, 0.04) !important;
-
-
-
-
-
-
-
-    }
-
-
-
-
-
-
-
-    .drawer-tool-btn:hover {
-
-
-
-
-
-
-
-      background: rgba(253, 246, 238, 0.9) !important;
-
-
-
-
-
-
-
-      border-color: rgba(180, 83, 9, 0.3) !important;
-
-
-
-
-
-
-
-    }
-
-
-
-
-
-
-
-    .drawer-tool-title {
-
-
-
-
-
-
-
-      color: #451a03 !important;
-
-
-
-
-
-
-
-    }
-
-
-
-
-
-
-
-    .drawer-tool-icon-box {
-
-
-
-
-
-
-
-      background: rgba(180, 83, 9, 0.1) !important;
-
-
-
-
-
-
-
-      border: 1px solid rgba(180, 83, 9, 0.18) !important;
-
-
-
-
-
-
-
+    #drawerGeneralHeader i, #drawerStaffHeader i {
       color: #b45309 !important;
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-    .drawer-tool-badge {
-
-
-
-
-
-
-
-      background: rgba(180, 83, 9, 0.08) !important;
-
-
-
-
-
-
-
-      border: 1px solid rgba(180, 83, 9, 0.15) !important;
-
-
-
-
-
-
-
+    .drawer-tool-btn,
+    #mainMenuDrawerPanel .drawer-tool-btn,
+    #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateGroupBtn):not([onclick*="logout"]):not([onclick*="Logout"]) {
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.24) !important;
+      color: #361c0c !important;
+      box-shadow: 0 3px 10px rgba(50, 35, 20, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+    }
+    .drawer-tool-btn:hover,
+    #mainMenuDrawerPanel .drawer-tool-btn:hover {
+      background: rgba(241, 230, 214, 0.98) !important;
+      border-color: rgba(156, 120, 78, 0.38) !important;
+    }
+    .drawer-tool-title {
+      color: #361c0c !important;
+    }
+    .drawer-tool-icon-box,
+    #mainMenuDrawerPanel .drawer-tool-icon-box {
+      background: rgba(217, 119, 6, 0.14) !important;
+      border: 1px solid rgba(180, 83, 9, 0.28) !important;
+      color: #b45309 !important;
+      box-shadow: none !important;
+    }
+    .drawer-tool-badge,
+    #mainMenuDrawerPanel .drawer-tool-badge {
+      background: rgba(217, 119, 6, 0.12) !important;
+      border: 1px solid rgba(180, 83, 9, 0.25) !important;
       color: #78350f !important;
-
-
-
-
-
-
-
+    }
+    #mainMenuDrawerPanel .fa-chevron-left {
+      color: #85430e !important;
     }
 
 
@@ -3171,7 +2888,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="/css/style.css?v=72.0&t=1795255000">
+  <link rel="stylesheet" href="/css/style.css?v=79.0&t=1795287000">
 
 
 
@@ -6689,10 +6406,10 @@
           <button 
             type="button" 
             onclick="openDirectDreamPrompt()" 
-            class="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-amber-600/35 bg-gradient-to-br from-amber-500/25 via-white/95 to-amber-500/15 dark:from-slate-900/95 dark:via-purple-950/50 dark:to-slate-900/95 shadow-lg flex items-center justify-between gap-3 sm:gap-4 cursor-pointer backdrop-blur-xl"
+            class="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-[#9c784e]/30 bg-gradient-to-br from-[#efe3d1] to-[#e4d4bd] shadow-lg flex items-center justify-between gap-3 sm:gap-4 cursor-pointer backdrop-blur-xl"
             title="ناردنی خەون بۆ لێکدانەوە"
           >
-            <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/25 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+            <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
             
             <div class="flex items-center gap-3.5 sm:gap-4 min-w-0 relative z-10">
               <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center text-xl sm:text-2xl shadow-md shrink-0 group-hover:scale-105 group-hover:rotate-6 transition-transform">
@@ -6700,18 +6417,18 @@
               </div>
               <div class="min-w-0">
                 <div class="flex items-center gap-2 mb-1">
-                  <h3 class="font-black text-sm sm:text-base md:text-lg text-slate-950 dark:text-white group-hover:text-amber-700 dark:group-hover:text-amber-300 transition-colors">
+                  <h3 class="font-black text-sm sm:text-base md:text-lg text-[#361c0c] transition-colors">
                     ناردنی خەون بۆ لێکدانەوە
                   </h3>
-                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" title="کارایە"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse shrink-0" title="کارایە"></span>
                 </div>
-                <p class="text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 font-semibold truncate">
+                <p class="text-xs sm:text-[13px] text-[#54371f] font-semibold truncate">
                   ڕاستەوخۆ، نهێنی و دەنگی لەگەڵ مامۆستا
                 </p>
               </div>
             </div>
 
-            <div class="shrink-0 relative z-10 flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-amber-500/25 border border-amber-500/50 text-amber-950 dark:text-amber-300 font-black text-xs group-hover:bg-amber-500 group-hover:text-white transition-all shadow-sm">
+            <div class="shrink-0 relative z-10 flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-amber-500/20 border border-amber-600/35 text-[#361c0c] font-black text-xs transition-all shadow-sm">
               <span>چات</span>
               <i class="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-1 transition-transform"></i>
             </div>
@@ -6721,29 +6438,29 @@
           <div class="flex flex-col gap-2">
             <a 
               href="/poems"
-              class="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-sky-600/35 bg-gradient-to-br from-sky-500/25 via-white/95 to-sky-500/15 dark:from-slate-900/95 dark:via-sky-950/50 dark:to-slate-900/95 shadow-lg flex items-center justify-between gap-3 sm:gap-4 cursor-pointer backdrop-blur-xl no-underline"
+              class="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-[#9c784e]/30 bg-gradient-to-br from-[#efe3d1] to-[#e4d4bd] shadow-lg flex items-center justify-between gap-3 sm:gap-4 cursor-pointer backdrop-blur-xl no-underline"
               title="شیعرەکانی م. ئازاد — کردنەوەی دیوانی شیعرەکان"
             >
-              <div class="absolute -top-10 -left-10 w-32 h-32 bg-sky-400/25 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+              <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
 
               <div class="flex items-center gap-3.5 sm:gap-4 min-w-0 relative z-10">
-                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-sky-400 to-indigo-600 text-white flex items-center justify-center text-xl sm:text-2xl shadow-md shrink-0 group-hover:scale-105 group-hover:-rotate-6 transition-transform">
-                  <i class="fa-solid fa-feather-pointed"></i>
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center text-xl sm:text-2xl shadow-md shrink-0 group-hover:scale-105 group-hover:-rotate-6 transition-transform">
+                  <i class="fa-solid fa-feather-pointed text-slate-950"></i>
                 </div>
                 <div class="min-w-0">
                   <div class="flex items-center gap-2 mb-1">
-                    <h3 class="font-black text-sm sm:text-base md:text-lg text-slate-950 dark:text-white group-hover:text-sky-700 dark:group-hover:text-sky-300 transition-colors">
+                    <h3 class="font-black text-sm sm:text-base md:text-lg text-[#361c0c] transition-colors">
                       شیعرەکانی م. ئازاد
                     </h3>
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-900 dark:text-sky-300 border border-sky-500/30">تایبەت</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-[#361c0c] border border-amber-600/30">تایبەت</span>
                   </div>
-                  <p class="text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 font-semibold truncate">
+                  <p class="text-xs sm:text-[13px] text-[#54371f] font-semibold truncate">
                     دیوانی هۆنراوە و بەرهەمە ئەدەبییەکان
                   </p>
                 </div>
               </div>
 
-              <div class="shrink-0 relative z-10 flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-sky-500/25 border border-sky-500/50 text-sky-950 dark:text-sky-300 font-black text-xs group-hover:bg-sky-500 group-hover:text-white transition-all shadow-sm">
+              <div class="shrink-0 relative z-10 flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-amber-500/20 border border-amber-600/35 text-[#361c0c] font-black text-xs transition-all shadow-sm">
                 <span>دیوان</span>
                 <i class="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-1 transition-transform"></i>
               </div>
@@ -6765,29 +6482,29 @@
           <!-- Button 3: کورتە وتار (کردنەوەی پەڕەی تایبەت بە کورتە وتارەکانی قوتابیان) -->
           <a 
             href="/articles"
-            class="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-emerald-600/35 bg-gradient-to-br from-emerald-500/25 via-white/95 to-emerald-500/15 dark:from-slate-900/95 dark:via-emerald-950/50 dark:to-slate-900/95 shadow-lg flex items-center justify-between gap-3 sm:gap-4 cursor-pointer backdrop-blur-xl no-underline"
+            class="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-[#9c784e]/30 bg-gradient-to-br from-[#efe3d1] to-[#e4d4bd] shadow-lg flex items-center justify-between gap-3 sm:gap-4 cursor-pointer backdrop-blur-xl no-underline"
             title="کورتە وتار — وتار و نووسراوی قوتابیان"
           >
-            <div class="absolute -top-10 -left-10 w-32 h-32 bg-emerald-400/25 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+            <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
 
             <div class="flex items-center gap-3.5 sm:gap-4 min-w-0 relative z-10">
-              <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white flex items-center justify-center text-xl sm:text-2xl shadow-md shrink-0 group-hover:scale-105 group-hover:rotate-6 transition-transform">
-                <i class="fa-solid fa-pen-nib"></i>
+              <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center text-xl sm:text-2xl shadow-md shrink-0 group-hover:scale-105 group-hover:rotate-6 transition-transform">
+                <i class="fa-solid fa-pen-nib text-slate-950"></i>
               </div>
               <div class="min-w-0">
                 <div class="flex items-center gap-2 mb-1">
-                  <h3 class="font-black text-sm sm:text-base md:text-lg text-slate-950 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors">
+                  <h3 class="font-black text-sm sm:text-base md:text-lg text-[#361c0c] transition-colors">
                     کورتە وتار
                   </h3>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-900 dark:text-emerald-300 border border-emerald-500/30">قوتابیان</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-[#361c0c] border border-amber-600/30">قوتابیان</span>
                 </div>
-                <p class="text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 font-semibold truncate">
+                <p class="text-xs sm:text-[13px] text-[#54371f] font-semibold truncate">
                   وتار و نووسراوی فێرخوازان
                 </p>
               </div>
             </div>
 
-            <div class="shrink-0 relative z-10 flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-emerald-500/25 border border-emerald-500/50 text-emerald-950 dark:text-emerald-300 font-black text-xs group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm">
+            <div class="shrink-0 relative z-10 flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-amber-500/20 border border-amber-600/35 text-[#361c0c] font-black text-xs transition-all shadow-sm">
               <span>وتارەکان</span>
               <i class="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-1 transition-transform"></i>
             </div>
@@ -59301,7 +59018,7 @@
 
 
 
-  <script src="/js/palettes.js?v=2.0&t=1795055000"></script>
+  <script src="/js/palettes.js?v=9.0&t=1795287000"></script>
 
 
 
