@@ -13459,8 +13459,11 @@ window.addEventListener('appinstalled', () => {
 });
 
 async function installPwaApp() {
+  if (typeof window.installPryaskaApp === 'function') {
+    return window.installPryaskaApp();
+  }
   if (!pwaDeferredPrompt) {
-    alert('ئەپی سیرین پێشتر دابەزێنراوە یان وێبگەڕەکەت ڕێگری دەکات. لە ڕێگەی مینیۆی براوزەرەکەتەوە (Add to Home screen / Install app) هەڵبژێرە.');
+    alert('ئەپی پریاسکە پێشتر دابەزێنراوە یان وێبگەڕەکەت ڕێگری دەکات. لە ڕێگەی مینیۆی براوزەرەکەتەوە (Add to Home screen / Install app) هەڵبژێرە.');
     return;
   }
   pwaDeferredPrompt.prompt();
