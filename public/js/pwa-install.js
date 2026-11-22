@@ -27,11 +27,10 @@
     e.preventDefault();
     deferredInstallPrompt = e;
     
-    // Update button text to native 1-click install
+    showInstallPromptUI();
+    // Update button text to native 1-click install after UI is created
     const btnText = document.getElementById('androidInstallBtnText');
     if (btnText) btnText.textContent = 'داگرتن و دانان';
-    
-    showInstallPromptUI();
   });
 
   // 3. Listen for app installed
@@ -91,7 +90,7 @@
             class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-xs shadow-md transition active:scale-95 flex items-center gap-1.5 cursor-pointer"
           >
             <i class="fa-solid fa-mobile-screen-button text-[12px]"></i>
-            <span id="androidInstallBtnText">دانان لەسەر شاشە</span>
+            <span id="androidInstallBtnText">${deferredInstallPrompt ? 'داگرتن و دانان' : 'دانان لەسەر شاشە'}</span>
           </button>
           <button 
             type="button" 
