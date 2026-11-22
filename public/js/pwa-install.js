@@ -9,9 +9,10 @@
   const isAndroid = /Android/i.test(navigator.userAgent || '');
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent || '');
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const isSecure = window.isSecureContext || location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 
-  // 1. Register Service Worker
-  if ('serviceWorker' in navigator) {
+  // 1. Register Service Worker (only on secure contexts)
+  if (isSecure && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js').then((reg) => {
         // Registered successfully
@@ -21,13 +22,15 @@
     });
   }
 
-  // 2. Capture native beforeinstallprompt
+  // 2. Capture native beforeinstallprompt (available on HTTPS or localhost)
   window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent default mini-infobar
     e.preventDefault();
     deferredInstallPrompt = e;
     
-    // Show install banner/buttons if not dismissed
+    // Update button text to native 1-click install
+    const btnText = document.getElementById('androidInstallBtnText');
+    if (btnText) btnText.textContent = 'داگرتن و دانان';
+    
     showInstallPromptUI();
   });
 
@@ -54,7 +57,7 @@
         showManualInstallModal();
       }
     } else {
-      // If native prompt is unavailable, show step-by-step instruction modal
+      // Show step-by-step instruction modal
       showManualInstallModal();
     }
   };
@@ -75,10 +78,10 @@
           </div>
           <div class="min-w-0">
             <div class="flex items-center gap-1.5">
-              <h4 style="color: #fde68a !important;" class="font-black text-xs sm:text-sm truncate">داگرتنی ئەپی پریاسکە</h4>
-              <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[9px] font-bold">ئەندرۆید</span>
+              <h4 style="color: #fde68a !important;" class="font-black text-xs sm:text-sm truncate">دانانی ئەپی پریاسکە</h4>
+              <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[9px] font-bold">مۆبایل</span>
             </div>
-            <p style="color: #e2e8f0 !important;" class="text-[11px] truncate mt-0.5">بە یەک کرتە وەک ئەپ دایبەزێنە سەر مۆبایلەکەت</p>
+            <p style="color: #e2e8f0 !important;" class="text-[11px] truncate mt-0.5">دانانی ڕاستەوخۆ لەسەر شاشەی مۆبایلەکەت</p>
           </div>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
@@ -87,8 +90,8 @@
             onclick="installPryaskaApp()" 
             class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-xs shadow-md transition active:scale-95 flex items-center gap-1.5 cursor-pointer"
           >
-            <i class="fa-solid fa-download text-[11px]"></i>
-            <span>داگرتن</span>
+            <i class="fa-solid fa-mobile-screen-button text-[12px]"></i>
+            <span id="androidInstallBtnText">دانان لەسەر شاشە</span>
           </button>
           <button 
             type="button" 
@@ -108,43 +111,48 @@
     modal.id = 'manualInstallModal';
     modal.className = 'hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm';
     modal.innerHTML = `
-      <div style="width: 100%; max-width: 380px; border-radius: 24px; background: linear-gradient(165deg, #fdfbf7 0%, #f4ede1 100%); border: 1.5px solid rgba(160, 120, 75, 0.35); padding: 22px 18px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45); position: relative; direction: rtl; text-align: right;">
+      <div style="width: 100%; max-width: 400px; border-radius: 24px; background: linear-gradient(165deg, #fdfbf7 0%, #f4ede1 100%); border: 1.5px solid rgba(160, 120, 75, 0.35); padding: 22px 18px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45); position: relative; direction: rtl; text-align: right;">
         <!-- Header -->
         <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid rgba(160,120,75,0.2); margin-bottom: 14px;">
           <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; border-radius: 12px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); display: flex; align-items: center; justify-content: center; color: #059669; flex-shrink: 0;">
-              <i class="fa-brands fa-android" style="font-size: 20px;"></i>
+            <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); display: flex; align-items: center; justify-content: center; color: #059669; flex-shrink: 0;">
+              <i class="fa-solid fa-mobile-screen text-xl"></i>
             </div>
             <div>
-              <h3 style="color: #2b1708 !important; font-size: 14.5px; font-weight: 900; margin: 0;">دابەزاندنی ئەپ بۆ مۆبایل</h3>
-              <p style="color: #78350f !important; font-size: 11px; font-weight: 600; margin-top: 2px;">ڕێنمایی دانانی ئەپ لەسەر شاشەی سەرەکی</p>
+              <h3 style="color: #2b1708 !important; font-size: 15px; font-weight: 900; margin: 0;">دانانی ئەپ لەسەر شاشەی مۆبایل</h3>
+              <p style="color: #78350f !important; font-size: 11px; font-weight: 600; margin-top: 2px;">بە چەند چرکەیەک ئایکۆنی ئەپەکە بخەرە سەر شاشە</p>
             </div>
           </div>
-          <button type="button" onclick="closeManualInstallModal()" style="width: 30px; height: 30px; border-radius: 8px; background: rgba(160,120,75,0.12); border: none; color: #54371f; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <button type="button" onclick="closeManualInstallModal()" style="width: 32px; height: 32px; border-radius: 8px; background: rgba(160,120,75,0.12); border: none; color: #54371f; display: flex; align-items: center; justify-content: center; cursor: pointer;">
             <i class="fa-solid fa-xmark" style="font-size: 14px;"></i>
           </button>
         </div>
 
         <!-- Steps -->
-        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px;">
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
           <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(160, 120, 75, 0.22); box-shadow: 0 2px 6px rgba(60, 40, 20, 0.05);">
             <span style="width: 24px; height: 24px; border-radius: 50%; background: #d97706; color: #ffffff !important; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 1px;">١</span>
             <p style="color: #3b2314 !important; font-size: 12.5px; font-weight: 600; line-height: 1.6; margin: 0;">
-              پەنجە بنێ بە <strong style="color: #92400e !important; font-weight: 800;">سێ خاڵەکەی بەشی سەرەوەی براوسەر</strong> (<span style="color: #b45309; font-weight: 900; font-size: 15px;">⋮</span> لە گۆشەی شاشەکە).
+              لە بەشی سەرەوەی براوسەرەکە (Chrome) پەنجە بنێ بە <strong style="color: #92400e !important; font-weight: 900;">سێ خاڵەکە</strong> (<span style="color: #b45309; font-weight: 900; font-size: 16px;">⋮</span> لە گۆشەی شاشەکە).
             </p>
           </div>
 
           <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(160, 120, 75, 0.22); box-shadow: 0 2px 6px rgba(60, 40, 20, 0.05);">
             <span style="width: 24px; height: 24px; border-radius: 50%; background: #d97706; color: #ffffff !important; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 1px;">٢</span>
-            <p style="color: #3b2314 !important; font-size: 12.5px; font-weight: 600; line-height: 1.6; margin: 0;">
-              لە لیستەکەدا هەڵبژاردنی <strong style="color: #047857 !important; font-weight: 800;">«Install app»</strong> یان <strong style="color: #047857 !important; font-weight: 800;">«Add to Home screen»</strong> (دانان لەسەر شاشە) دیاریبکە.
-            </p>
+            <div style="color: #3b2314 !important; font-size: 12.5px; font-weight: 600; line-height: 1.6; margin: 0;">
+              لە لیستەکەدا پەنجە بنێ بە:
+              <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+                <span style="display: inline-block; padding: 2px 8px; border-radius: 6px; background: rgba(5, 150, 105, 0.12); color: #047857 !important; font-weight: 800;">• Add to Home screen</span>
+                <span style="display: inline-block; padding: 2px 8px; border-radius: 6px; background: rgba(5, 150, 105, 0.08); color: #047857 !important; font-weight: 700;">• یان: زیادکردن بۆ سەر شاشەی سەرەکی</span>
+                <span style="display: inline-block; padding: 2px 8px; border-radius: 6px; background: rgba(5, 150, 105, 0.08); color: #047857 !important; font-weight: 700;">• یان: إضافة إلى الشاشة الرئيسية</span>
+              </div>
+            </div>
           </div>
 
           <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(160, 120, 75, 0.22); box-shadow: 0 2px 6px rgba(60, 40, 20, 0.05);">
             <span style="width: 24px; height: 24px; border-radius: 50%; background: #d97706; color: #ffffff !important; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 1px;">٣</span>
             <p style="color: #3b2314 !important; font-size: 12.5px; font-weight: 600; line-height: 1.6; margin: 0;">
-              پەنجە بە <strong style="color: #047857 !important; font-weight: 800;">«Install»</strong> یان <strong style="color: #047857 !important; font-weight: 800;">«زیادکردن»</strong> بنێ تا ئایکۆنی ئەپەکە بێتە سەر شاشەی مۆبایلەکەت.
+              پەنجە بە <strong style="color: #047857 !important; font-weight: 900;">«Add / زیادکردن»</strong> بنێ؛ ئایکۆنی ئەپەکە دەچێتە سەر شاشەی مۆبایلەکەت و وەک ئەپ دەکرێتەوە.
             </p>
           </div>
         </div>
@@ -210,7 +218,6 @@
   // If user is on Android or mobile, show the prompt after a short delay (1.5 seconds)
   window.addEventListener('DOMContentLoaded', () => {
     if (!isStandalone) {
-      // Auto-show banner if on Android or Mobile device
       if (isAndroid || isMobile) {
         setTimeout(() => {
           showInstallPromptUI();
