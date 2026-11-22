@@ -2126,7 +2126,7 @@ function initSocket() {
   socket.on('classroom_deleted', (data) => {
     if (typeof loadClassrooms === 'function') loadClassrooms();
     if (currentClassroomId && data && data.id && Number(data.id) === Number(currentClassroomId)) {
-      alert('ئەم هۆبەیە لەلایەن بەڕێوەبەرەوە سڕایەوە');
+      alert('ئەم پریاسکەیە لەلایەن بەڕێوەبەرەوە سڕایەوە');
       if (typeof returnToClassroomsLobby === 'function') returnToClassroomsLobby();
     }
   });
@@ -2915,7 +2915,7 @@ function renderClassrooms() {
     container.innerHTML = `
       <div class="col-span-full py-12 text-center text-slate-500">
         <i class="fa-solid fa-magnifying-glass text-3xl mb-3 text-slate-600"></i>
-        <p class="font-bold text-sm text-slate-400">هیچ هۆبەیەک بەم ناوە نەدۆزرایەوە</p>
+        <p class="font-bold text-sm text-slate-400">هیچ پریاسکەیەک بەم ناوە نەدۆزرایەوە</p>
       </div>
     `;
     return;
@@ -2998,7 +2998,7 @@ function handleClassroomsSearch(val) {
 
 function enterClassroom(roomId) {
   const rId = Number(roomId) || 1;
-  const room = (cachedClassrooms && cachedClassrooms.find(c => c.id === rId)) || { id: rId, name: 'هۆبە', icon: 'fa-school' };
+  const room = (cachedClassrooms && cachedClassrooms.find(c => c.id === rId)) || { id: rId, name: 'پریاسکە', icon: 'fa-school' };
 
   if (currentClassroomId && currentClassroomId !== rId && socket) {
     socket.emit('leave_classroom', { roomId: currentClassroomId });
@@ -3124,14 +3124,14 @@ function openCreateClassroomModal(editId = null) {
   if (editId) {
     const existing = cachedClassrooms.find(c => c.id === editId);
     if (!existing) return;
-    if (titleEl) titleEl.innerText = 'دەستکاریکردنی هۆبە';
+    if (titleEl) titleEl.innerText = 'دەستکاریکردنی پریاسکە';
     if (idInput) idInput.value = existing.id;
     if (nameInput) nameInput.value = existing.name || '';
     if (descInput) descInput.value = existing.description || '';
     if (teacherInput) teacherInput.value = existing.teacher_name || '';
     if (iconInput) iconInput.value = existing.icon || 'fa-school';
   } else {
-    if (titleEl) titleEl.innerText = 'دروستکردنی هۆبەی نوێ';
+    if (titleEl) titleEl.innerText = 'دروستکردنی پریاسکەی نوێ';
     if (idInput) idInput.value = '';
     if (nameInput) nameInput.value = '';
     if (descInput) descInput.value = '';
@@ -3158,7 +3158,7 @@ async function handleSaveClassroom(e) {
   const btn = document.getElementById('saveClassroomSubmitBtn');
 
   if (!name) {
-    alert('تکایە ناوی هۆبە بنووسە');
+    alert('تکایە ناوی پریاسکە بنووسە');
     return;
   }
 
@@ -3199,10 +3199,10 @@ async function handleSaveClassroom(e) {
 
 async function deleteClassroom(id) {
   if (Number(id) === 1) {
-    alert('ناکرێت هۆبەی سەرەکی بسڕدرێتەوە');
+    alert('ناکرێت پریاسکەی سەرەکی بسڕدرێتەوە');
     return;
   }
-  if (!confirm('ئایا دڵنیایت لە سڕینەوەی ئەم هۆبەیە؟')) return;
+  if (!confirm('ئایا دڵنیایت لە سڕینەوەی ئەم پریاسکەیە؟')) return;
 
   try {
     const res = await fetch(`/api/classrooms/${id}`, {
@@ -3213,7 +3213,7 @@ async function deleteClassroom(id) {
     if (res.ok && data.success) {
       await loadClassrooms();
     } else {
-      alert(data.error || 'هەڵە لە سڕینەوەی هۆبە');
+      alert(data.error || 'هەڵە لە سڕینەوەی پریاسکە');
     }
   } catch (err) {
     alert('پەیوەندی لەگەڵ سێرڤەر ناتەواوە');
@@ -8286,7 +8286,7 @@ function renderAdminArticlesList() {
               ${escapeHtml((art.author_name || 'ق')[0])}
             </div>
             <div class="min-w-0">
-              <h5 class="text-xs font-black text-white truncate">${escapeHtml(art.author_name)} <span class="text-[10px] font-normal text-slate-400">(${art.author_role === 'student' ? 'فێرخواز' : 'ئەندام'})</span></h5>
+              <h5 class="text-xs font-black text-white truncate">${escapeHtml(art.author_name)} <span class="text-[10px] font-normal text-slate-400">(${art.author_role === 'student' ? 'بەشداربووی پێشکەوتوو' : 'ئەندام'})</span></h5>
               <p class="text-[10px] text-slate-400">${new Date(art.created_at).toLocaleString('ckb')}</p>
             </div>
           </div>
@@ -17042,7 +17042,7 @@ function applyAppLanguage(lang) {
       drawerQuestionsText: 'بانکی پرسیار و وەڵامەکان',
       drawerLeaderboardText: 'ڕیزبەندی و خاڵەکان',
       drawerPrivateChatText: 'نامەی تایبەت لەگەڵ مامۆستا',
-      drawerDreamSubmitText: 'ناردنی خەون بۆ لێکدانەوە',
+      drawerDreamSubmitText: 'خەونەکەت بنێرە',
       drawerDreamSubmitBadge: '١ بە ١',
       drawerSearchText: 'گەڕان لەناو پەیامەکان',
       drawerMembersText: 'لیستی ئەندامان',
@@ -22284,6 +22284,21 @@ function playBellChime() {
 let currentPollTargetChatType = 'public';
 let pollCacheMap = new Map();
 
+function openPollsHubOrModal() {
+  if (currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher' || currentUser.role === 'admin')) {
+    openCreatePollModal('public');
+  } else {
+    const pollCard = document.querySelector('[id^="poll-card-"]') || document.querySelector('.poll-card');
+    if (pollCard) {
+      pollCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      pollCard.classList.add('ring-4', 'ring-amber-400');
+      setTimeout(() => pollCard.classList.remove('ring-4', 'ring-amber-400'), 2500);
+    } else {
+      alert('لە چاتی گشتیدا سەیری ڕاپرسییە چالاکەکان بکە یان چاوەڕێی ڕاپرسی نوێ بە');
+    }
+  }
+}
+
 function openCreatePollModal(chatType = 'public') {
   currentPollTargetChatType = chatType;
   const modal = document.getElementById('createPollModal');
@@ -22403,7 +22418,7 @@ function renderPollCardHtml(poll, { canClose = false } = {}) {
     ` : '';
 
     return `
-      <div class="relative overflow-hidden rounded-2xl border ${isMyChoice ? 'border-amber-400 bg-amber-500/10 shadow-sm' : 'border-slate-700/80 bg-slate-800/80 hover:bg-slate-800'} transition cursor-pointer select-none group/opt" onclick="${isClosed ? '' : `castPollVote(${poll.id}, ${idx})`}">
+      <div class="relative overflow-hidden rounded-2xl border ${isMyChoice ? 'border-amber-500 bg-amber-500/15 shadow-sm' : 'border-[rgba(156,120,78,0.28)] bg-[#f7f0e4] hover:bg-[#fff9f0]'} transition cursor-pointer select-none group/opt" onclick="${isClosed ? '' : `castPollVote(${poll.id}, ${idx})`}">
         <div class="absolute inset-y-0 right-0 ${isMyChoice ? 'bg-amber-500/25' : 'bg-slate-700/50'} transition-all duration-500" style="width: ${pct}%;"></div>
         
         <div class="relative z-10 px-3 py-2.5">
@@ -22412,7 +22427,7 @@ function renderPollCardHtml(poll, { canClose = false } = {}) {
               <span class="w-5 h-5 rounded-full border ${isMyChoice ? 'border-amber-400 bg-amber-400 text-slate-950' : 'border-slate-500 bg-slate-900 text-transparent'} flex items-center justify-center text-[10px] font-black shrink-0 transition">
                 <i class="fa-solid fa-check"></i>
               </span>
-              <span class="text-xs font-black ${isMyChoice ? 'text-amber-200' : 'text-slate-100'} truncate">${escapeHtml(opt.text)}</span>
+              <span class="text-xs font-black ${isMyChoice ? 'text-amber-900' : 'text-[#361c0c]'} truncate">${escapeHtml(opt.text)}</span>
             </div>
             <div class="flex items-center gap-2 shrink-0 font-mono text-[11px]">
               <span class="text-slate-400 text-[10px]">(${opt.count || 0})</span>
@@ -22426,7 +22441,7 @@ function renderPollCardHtml(poll, { canClose = false } = {}) {
   }).join('');
 
   return `
-    <div id="poll-card-${poll.id}" class="w-full max-w-lg my-2 mx-auto rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/20 border-2 border-amber-500/40 p-3.5 sm:p-4 shadow-xl space-y-3" data-poll-id="${poll.id}">
+    <div id="poll-card-${poll.id}" class="poll-card w-full max-w-lg my-2 mx-auto rounded-3xl bg-gradient-to-br from-[#efe3d1] via-[#ebdcc7] to-[#e4d4bd] border-2 border-[rgba(156,120,78,0.35)] p-3.5 sm:p-4 shadow-xl space-y-3" data-poll-id="${poll.id}">
       <div class="flex items-center justify-between border-b border-amber-500/20 pb-2">
         <div class="flex items-center gap-2">
           <span class="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-xs">
@@ -22459,7 +22474,7 @@ function renderPollCardHtml(poll, { canClose = false } = {}) {
         </div>
       </div>
 
-      <h4 class="text-xs sm:text-sm font-black text-white leading-relaxed">${escapeHtml(poll.question)}</h4>
+      <h4 class="text-xs sm:text-sm font-black text-[#361c0c] leading-relaxed">${escapeHtml(poll.question)}</h4>
 
       <div class="space-y-2">
         ${optionsHtml}
@@ -22854,7 +22869,7 @@ function renderAlarmCardHtml(alarm, { canManage = false, canDelete = false } = {
   const formattedTimeStr = targetDateObj.toLocaleDateString('ku-IQ') + ' • ' + targetDateObj.toLocaleTimeString('ku-IQ', { hour: '2-digit', minute: '2-digit' });
 
   return `
-    <div id="alarm-card-${alarmId}" class="w-full max-w-lg my-2 mx-auto rounded-3xl bg-gradient-to-br from-slate-900 via-rose-950/20 to-slate-900 border-2 border-rose-500/40 p-4 shadow-2xl space-y-3.5 relative overflow-hidden group" data-alarm-id="${alarmId}" data-target-time="${targetTime}">
+    <div id="alarm-card-${alarmId}" class="alarm-card w-full max-w-lg my-2 mx-auto rounded-3xl bg-gradient-to-br from-[#efe3d1] via-[#ebdcc7] to-[#e4d4bd] border-2 border-[rgba(156,120,78,0.35)] p-4 shadow-2xl space-y-3.5 relative overflow-hidden group" data-alarm-id="${alarmId}" data-target-time="${targetTime}">
       <!-- Notice Title at Top Prominently Displayed -->
       <div class="flex items-start justify-between gap-2 border-b border-rose-500/20 pb-2.5">
         <div class="flex items-start gap-2.5 min-w-0">
@@ -22862,7 +22877,7 @@ function renderAlarmCardHtml(alarm, { canManage = false, canDelete = false } = {
             <i class="fa-solid fa-bell"></i>
           </span>
           <div class="min-w-0">
-            <h4 class="text-xs sm:text-sm font-black text-rose-200 leading-snug break-words">${escapeHtml(alarm.title)}</h4>
+            <h4 class="text-xs sm:text-sm font-black text-[#361c0c] leading-snug break-words">${escapeHtml(alarm.title)}</h4>
             <span class="text-[10px] text-slate-400 mt-0.5 block font-mono">${formattedTimeStr}</span>
           </div>
         </div>
@@ -22880,20 +22895,20 @@ function renderAlarmCardHtml(alarm, { canManage = false, canDelete = false } = {
 
       <!-- Stunning Digital Countdown Clock Display -->
       <div id="alarm-timer-box-${alarmId}" class="grid grid-cols-4 gap-2 text-center select-none font-mono">
-        <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-2 shadow-inner">
-          <span class="text-base sm:text-xl font-black text-white block alarm-digit-days">${days}</span>
+        <div class="bg-[#f7f0e4] border border-[rgba(156,120,78,0.28)] rounded-2xl p-2 shadow-sm">
+          <span class="text-base sm:text-xl font-black text-[#361c0c] block alarm-digit-days">${days}</span>
           <span class="text-[9px] text-slate-400 font-bold block mt-0.5">ڕۆژ</span>
         </div>
-        <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-2 shadow-inner">
-          <span class="text-base sm:text-xl font-black text-rose-300 block alarm-digit-hours">${String(hours).padStart(2, '0')}</span>
+        <div class="bg-[#f7f0e4] border border-[rgba(156,120,78,0.28)] rounded-2xl p-2 shadow-sm">
+          <span class="text-base sm:text-xl font-black text-[#361c0c] block alarm-digit-hours">${String(hours).padStart(2, '0')}</span>
           <span class="text-[9px] text-slate-400 font-bold block mt-0.5">کاتژمێر</span>
         </div>
-        <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-2 shadow-inner">
-          <span class="text-base sm:text-xl font-black text-amber-300 block alarm-digit-minutes">${String(minutes).padStart(2, '0')}</span>
+        <div class="bg-[#f7f0e4] border border-[rgba(156,120,78,0.28)] rounded-2xl p-2 shadow-sm">
+          <span class="text-base sm:text-xl font-black text-[#361c0c] block alarm-digit-minutes">${String(minutes).padStart(2, '0')}</span>
           <span class="text-[9px] text-slate-400 font-bold block mt-0.5">خولەک</span>
         </div>
-        <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-2 shadow-inner">
-          <span class="text-base sm:text-xl font-black text-emerald-400 block alarm-digit-seconds">${String(seconds).padStart(2, '0')}</span>
+        <div class="bg-[#f7f0e4] border border-[rgba(156,120,78,0.28)] rounded-2xl p-2 shadow-sm">
+          <span class="text-base sm:text-xl font-black text-[#361c0c] block alarm-digit-seconds">${String(seconds).padStart(2, '0')}</span>
           <span class="text-[9px] text-slate-400 font-bold block mt-0.5">چرکە</span>
         </div>
       </div>
@@ -23748,8 +23763,8 @@ function toggleActivityDetails(collapseId) {
 const LANDING_DIALECTS = {
   sorani: {
     name: 'سۆرانی',
-    heroTitle: 'بەخێربێن بۆ پریاسکەی عەبدی',
-    heroSubtitle: 'ناوەندێکی ئەکادیمی و مەعریفی بۆ وانە زانستییەکان و ڕاڤەکردنی خەون بە شێوازێکی دروست و باوەڕپێکراو',
+    heroTitle: 'پریاسکەی عەبدی',
+    heroSubtitle: 'ناوەندێک بۆ فێربوونی زانستی تەعبیر و لێکدانەوەی خەونەکانتان',
     heroBtn: 'ناردنی خەون',
     actionText: 'بەشداربە لەم بەشە',
     sections: [
@@ -25220,7 +25235,7 @@ async function handleLandingQuickDreamSubmit(e) {
   } finally {
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane text-xs"></i> <span>ناردنی خەون بۆ لێکدانەوە</span>';
+      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane text-xs"></i> <span>خەونەکەت بنێرە</span>';
     }
   }
 }
@@ -25291,12 +25306,7 @@ function renderLandingPoems() {
 ${escapeHtml(poem.content)}
         </div>
 
-        <div class="flex items-center justify-between text-xs pt-1.5">
-          <span class="text-[11px] text-amber-900 font-black flex items-center gap-1">
-            <i class="fa-solid fa-pen-nib text-amber-600 text-[10px]"></i>
-            <span>${escapeHtml(poem.author || 'م. ئازاد')}</span>
-          </span>
-
+        <div class="flex items-center justify-end text-xs pt-1.5">
           <div class="flex items-center gap-2">
             <button onclick="sharePoem(${poem.id})" class="text-amber-800 hover:text-amber-950 text-xs p-1 rounded transition cursor-pointer" title="هاوبەشکردن / کۆپیکردن">
               <i class="fa-solid fa-share-nodes"></i>

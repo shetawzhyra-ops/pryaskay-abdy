@@ -4,7 +4,11 @@
   <meta charset="UTF-8">
   <script>try{sessionStorage.setItem('has_visited_section','true');}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>کورتە وتاری فێرخوازان — پریاسکەی عەبدی</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png">
+  <meta name="theme-color" content="#334032">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>پریاسکەی وتار — پریاسکەی عەبدی</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖋️</text></svg>">
@@ -43,9 +47,9 @@
   </script>
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="/css/style.css?v=79.0&t=1795287000">
+  <link rel="stylesheet" href="/css/style.css?v=90.0&t=1795310000">
   <!-- Shared Palettes -->
-  <script src="/js/palettes.js?v=9.0&t=1795287000"></script>
+  <script src="/js/palettes.js?v=90.0&t=1795310000"></script>
   <script>
     if (typeof applyActiveSavedTheme === 'function') {
       applyActiveSavedTheme();
@@ -58,7 +62,7 @@
       left: 0 !important;
       right: 0 !important;
       width: 100% !important;
-      z-index: 9999 !important;
+      z-index: 40 !important;
     }
     .article-body-text {
       font-feature-settings: "liga" 1;
@@ -71,8 +75,7 @@
     html, body {
       background-color: #86b89c !important;
       background: #86b89c !important;
-      background-image: radial-gradient(ellipse 80% 55% at 50% -10%, rgba(52, 211, 153, 0.28) 0%, transparent 65%), radial-gradient(circle at 85% 18%, rgba(110, 231, 183, 0.20) 0%, transparent 45%), radial-gradient(circle at 12% 65%, rgba(16, 185, 129, 0.22) 0%, transparent 55%), linear-gradient(180deg, #a7d3ba 0%, #8cbe9f 50%, #72a988 100%) !important;
-      background-attachment: fixed !important;
+      background-image: none !important;
     }
     #poemsHeader, #articlesHeader {
       background: rgba(236, 222, 202, 0.95) !important;
@@ -111,8 +114,8 @@
 </head>
 <body class="light-theme light-mode in-landing text-slate-900 font-kurdish min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
 
-  <!-- Ambient Glow Effects -->
-  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+  <!-- Ambient Glow Effects Hidden for 100% Matte Background -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10 hidden" style="display: none !important;">
     <div class="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse"></div>
     <div class="absolute top-1/3 -left-40 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl"></div>
     <div class="absolute -bottom-40 right-1/4 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl"></div>
@@ -222,11 +225,11 @@
         </div>
 
         <h1 id="heroTitle" class="text-2xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-l from-white via-emerald-100 to-teal-300 tracking-tight drop-shadow-md">
-          کورتە وتاری فێرخوازان
+          پریاسکەی وتار
         </h1>
 
         <p id="heroSubtitle" class="text-xs sm:text-base text-slate-300/90 font-medium max-w-2xl mx-auto leading-relaxed">
-          ناوەندێکی مەعریفی و ئەدەبی بۆ نووسین و بڵاوکردنەوەی کورتە وتارە زانستی، ئەدەبی و فکرییەکانی قوتابیان و فێرخوازانی پریاسکەی عەبدی — بە پەسەندکراوی دەستەی بەڕێوەبەرایەتی.
+          ناوەندێکی مەعریفی و ئەدەبی بۆ نووسین و بڵاوکردنەوەی وتارە زانستی، ئەدەبی و فکرییەکانی بەشداربوانی پێشکەوتووی پریاسکەی عەبدی.
         </p>
 
         <!-- Stats Badges -->
@@ -236,14 +239,11 @@
             <span id="articlesCountText">0 وتار بڵاوکراوەتەوە</span>
           </span>
 
-          <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-teal-500/15 border border-teal-500/30 text-teal-300 text-xs font-semibold">
-            <i class="fa-solid fa-shield-halved text-[11px]"></i>
-            <span>پەسەندکراوی دەستەی بەڕێوەبەرایەتی</span>
-          </span>
+
 
           <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
             <i class="fa-solid fa-users text-[11px]"></i>
-            <span>تایبەت بە فێرخوازان</span>
+            <span>تایبەت بە بەشداربوانی پێشکەوتوو</span>
           </span>
         </div>
       </div>
@@ -337,7 +337,7 @@
 
         <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-right">
           <p class="text-xs text-amber-200/90 leading-relaxed font-medium">
-            ⚠️ <strong>مەرجی بڵاوبوونەوە:</strong> وتارەکەت ڕاستەوخۆ بڵاو نابێتەوە؛ سەرەتا دەچێتە بەردەستی ئەدمین و دەستەی بەڕێوەبەرایەتی، پاش ئەوەی بیبینن و قبوڵی بکەن، بە ناوی خۆتەوە لەم پەڕەیە بڵاودەکرێتەوە.
+            ⚠️ <strong>مەرجی بڵاوبوونەوە:</strong> وتارەکەت ڕاستەوخۆ بڵاو نابێتەوە؛ سەرەتا دەچێتە بەردەستی ئەدمین، پاش پێداچوونەوە و قبوڵکردنی، بە ناوی خۆتەوە لەم پەڕەیە بڵاودەکرێتەوە.
           </p>
         </div>
 
@@ -361,7 +361,7 @@
       <div class="flex items-center gap-4 text-slate-400">
         <a href="/" class="hover:text-emerald-400 transition">پەڕەی سەرەکی</a>
         <span>·</span>
-        <a href="/poems" class="hover:text-emerald-400 transition">شیعرەکانی م. ئازاد</a>
+        <a href="/poems" class="hover:text-emerald-400 transition">پریاسکەی ئەدەبی</a>
         <span>·</span>
         <a href="/dreams" class="hover:text-emerald-400 transition">خەونە لێکدراوەکان</a>
       </div>
@@ -375,6 +375,8 @@
   </div>
 
   <!-- Articles JavaScript -->
-  <script src="/js/articles.js?v=1.0&t=1795120000"></script>
+  <script src="/js/articles.js?v=6.0&t=1795360000"></script>
+  <!-- PWA & Android App Installation Controller -->
+  <script src="/js/pwa-install.js?v=1.0&t=1795360000"></script>
 </body>
 </html>

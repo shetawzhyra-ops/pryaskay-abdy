@@ -255,14 +255,7 @@
 
 
       background: #86b89c !important;
-
-
-
-
-
-
-
-      background-image: radial-gradient(ellipse 80% 55% at 50% -10%, rgba(52, 211, 153, 0.28) 0%, transparent 65%), radial-gradient(circle at 85% 18%, rgba(110, 231, 183, 0.20) 0%, transparent 45%), radial-gradient(circle at 12% 65%, rgba(16, 185, 129, 0.22) 0%, transparent 55%), linear-gradient(180deg, #a7d3ba 0%, #8cbe9f 50%, #72a988 100%) !important;
+      background-image: none !important;
 
 
 
@@ -2755,7 +2748,1079 @@
 
 
 
-  </style>
+  
+    /* ==========================================================================
+       WARM BEIGE & SAGE GREEN PLATFORM-WIDE UNIFICATION (REMOVING ALL WHITE ARTIFACTS)
+       ========================================================================== */
+    .landing-navbar-premium,
+    header#landingHeader,
+    header.landing-navbar-premium,
+    #dreamsHeader,
+    #poemsHeader,
+    #articlesHeader,
+    #mainApp > header {
+      background: rgba(236, 222, 202, 0.98) !important;
+      border-bottom: 1px solid rgba(156, 120, 78, 0.28) !important;
+      backdrop-filter: blur(24px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+      box-shadow: 0 4px 20px -4px rgba(50, 35, 20, 0.08) !important;
+    }
+    #landingHeader .landing-brand-text,
+    .landing-brand-word,
+    .brand-title,
+    #dreamsPageTitle,
+    #poemsPageTitle,
+    #articlesPageTitle {
+      color: #361c0c !important;
+    }
+    #btnDialectDropdown.landing-dialect-pill,
+    #btnDialectDropdown {
+      background: rgba(228, 212, 189, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.35) !important;
+      color: #361c0c !important;
+    }
+
+    body.light-mode.in-landing,
+    body.light-theme.in-landing,
+    body.in-landing,
+    #landingPage {
+      background-color: #86b89c !important;
+      background: #86b89c !important;
+      background-image: none !important;
+    }
+
+    body.light-mode .landing-footer,
+    body.light-theme .landing-footer,
+    footer.landing-footer,
+    .landing-footer {
+      background: rgba(235, 219, 198, 0.98) !important;
+      border-top: 1px solid rgba(156, 120, 78, 0.28) !important;
+      backdrop-filter: blur(16px) !important;
+      color: #54371f !important;
+    }
+    body.light-mode .landing-footer-brand,
+    body.light-theme .landing-footer-brand,
+    .landing-footer-brand {
+      color: #361c0c !important;
+    }
+    .landing-footer p, .landing-footer span {
+      color: #54371f !important;
+    }
+
+    #chatInputBar,
+    #customGroupInputBar,
+    body.light-theme #chatInputBar {
+      background: rgba(235, 219, 198, 0.98) !important;
+      border-top: 1px solid rgba(156, 120, 78, 0.28) !important;
+      box-shadow: 0 -4px 20px -4px rgba(50, 35, 20, 0.08) !important;
+    }
+    #chatInputBar form,
+    body.light-theme #chatInputBar form {
+      background: rgba(247, 240, 228, 0.98) !important;
+      border: 1.5px solid rgba(156, 120, 78, 0.35) !important;
+      box-shadow: 0 4px 14px -2px rgba(50, 35, 20, 0.08) !important;
+    }
+    #chatInputBar #messageInput,
+    #messageInput,
+    #customGroupTextInput,
+    body.light-theme #chatInputBar #messageInput {
+      background: #fbf7f0 !important;
+      border: 1px solid rgba(156, 120, 78, 0.25) !important;
+      color: #361c0c !important;
+    }
+    #messageInput::placeholder,
+    #customGroupTextInput::placeholder {
+      color: #854d0e !important;
+      opacity: 0.75 !important;
+    }
+    #chatInputBar #publicChatToolsBtn,
+    body.light-theme #chatInputBar #publicChatToolsBtn {
+      background: rgba(239, 227, 209, 0.95) !important;
+      border: 1px solid rgba(156, 120, 78, 0.35) !important;
+      color: #b45309 !important;
+    }
+    #chatInputBar #publicChatToolsBtn:hover,
+    body.light-theme #chatInputBar #publicChatToolsBtn:hover {
+      background: rgba(228, 212, 189, 0.98) !important;
+      color: #92400e !important;
+    }
+    #chatInputBar #sendBtn,
+    body.light-theme #chatInputBar #sendBtn {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(180, 83, 9, 0.3) !important;
+      box-shadow: 0 4px 12px rgba(180, 83, 9, 0.3) !important;
+    }
+    body.light-theme .chat-msg-item .bg-slate-800\/90,
+    body.light-theme .chat-msg-item .bg-slate-800,
+    body.light-theme .chat-msg-item .bg-slate-900\/95,
+    body.light-theme .chat-msg-item .bg-slate-900,
+    body.light-theme [id^="msg-"] .max-w-xl.rounded-3xl,
+    .chat-msg-bubble,
+    .msg-bubble {
+      background: rgba(247, 240, 228, 0.98) !important;
+      border: 1px solid rgba(156, 120, 78, 0.28) !important;
+      box-shadow: 0 4px 14px -3px rgba(50, 35, 20, 0.08) !important;
+      color: #361c0c !important;
+    }
+    body.light-theme .chat-msg-item .text-slate-100,
+    body.light-theme .chat-msg-item .text-slate-200,
+    body.light-theme .chat-msg-item .text-slate-300,
+    body.light-theme .msg-text-student,
+    body.light-theme [class*="msg-text-student"] {
+      color: #361c0c !important;
+    }
+    body.light-theme .chat-msg-item .bg-slate-800\/60,
+    body.light-theme .chat-msg-item .bg-slate-800\/80,
+    body.light-theme .chat-msg-item .bg-slate-700\/60,
+    body.light-theme .chat-msg-item button.text-slate-400 {
+      background: rgba(239, 227, 209, 0.95) !important;
+      border: 1px solid rgba(156, 120, 78, 0.25) !important;
+      color: #78350f !important;
+    }
+    body.light-theme .chat-msg-item button.text-slate-400:hover {
+      background: rgba(228, 212, 189, 0.98) !important;
+      color: #451a03 !important;
+    }
+
+    body.light-theme [data-attendance-session] > div,
+    body.light-theme .attendance-card,
+    body.light-theme .poll-card,
+    [data-attendance-session] > div {
+      background: linear-gradient(165deg, rgba(241, 228, 209, 0.98) 0%, rgba(228, 211, 188, 0.97) 100%) !important;
+      border: 1px solid rgba(156, 120, 78, 0.30) !important;
+      box-shadow: 0 10px 30px -5px rgba(50, 35, 20, 0.10) !important;
+      color: #361c0c !important;
+    }
+    body.light-theme [data-attendance-session] .border-slate-800,
+    body.light-theme [data-attendance-session] .border-slate-700 {
+      border-color: rgba(156, 120, 78, 0.25) !important;
+    }
+    body.light-theme [data-attendance-session] h3,
+    body.light-theme [data-attendance-session] h4,
+    body.light-theme [data-attendance-session] .font-black {
+      color: #361c0c !important;
+    }
+    body.light-theme [data-attendance-session] p,
+    body.light-theme [data-attendance-session] span.text-slate-300,
+    body.light-theme [data-attendance-session] span.text-slate-400 {
+      color: #54371f !important;
+    }
+    body.light-theme [data-attendance-session] button {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(180, 83, 9, 0.3) !important;
+    }
+
+    #libraryModal > div.bg-slate-900,
+    #libraryModal .w-full.max-w-5xl,
+    body.light-theme #libraryModal .bg-slate-900 {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98) 0%, rgba(228, 212, 189, 0.97) 100%) !important;
+      border: 1px solid rgba(156, 120, 78, 0.30) !important;
+      box-shadow: 0 25px 65px -15px rgba(50, 35, 20, 0.20) !important;
+      color: #361c0c !important;
+    }
+    #libraryModal .border-b,
+    #libraryModal .border-slate-800,
+    #libraryModal .border-slate-700 {
+      border-color: rgba(156, 120, 78, 0.25) !important;
+    }
+    #libraryModal h2, #libraryModal h3, #libraryModal h4 {
+      color: #361c0c !important;
+    }
+    #libraryModal input,
+    #libraryModal textarea,
+    #libraryModal select,
+    #librarySearchInput,
+    body.light-theme #libraryModal input,
+    body.light-theme #libraryModal textarea,
+    body.light-theme #libraryModal select {
+      background: #fbf7f0 !important;
+      border: 1px solid rgba(156, 120, 78, 0.35) !important;
+      color: #361c0c !important;
+    }
+    #libraryModal input::placeholder,
+    #libraryModal textarea::placeholder {
+      color: #854d0e !important;
+      opacity: 0.75 !important;
+    }
+    #libraryModal #addBookForm,
+    #libraryModal .bg-slate-800\/60,
+    #libraryModal .bg-slate-950\/60,
+    #libraryModal .bg-slate-800\/40 {
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.25) !important;
+    }
+    #libraryModal .library-category-pill,
+    #libraryModal [onclick*="filterLibraryCategory"] {
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.25) !important;
+      color: #54371f !important;
+    }
+    #libraryModal .library-category-pill.active,
+    #libraryModal [onclick*="filterLibraryCategory"].active,
+    #libraryModal .bg-amber-500,
+    #libraryModal .bg-amber-600 {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+      color: #ffffff !important;
+      border-color: rgba(180, 83, 9, 0.4) !important;
+    }
+
+    #recordedLessonsModal > div,
+    body.light-theme #recordedLessonsModal > div {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98) 0%, rgba(228, 212, 189, 0.97) 100%) !important;
+      border: 1px solid rgba(156, 120, 78, 0.30) !important;
+      box-shadow: 0 25px 65px -15px rgba(50, 35, 20, 0.20) !important;
+      color: #361c0c !important;
+    }
+    #recordedLessonsModal .border-b,
+    #recordedLessonsModal .bg-slate-950\/60,
+    #recordedLessonsModal .border-emerald-500\/30 {
+      background: rgba(235, 219, 198, 0.98) !important;
+      border-color: rgba(156, 120, 78, 0.25) !important;
+    }
+    #recordedLessonsModal h3,
+    #recordedLessonsModal h4 {
+      color: #361c0c !important;
+    }
+    #recordedLessonsModal input,
+    #lessonSearchInput,
+    body.light-theme #recordedLessonsModal input {
+      background: #fbf7f0 !important;
+      border: 1px solid rgba(156, 120, 78, 0.35) !important;
+      color: #361c0c !important;
+    }
+    #recordedLessonsModal input::placeholder {
+      color: #854d0e !important;
+      opacity: 0.75 !important;
+    }
+
+    #dreamSubmissionsSidebar,
+    #dreamSubmissionsSidebar > div,
+    body.light-theme #dreamSubmissionsSidebar {
+      background: rgba(235, 219, 198, 0.98) !important;
+      border-left: 1px solid rgba(156, 120, 78, 0.28) !important;
+      color: #361c0c !important;
+    }
+    #dreamSubmissionsSidebar h4,
+    #dreamSubmissionsSidebar .font-black {
+      color: #361c0c !important;
+    }
+    #dreamSubmissionsSidebar .bg-slate-900,
+    body.light-theme #dreamSubmissionsSidebar .bg-slate-900 {
+      background: rgba(228, 212, 189, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.25) !important;
+    }
+    #dreamSubmissionsSidebar button {
+      color: #54371f !important;
+    }
+    #dreamSubmissionsSidebar button.bg-purple-600,
+    #dreamSubmissionsSidebar button.active {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+      color: #ffffff !important;
+    }
+    #dreamSessionsList > div,
+    body.light-theme #dreamSessionsList > div,
+    .dream-session-item,
+    .dream-submission-card {
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.25) !important;
+      box-shadow: 0 4px 12px -2px rgba(50, 35, 20, 0.06) !important;
+      color: #361c0c !important;
+    }
+    #dreamSessionsList > div:hover,
+    body.light-theme #dreamSessionsList > div:hover {
+      background: rgba(253, 248, 240, 0.98) !important;
+      border-color: rgba(180, 83, 9, 0.4) !important;
+    }
+    #dreamSessionsList > div.bg-purple-950\/70,
+    #dreamSessionsList > div.ring-1 {
+      background: rgba(254, 243, 199, 0.98) !important;
+      border-color: rgba(180, 83, 9, 0.6) !important;
+      box-shadow: 0 6px 18px -3px rgba(180, 83, 9, 0.15) !important;
+    }
+    #dreamSessionsList h4,
+    #dreamSessionsList .font-bold,
+    #dreamSessionsList .text-slate-100,
+    #dreamSessionsList .text-slate-200 {
+      color: #361c0c !important;
+    }
+    #dreamSessionsList p,
+    #dreamSessionsList .text-slate-400,
+    #dreamSessionsList .text-slate-500 {
+      color: #54371f !important;
+    }
+
+    div[id$="Modal"]:not(#authScreen) {
+      background: rgba(45, 82, 63, 0.6) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+    }
+    div[id$="Modal"] > div.bg-slate-900,
+    div[id$="Modal"] > div.bg-slate-950,
+    div[id$="Modal"] > div.bg-slate-900\/95,
+    div[id$="Modal"] > div.bg-slate-950\/90,
+    div[id$="Modal"] > div.bg-slate-950\/85,
+    div[id$="Modal"] > div > div.bg-slate-900,
+    div[id$="Modal"] > div > div.bg-slate-950,
+    #userProfileModalDialog,
+    .modal-content,
+    .executive-modal-box {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98) 0%, rgba(228, 212, 189, 0.97) 100%) !important;
+      border: 1px solid rgba(156, 120, 78, 0.30) !important;
+      box-shadow: 0 25px 65px -15px rgba(50, 35, 20, 0.20) !important;
+      color: #361c0c !important;
+    }
+    div[id$="Modal"] h2,
+    div[id$="Modal"] h3,
+    div[id$="Modal"] h4,
+    div[id$="Modal"] .font-black {
+      color: #361c0c !important;
+    }
+    div[id$="Modal"] p,
+    div[id$="Modal"] span.text-slate-300,
+    div[id$="Modal"] span.text-slate-400 {
+      color: #54371f !important;
+    }
+    div[id$="Modal"] input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+    div[id$="Modal"] textarea,
+    div[id$="Modal"] select {
+      background: #fbf7f0 !important;
+      border: 1px solid rgba(156, 120, 78, 0.35) !important;
+      color: #361c0c !important;
+    }
+    div[id$="Modal"] input::placeholder,
+    div[id$="Modal"] textarea::placeholder {
+      color: #854d0e !important;
+      opacity: 0.75 !important;
+    }
+    div[id$="Modal"] button.bg-slate-800,
+    div[id$="Modal"] button.bg-slate-850 {
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.25) !important;
+      color: #54371f !important;
+    }
+
+    /* ==========================================================================
+       WARM BEIGE & SAGE GREEN PLATFORM-WIDE UNIFICATION - PHASE 2
+       ========================================================================== */
+
+    /* 1. LIVE LESSON ROOM (#liveLessonModal) */
+    #liveLessonModal,
+    #liveLessonModal > div {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+      border: 1px solid rgba(156, 120, 78, 0.30) !important;
+      box-shadow: 0 25px 65px -15px rgba(50, 35, 20, 0.20) !important;
+      color: #361c0c !important;
+    }
+    #liveLessonModal .border-b,
+    #liveLessonModal > div > div:first-child,
+    #liveLessonModal .bg-slate-950\/90 {
+      background: linear-gradient(165deg, rgba(235, 219, 198, 0.98), rgba(224, 206, 182, 0.96)) !important;
+      border-color: rgba(156, 120, 78, 0.28) !important;
+    }
+    #liveLessonModal h3,
+    #liveLessonModal #liveLessonModalTitle {
+      color: #361c0c !important;
+    }
+    #liveLessonModal p,
+    #liveLessonModal #liveLessonPresenterText {
+      color: #54371f !important;
+    }
+    #liveLessonModal .bg-slate-950\/95,
+    #liveLessonModal .flex-1.bg-slate-950\/95,
+    #liveParticipantsList {
+      background: rgba(247, 240, 228, 0.96) !important;
+    }
+    #liveLessonModal .live-action-dock,
+    .live-action-dock {
+      background: rgba(235, 219, 198, 0.98) !important;
+      border: 1.5px solid rgba(156, 120, 78, 0.35) !important;
+      box-shadow: 0 10px 30px -5px rgba(50, 35, 20, 0.12) !important;
+      divide-color: rgba(156, 120, 78, 0.25) !important;
+    }
+    #liveLessonModal .live-action-dock button,
+    .live-action-dock button {
+      color: #361c0c !important;
+    }
+    #liveLessonModal .live-action-dock button:hover,
+    .live-action-dock button:hover {
+      background: rgba(224, 206, 182, 0.6) !important;
+    }
+    #liveLessonModal .live-action-dock span,
+    .live-action-dock span {
+      color: #361c0c !important;
+    }
+    #liveStartEndBtn,
+    #liveLessonModal #liveStartEndBtn {
+      background: linear-gradient(135deg, #d97706, #b45309) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(180, 83, 9, 0.3) !important;
+    }
+    #liveLessonModal button.bg-slate-800 {
+      background: rgba(228, 212, 189, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.3) !important;
+      color: #361c0c !important;
+    }
+
+    /* 2. USER PROFILE MODAL (#userProfileModal) */
+    #userProfileModalDialog {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+      border: 2px solid rgba(156, 120, 78, 0.35) !important;
+      color: #361c0c !important;
+    }
+    #userProfileModalDialog .border-b {
+      border-color: rgba(156, 120, 78, 0.25) !important;
+    }
+    #profFullName {
+      color: #361c0c !important;
+    }
+    #profUsername {
+      color: #78350f !important;
+    }
+    #profRegularStatsGrid > div,
+    #profRegularStatsGrid .bg-slate-950\/70,
+    #profStarsBox {
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.28) !important;
+      color: #361c0c !important;
+    }
+    #profRegularStatsGrid span {
+      color: #361c0c !important;
+    }
+    #profRegularStatsGrid span[class*="text-amber"] {
+      color: #92400e !important;
+    }
+    #profSuperAdminSpecialCard,
+    #profPublishDreamPostContainer,
+    #profPublishPoemContainer,
+    #profCoursesViewCard,
+    #profCoursesEditCard,
+    #profNotificationContainer,
+    #profStarsAdjustContainer,
+    #profSuperAdminActions,
+    #profSpecialBadgeAdminCard {
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.28) !important;
+      color: #361c0c !important;
+      box-shadow: 0 4px 14px -3px rgba(50, 35, 20, 0.08) !important;
+    }
+    #profPublishPoemContainer h4,
+    #profPublishDreamPostContainer h4,
+    #profSuperAdminSpecialCard span,
+    #profStarsAdjustContainer h4,
+    #profSpecialBadgeAdminCard span {
+      color: #361c0c !important;
+    }
+    #profPublishPoemContainer p,
+    #profPublishDreamPostContainer p,
+    #profStarsAdjustContainer p,
+    #profSpecialBadgeAdminCard p {
+      color: #54371f !important;
+    }
+    #profSpecialBadgeAdminCard button,
+    [id^="badgeBtn"] {
+      background: #fbf7f0 !important;
+      border: 1px solid rgba(156, 120, 78, 0.3) !important;
+      color: #361c0c !important;
+    }
+    #profSpecialBadgeAdminCard button span,
+    #profSpecialBadgeAdminCard button div {
+      color: #361c0c !important;
+    }
+    #profSuperAdminActions select,
+    #profActionButtonsSlot select,
+    #userProfileModal select {
+      background: #fbf7f0 !important;
+      border: 1px solid rgba(156, 120, 78, 0.35) !important;
+      color: #361c0c !important;
+    }
+
+    /* 3. COMPLAINTS & FEEDBACK MODAL (#complaintsModal) */
+    #complaintsModal > div {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+      border: 1px solid rgba(156, 120, 78, 0.30) !important;
+      color: #361c0c !important;
+    }
+    #complaintsModal .border-b,
+    #complaintsModal > div > div:first-child,
+    #complaintsModal [class*="bg-gradient-to-r"] {
+      background: linear-gradient(165deg, rgba(235, 219, 198, 0.98), rgba(224, 206, 182, 0.96)) !important;
+      border-color: rgba(156, 120, 78, 0.28) !important;
+    }
+    #complaintsModal h3,
+    #complaintsModal h4 {
+      color: #361c0c !important;
+    }
+    #complaintsModal p,
+    #complaintsModal span {
+      color: #54371f !important;
+    }
+
+    /* 4. DREAMS ADMIN SESSIONS SIDEBAR (#dreamAdminSessionsSidebar) */
+    #dreamAdminSessionsSidebar,
+    #dreamAdminSessionsSidebar > div,
+    body.light-theme #dreamAdminSessionsSidebar {
+      background: rgba(235, 219, 198, 0.98) !important;
+      border-left: 1px solid rgba(156, 120, 78, 0.28) !important;
+      color: #361c0c !important;
+    }
+    #dreamAdminSessionsSidebar h4,
+    #dreamAdminSessionsSidebar .font-black {
+      color: #361c0c !important;
+    }
+    #dreamAdminSessionsSidebar .border-b {
+      border-color: rgba(156, 120, 78, 0.25) !important;
+    }
+    #dreamAdminSessionsSidebar .bg-slate-900,
+    body.light-theme #dreamAdminSessionsSidebar .bg-slate-900 {
+      background: rgba(224, 206, 182, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.25) !important;
+    }
+    #dreamAdminSessionsSidebar button {
+      color: #54371f !important;
+    }
+    #dreamAdminSessionsSidebar button.bg-purple-600,
+    #dreamAdminSessionsSidebar button.active {
+      background: linear-gradient(135deg, #d97706, #b45309) !important;
+      color: #ffffff !important;
+    }
+
+    /* 5. DIALECT SELECTOR DROPDOWN (#dialectDropdownMenu) */
+    #dialectDropdownMenu,
+    body.light-mode #dialectDropdownMenu,
+    body.light-theme #dialectDropdownMenu {
+      background: rgba(247, 240, 228, 0.98) !important;
+      border: 1px solid rgba(156, 120, 78, 0.35) !important;
+      box-shadow: 0 20px 45px -10px rgba(50, 35, 20, 0.15) !important;
+    }
+    #dialectDropdownMenu .border-b {
+      border-color: rgba(156, 120, 78, 0.25) !important;
+    }
+    #dialectDropdownMenu .border-b span {
+      color: #78350f !important;
+    }
+    #dialectDropdownMenu button,
+    body.light-mode .dialect-option,
+    body.light-theme .dialect-option {
+      color: #361c0c !important;
+    }
+    #dialectDropdownMenu button:hover,
+    body.light-mode .dialect-option:hover,
+    body.light-theme .dialect-option:hover {
+      background: rgba(224, 206, 182, 0.6) !important;
+      color: #361c0c !important;
+    }
+    #dialectDropdownMenu span.rounded-full[class*="bg-"] {
+      background-color: #d97706 !important;
+    }
+
+    /* 6. AI GUARD / SECURITY COMMAND CENTER (#aiSecurityModal) */
+    #aiSecurityModal > div {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+      border: 1px solid rgba(156, 120, 78, 0.30) !important;
+      color: #361c0c !important;
+    }
+    #aiSecurityModal .border-b,
+    #aiSecurityModal > div > div:first-child,
+    #aiSecurityModal [class*="bg-gradient-to-r"] {
+      background: linear-gradient(165deg, rgba(235, 219, 198, 0.98), rgba(224, 206, 182, 0.96)) !important;
+      border-color: rgba(156, 120, 78, 0.28) !important;
+    }
+    #aiSecurityModal h3,
+    #aiSecurityModal h4 {
+      color: #361c0c !important;
+    }
+    #aiSecurityModal p,
+    #aiSecurityModal span {
+      color: #54371f !important;
+    }
+    #aiSecurityModal .from-rose-950\/60 {
+      background: rgba(254, 242, 242, 0.95) !important;
+      border: 1.5px solid rgba(244, 63, 94, 0.4) !important;
+    }
+    #aiSecurityModal .from-rose-950\/60 h4 {
+      color: #881337 !important;
+    }
+    #aiSecurityModal .from-rose-950\/60 p {
+      color: #9f1239 !important;
+    }
+    #aiSecurityModal .grid > div,
+    #aiSecurityModal .bg-slate-950\/70 {
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.28) !important;
+    }
+    #aiSecurityModal .grid p {
+      color: #54371f !important;
+    }
+    #aiSecurityModal .grid h5 {
+      color: #361c0c !important;
+    }
+    #aiSecurityModal .border.border-slate-800,
+    #aiSecIncidentsList,
+    #aiSecIncidentsList > div {
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.28) !important;
+      color: #361c0c !important;
+    }
+    #aiSecIncidentsList p,
+    #aiSecIncidentsList span {
+      color: #361c0c !important;
+    }
+
+    /* 7. ACTIVITY DATABASE / ATTENDANCE LOGS MODAL (#activityDatabaseModal) */
+    #activityDatabaseModal > div {
+      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+      border: 1px solid rgba(156, 120, 78, 0.30) !important;
+      color: #361c0c !important;
+    }
+    #activityDatabaseModal .border-b,
+    #activityDatabaseModal > div > div:first-child,
+    #activityDatabaseModal [class*="bg-gradient-to-r"] {
+      background: linear-gradient(165deg, rgba(235, 219, 198, 0.98), rgba(224, 206, 182, 0.96)) !important;
+      border-color: rgba(156, 120, 78, 0.28) !important;
+    }
+    #activityDatabaseModal h3 {
+      color: #361c0c !important;
+    }
+    #activityDatabaseModal span {
+      color: #54371f !important;
+    }
+    #activityDatabaseModal .bg-slate-950\/70,
+    #activityDatabaseModal .bg-slate-950 {
+      background: rgba(228, 212, 189, 0.96) !important;
+      border-color: rgba(156, 120, 78, 0.25) !important;
+    }
+    #activityDatabaseModal input {
+      background: #fbf7f0 !important;
+      border: 1px solid rgba(156, 120, 78, 0.35) !important;
+      color: #361c0c !important;
+    }
+    #activityDatabaseModal input::placeholder {
+      color: #854d0e !important;
+      opacity: 0.75 !important;
+    }
+    #activityDatabaseModal [class*="rounded-2xl"],
+    #activityLogsList > div {
+      background: rgba(247, 240, 228, 0.96) !important;
+      border: 1px solid rgba(156, 120, 78, 0.28) !important;
+      color: #361c0c !important;
+    }
+    #activityDatabaseModal [class*="rounded-2xl"] h4,
+    #activityDatabaseModal [class*="rounded-2xl"] p {
+      color: #361c0c !important;
+    }
+    #activityDatabaseModal [class*="rounded-2xl"] .rounded-2xl,
+    #activityDatabaseModal [class*="rounded-2xl"] .rounded-xl {
+      background: rgba(239, 227, 209, 0.95) !important;
+      border: 1px solid rgba(156, 120, 78, 0.25) !important;
+      color: #361c0c !important;
+    }
+
+    /* 8. GENERAL MODAL & COMPONENT CLEANUP (ELIMINATING ALL BLACK / WHITE OVERRIDES) */
+    div[id$="Modal"] > div > div:first-child,
+    div[id$="Modal"] .modal-header,
+    div[id$="Modal"] [class*="bg-gradient-to-r"][class*="border-b"] {
+      background: linear-gradient(165deg, rgba(235, 219, 198, 0.98), rgba(224, 206, 182, 0.96)) !important;
+      border-color: rgba(156, 120, 78, 0.28) !important;
+    }
+    div[id$="Modal"] > div > div:first-child h2,
+    div[id$="Modal"] > div > div:first-child h3,
+    div[id$="Modal"] > div > div:first-child h4 {
+      color: #361c0c !important;
+    }
+    div[id$="Modal"] .bg-slate-950\/80,
+    div[id$="Modal"] .bg-slate-950\/70,
+    div[id$="Modal"] .bg-slate-950\/60,
+    div[id$="Modal"] .bg-slate-900\/90,
+    div[id$="Modal"] .bg-slate-900\/80,
+    div[id$="Modal"] .bg-slate-900\/60 {
+      background: rgba(247, 240, 228, 0.96) !important;
+      border-color: rgba(156, 120, 78, 0.25) !important;
+      color: #361c0c !important;
+    }
+
+
+/* ==========================================================================
+   FEED CARDS: POLLS, ALARMS, COUNTDOWNS, QUESTIONS, REVEALED ANSWERS
+   Eliminating all dark/black slate cards across feed and chat
+   ========================================================================== */
+
+/* Clear chat-msg-item containers so they are completely transparent and have no borders */
+.chat-msg-item,
+.chat-msg-item[data-poll-id],
+.chat-msg-item[data-alarm-id],
+.chat-msg-item[data-question-id],
+[id^="poll-msg-slot-"],
+[id^="cg-poll-msg-slot-"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* 1. Poll Cards */
+div.poll-card,
+div[id^="poll-card-"] {
+  background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+  border: 1.5px solid rgba(156, 120, 78, 0.35) !important;
+  box-shadow: 0 10px 30px -5px rgba(50, 35, 20, 0.10) !important;
+  color: #361c0c !important;
+}
+[id^="poll-card-"] h3,
+[id^="poll-card-"] h4,
+[id^="poll-card-"] .font-black {
+  color: #361c0c !important;
+}
+[id^="poll-card-"] span,
+[id^="poll-card-"] p,
+[id^="poll-card-"] .text-slate-400,
+[id^="poll-card-"] .text-slate-500 {
+  color: #54371f !important;
+}
+[id^="poll-card-"] .border-b,
+[id^="poll-card-"] .border-t,
+[id^="poll-card-"] [class*="border-amber-500"],
+[id^="poll-card-"] [class*="border-slate-800"] {
+  border-color: rgba(156, 120, 78, 0.25) !important;
+}
+[id^="poll-card-"] .relative.overflow-hidden.rounded-2xl {
+  background: rgba(247, 240, 228, 0.96) !important;
+  border: 1px solid rgba(156, 120, 78, 0.28) !important;
+  color: #361c0c !important;
+}
+[id^="poll-card-"] .relative.overflow-hidden.rounded-2xl:hover {
+  background: rgba(253, 248, 240, 0.98) !important;
+  border-color: rgba(180, 83, 9, 0.45) !important;
+}
+[id^="poll-card-"] .relative.overflow-hidden.rounded-2xl span {
+  color: #361c0c !important;
+}
+[id^="poll-card-"] .relative.overflow-hidden.rounded-2xl > div.absolute {
+  background: rgba(217, 119, 6, 0.18) !important;
+}
+[id^="poll-card-"] span.w-5.h-5.rounded-full {
+  border-color: rgba(180, 83, 9, 0.5) !important;
+}
+
+/* 2. Alarm / Countdown Cards */
+div.alarm-card,
+div[id^="alarm-card-"] {
+  background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+  border: 1.5px solid rgba(156, 120, 78, 0.35) !important;
+  box-shadow: 0 10px 30px -5px rgba(50, 35, 20, 0.10) !important;
+  color: #361c0c !important;
+}
+[id^="alarm-card-"] h3,
+[id^="alarm-card-"] h4,
+[id^="alarm-card-"] .text-rose-200 {
+  color: #361c0c !important;
+}
+[id^="alarm-card-"] span.font-mono,
+[id^="alarm-card-"] .text-slate-400,
+[id^="alarm-card-"] .text-slate-500 {
+  color: #54371f !important;
+}
+[id^="alarm-card-"] .border-b,
+[id^="alarm-card-"] .border-t,
+[id^="alarm-card-"] [class*="border-rose-500"],
+[id^="alarm-card-"] [class*="border-slate-800"] {
+  border-color: rgba(156, 120, 78, 0.25) !important;
+}
+[id^="alarm-card-"] span.rounded-2xl.bg-rose-500\/20,
+[id^="alarm-card-"] span.rounded-2xl {
+  background: rgba(244, 63, 94, 0.15) !important;
+  border-color: rgba(244, 63, 94, 0.35) !important;
+  color: #be123c !important;
+}
+[id^="alarm-card-"] .bg-slate-950\/80,
+[id^="alarm-card-"] [id^="alarm-timer-box-"] > div,
+[id^="alarm-timer-box-"] > div {
+  background: rgba(247, 240, 228, 0.96) !important;
+  border: 1px solid rgba(156, 120, 78, 0.28) !important;
+  box-shadow: 0 2px 6px rgba(50, 35, 20, 0.06) !important;
+}
+[id^="alarm-card-"] .alarm-digit-days,
+[id^="alarm-card-"] .alarm-digit-hours,
+[id^="alarm-card-"] .alarm-digit-minutes,
+[id^="alarm-card-"] .alarm-digit-seconds,
+[id^="alarm-timer-box-"] span:first-child {
+  color: #361c0c !important;
+}
+[id^="alarm-card-"] span.text-\[9px\],
+[id^="alarm-timer-box-"] span.text-\[9px\] {
+  color: #78350f !important;
+}
+[id^="alarm-status-badge-"] {
+  color: #166534 !important;
+}
+
+/* 3. Question Glow & Revealed Answers */
+.question-glow,
+[data-question-id] > div.question-glow,
+.revealed-answers-card {
+  background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+  border: 1.5px solid rgba(156, 120, 78, 0.35) !important;
+  box-shadow: 0 10px 30px -5px rgba(50, 35, 20, 0.10) !important;
+  color: #361c0c !important;
+}
+.question-glow h3, .question-glow h4,
+.revealed-answers-card h3, .revealed-answers-card h4 {
+  color: #361c0c !important;
+}
+.question-glow p, .question-glow span,
+.revealed-answers-card p, .revealed-answers-card span {
+  color: #54371f !important;
+}
+.question-glow .border-b, .question-glow .border-t,
+.revealed-answers-card .border-b, .revealed-answers-card .border-t {
+  border-color: rgba(156, 120, 78, 0.25) !important;
+}
+.revealed-answers-card .bg-slate-950\/70,
+.question-glow .bg-slate-950\/60,
+.question-glow .bg-slate-950\/70 {
+  background: rgba(247, 240, 228, 0.96) !important;
+  border-color: rgba(156, 120, 78, 0.28) !important;
+  color: #361c0c !important;
+}
+
+/* 4. Classroom Lobby & Waveform Cards */
+.classroom-lobby-card {
+  background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+  border: 1px solid rgba(156, 120, 78, 0.28) !important;
+  box-shadow: 0 4px 14px -3px rgba(50, 35, 20, 0.08) !important;
+  color: #361c0c !important;
+}
+.classroom-lobby-card h3 {
+  color: #361c0c !important;
+}
+.classroom-lobby-card p {
+  color: #54371f !important;
+}
+.voice-waveform-card {
+  background: rgba(247, 240, 228, 0.96) !important;
+  border: 1px solid rgba(156, 120, 78, 0.28) !important;
+  color: #361c0c !important;
+}
+
+    
+
+/* ==========================================================================
+   DRAWER & TOOLS MENU: WARM BEIGE PALETTE & MOBILE ICON-ONLY VIEW
+   ========================================================================== */
+
+/* Main Menu Drawer Styling - 100% Warm Beige */
+#mainMenuDrawerPanel,
+body.light-theme #mainMenuDrawerPanel,
+body.light-mode #mainMenuDrawerPanel {
+  background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+  border-left: 1.5px solid rgba(156, 120, 78, 0.35) !important;
+  color: #361c0c !important;
+  box-shadow: -10px 0 35px rgba(50, 35, 20, 0.15) !important;
+}
+#mainMenuDrawerPanel > div:first-child,
+body.light-theme #mainMenuDrawerPanel > div:first-child {
+  background: linear-gradient(165deg, rgba(235, 219, 198, 0.98), rgba(224, 206, 182, 0.96)) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.28) !important;
+}
+#mainMenuDrawerPanel h3,
+#mainMenuDrawerPanel h4 {
+  color: #361c0c !important;
+}
+#mainMenuDrawerPanel p {
+  color: #54371f !important;
+}
+.drawer-tool-btn,
+#mainMenuDrawerPanel .drawer-tool-btn,
+#mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateGroupBtn):not([onclick*="logout"]):not([onclick*="Logout"]),
+body.light-theme .drawer-tool-btn,
+body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateGroupBtn):not([onclick*="logout"]):not([onclick*="Logout"]) {
+  background: rgba(247, 240, 228, 0.96) !important;
+  border: 1px solid rgba(156, 120, 78, 0.28) !important;
+  color: #361c0c !important;
+  box-shadow: 0 4px 14px -3px rgba(50, 35, 20, 0.08) !important;
+}
+.drawer-tool-btn:hover,
+#mainMenuDrawerPanel .drawer-tool-btn:hover {
+  background: rgba(253, 248, 240, 0.98) !important;
+  border-color: rgba(180, 83, 9, 0.45) !important;
+}
+.drawer-tool-icon-box,
+#mainMenuDrawerPanel .drawer-tool-icon-box {
+  background: rgba(217, 119, 6, 0.15) !important;
+  border: 1px solid rgba(180, 83, 9, 0.35) !important;
+  color: #b45309 !important;
+}
+.drawer-tool-title,
+#mainMenuDrawerPanel .drawer-tool-title {
+  color: #361c0c !important;
+}
+.drawer-tool-badge,
+#mainMenuDrawerPanel .drawer-tool-badge {
+  background: rgba(217, 119, 6, 0.18) !important;
+  border: 1px solid rgba(180, 83, 9, 0.3) !important;
+  color: #78350f !important;
+}
+#mainMenuDrawerPanel .fa-chevron-left {
+  color: #a16207 !important;
+}
+#drawerSettingsList,
+#drawerSettingsSection {
+  background: rgba(235, 219, 198, 0.95) !important;
+  border-color: rgba(156, 120, 78, 0.25) !important;
+}
+
+/* Floating Chat Tools Menu (#publicChatToolsMenu & #customGroupToolsMenu) */
+#publicChatToolsMenu,
+#customGroupToolsMenu {
+  background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+  border: 1.5px solid rgba(156, 120, 78, 0.35) !important;
+  box-shadow: 0 15px 35px -5px rgba(50, 35, 20, 0.18) !important;
+  color: #361c0c !important;
+}
+#publicChatToolsMenu button,
+#customGroupToolsMenu button {
+  background: rgba(247, 240, 228, 0.96) !important;
+  border: 1px solid rgba(156, 120, 78, 0.25) !important;
+  color: #361c0c !important;
+}
+#publicChatToolsMenu button:hover,
+#customGroupToolsMenu button:hover {
+  background: rgba(253, 248, 240, 0.98) !important;
+  border-color: rgba(180, 83, 9, 0.45) !important;
+}
+#publicChatToolsMenu button span,
+#customGroupToolsMenu button span {
+  color: #361c0c !important;
+}
+
+/* Modals: Create & Edit Poll */
+#createPollModal > div > div,
+#editPollModal > div > div {
+  background: linear-gradient(165deg, rgba(239, 227, 209, 0.98), rgba(228, 212, 189, 0.97)) !important;
+  border: 1.5px solid rgba(156, 120, 78, 0.35) !important;
+  color: #361c0c !important;
+}
+#createPollModal h4, #editPollModal h4 {
+  color: #361c0c !important;
+}
+#createPollModal input, #createPollModal textarea,
+#editPollModal input, #editPollModal textarea {
+  background: #fbf7f0 !important;
+  border: 1px solid rgba(156, 120, 78, 0.35) !important;
+  color: #361c0c !important;
+}
+
+/* ================= MOBILE VIEW: ONLY SHOW ICONS ================= */
+@media (max-width: 640px) {
+  /* 1. Main Menu Drawer on Mobile: Compact Icon Rail / Dock */
+  #mainMenuDrawerPanel {
+    width: 82px !important;
+    min-width: 82px !important;
+    max-width: 82px !important;
+    padding: 0.5rem 0.25rem !important;
+  }
+  #mainMenuDrawerPanel > div:first-child {
+    padding: 0.6rem 0.25rem !important;
+    justify-content: center !important;
+  }
+  #mainMenuDrawerPanel > div:first-child > div:first-child > div:last-child {
+    display: none !important; /* Hide title & subtitle */
+  }
+  #mainMenuDrawerPanel div[onclick*="openMyProfile"] {
+    margin: 0.25rem auto !important;
+    padding: 0.35rem !important;
+    justify-content: center !important;
+    width: 54px !important;
+    height: 54px !important;
+    border-radius: 1rem !important;
+  }
+  #mainMenuDrawerPanel div[onclick*="openMyProfile"] > div:first-child > div:last-child,
+  #mainMenuDrawerPanel div[onclick*="openMyProfile"] span,
+  #mainMenuDrawerPanel div[onclick*="openMyProfile"] i:not(.fa-user) {
+    display: none !important; /* Hide profile texts, only show avatar */
+  }
+  .drawer-tool-btn,
+  #mainMenuDrawerPanel .drawer-tool-btn,
+  #mainMenuDrawerPanel .overflow-y-auto button {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 52px !important;
+    height: 52px !important;
+    min-height: 52px !important;
+    padding: 0 !important;
+    margin: 0.35rem auto !important;
+    border-radius: 1rem !important;
+  }
+  .drawer-tool-title,
+  .drawer-tool-badge,
+  #mainMenuDrawerPanel .drawer-tool-title,
+  #mainMenuDrawerPanel .drawer-tool-badge,
+  #mainMenuDrawerPanel span:not(.fa-solid):not(.fa-regular):not(.fa-brands),
+  #mainMenuDrawerPanel .fa-chevron-left,
+  #mainMenuDrawerPanel p {
+    display: none !important; /* ONLY ICONS APPEAR ON MOBILE */
+  }
+  .drawer-tool-icon-box,
+  #mainMenuDrawerPanel .drawer-tool-icon-box {
+    margin: 0 !important;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 0.85rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .drawer-tool-icon-box i,
+  #mainMenuDrawerPanel .drawer-tool-icon-box i {
+    font-size: 1.15rem !important;
+  }
+  #mainMenuDrawerPanel .border-t button[onclick*="logout"],
+  #mainMenuDrawerPanel .border-t button[onclick*="Logout"] {
+    width: 52px !important;
+    height: 52px !important;
+    padding: 0 !important;
+    margin: 0.35rem auto !important;
+    justify-content: center !important;
+    border-radius: 1rem !important;
+  }
+  #mainMenuDrawerPanel .border-t button[onclick*="logout"] span,
+  #mainMenuDrawerPanel .border-t button[onclick*="Logout"] span {
+    display: none !important;
+  }
+
+  /* 2. Chat Floating Tools Menu on Mobile: Horizontal Icon Row */
+  #publicChatToolsMenu,
+  #customGroupToolsMenu {
+    min-width: unset !important;
+    width: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0.4rem !important;
+    padding: 0.4rem !important;
+    border-radius: 1.25rem !important;
+  }
+  #publicChatToolsMenu button,
+  #customGroupToolsMenu button {
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-radius: 0.85rem !important;
+  }
+  #publicChatToolsMenu button span,
+  #customGroupToolsMenu button span {
+    display: none !important; /* Only icons appear on mobile */
+  }
+  #publicChatToolsMenu button div,
+  #customGroupToolsMenu button div {
+    margin: 0 !important;
+  }
+}
+
+    </style>
 
 
 
@@ -2787,31 +3852,15 @@
 
 
 
-  <link rel="apple-touch-icon" href="/images/logo.jpg?v=1795039300097">
-
-
-
-
-
-
-
+  <link rel="apple-touch-icon" href="/images/icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/images/icon-512.png">
   <link rel="manifest" href="/manifest.json">
-
-
-
-
-
-
-
-  <meta name="theme-color" content="#070a18">
-
-
-
-
-
-
-
+  <meta name="theme-color" content="#334032">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="پریاسکەی عەبدی">
 
 
 
@@ -2888,7 +3937,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="/css/style.css?v=79.0&t=1795287000">
+  <link rel="stylesheet" href="/css/style.css?v=90.0&t=1795310000">
 
 
 
@@ -5467,6 +6516,17 @@
 
 
 
+          <!-- Android Install App Button -->
+          <button 
+            type="button" 
+            onclick="installPryaskaApp()" 
+            class="px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs font-bold rounded-xl inline-flex items-center gap-1.5 cursor-pointer shadow-md bg-emerald-600/15 hover:bg-emerald-600/25 text-emerald-800 dark:text-emerald-200 border border-emerald-500/30 transition active:scale-95"
+            title="داگرتنی ئەپی پریاسکەی عەبدی بۆ ئەندرۆید"
+          >
+            <i class="fa-brands fa-android text-sm text-emerald-600 dark:text-emerald-400"></i>
+            <span class="hidden sm:inline">داگرتنی ئەپ</span>
+          </button>
+
           <!-- Executive Glass-Border Login Button -->
 
 
@@ -6284,21 +7344,7 @@
 
 
           <h2 id="heroTitle" class="landing-hero-title text-2xl sm:text-4xl lg:text-[2.65rem] font-black tracking-tight leading-snug sm:leading-tight">
-
-
-
-
-
-
-
-            بەخێربێن بۆ پریاسکەی عەبدی
-
-
-
-
-
-
-
+            پریاسکەی عەبدی
           </h2>
 
 
@@ -6324,21 +7370,7 @@
 
 
           <p id="heroSubtitle" class="landing-hero-subtitle text-xs sm:text-base max-w-xl mx-auto leading-relaxed font-medium">
-
-
-
-
-
-
-
-            ناوەندێکی ئەکادیمی و مەعریفی بۆ وانە زانستییەکان و ڕاڤەکردنی خەون بە شێوازێکی دروست و باوەڕپێکراو
-
-
-
-
-
-
-
+            ناوەندێک بۆ فێربوونی زانستی تەعبیر و لێکدانەوەی خەونەکانتان
           </p>
 
 
@@ -6407,7 +7439,7 @@
             type="button" 
             onclick="openDirectDreamPrompt()" 
             class="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-[#9c784e]/30 bg-gradient-to-br from-[#efe3d1] to-[#e4d4bd] shadow-lg flex items-center justify-between gap-3 sm:gap-4 cursor-pointer backdrop-blur-xl"
-            title="ناردنی خەون بۆ لێکدانەوە"
+            title="خەونەکەت بنێرە"
           >
             <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
             
@@ -6418,7 +7450,7 @@
               <div class="min-w-0">
                 <div class="flex items-center gap-2 mb-1">
                   <h3 class="font-black text-sm sm:text-base md:text-lg text-[#361c0c] transition-colors">
-                    ناردنی خەون بۆ لێکدانەوە
+                    خەونەکەت بنێرە
                   </h3>
                   <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse shrink-0" title="کارایە"></span>
                 </div>
@@ -6439,7 +7471,7 @@
             <a 
               href="/poems"
               class="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-[#9c784e]/30 bg-gradient-to-br from-[#efe3d1] to-[#e4d4bd] shadow-lg flex items-center justify-between gap-3 sm:gap-4 cursor-pointer backdrop-blur-xl no-underline"
-              title="شیعرەکانی م. ئازاد — کردنەوەی دیوانی شیعرەکان"
+              title="پریاسکەی ئەدەبی — کردنەوەی دیوانی شیعرەکان"
             >
               <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
 
@@ -6448,15 +7480,9 @@
                   <i class="fa-solid fa-feather-pointed text-slate-950"></i>
                 </div>
                 <div class="min-w-0">
-                  <div class="flex items-center gap-2 mb-1">
-                    <h3 class="font-black text-sm sm:text-base md:text-lg text-[#361c0c] transition-colors">
-                      شیعرەکانی م. ئازاد
-                    </h3>
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-[#361c0c] border border-amber-600/30">تایبەت</span>
-                  </div>
-                  <p class="text-xs sm:text-[13px] text-[#54371f] font-semibold truncate">
-                    دیوانی هۆنراوە و بەرهەمە ئەدەبییەکان
-                  </p>
+                  <h3 class="font-black text-sm sm:text-base md:text-lg text-[#361c0c] transition-colors">
+                    پریاسکەی ئەدەبی
+                  </h3>
                 </div>
               </div>
 
@@ -6483,7 +7509,7 @@
           <a 
             href="/articles"
             class="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-[#9c784e]/30 bg-gradient-to-br from-[#efe3d1] to-[#e4d4bd] shadow-lg flex items-center justify-between gap-3 sm:gap-4 cursor-pointer backdrop-blur-xl no-underline"
-            title="کورتە وتار — وتار و نووسراوی قوتابیان"
+            title="پریاسکەی وتار"
           >
             <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
 
@@ -6492,15 +7518,9 @@
                 <i class="fa-solid fa-pen-nib text-slate-950"></i>
               </div>
               <div class="min-w-0">
-                <div class="flex items-center gap-2 mb-1">
-                  <h3 class="font-black text-sm sm:text-base md:text-lg text-[#361c0c] transition-colors">
-                    کورتە وتار
-                  </h3>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-[#361c0c] border border-amber-600/30">قوتابیان</span>
-                </div>
-                <p class="text-xs sm:text-[13px] text-[#54371f] font-semibold truncate">
-                  وتار و نووسراوی فێرخوازان
-                </p>
+                <h3 class="font-black text-sm sm:text-base md:text-lg text-[#361c0c] transition-colors">
+                  پریاسکەی وتار
+                </h3>
               </div>
             </div>
 
@@ -7855,23 +8875,9 @@
 
 
 
-          <!-- Ambient Glow Elements inside card -->
-
-
-
-
-
-
-
-          <div class="absolute -top-20 -right-20 w-64 h-64 bg-amber-500/18 rounded-full blur-3xl pointer-events-none"></div>
-
-
-
-
-
-
-
-          <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
+          <!-- Ambient Glow Elements inside card (Hidden for clean matte surface) -->
+          <div class="absolute -top-20 -right-20 w-64 h-64 bg-amber-500/18 rounded-full blur-3xl pointer-events-none hidden" style="display: none !important;"></div>
+          <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none hidden" style="display: none !important;"></div>
 
 
 
@@ -11087,30 +12093,9 @@
 
 
 
-        <button type="button" id="backToClassroomsLobbyBtn" onclick="returnToClassroomsLobby()" class="hidden px-2.5 py-1.5 hover:bg-amber-400/15 text-amber-300 hover:text-amber-200 text-xs font-black rounded-full transition items-center gap-1.5 active:scale-95 shrink-0 cursor-pointer" title="گەڕانەوە بۆ لیستی هۆبەکان">
-
-
-
-
-
-
-
+        <button type="button" id="backToClassroomsLobbyBtn" onclick="returnToClassroomsLobby()" class="hidden px-2.5 py-1.5 hover:bg-amber-400/15 text-amber-300 hover:text-amber-200 text-xs font-black rounded-full transition items-center gap-1.5 active:scale-95 shrink-0 cursor-pointer" title="گەڕانەوە بۆ لیستی پریاسکەکان">
           <i class="fa-solid fa-arrow-right text-[10px]"></i>
-
-
-
-
-
-
-
-          <span id="backToClassroomsLobbyText" class="inline font-bold text-[11px] sm:text-xs">هۆبەکان</span>
-
-
-
-
-
-
-
+          <span id="backToClassroomsLobbyText" class="inline font-bold text-[11px] sm:text-xs">پریاسکەکان</span>
         </button>
 
 
@@ -11151,7 +12136,7 @@
 
 
 
-          <span id="headerActiveRoomName" class="truncate">هۆبە</span>
+          <span id="headerActiveRoomName" class="truncate">پریاسکە</span>
 
 
 
@@ -12455,6 +13440,17 @@
 
 
 
+                        <!-- Polls Section (بەشی ڕاپرسی) -->
+            <button id="drawerPollBtn" onclick="closeMainMenuDrawer(); openPollsHubOrModal();" class="drawer-tool-btn group" title="بەشی ڕاپرسی و دەنگدان">
+              <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <div class="drawer-tool-icon-box">
+                  <i class="fa-solid fa-square-poll-vertical"></i>
+                </div>
+                <span id="drawerPollText" class="drawer-tool-title">بەشی ڕاپرسی</span>
+              </div>
+              <span id="drawerPollBadge" class="drawer-tool-badge">دەنگدان</span>
+            </button>
+
             <!-- Library -->
 
 
@@ -12855,7 +13851,7 @@
 
 
 
-                <span id="drawerDreamSubmitText" class="drawer-tool-title">ناردنی خەون بۆ لێکدانەوە</span>
+                <span id="drawerDreamSubmitText" class="drawer-tool-title">خەونەکەت بنێرە</span>
 
 
 
@@ -12894,6 +13890,17 @@
 
 
 
+
+            <!-- Install App Button (PWA / Android) -->
+            <button id="drawerInstallAppBtn" type="button" onclick="closeMainMenuDrawer(); installPryaskaApp();" class="drawer-tool-btn group">
+              <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <div class="drawer-tool-icon-box text-emerald-600 dark:text-emerald-400">
+                  <i class="fa-brands fa-android text-base sm:text-lg"></i>
+                </div>
+                <span class="drawer-tool-title">داگرتنی ئەپی پریاسکە</span>
+              </div>
+              <span class="drawer-tool-badge !bg-emerald-500/20 !text-emerald-300 !border-emerald-400/30">ئەندرۆید</span>
+            </button>
 
             <!-- Complaints Box (For Students) -->
 
@@ -15362,29 +16369,8 @@
 
 
                 <h2 class="text-sm sm:text-base md:text-lg font-black text-white flex items-center gap-1.5">
-
-
-
-
-
-
-
-                  <span>هۆبە و ژوورەکانی فێرگە</span>
-
-
-
-
-
-
-
+                  <span>پریاسکەکان</span>
                   <span id="classroomsTotalCountBadge" class="text-[10px] sm:text-xs px-2 py-0.2 rounded-full bg-slate-800 text-amber-300 font-mono font-bold border border-slate-700">4</span>
-
-
-
-
-
-
-
                 </h2>
 
 
@@ -15489,7 +16475,7 @@
 
 
 
-                  placeholder="گەڕان بەدوای هۆبەکان..." 
+                  placeholder="گەڕان..." 
 
 
 
@@ -15561,38 +16547,10 @@
 
 
 
-                title="دروستکردنی ژووری نوێ"
-
-
-
-
-
-
-
+                title="دروستکردنی پریاسکەی نوێ"
               >
-
-
-
-
-
-
-
                 <i class="fa-solid fa-plus text-xs"></i>
-
-
-
-
-
-
-
-                <span class="hidden sm:inline">هۆبەی نوێ</span>
-
-
-
-
-
-
-
+                <span class="hidden sm:inline">پریاسکەی نوێ</span>
               </button>
 
 
@@ -19537,7 +20495,7 @@
                 <i class="fa-solid fa-feather-pointed"></i>
               </span>
               <div>
-                <h4 class="font-black text-sm text-white">بەشی شیعرەکانی م. ئازاد</h4>
+                <h4 class="font-black text-sm text-white">بەشی پریاسکەی ئەدەبی</h4>
                 <p class="text-[11px] text-amber-300/80">بڵاوکردنەوەی شیعر و هۆنراوە بۆ دیوانی وێبسایت</p>
               </div>
             </div>
@@ -37826,7 +38784,7 @@
 
 
 
-            <h3 id="classroomModalTitle" class="font-black text-sm sm:text-base text-white">دروستکردنی هۆبەی نوێ</h3>
+            <h3 id="classroomModalTitle" class="font-black text-sm sm:text-base text-white">دروستکردنی پریاسکەی نوێ</h3>
 
 
 
@@ -37930,15 +38888,8 @@
 
 
 
-          <label class="block text-xs font-bold text-slate-300 mb-1">ناوی هۆبە / ژوور <span class="text-rose-400">*</span></label>
-
-
-
-
-
-
-
-          <input type="text" id="classroomInputName" required placeholder="بۆ نموونە: هۆبەی زمانی عەرەبی" class="w-full px-3.5 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400">
+          <label class="block text-xs font-bold text-slate-300 mb-1">ناوی پریاسکە / ژوور <span class="text-rose-400">*</span></label>
+          <input type="text" id="classroomInputName" required placeholder="بۆ نموونە: پریاسکەی زمانی عەرەبی" class="w-full px-3.5 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400">
 
 
 
@@ -38050,7 +39001,7 @@
 
 
 
-            <label class="block text-xs font-bold text-slate-300 mb-1">ئایکۆنی هۆبە</label>
+            <label class="block text-xs font-bold text-slate-300 mb-1">ئایکۆنی پریاسکە</label>
 
 
 
@@ -38066,7 +39017,7 @@
 
 
 
-              <option value="fa-school">🏫 هۆبە / قوتابخانە</option>
+              <option value="fa-school">🏫 پریاسکە / ناوەند</option>
 
 
 
@@ -59018,7 +59969,7 @@
 
 
 
-  <script src="/js/palettes.js?v=9.0&t=1795287000"></script>
+  <script src="/js/palettes.js?v=90.0&t=1795310000"></script>
 
 
 
@@ -59034,7 +59985,9 @@
 
 
 
-  <script src="/js/app.js?v=71.0&t=1795118500"></script>
+  <script src="/js/app.js?v=100.0&t=1795360000"></script>
+  <!-- PWA & Android App Installation Controller -->
+  <script src="/js/pwa-install.js?v=1.0&t=1795360000"></script>
 
 
 
@@ -59515,7 +60468,7 @@
 
 
 
-            <h3 class="font-black text-base text-slate-950 dark:text-white">ناردنی خەون بۆ لێکدانەوە</h3>
+            <h3 class="font-black text-base text-slate-950 dark:text-white">خەونەکەت بنێرە</h3>
 
 
 
@@ -59803,7 +60756,7 @@
 
 
 
-            <h3 class="font-black text-base sm:text-lg text-slate-950 dark:text-white">شیعرەکانی م. ئازاد</h3>
+            <h3 class="font-black text-base sm:text-lg text-slate-950 dark:text-white">پریاسکەی ئەدەبی</h3>
 
 
 
@@ -59947,7 +60900,7 @@
 
 
 
-          <span>هۆنراوە و بەرهەمی م. ئازاد</span>
+          <span>هۆنراوە و بەرهەمە ئەدەبییەکان</span>
 
 
 

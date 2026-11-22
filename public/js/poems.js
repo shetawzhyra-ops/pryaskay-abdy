@@ -13,26 +13,26 @@
     sorani: {
       label: 'شێوەزار: سۆرانی',
       back: 'گەڕانەوە بۆ سەرەکی',
-      title: 'شیعرەکانی م. ئازاد',
-      subtitle: 'دیوانی هۆنراوە و بەرهەمە ئەدەبی و ڕۆحییەکانی مامۆستا ئازاد (خاوەنی ماڵپەڕی پریاسکەی عەبدی). دەتوانیت شیعرەکان بخوێنیتەوە و کاردانەوەی خۆت بنێریت.',
-      countSuffix: 'شیعر بڵاوکراوەتەوە',
-      authorDefault: 'م. ئازاد'
+      title: 'پریاسکەی ئەدەبی',
+      subtitle: 'هۆنراوە و بەرهەمە ئەدەبی و ڕۆحییەکانی ئازاد عەبدی',
+      countSuffix: 'بابەت بڵاوکراوەتەوە',
+      authorDefault: ''
     },
     kurmanji: {
       label: 'شێوەزار: کرمانجی',
       back: 'ڤەگەڕیان بۆ سەرەکی',
-      title: 'هەلبەستێن م. ئازاد',
+      title: 'پریاسکەیا ئەدەبی',
       subtitle: 'دیوانا هەلبەست و بەرهەمێن ئەدەبی یێن مامۆستا ئازاد. تو دشێی هەلبەستان بخوینی و دلێ خۆ دەربڕی.',
       countSuffix: 'هەلبەست هاتینە بەلاڤکرن',
-      authorDefault: 'م. ئازاد'
+      authorDefault: ''
     },
     hawrami: {
       label: 'شێوەزار: هەورامی',
       back: 'گێڵایۆ پەی سەرەکی',
-      title: 'شێعرەکێ م. ئازادی',
+      title: 'پریاسکەی ئەدەبی',
       subtitle: 'دیوانو هۆنیێ و بەرهەمە ئەدەبییەکاو مامۆستا ئازادی. تاوی شێعرەکا بوانیۆ و کاردانەوەو وێت بنیا.',
       countSuffix: 'شێعرێ وەڵاوە کریاینە',
-      authorDefault: 'م. ئازاد'
+      authorDefault: ''
     }
   };
 
@@ -112,7 +112,11 @@
     const textEl = document.getElementById('poemsCountText');
     if (textEl) {
       const d = DIALECTS[currentDialect] || DIALECTS.sorani;
-      textEl.innerText = `${count} ${d.countSuffix}`;
+      if (count === 1) {
+        textEl.innerText = (currentDialect === 'sorani') ? 'یەک بابەت بڵاوکراوەتەوە' : `1 ${d.countSuffix}`;
+      } else {
+        textEl.innerText = `${count} ${d.countSuffix}`;
+      }
     }
   }
 
@@ -183,12 +187,7 @@ ${escapeHtml(poem.content)}
           </div>
 
           <!-- Card Footer -->
-          <div class="pt-3 border-t border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between gap-3 flex-wrap text-xs">
-            <!-- Author Signature -->
-            <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/25 text-amber-950 dark:text-amber-300 font-black">
-              <i class="fa-solid fa-pen-nib text-amber-600 dark:text-amber-400 text-[11px]"></i>
-              <span>${escapeHtml(poem.author || 'م. ئازاد')}</span>
-            </div>
+          <div class="pt-3 border-t border-slate-200/80 dark:border-slate-800/80 flex items-center justify-end gap-3 flex-wrap text-xs">
 
             <!-- Actions: Like & Share -->
             <div class="flex items-center gap-2">

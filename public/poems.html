@@ -4,7 +4,11 @@
   <meta charset="UTF-8">
   <script>try{sessionStorage.setItem('has_visited_section','true');}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>شیعرەکانی م. ئازاد — پریاسکەی عەبدی</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png">
+  <meta name="theme-color" content="#334032">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>پریاسکەی ئەدەبی — پریاسکەی عەبدی</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪶</text></svg>">
@@ -44,9 +48,9 @@
   </script>
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="/css/style.css?v=79.0&t=1795287000">
+  <link rel="stylesheet" href="/css/style.css?v=90.0&t=1795310000">
   <!-- Shared Palettes -->
-  <script src="/js/palettes.js?v=9.0&t=1795287000"></script>
+  <script src="/js/palettes.js?v=90.0&t=1795310000"></script>
   <script>
     if (typeof applyActiveSavedTheme === 'function') {
       applyActiveSavedTheme();
@@ -59,7 +63,7 @@
       left: 0 !important;
       right: 0 !important;
       width: 100% !important;
-      z-index: 9999 !important;
+      z-index: 40 !important;
     }
     .poem-verse-text {
       font-feature-settings: "liga" 1;
@@ -70,8 +74,7 @@
     html, body {
       background-color: #86b89c !important;
       background: #86b89c !important;
-      background-image: radial-gradient(ellipse 80% 55% at 50% -10%, rgba(52, 211, 153, 0.28) 0%, transparent 65%), radial-gradient(circle at 85% 18%, rgba(110, 231, 183, 0.20) 0%, transparent 45%), radial-gradient(circle at 12% 65%, rgba(16, 185, 129, 0.22) 0%, transparent 55%), linear-gradient(180deg, #a7d3ba 0%, #8cbe9f 50%, #72a988 100%) !important;
-      background-attachment: fixed !important;
+      background-image: none !important;
     }
     #poemsHeader, #articlesHeader {
       background: rgba(236, 222, 202, 0.95) !important;
@@ -110,8 +113,8 @@
 </head>
 <body class="light-theme light-mode in-landing text-slate-900 font-kurdish min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-white">
 
-  <!-- Ambient Glow Effects -->
-  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+  <!-- Ambient Glow Effects Hidden for 100% Matte Background -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10 hidden" style="display: none !important;">
     <div class="absolute -top-40 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse"></div>
     <div class="absolute top-1/3 -left-40 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl"></div>
     <div class="absolute -bottom-40 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
@@ -237,23 +240,18 @@
         </div>
 
         <h1 id="poemsPageTitle" class="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-          شیعرەکانی م. ئازاد
+          پریاسکەی ئەدەبی
         </h1>
 
         <p id="poemsPageSubtitle" class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 max-w-xl mx-auto leading-relaxed font-medium">
-          دیوانی هۆنراوە و بەرهەمە ئەدەبی و ڕۆحییەکانی مامۆستا ئازاد (خاوەنی ماڵپەڕی پریاسکەی عەبدی). دەتوانیت شیعرەکان بخوێنیتەوە و کاردانەوەی خۆت بنێریت.
+          هۆنراوە و بەرهەمە ئەدەبی و ڕۆحییەکانی ئازاد عەبدی
         </p>
 
         <!-- Stats & Action Bar -->
         <div class="pt-2 flex items-center justify-center gap-3 flex-wrap">
           <span id="poemsCountBadge" class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-800 dark:text-amber-300 text-xs font-black">
             <i class="fa-solid fa-feather text-[11px]"></i>
-            <span id="poemsCountText">بارکردنی شیعرەکان...</span>
-          </span>
-
-          <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-sky-500/15 border border-sky-400/30 text-sky-800 dark:text-sky-300 text-xs font-black">
-            <i class="fa-solid fa-crown text-[11px]"></i>
-            <span>تایبەت بە هۆنراوەکانی م. ئازاد</span>
+            <span id="poemsCountText">یەک بابەت بڵاوکراوەتەوە</span>
           </span>
         </div>
 
@@ -265,7 +263,7 @@
               type="text" 
               id="poemsSearchInput" 
               oninput="filterPoems(this.value)"
-              placeholder="گەڕان لەناو دێڕ و ناونیشانی شیعرەکان..." 
+              placeholder="گەڕان لەناو دێڕ و ناونیشانەکان..." 
               class="w-full pr-9 pl-4 py-2.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-xs sm:text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500 shadow-sm transition"
             >
           </div>
@@ -332,7 +330,7 @@
         </div>
         <div>
           <h3 class="text-xl font-black text-slate-950 dark:text-white">دانانی شیعری نوێ</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">بڵاوکردنەوەی هۆنراوەیەکی نوێ لە دیوانی م. ئازاد</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">بڵاوکردنەوەی هۆنراوەیەکی نوێ لە پریاسکەی ئەدەبی</p>
         </div>
       </div>
 
@@ -400,6 +398,8 @@
   <!-- Socket.io -->
   <script src="/socket.io/socket.io.js"></script>
   <!-- Dedicated Poems Script -->
-  <script src="/js/poems.js?v=1.0&t=1795119000"></script>
+  <script src="/js/poems.js?v=8.0&t=1795360000"></script>
+  <!-- PWA & Android App Installation Controller -->
+  <script src="/js/pwa-install.js?v=1.0&t=1795360000"></script>
 </body>
 </html>

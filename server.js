@@ -769,18 +769,22 @@ app.delete('/api/dreams/posts/:id', (req, res) => {
 });
 
 app.get('/dreams', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'dreams.html'));
 });
 
 app.get('/poems', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'poems.html'));
 });
 
 app.get('/articles', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'articles.html'));
 });
 
 app.get('/', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -7595,7 +7599,7 @@ app.get('/api/classrooms', authMiddleware, (req, res) => {
     res.json({ success: true, classrooms: enriched });
   } catch (err) {
     console.error('Error fetching classrooms:', err);
-    res.status(500).json({ success: false, error: 'هەڵە لە وەرگرتنی هۆبەکان' });
+    res.status(500).json({ success: false, error: 'هەڵە لە وەرگرتنی پریاسکەکان' });
   }
 });
 
@@ -7603,7 +7607,7 @@ app.post('/api/classrooms', authMiddleware, requireAdmin, (req, res) => {
   try {
     const { name, description, icon, teacher_name, is_private } = req.body;
     if (!name || !name.trim()) {
-      return res.status(400).json({ error: 'تکایە ناوی هۆبە یان ژوور بنووسە' });
+      return res.status(400).json({ error: 'تکایە ناوی پریاسکە یان ژوور بنووسە' });
     }
     const newRoom = classrooms.create(
       name.trim(),
@@ -7618,7 +7622,7 @@ app.post('/api/classrooms', authMiddleware, requireAdmin, (req, res) => {
     res.status(201).json({ success: true, classroom: newRoom });
   } catch (err) {
     console.error('Error creating classroom:', err);
-    res.status(500).json({ error: 'هەڵە لە دروستکردنی هۆبە' });
+    res.status(500).json({ error: 'هەڵە لە دروستکردنی پریاسکە' });
   }
 });
 
@@ -7627,13 +7631,13 @@ app.put('/api/classrooms/:id', authMiddleware, requireAdmin, (req, res) => {
     const id = parseInt(req.params.id, 10);
     const { name, description, icon, teacher_name } = req.body;
     if (!name || !name.trim()) {
-      return res.status(400).json({ error: 'ناوی هۆبە پێویستە' });
+      return res.status(400).json({ error: 'ناوی پریاسکە پێویستە' });
     }
     const updated = classrooms.update(id, name.trim(), description || '', icon || 'fa-school', teacher_name || '');
     io.emit('classroom_updated', updated);
     res.json({ success: true, classroom: updated });
   } catch (err) {
-    res.status(500).json({ error: 'هەڵە لە نوێکردنەوەی هۆبە' });
+    res.status(500).json({ error: 'هەڵە لە نوێکردنەوەی پریاسکە' });
   }
 });
 
@@ -7641,13 +7645,13 @@ app.delete('/api/classrooms/:id', authMiddleware, requireAdmin, (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (id === 1) {
-      return res.status(400).json({ error: 'ناکرێت هۆبەی سەرەکیی گشتی بسڕدرێتەوە' });
+      return res.status(400).json({ error: 'ناکرێت پریاسکەی سەرەکیی گشتی بسڕدرێتەوە' });
     }
     classrooms.delete(id);
     io.emit('classroom_deleted', { id });
     res.json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: 'هەڵە لە سڕینەوەی هۆبە' });
+    res.status(500).json({ error: 'هەڵە لە سڕینەوەی پریاسکە' });
   }
 });
 
