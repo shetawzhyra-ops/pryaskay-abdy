@@ -107,15 +107,76 @@ html body #landingHeader .landing-brand-word {
     0 5px 14px rgba(23, 73, 47, 0.20) !important;
 }
 
+@keyframes pryaskaGoldenStrokeDance {
+  0%, 17% {
+    opacity: 0;
+    transform: scaleX(0) translateX(10px);
+    transform-origin: right center;
+    background-position: 100% 50%;
+    filter: blur(2px);
+  }
+  28% {
+    opacity: 1;
+    transform: scaleX(1.08) translateX(-2px);
+    transform-origin: right center;
+    background-position: 60% 50%;
+    filter: blur(0px) drop-shadow(0 1px 6px rgba(245, 158, 11, 0.65));
+  }
+  34% {
+    opacity: 0.96;
+    transform: scaleX(0.96) translateX(0);
+    transform-origin: center center;
+    background-position: 35% 50%;
+  }
+  48% {
+    opacity: 1;
+    transform: scaleX(1.05) translateX(-3px);
+    transform-origin: center center;
+    background-position: 0% 50%;
+    filter: blur(0px) drop-shadow(0 2px 8px rgba(251, 191, 36, 0.8));
+  }
+  64% {
+    opacity: 0.95;
+    transform: scaleX(0.92) translateX(2px);
+    transform-origin: center center;
+    background-position: -60% 50%;
+    filter: blur(0px) drop-shadow(0 1px 5px rgba(217, 119, 6, 0.5));
+  }
+  77% {
+    opacity: 1;
+    transform: scaleX(1.02) translateX(0);
+    transform-origin: right center;
+    background-position: -100% 50%;
+  }
+  87%, 100% {
+    opacity: 0;
+    transform: scaleX(0) translateX(12px);
+    transform-origin: right center;
+    background-position: 100% 50%;
+    filter: blur(2px);
+  }
+}
+
 html body #landingHeader .landing-brand-word::after {
   content: "" !important;
   display: block !important;
-  width: 88% !important;
-  height: 2px !important;
-  margin: -0.08rem auto 0 !important;
+  width: 92% !important;
+  height: 2.5px !important;
+  margin: -0.06rem auto 0 !important;
   border-radius: 999px !important;
-  background: linear-gradient(90deg, transparent 0%, #d97706 30%, #fbbf24 55%, #b45309 85%, transparent 100%) !important;
-  opacity: 0.88 !important;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #b45309 18%,
+    #f59e0b 38%,
+    #fef08a 50%,
+    #f59e0b 62%,
+    #b45309 82%,
+    transparent 100%
+  ) !important;
+  background-size: 220% 100% !important;
+  animation: pryaskaGoldenStrokeDance 7.6s cubic-bezier(0.22, 1, 0.36, 1) infinite !important;
+  will-change: transform, opacity, background-position, filter !important;
 }
 
 #landingHeader .landing-emblem-box {
