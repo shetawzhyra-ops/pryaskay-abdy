@@ -84,11 +84,24 @@
 }
 
 /* 3. HERO STAGE — QURAN.COM INSPIRED FRAMELESS CALLIGRAPHIC CENTERPIECE */
+html body #landingPage main {
+  padding-top: 4.35rem !important;
+}
+
+@media (min-width: 640px) {
+  html body #landingPage main {
+    padding-top: 4.85rem !important;
+  }
+}
+
 #landingPage #landingQuranHero.landing-quran-hero {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   position: relative;
+  padding-top: 0 !important;
+  padding-bottom: 0.25rem !important;
+  margin-top: -0.25rem !important;
 }
 
 #landingHeader #btnDialectDropdown.landing-nav-icon-btn {
@@ -107,19 +120,10 @@
   transform: translateY(-1px);
 }
 
-#landingPage .quran-hero-ayah-ornament {
-  font-family: 'Amiri Quran', 'Amiri', serif !important;
-  font-size: clamp(1.05rem, 2.2vw, 1.4rem) !important;
-  color: rgba(36, 19, 7, 0.76) !important;
-  line-height: 1.8 !important;
-  letter-spacing: 0.01em !important;
-  text-shadow: 0 1px 0 rgba(255, 252, 244, 0.35) !important;
-}
-
 html body #landingPage #landingQuranHero #heroTitle.quran-hero-main-title {
   font-family: 'Aref Ruqaa', 'Amiri Quran', 'Amiri', serif !important;
-  font-size: clamp(2.15rem, 5.2vw, 3.75rem) !important;
-  line-height: 1.58 !important;
+  font-size: clamp(2.15rem, 5.1vw, 3.65rem) !important;
+  line-height: 1.42 !important;
   font-weight: 700 !important;
   color: #fff8eb !important;
   -webkit-text-fill-color: #fff8eb !important;
@@ -128,29 +132,32 @@ html body #landingPage #landingQuranHero #heroTitle.quran-hero-main-title {
     0 2px 0 #173d2b,
     0 6px 18px rgba(16, 44, 30, 0.42),
     0 0 22px rgba(245, 158, 11, 0.20) !important;
-  padding-top: 0.15rem !important;
-  padding-bottom: 0.35rem !important;
-  margin: 0.1rem auto 0.45rem !important;
+  padding-top: 0 !important;
+  padding-bottom: 0.2rem !important;
+  margin: 0 auto 0.2rem !important;
 }
 
 html body #landingPage #landingQuranHero #heroTitle.quran-hero-main-title::after {
   content: "" !important;
   display: block !important;
-  width: 6.5rem !important;
+  width: 6rem !important;
   height: 2px !important;
-  margin: 0.65rem auto 0.25rem !important;
+  margin: 0.35rem auto 0.15rem !important;
   border-radius: 999px !important;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 248, 235, 0.4) 20%, #f59e0b 50%, rgba(255, 248, 235, 0.4) 80%, transparent 100%) !important;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 248, 235, 0.45) 20%, #fbbf24 50%, rgba(255, 248, 235, 0.45) 80%, transparent 100%) !important;
 }
 
 html body #landingPage #landingQuranHero #heroSubtitle.quran-hero-subtitle {
   font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
-  font-size: clamp(0.95rem, 1.5vw, 1.15rem) !important;
-  color: #163826 !important;
-  line-height: 1.8 !important;
+  font-size: clamp(1rem, 1.55vw, 1.2rem) !important;
+  color: #fef3c7 !important;
+  -webkit-text-fill-color: #fef3c7 !important;
+  line-height: 1.65 !important;
   font-weight: 700 !important;
-  text-shadow: 0 1px 0 rgba(255, 252, 244, 0.38) !important;
-  margin-top: 0.25rem !important;
+  text-shadow:
+    0 1.5px 6px rgba(14, 40, 26, 0.65),
+    0 1px 2px rgba(12, 35, 23, 0.8) !important;
+  margin-top: 0.1rem !important;
 }
 
 /* Wide Rounded-Full Search Bar (Quran.com Hero Search Pill) */

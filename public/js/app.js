@@ -25100,7 +25100,7 @@ function applyLandingCardPalette(colorId) {
     body.in-landing .landing-hero-stage p,
     body.in-landing .landing-ann-card p,
     body.in-landing .landing-pillar-desc,
-    body.in-landing #heroSubtitle,
+    body.in-landing .hero-legacy-subtitle,
     body.in-landing #annActiveContent {
       color: ${palette.textColor} !important;
     }
