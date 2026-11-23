@@ -79,7 +79,7 @@
       <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#2c382a] via-[#364433] to-[#252f23] text-white p-3.5 sm:p-4 shadow-[0_12px_40px_rgba(0,0,0,0.55)] border border-[#7e9975]/40 flex items-center justify-between gap-3 backdrop-blur-xl">
         <div class="flex items-center gap-3 min-w-0">
           <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-600 p-0.5 shadow-md shrink-0 flex items-center justify-center overflow-hidden">
-            <img src="/images/icon-192.png" alt="پریاسکەی عەبدی" class="w-full h-full object-cover rounded-[10px]" onerror="this.src='/images/logo.png'">
+            <img src="/images/icon-192.png?v=5" alt="پریاسکەی عەبدی" class="w-full h-full object-cover rounded-[10px]" onerror="this.src='/images/logo.png'">
           </div>
           <div class="min-w-0">
             <div class="flex items-center gap-1.5">
