@@ -763,7 +763,7 @@ function initDb() {
   }
   try {
     db.prepare("UPDATE users SET full_name = 'هێمن طه' WHERE username = 'hemntjabar'").run();
-    db.prepare("UPDATE users SET full_name = 'م. ئازاد', role = 'super_admin', status = 'active' WHERE username = 'azad'").run();
+    db.prepare("UPDATE users SET full_name = 'ئازادی موعەبیر', role = 'super_admin', status = 'active' WHERE username = 'azad'").run();
   } catch (e) {}
 
   try {

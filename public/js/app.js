@@ -296,7 +296,7 @@ function formatUserDisplayName(user) {
   const isSuper = user.role === 'super_admin' || uname === 'admin' || uname === 'hemntjabar';
 
   if (uname === 'azad' || user.id === 6 || (user.full_name || '').includes('ئازاد')) {
-    return 'م. ئازاد 🛡️';
+    return 'ئازادی موعەبیر 🛡️';
   }
 
   if (user.role === 'guest') {
@@ -330,7 +330,7 @@ function renderRoleBadge(role, gender) {
   } else if (role === 'teacher') {
     return `<span class="role-text-teacher inline-flex items-center gap-1 font-black text-[11px] select-none" title="مامۆستا"><i class="fa-solid fa-graduation-cap text-[10px]"></i> مامۆستا</span>`;
   } else if (role === 'admin') {
-    return `<span class="role-text-admin inline-flex items-center gap-1 font-black text-[11px] select-none" title="م. ئازاد"><i class="fa-solid fa-shield-halved text-[9px]"></i> م. ئازاد</span>`;
+    return `<span class="role-text-admin inline-flex items-center gap-1 font-black text-[11px] select-none" title="ئازادی موعەبیر"><i class="fa-solid fa-shield-halved text-[9px]"></i> ئازادی موعەبیر</span>`;
   } else if (role === 'new_student') {
     const badgeClass = isGirl ? 'badge-new-student-girl' : 'badge-new-student';
     return `<span class="${badgeClass} px-2 py-0.5 rounded-md text-[10px] font-bold inline-flex items-center gap-1 shadow">🔰 قوتابی تازە</span>`;
@@ -1086,7 +1086,7 @@ function updateUserUI() {
     roleBadgeElem.innerHTML = '<i class="fa-solid fa-graduation-cap text-[9px]"></i> مامۆستا';
   } else if (currentUser.role === 'admin') {
     roleBadgeElem.className = 'role-text-admin text-[10px] font-black hidden sm:inline-flex items-center gap-1';
-    roleBadgeElem.innerHTML = '<i class="fa-solid fa-shield-halved text-[9px]"></i> م. ئازاد';
+    roleBadgeElem.innerHTML = '<i class="fa-solid fa-shield-halved text-[9px]"></i> ئازادی موعەبیر';
   } else if (currentUser.role === 'new_student') {
     roleBadgeElem.className = `${isGirl ? 'badge-new-student-girl' : 'badge-new-student'} text-[9px] px-1.5 py-0.2 rounded font-bold hidden sm:inline-block`;
     roleBadgeElem.innerText = 'قوتابی تازە 🔰';
@@ -1128,7 +1128,7 @@ function updateUserUI() {
   }
   if (drawerName) {
     if (isAzadUserLoggedIn()) {
-      drawerName.innerHTML = `<span class="block font-black text-xs truncate ${getUserNameClass(currentUser)}">م. ئازاد</span>`;
+      drawerName.innerHTML = `<span class="block font-black text-xs truncate ${getUserNameClass(currentUser)}">ئازادی موعەبیر</span>`;
     } else {
       const nick = currentUser.username || currentUser.full_name;
       const real = currentUser.full_name;
@@ -7640,7 +7640,7 @@ async function openUserProfileModal(userId) {
     const isProfAzad = (prof.username || '').toLowerCase() === 'azad' || prof.id === 6 || (prof.full_name || '').includes('ئازاد');
 
     if (isProfAzad) {
-      fullNameEl.innerText = 'م. ئازاد';
+      fullNameEl.innerText = 'ئازادی موعەبیر';
       fullNameEl.className = `font-black text-base ${getUserNameClass(prof)} ${isProfStarGlowing ? 'user-name-star-glow' : ''}`;
       usernameEl.innerText = '';
       usernameEl.className = 'hidden';
@@ -7867,7 +7867,7 @@ async function openUserProfileModal(userId) {
         execSubtitle.textContent = 'سەرپەرشتیاری پڕۆژە';
       }
       if (execRoleBadge) {
-        execRoleBadge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> م. ئازاد';
+        execRoleBadge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ئازادی موعەبیر';
       }
       if (execAuthority) {
         execAuthority.innerHTML = '<i class="fa-solid fa-bolt"></i> کۆنتڕۆڵی گشتی';
@@ -14395,7 +14395,7 @@ async function loadPrivateStaffList() {
       html += `
         <div class="pt-1 pb-1 px-1 text-[11px] font-bold text-purple-400 flex items-center gap-1">
           <i class="fa-solid fa-shield-halved"></i>
-          <span>م. ئازاد (خاوەنی ماڵپەڕ)</span>
+          <span>ئازادی موعەبیر (خاوەنی ماڵپەڕ)</span>
         </div>
       `;
       html += superAdmins.map(s => renderStaffCardHtml(s)).join('');
@@ -14423,7 +14423,7 @@ function renderStaffCardHtml(s) {
   const activeBg = isCurrent ? 'bg-amber-100/90 border-amber-400/80' : 'bg-white hover:bg-amber-50/70 border-amber-900/15';
   const isAzadOrAdmin = (s.username === 'azad' || s.role === 'super_admin' || s.role === 'admin');
   const roleBadge = isAzadOrAdmin
-    ? `<span class="role-text-admin text-xs font-black inline-flex items-center gap-1 select-none text-purple-700 bg-purple-100/90 px-2 py-0.5 rounded-lg border border-purple-300/60"><i class="fa-solid fa-shield-halved text-[10px]"></i> م. ئازاد</span>`
+    ? `<span class="role-text-admin text-xs font-black inline-flex items-center gap-1 select-none text-purple-700 bg-purple-100/90 px-2 py-0.5 rounded-lg border border-purple-300/60"><i class="fa-solid fa-shield-halved text-[10px]"></i> ئازادی موعەبیر</span>`
     : `<span class="role-text-teacher text-xs font-black inline-flex items-center gap-1 select-none text-emerald-700 bg-emerald-100/90 px-2 py-0.5 rounded-lg border border-emerald-300/60"><i class="fa-solid fa-graduation-cap text-[10px]"></i> مامۆستا</span>`;
   const onlineDot = s.is_online 
     ? `<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-500/30" title="لەسەر هێڵە"></span>`
