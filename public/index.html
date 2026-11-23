@@ -1943,7 +1943,7 @@ background: rgba(56, 189, 248, 0.85);
 }
 </style>
 <!-- Experimental Modern Heritage Landing Style (Non-color-changing, clean revertable) -->
-  <link id="landingHeritageTestCss" rel="stylesheet" href="/css/landing-heritage-test.css?v=4.0&t=1795440000">
+  <link id="landingHeritageTestCss" rel="stylesheet" href="/css/landing-heritage-test.css?v=5.0&t=1795440000">
   <!-- Inside Application Modern Heritage / Manuscript Luxe Style -->
   <link id="appHeritageCss" rel="stylesheet" href="/css/app-heritage.css?v=1.0&t=1795500000">
 </head>
@@ -2135,91 +2135,73 @@ background: rgba(56, 189, 248, 0.85);
 <div class="landing-orb landing-orb-emerald"></div>
 <div class="landing-grid-pattern"></div>
 </div>
-<!-- Top Landing Navbar (Fixed permanently at top of page when scrolling) -->
-<header id="landingHeader" class="fixed top-0 left-0 right-0 z-40 glass-header landing-navbar-premium px-4 sm:px-8 py-3 sm:py-3.5 transition-all duration-300">
-<div class="max-w-7xl mx-auto flex items-center justify-between">
-<!-- Right in RTL: Academy Emblem & Brand Word "فێرگە" -->
-<div class="logo-brand-container relative flex items-center gap-3 select-none group" title="پریاسکەی عەبدی">
-<!-- Jewel-Crafted Logo Emblem Box -->
-<div class="logo-box landing-emblem-box relative z-20 w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 overflow-hidden p-0.5">
+<!-- Top Landing Navbar (Quran.com inspired layout: Brand on Right, Login Pill + Icons on Left) -->
+<header id="landingHeader" class="fixed top-0 left-0 right-0 z-40 glass-header landing-navbar-premium px-4 sm:px-8 py-2.5 sm:py-3 transition-all duration-300">
+<div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+<!-- Right in RTL: Academy Emblem & Brand Word -->
+<div class="logo-brand-container relative flex items-center gap-2.5 sm:gap-3 select-none group" title="پریاسکەی عەبدی">
+<div class="logo-box landing-emblem-box relative z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 overflow-hidden p-0.5">
 <img src="/images/logo.jpg?v=1795039300097" alt="پریاسکەی عەبدی" class="w-full h-full object-cover rounded-[14px]">
 </div>
-<!-- Brand Word "فێرگە" aligned cleanly with logo -->
 <div class="logo-text-wrapper relative z-10 flex items-center">
-<h1 class="logo-text-animated landing-brand-word text-xl sm:text-2xl font-black tracking-wide whitespace-nowrap m-0">
+<h1 class="logo-text-animated landing-brand-word text-lg sm:text-2xl font-black tracking-wide whitespace-nowrap m-0">
 پریاسکەی عەبدی
 </h1>
 </div>
 </div>
-<!-- Left in RTL: Executive Login Action -->
-<div class="flex items-center gap-2 sm:gap-2.5">
-<!-- Executive Glass-Border Login Button -->
+<!-- Left in RTL: Login Pill + Search + Dialect Globe -->
+<div class="flex items-center gap-1.5 sm:gap-2">
+<!-- Login Pill Button (Quran.com "تسجيل الدخول" style) -->
 <button 
 type="button" 
 id="btnLoginPublic"
 onclick="openAuthScreen()" 
-class="landing-nav-login-btn px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-black rounded-xl inline-flex items-center gap-2 cursor-pointer shadow-md"
+class="landing-nav-login-btn px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-black rounded-full inline-flex items-center gap-1.5 cursor-pointer shadow-sm"
 >
 <span>چوونەژوورەوە</span>
-<i class="fa-solid fa-arrow-right-to-bracket text-xs opacity-90"></i>
+<i class="fa-solid fa-arrow-right-to-bracket text-[11px] opacity-90"></i>
 </button>
-</div>
-</div>
-</header>
-<!-- Main Content Container for Landing -->
-<main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-5 sm:py-8 space-y-8 sm:space-y-11 pt-24 sm:pt-28 md:pt-32">
-<!-- Hero Section (Grand Academy & Dream Sanctuary Stage) -->
-<section class="glass-card hero-compact-card landing-hero-stage relative overflow-visible z-20 max-w-4xl mx-auto px-4 py-5 sm:px-8 sm:py-6 text-center">
-<!-- Subtle Inner Orbs & Ornamental Top Shimmer -->
-<div class="absolute inset-0 rounded-[inherit] overflow-hidden pointer-events-none">
-<div class="landing-hero-top-beam"></div>
-<div class="absolute -top-24 right-1/4 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-<div class="absolute -bottom-24 left-1/4 w-72 h-72 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
-</div>
-<div class="relative z-10 max-w-2xl mx-auto space-y-2.5 sm:space-y-3">
-<!-- Dialect Selector Dropdown Button (شێوەزار: سۆرانی ⌄) -->
+<!-- Dialect Globe Icon Dropdown (Quran.com 🌐 style) -->
 <div class="relative inline-block text-right z-40" id="dialectDropdownContainer">
 <button 
 id="btnDialectDropdown" 
 type="button" 
 onclick="toggleLandingDialect(event)"
-class="landing-dialect-pill inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer group"
+class="landing-nav-icon-btn inline-flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer group"
+title="گۆڕینی شێوەزار"
 aria-haspopup="true"
 aria-expanded="false"
 >
-<span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.9)]"></span>
-<i class="fa-solid fa-language text-amber-300 text-xs transition-transform group-hover:scale-110"></i>
-<span id="currentDialectLabel">شێوەزار: سۆرانی</span>
-<i id="dialectChevron" class="fa-solid fa-chevron-down text-[9px] opacity-75 transition-transform duration-200"></i>
+<i class="fa-solid fa-globe text-sm sm:text-base transition-transform group-hover:scale-110"></i>
+<span id="currentDialectLabel" class="hidden md:inline text-[11px]">شێوەزار: سۆرانی</span>
+<i id="dialectChevron" class="fa-solid fa-chevron-down text-[8px] opacity-75 transition-transform duration-200 hidden md:inline"></i>
 </button>
 <!-- Floating Dialect Menu -->
 <div 
 id="dialectDropdownMenu" 
-class="hidden absolute top-full mt-2.5 left-1/2 -translate-x-1/2 w-64 sm:w-72 rounded-2xl border border-[#9c784e]/35 p-2.5 shadow-2xl z-50 text-right bg-[#f5ead9]/98 backdrop-blur-2xl animate-dropdown-in"
+class="hidden absolute top-full mt-2.5 left-0 w-60 sm:w-64 rounded-2xl border border-[#9c784e]/35 p-2.5 shadow-2xl z-50 text-right bg-[#f5ead9]/98 backdrop-blur-2xl animate-dropdown-in"
 >
 <div class="px-3 py-1.5 text-[11px] font-bold text-[#54371f] border-b border-[#9c784e]/20 mb-1.5 flex items-center justify-between">
 <span>شێوەزارەکانی زمانی کوردی</span>
-<i class="fa-solid fa-shapes text-amber-400/70 text-[10px]"></i>
+<i class="fa-solid fa-shapes text-amber-500/80 text-[10px]"></i>
 </div>
-<!-- Option 1: Sorani (سۆرانی) -->
 <button 
 type="button" 
 onclick="selectLandingDialect('sorani')" 
-class="dialect-option w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-colors text-[#361c0c] hover:text-[#241206] group cursor-pointer" 
+class="dialect-option w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors text-[#361c0c] hover:bg-amber-500/10 group cursor-pointer" 
 data-dialect="sorani"
 >
 <div class="flex items-center gap-2.5">
-<span id="dialectDotSorani" class="w-2.5 h-2.5 rounded-full bg-amber-400 dialect-dot shadow-[0_0_8px_rgba(251,191,36,0.8)]"></span>
+<span id="dialectDotSorani" class="w-2.5 h-2.5 rounded-full bg-amber-500 dialect-dot"></span>
 <span class="font-bold text-[#361c0c] text-sm">سۆرانی</span>
 <span class="text-[11px] text-[#785336] font-latin">(Sorani)</span>
 </div>
-<i id="dialectCheckSorani" class="fa-solid fa-check text-amber-400 text-xs dialect-check"></i>
+<i id="dialectCheckSorani" class="fa-solid fa-check text-amber-600 text-xs dialect-check"></i>
 </button>
-<!-- Option 2: Kurmanji (کرمانجی) -->
 <button 
 type="button" 
 onclick="selectLandingDialect('kurmanji')" 
-class="dialect-option w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-colors text-[#361c0c] hover:text-[#241206] group cursor-pointer" 
+class="dialect-option w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors text-[#361c0c] hover:bg-amber-500/10 group cursor-pointer" 
 data-dialect="kurmanji"
 >
 <div class="flex items-center gap-2.5">
@@ -2227,13 +2209,12 @@ data-dialect="kurmanji"
 <span class="font-bold text-[#361c0c] text-sm">کرمانجی</span>
 <span class="text-[11px] text-[#785336] font-latin">(Kurmancî)</span>
 </div>
-<i id="dialectCheckKurmanji" class="fa-solid fa-check text-amber-400 text-xs dialect-check hidden"></i>
+<i id="dialectCheckKurmanji" class="fa-solid fa-check text-amber-600 text-xs dialect-check hidden"></i>
 </button>
-<!-- Option 3: Hawrami (هەورامی) -->
 <button 
 type="button" 
 onclick="selectLandingDialect('hawrami')" 
-class="dialect-option w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-colors text-[#361c0c] hover:text-[#241206] group cursor-pointer" 
+class="dialect-option w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors text-[#361c0c] hover:bg-amber-500/10 group cursor-pointer" 
 data-dialect="hawrami"
 >
 <div class="flex items-center gap-2.5">
@@ -2241,18 +2222,77 @@ data-dialect="hawrami"
 <span class="font-bold text-[#361c0c] text-sm">هەورامی</span>
 <span class="text-[11px] text-[#785336] font-latin">(Hawramî)</span>
 </div>
-<i id="dialectCheckHawrami" class="fa-solid fa-check text-amber-400 text-xs dialect-check hidden"></i>
+<i id="dialectCheckHawrami" class="fa-solid fa-check text-amber-600 text-xs dialect-check hidden"></i>
 </button>
 </div>
 </div>
-<!-- Hero Title -->
-<h2 id="heroTitle" class="landing-hero-title text-xl sm:text-3xl lg:text-[2.15rem] font-black tracking-tight leading-snug">
-            پریاسکەی عەبدی
-          </h2>
-<!-- Hero Subtitle (Academic & Dream Interpretation Tagline) -->
-<p id="heroSubtitle" class="landing-hero-subtitle text-xs sm:text-sm max-w-lg mx-auto leading-relaxed font-medium">
-            ناوەندێک بۆ فێربوونی زانستی تەعبیر و لێکدانەوەی خەونەکانتان
-          </p>
+</div>
+</div>
+</header>
+<!-- Main Content Container for Landing -->
+<main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-4 sm:py-6 space-y-6 sm:space-y-8 pt-20 sm:pt-24">
+<!-- Quran.com-Inspired Frameless Top Hero Stage (No Boxed Card) -->
+<section id="landingQuranHero" class="landing-quran-hero relative z-20 max-w-3xl mx-auto pt-2 pb-1 sm:pt-4 sm:pb-3 text-center">
+<!-- Ornate Calligraphic Centerpiece (Directly on canvas, no box) -->
+<div class="quran-hero-calligraphy-wrap select-none space-y-1 sm:space-y-1.5 mb-5 sm:mb-6">
+<div class="quran-hero-ayah-ornament" aria-hidden="true">
+﴿ هَٰذَا تَأْوِيلُ رُؤْيَايَ مِن قَبْلُ قَدْ جَعَلَهَا رَبِّي حَقًّا ﴾
+</div>
+<h2 id="heroTitle" class="quran-hero-main-title">
+پریاسکەی عەبدی
+</h2>
+<p id="heroSubtitle" class="quran-hero-subtitle">
+ناوەندێک بۆ فێربوونی زانستی تەعبیر و لێکدانەوەی خەونەکانتان
+</p>
+</div>
+<!-- Wide Rounded-Full Search Bar (Quran.com Search Bar Style) -->
+<div class="max-w-2xl mx-auto">
+<button 
+type="button" 
+onclick="if(window.openPryaskaGlobalSearch) window.openPryaskaGlobalSearch()" 
+class="quran-hero-search-bar w-full rounded-full px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between gap-3 cursor-pointer transition-all duration-200 group"
+title="گەڕان لە پریاسکەی عەبدی (Ctrl+K)"
+>
+<div class="flex items-center gap-3 min-w-0">
+<i class="fa-solid fa-magnifying-glass quran-hero-search-icon text-base sm:text-lg shrink-0 transition-transform group-hover:scale-110"></i>
+<span class="quran-hero-search-placeholder text-xs sm:text-base truncate">گەڕان لە پریاسکەی عەبدی (خەون، شیعر، وتار، کتێب)...</span>
+</div>
+<span class="quran-hero-search-badge shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center">
+<i class="fa-solid fa-sliders text-xs sm:text-sm"></i>
+</span>
+</button>
+</div>
+<!-- Quick Action Pill Buttons Under Search Bar (Quran.com "قائمة السور / الأكثر شيوعًا" Style) -->
+<div class="mt-4 sm:mt-5 flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
+<button 
+type="button" 
+onclick="openDirectDreamPrompt()" 
+class="quran-hero-pill-primary px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-black inline-flex items-center gap-2 cursor-pointer transition-all active:scale-95"
+>
+<i class="fa-solid fa-moon text-xs"></i>
+<span>خەونەکەت بنێرە</span>
+</button>
+<a 
+href="/dreams" 
+class="quran-hero-pill-outline px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold inline-flex items-center gap-2 cursor-pointer transition-all no-underline active:scale-95"
+>
+<i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+<span>خەونە لێکدراوەکان</span>
+</a>
+<a 
+href="/poems" 
+class="quran-hero-pill-outline px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold inline-flex items-center gap-2 cursor-pointer transition-all no-underline active:scale-95"
+>
+<i class="fa-solid fa-feather-pointed text-xs"></i>
+<span>دیوانی شیعر</span>
+</a>
+<a 
+href="/articles" 
+class="quran-hero-pill-outline px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold inline-flex items-center gap-2 cursor-pointer transition-all no-underline active:scale-95"
+>
+<i class="fa-solid fa-pen-nib text-xs"></i>
+<span>وتارەکان</span>
+</a>
 </div>
 </section>
 <!-- ================= DUAL FEATURED SECTIONS: 1. DREAM SUBMISSION & 2. POEMS OF M. AZAD ================= -->
