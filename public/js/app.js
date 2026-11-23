@@ -258,6 +258,11 @@ function getUserDisplayName(userOrMsg, options = {}) {
   if (!userOrMsg) return '';
   const nickname = (userOrMsg.username || userOrMsg.sender_username || userOrMsg.full_name || 'بەکارهێنەر').trim();
   const realName = (userOrMsg.full_name || userOrMsg.sender_name || '').trim();
+  const unameLower = nickname.toLowerCase();
+  if (unameLower === 'azad' || userOrMsg.id === 6 || realName.includes('ئازاد')) {
+    if (options.plain) return 'ئازادی موعەبیر';
+    return '<span class="user-nickname-text leading-tight">ئازادی موعەبیر</span>';
+  }
   const canSee = canSeeRealFullName(currentUser);
   const isDifferent = realName && realName.toLowerCase() !== nickname.toLowerCase();
 
@@ -330,7 +335,7 @@ function renderRoleBadge(role, gender) {
   } else if (role === 'teacher') {
     return `<span class="role-text-teacher inline-flex items-center gap-1 font-black text-[11px] select-none" title="مامۆستا"><i class="fa-solid fa-graduation-cap text-[10px]"></i> مامۆستا</span>`;
   } else if (role === 'admin') {
-    return `<span class="role-text-admin inline-flex items-center gap-1 font-black text-[11px] select-none" title="ئازادی موعەبیر"><i class="fa-solid fa-shield-halved text-[9px]"></i> ئازادی موعەبیر</span>`;
+    return `<span class="role-text-admin inline-flex items-center gap-1 font-black text-[11px] select-none" title="ئەدمین"><i class="fa-solid fa-shield-halved text-[9px]"></i> ئەدمین</span>`;
   } else if (role === 'new_student') {
     const badgeClass = isGirl ? 'badge-new-student-girl' : 'badge-new-student';
     return `<span class="${badgeClass} px-2 py-0.5 rounded-md text-[10px] font-bold inline-flex items-center gap-1 shadow">🔰 قوتابی تازە</span>`;
@@ -1086,7 +1091,7 @@ function updateUserUI() {
     roleBadgeElem.innerHTML = '<i class="fa-solid fa-graduation-cap text-[9px]"></i> مامۆستا';
   } else if (currentUser.role === 'admin') {
     roleBadgeElem.className = 'role-text-admin text-[10px] font-black hidden sm:inline-flex items-center gap-1';
-    roleBadgeElem.innerHTML = '<i class="fa-solid fa-shield-halved text-[9px]"></i> ئازادی موعەبیر';
+    roleBadgeElem.innerHTML = '<i class="fa-solid fa-shield-halved text-[9px]"></i> ئەدمین';
   } else if (currentUser.role === 'new_student') {
     roleBadgeElem.className = `${isGirl ? 'badge-new-student-girl' : 'badge-new-student'} text-[9px] px-1.5 py-0.2 rounded font-bold hidden sm:inline-block`;
     roleBadgeElem.innerText = 'قوتابی تازە 🔰';
@@ -7867,7 +7872,7 @@ async function openUserProfileModal(userId) {
         execSubtitle.textContent = 'سەرپەرشتیاری پڕۆژە';
       }
       if (execRoleBadge) {
-        execRoleBadge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ئازادی موعەبیر';
+        execRoleBadge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ئەدمین';
       }
       if (execAuthority) {
         execAuthority.innerHTML = '<i class="fa-solid fa-bolt"></i> کۆنتڕۆڵی گشتی';
@@ -14041,7 +14046,7 @@ async function showReactionUsersModal(messageId, emoji, event) {
           </div>
           <div class="min-w-0">
             <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="text-xs font-black ${nameClass} truncate">${escapeHtml(u.full_name)}</span>
+              <span class="text-xs font-black ${nameClass} truncate">${((u.username || '').toLowerCase() === 'azad' || (u.full_name || '').includes('ئازاد')) ? 'ئازادی موعەبیر' : escapeHtml(u.full_name)}</span>
               ${isMe ? '<span class="text-[9px] text-indigo-400">(تۆ)</span>' : ''}
             </div>
             <div class="mt-0.5">${roleBadge}</div>
@@ -14423,7 +14428,7 @@ function renderStaffCardHtml(s) {
   const activeBg = isCurrent ? 'bg-amber-100/90 border-amber-400/80' : 'bg-white hover:bg-amber-50/70 border-amber-900/15';
   const isAzadOrAdmin = (s.username === 'azad' || s.role === 'super_admin' || s.role === 'admin');
   const roleBadge = isAzadOrAdmin
-    ? `<span class="role-text-admin text-xs font-black inline-flex items-center gap-1 select-none text-purple-700 bg-purple-100/90 px-2 py-0.5 rounded-lg border border-purple-300/60"><i class="fa-solid fa-shield-halved text-[10px]"></i> ئازادی موعەبیر</span>`
+    ? `<span class="role-text-admin text-xs font-black inline-flex items-center gap-1 select-none text-purple-700 bg-purple-100/90 px-2 py-0.5 rounded-lg border border-purple-300/60"><i class="fa-solid fa-shield-halved text-[10px]"></i> ئەدمین</span>`
     : `<span class="role-text-teacher text-xs font-black inline-flex items-center gap-1 select-none text-emerald-700 bg-emerald-100/90 px-2 py-0.5 rounded-lg border border-emerald-300/60"><i class="fa-solid fa-graduation-cap text-[10px]"></i> مامۆستا</span>`;
   const onlineDot = s.is_online 
     ? `<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-500/30" title="لەسەر هێڵە"></span>`
@@ -22055,7 +22060,7 @@ async function refreshManageGroupMembersUI() {
                   </div>
                   <div class="min-w-0 flex-1">
                     <div class="text-xs font-black flex items-center gap-1.5 flex-wrap">
-                      <span class="${nameClass} break-words leading-tight" title="${escapeHtml(m.full_name)}">${escapeHtml(m.full_name)}</span>
+                      <span class="${nameClass} break-words leading-tight" title="${escapeHtml(m.full_name)}">${((m.username || '').toLowerCase() === 'azad' || (m.full_name || '').includes('ئازاد')) ? 'ئازادی موعەبیر' : escapeHtml(m.full_name)}</span>
                       ${m.id === currentUser?.id ? '<span class="text-[9px] text-indigo-400 font-normal shrink-0">(تۆ)</span>' : ''}
                     </div>
                     <div class="flex items-center gap-1.5 mt-1 flex-wrap">
@@ -25639,7 +25644,7 @@ ${escapeHtml(poem.content)}
 function isAzadUserLoggedIn() {
   if (!currentUser) return false;
   const uname = (currentUser.username || '').toLowerCase().trim();
-  return uname === 'azad' || currentUser.id === 6 || (currentUser.role === 'super_admin' && (uname === 'azad' || (currentUser.full_name || '').includes('ئازاد')));
+  return uname === 'azad' || currentUser.id === 6 || (currentUser.full_name || '').includes('ئازاد');
 }
 
 function checkAzadPoemPrivilege() {

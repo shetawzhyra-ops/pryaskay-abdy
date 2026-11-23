@@ -325,7 +325,7 @@ app.post('/api/poems', (req, res) => {
     }
 
     const uname = (authedUser.username || '').toLowerCase().trim();
-    const isAzad = uname === 'azad' || authedUser.id === 6 || (authedUser.role === 'super_admin' && (uname === 'azad' || (authedUser.full_name || '').includes('ئازاد')));
+    const isAzad = uname === 'azad' || authedUser.id === 6 || (authedUser.full_name || '').includes('ئازاد');
 
     if (!isAzad) {
       return res.status(403).json({ success: false, error: 'تەنها مامۆستا ئازاد (خاوەنی ماڵپەڕ) دەسەڵاتی دانانی شیعری هەیە' });
@@ -362,7 +362,7 @@ app.delete('/api/poems/:id', (req, res) => {
     }
 
     const uname = (authedUser.username || '').toLowerCase().trim();
-    const isAzad = uname === 'azad' || authedUser.id === 6 || (authedUser.role === 'super_admin' && (uname === 'azad' || (authedUser.full_name || '').includes('ئازاد')));
+    const isAzad = uname === 'azad' || authedUser.id === 6 || (authedUser.full_name || '').includes('ئازاد');
 
     if (!isAzad) {
       return res.status(403).json({ success: false, error: 'تەنها مامۆستا ئازاد دەتوانێت شیعر بسڕێتەوە' });
