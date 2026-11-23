@@ -1646,7 +1646,7 @@ function applyLandingCardPaletteToDoc(colorId, doc) {
     'color: ' + palette.textColor + ' !important;' +
   '}' +
   '.fb-post-card { border-color: ' + palette.border + ' !important; }' +
-  '.fb-post-title, .landing-pillar-title, #heroTitle, #dreamsPageTitle, .landing-ann-card h4, #dreamGatewayTitle, #sectionsHeaderTitle, #postsHeaderTitle, .classroom-lobby-card h3, #membersSidebar h3, #drawerUserName { color: ' + palette.titleColor + ' !important; }' +
+  '.fb-post-title, .landing-pillar-title, #dreamsPageTitle, .landing-ann-card h4, #dreamGatewayTitle, #sectionsHeaderTitle, #postsHeaderTitle, .classroom-lobby-card h3, #membersSidebar h3, #drawerUserName { color: ' + palette.titleColor + ' !important; }' +
   '#heroSubtitle, .landing-hero-subtitle, #dreamsPageSubtitle, #dreamGatewayDesc, #sectionsHeaderSubtitle, #postsHeaderSubtitle, .classroom-lobby-card p, #classroomsLobbyView p { color: ' + (palette.descColor || palette.textColor) + ' !important; }' +
   '.landing-navbar-premium, #dreamsHeader, #poemsHeader, #articlesHeader, #mainApp > header { background: rgba(236, 222, 202, 0.95) !important; border-bottom: 1px solid ' + palette.border + ' !important; }' +
   '#btnDialectDropdown.landing-dialect-pill, #btnDialectDropdown, #btnBackToHome { background: rgba(222, 204, 180, 0.95) !important; border-color: rgba(160, 120, 70, 0.38) !important; color: #381e0a !important; }' +

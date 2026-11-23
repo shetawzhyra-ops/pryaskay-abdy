@@ -23902,7 +23902,7 @@ function toggleActivityDetails(collapseId) {
 const LANDING_DIALECTS = {
   sorani: {
     name: 'سۆرانی',
-    heroTitle: 'پریاسکەی عەبدی',
+    heroTitle: 'پریاسکەی ئازادی موعەبیر',
     heroSubtitle: 'ناوەندێک بۆ فێربوونی زانستی تەعبیر و لێکدانەوەی خەونەکانتان',
     heroBtn: 'ناردنی خەون',
     actionText: 'بەشداربە لەم بەشە',
@@ -23929,7 +23929,7 @@ const LANDING_DIALECTS = {
   },
   kurmanji: {
     name: 'کرمانجی',
-    heroTitle: 'Bi xêr hatin bo platforma Fêrgeh',
+    heroTitle: 'پریاسکەی ئازادی موعەبیر',
     heroSubtitle: 'Navendeke akademîk û zanistî bo dersên perwerdeyî û şîrovekirina xewnan bi awayekî dirust û bawerpêkirî',
     heroBtn: 'Xewnê bişîne',
     actionText: 'Beşdar bibe di vê beşê de',
@@ -23956,7 +23956,7 @@ const LANDING_DIALECTS = {
   },
   hawrami: {
     name: 'هەورامی',
-    heroTitle: 'خێر ئامەین پەی پلاتفۆرمو فێرگەی',
+    heroTitle: 'پریاسکەی ئازادی موعەبیر',
     heroSubtitle: 'ناوەندێوی ئەکادیمی و زانستی پەی وانە پەروەردەییەکا و ماناکەردەو خەونا بە شێوازێوی دروست و باوەڕپێکریا',
     heroBtn: 'پەیام و خەون کیانە',
     actionText: 'بەشدار بیە ئی بەشەنە',
@@ -25089,7 +25089,7 @@ function applyLandingCardPalette(colorId) {
     body.in-landing .landing-ann-card h4,
     body.in-landing .landing-pillar-card h4,
     body.in-landing .landing-pillar-title,
-    body.in-landing #heroTitle,
+    body.in-landing .hero-legacy-title,
     body.in-landing #annActiveTitle {
       color: ${palette.titleColor} !important;
     }
