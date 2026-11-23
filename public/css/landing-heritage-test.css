@@ -1,0 +1,515 @@
+/**
+ * ============================================================================
+ * PRYASKAY ABDY — MODERN HERITAGE / MANUSCRIPT LUXE STYLE (EXPERIMENTAL)
+ * Preserves exact existing color palette (Sage Green #86b89c, Warm Parchment,
+ * Espresso #361c0c, Royal Amber Gold) while elevating structure, symmetry,
+ * manuscript borders, shadows, typography hierarchy, and eliminating stray blues.
+ * ============================================================================
+ */
+
+/* 1. VELVETY SAGE CANVAS DEPTH (Same #86b89c color, richer tactile finish) */
+#landingPage {
+  background-color: #86b89c !important;
+  background-image:
+    radial-gradient(ellipse 85% 55% at 50% 18%, rgba(255, 252, 240, 0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 70% at 50% 100%, rgba(28, 56, 40, 0.14) 0%, transparent 60%) !important;
+  background-attachment: fixed !important;
+}
+
+#landingPage .landing-grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(34, 66, 48, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 66, 48, 0.045) 1px, transparent 1px) !important;
+  background-size: 42px 42px !important;
+  mask-image: radial-gradient(ellipse at 50% 35%, rgba(0, 0, 0, 0.85) 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 35%, rgba(0, 0, 0, 0.85) 20%, transparent 80%);
+}
+
+/* 2. TOP NAVIGATION BAR — CLEAN MANUSCRIPT HEADER */
+#landingHeader.landing-navbar-premium {
+  background: rgba(238, 224, 204, 0.95) !important;
+  backdrop-filter: blur(22px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.34) !important;
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 251, 244, 0.55),
+    0 10px 28px -10px rgba(42, 24, 10, 0.16) !important;
+  padding-top: 0.72rem !important;
+  padding-bottom: 0.72rem !important;
+}
+
+/* Restore Smooth Brand Word "پریاسکەی عەبدی" Sliding Animation from Under Emblem */
+#landingHeader .logo-text-animated,
+#landingHeader .landing-brand-word {
+  display: inline-block;
+  animation: pryaskaUnderLogo 8.4s cubic-bezier(0.25, 1, 0.5, 1) infinite !important;
+  transform-origin: right center;
+  will-change: transform, opacity, filter, clip-path;
+  color: #361c0c !important;
+  -webkit-text-fill-color: #361c0c !important;
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: clamp(1.32rem, 2vw, 1.65rem) !important;
+  line-height: 1.35 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 1px 0 rgba(255, 250, 240, 0.7) !important;
+}
+
+#landingHeader .landing-emblem-box {
+  background: linear-gradient(145deg, #fdf6ec 0%, #e4d4bd 100%) !important;
+  border: 1.5px solid rgba(180, 83, 9, 0.42) !important;
+  box-shadow:
+    0 4px 12px -2px rgba(54, 28, 12, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+  padding: 2px !important;
+}
+
+#landingHeader .landing-nav-login-btn {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 55%, #d97706 100%) !important;
+  color: #2b1406 !important;
+  border: 1px solid rgba(180, 83, 9, 0.48) !important;
+  border-radius: 0.85rem !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.65),
+    0 6px 16px -4px rgba(180, 83, 9, 0.35) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#landingHeader .landing-nav-login-btn:hover {
+  transform: translateY(-1.5px) !important;
+  filter: brightness(1.04) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.8),
+    0 10px 22px -4px rgba(180, 83, 9, 0.45) !important;
+}
+
+/* 3. HERO STAGE — ROYAL MANUSCRIPT DOUBLE-FRAME FOLIO */
+#landingPage .landing-hero-stage {
+  background: linear-gradient(168deg, rgba(244, 233, 216, 0.99) 0%, rgba(230, 213, 190, 0.98) 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.42) !important;
+  border-radius: 1.75rem !important;
+  padding-top: 2rem !important;
+  padding-bottom: 2.15rem !important;
+  box-shadow:
+    0 24px 52px -14px rgba(34, 22, 10, 0.24),
+    0 8px 18px -6px rgba(34, 22, 10, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
+  position: relative;
+}
+
+/* Crisp inset hairline manuscript border */
+#landingPage .landing-hero-stage::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 1.32rem;
+  border: 1px solid rgba(156, 120, 78, 0.24);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Soft parchment top-center manuscript light */
+#landingPage .landing-hero-stage::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 1.32rem;
+  background: radial-gradient(ellipse 65% 45% at 50% 0%, rgba(255, 250, 232, 0.42) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+#landingPage .landing-hero-stage > div {
+  position: relative;
+  z-index: 3 !important;
+}
+
+#landingPage .landing-hero-top-beam {
+  left: 22% !important;
+  right: 22% !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent 0%, rgba(217, 119, 6, 0.7) 50%, transparent 100%) !important;
+}
+
+#landingPage #btnDialectDropdown.landing-dialect-pill {
+  background: rgba(235, 219, 198, 0.88) !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  color: #361c0c !important;
+  box-shadow:
+    inset 0 1px 3px rgba(54, 28, 12, 0.08),
+    0 2px 6px rgba(255, 255, 255, 0.55) !important;
+  padding: 0.42rem 1.05rem !important;
+  transition: all 0.2s ease !important;
+}
+
+#landingPage #btnDialectDropdown.landing-dialect-pill:hover {
+  background: rgba(226, 206, 180, 0.98) !important;
+  border-color: rgba(180, 83, 9, 0.5) !important;
+  transform: translateY(-1px);
+}
+
+#landingPage #heroTitle {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: clamp(2rem, 3.8vw, 2.75rem) !important;
+  line-height: 1.45 !important;
+  font-weight: 700 !important;
+  color: #361c0c !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 1px 0 rgba(255, 252, 244, 0.75) !important;
+  margin-top: 0.3rem !important;
+}
+
+/* Engraved Antique Gold Ornamental Divider Under Hero Title */
+#landingPage #heroTitle::after {
+  content: "";
+  display: block;
+  width: 5.5rem;
+  height: 2px;
+  margin: 0.55rem auto 0.25rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(180, 83, 9, 0.45) 20%,
+    rgba(217, 119, 6, 0.9) 50%,
+    rgba(180, 83, 9, 0.45) 80%,
+    transparent 100%
+  );
+}
+
+#landingPage #heroSubtitle {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: clamp(1rem, 1.5vw, 1.18rem) !important;
+  color: #54371f !important;
+  line-height: 1.85 !important;
+  font-weight: 400 !important;
+}
+
+/* 4. THE 4 FEATURED ACTION CARDS — ARCHITECTURAL SYMMETRIC FOLIO TILES */
+#landingFeaturedDualSection {
+  margin-top: 1.75rem !important;
+  margin-bottom: 2.25rem !important;
+}
+
+#landingFeaturedDualSection > .grid {
+  gap: 1rem !important;
+}
+
+/* Target all 4 interactive cards uniformly */
+#landingFeaturedDualSection > div > button,
+#landingFeaturedDualSection > div > div > a,
+#landingFeaturedDualSection > div > a {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: space-between !important;
+  gap: 0.95rem !important;
+  padding: 1.25rem 1.3rem !important;
+  border-radius: 1.45rem !important;
+  background: linear-gradient(165deg, rgba(244, 233, 216, 0.98) 0%, rgba(228, 211, 187, 0.97) 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.38) !important;
+  box-shadow:
+    0 16px 34px -12px rgba(34, 22, 10, 0.22),
+    0 4px 10px -3px rgba(34, 22, 10, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease !important;
+  position: relative !important;
+  min-height: 148px !important;
+}
+
+/* Delicate inner hairline manuscript border on each action card */
+#landingFeaturedDualSection > div > button::before,
+#landingFeaturedDualSection > div > div > a::before,
+#landingFeaturedDualSection > div > a::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 1.1rem;
+  border: 1px solid rgba(156, 120, 78, 0.18);
+  pointer-events: none;
+  z-index: 1;
+  transition: border-color 0.28s ease;
+}
+
+#landingFeaturedDualSection > div > button:hover,
+#landingFeaturedDualSection > div > div > a:hover,
+#landingFeaturedDualSection > div > a:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(180, 83, 9, 0.55) !important;
+  box-shadow:
+    0 24px 44px -12px rgba(34, 22, 10, 0.28),
+    0 8px 18px -4px rgba(180, 83, 9, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+#landingFeaturedDualSection > div > button:hover::before,
+#landingFeaturedDualSection > div > div > a:hover::before,
+#landingFeaturedDualSection > div > a:hover::before {
+  border-color: rgba(217, 119, 6, 0.34);
+}
+
+/* Card top content wrapper: Icon + Title + Optional Subtitle get full width */
+#landingFeaturedDualSection > div > button > div.min-w-0,
+#landingFeaturedDualSection > div > div > a > div.min-w-0,
+#landingFeaturedDualSection > div > a > div.min-w-0 {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.85rem !important;
+  width: 100% !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Jewel-crafted Golden Icon Badge inside cards */
+#landingFeaturedDualSection > div > button > div.min-w-0 > div:first-child,
+#landingFeaturedDualSection > div > div > a > div.min-w-0 > div:first-child,
+#landingFeaturedDualSection > div > a > div.min-w-0 > div:first-child {
+  width: 3rem !important;
+  height: 3rem !important;
+  border-radius: 0.95rem !important;
+  border: 1px solid rgba(254, 243, 199, 0.6) !important;
+  box-shadow:
+    0 8px 16px -4px rgba(180, 83, 9, 0.34),
+    inset 0 1px 1px rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Crisp single-line Titles & Full Readable Subtitle without ugly ellipsis */
+#landingFeaturedDualSection h3 {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  color: #361c0c !important;
+  font-size: clamp(1.08rem, 1.4vw, 1.24rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.45 !important;
+  white-space: nowrap !important;
+}
+
+#landingFeaturedDualSection p {
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif !important;
+  color: #54371f !important;
+  font-size: 0.8rem !important;
+  line-height: 1.6 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  margin-top: 0.15rem !important;
+}
+
+/* Bottom Action Strip inside each card — Sleek Editorial Footer Bar */
+#landingFeaturedDualSection > div > button > div.shrink-0,
+#landingFeaturedDualSection > div > div > a > div.shrink-0,
+#landingFeaturedDualSection > div > a > div.shrink-0 {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: transparent !important;
+  border: none !important;
+  border-top: 1px solid rgba(156, 120, 78, 0.22) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0.72rem 0.1rem 0 0.1rem !important;
+  margin-top: auto !important;
+  gap: 0.5rem !important;
+}
+
+#landingFeaturedDualSection > div > button > div.shrink-0 > span,
+#landingFeaturedDualSection > div > div > a > div.shrink-0 > span,
+#landingFeaturedDualSection > div > a > div.shrink-0 > span {
+  color: #78350f !important;
+  font-size: 0.78rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.01em;
+  transition: color 0.25s ease;
+}
+
+#landingFeaturedDualSection > div > button:hover > div.shrink-0 > span,
+#landingFeaturedDualSection > div > div > a:hover > div.shrink-0 > span,
+#landingFeaturedDualSection > div > a:hover > div.shrink-0 > span {
+  color: #361c0c !important;
+}
+
+#landingFeaturedDualSection > div > button > div.shrink-0 > i,
+#landingFeaturedDualSection > div > div > a > div.shrink-0 > i,
+#landingFeaturedDualSection > div > a > div.shrink-0 > i {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+  border-radius: 9999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.14) 100%) !important;
+  border: 1px solid rgba(180, 83, 9, 0.34) !important;
+  color: #78350f !important;
+  font-size: 0.68rem !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#landingFeaturedDualSection > div > button:hover > div.shrink-0 > i,
+#landingFeaturedDualSection > div > div > a:hover > div.shrink-0 > i,
+#landingFeaturedDualSection > div > a:hover > div.shrink-0 > i {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 60%, #d97706 100%) !important;
+  border-color: rgba(180, 83, 9, 0.55) !important;
+  color: #2b1406 !important;
+  transform: translateX(-3px) !important;
+  box-shadow: 0 4px 10px -2px rgba(180, 83, 9, 0.35) !important;
+}
+
+/* Mobile adjustment: keep super crisp & comfortable spacing */
+@media (max-width: 639px) {
+  #landingFeaturedDualSection > div > button,
+  #landingFeaturedDualSection > div > div > a,
+  #landingFeaturedDualSection > div > a {
+    min-height: 124px !important;
+    padding: 1.05rem 1.15rem !important;
+    gap: 0.75rem !important;
+  }
+}
+
+/* 5. ANNOUNCEMENTS SECTION — HARMONIZED WARM PARCHMENT & BRONZE */
+#announcementsSection .landing-section-header {
+  border-bottom: 1px solid rgba(40, 22, 10, 0.16) !important;
+  padding-bottom: 0.95rem !important;
+}
+
+/* Replace stray blue megaphone icon badge with Warm Parchment Emblem */
+#announcementsSection .landing-section-icon-badge.landing-badge-sapphire {
+  width: 2.65rem !important;
+  height: 2.65rem !important;
+  border-radius: 0.9rem !important;
+  background: linear-gradient(145deg, rgba(244, 233, 216, 0.98) 0%, rgba(228, 211, 188, 0.96) 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.42) !important;
+  color: #b45309 !important;
+  box-shadow:
+    0 6px 14px -4px rgba(34, 22, 10, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+}
+
+#announcementsSection #postsHeaderTitle {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: 1.45rem !important;
+  color: #241307 !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+#announcementsSection #postsHeaderSubtitle {
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif !important;
+  color: #2d1b0e !important;
+  opacity: 0.88 !important;
+  font-weight: 500 !important;
+}
+
+/* Replace stray teal counter pill and pure white arrows with Warm Parchment controls */
+#announcementsSection #annCounter.landing-counter-pill {
+  background: linear-gradient(145deg, rgba(244, 233, 216, 0.98), rgba(228, 211, 188, 0.96)) !important;
+  border: 1px solid rgba(156, 120, 78, 0.38) !important;
+  color: #361c0c !important;
+  box-shadow:
+    0 4px 10px -3px rgba(34, 22, 10, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+  padding: 0.32rem 0.85rem !important;
+  font-weight: 800 !important;
+}
+
+#announcementsSection .landing-carousel-arrow {
+  width: 2.2rem !important;
+  height: 2.2rem !important;
+  border-radius: 0.75rem !important;
+  background: linear-gradient(145deg, rgba(244, 233, 216, 0.98), rgba(228, 211, 188, 0.96)) !important;
+  border: 1px solid rgba(156, 120, 78, 0.38) !important;
+  color: #361c0c !important;
+  box-shadow:
+    0 4px 10px -3px rgba(34, 22, 10, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+  transition: all 0.2s ease !important;
+}
+
+#announcementsSection .landing-carousel-arrow:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  border-color: rgba(180, 83, 9, 0.5) !important;
+  color: #2b1406 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Manuscript Editorial Announcement Card */
+#announcementsSection #announcementActiveCard.landing-ann-card {
+  background: linear-gradient(166deg, rgba(244, 233, 216, 0.99) 0%, rgba(229, 212, 188, 0.97) 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.38) !important;
+  border-right: 4px solid #d97706 !important;
+  border-radius: 1.5rem !important;
+  box-shadow:
+    0 20px 46px -14px rgba(34, 22, 10, 0.22),
+    0 6px 14px -4px rgba(34, 22, 10, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+  position: relative !important;
+}
+
+#announcementsSection #announcementActiveCard.landing-ann-card::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 1.15rem;
+  border: 1px solid rgba(156, 120, 78, 0.18);
+  pointer-events: none;
+  z-index: 1;
+}
+
+#announcementsSection #annCardContentWrapper {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+#announcementsSection #annActiveTitle {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: clamp(1.2rem, 1.9vw, 1.5rem) !important;
+  line-height: 1.6 !important;
+  font-weight: 700 !important;
+}
+
+#announcementsSection #annActiveContent {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: 1.05rem !important;
+  line-height: 1.9 !important;
+}
+
+/* Warm Amber Progress Bar & Dots (eliminating cyan/blue) */
+#announcementsSection .ann-progress-track {
+  background: rgba(156, 120, 78, 0.14) !important;
+  height: 3px !important;
+}
+
+#announcementsSection #annProgressBar {
+  background: linear-gradient(90deg, #f59e0b 0%, #d97706 60%, #b45309 100%) !important;
+}
+
+#announcementsSection #annDotsContainer .ann-dot {
+  background: rgba(156, 120, 78, 0.30) !important;
+}
+
+#announcementsSection #annDotsContainer .ann-dot.active {
+  background: linear-gradient(90deg, #d97706 0%, #f59e0b 100%) !important;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.38) !important;
+}
+
+#announcementsSection #annActiveDate {
+  color: #785336 !important;
+  font-weight: 600 !important;
+}
+
+#announcementsSection .landing-ann-author {
+  color: #78350f !important;
+}
+
+#announcementsSection #announcementActiveCard .border-t {
+  border-top-color: rgba(156, 120, 78, 0.22) !important;
+}
+
+/* 6. FOOTER POLISH */
+#landingPage footer.landing-footer {
+  background: rgba(238, 224, 204, 0.96) !important;
+  border-top: 1px solid rgba(156, 120, 78, 0.34) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 251, 244, 0.6) !important;
+  padding-top: 1.45rem !important;
+  padding-bottom: 1.45rem !important;
+}

@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <script>try{sessionStorage.setItem('has_visited_section','true');}catch(e){}</script>
+  <script>try{sessionStorage.setItem('has_visited_section','true');document.documentElement.classList.remove('dark');}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png">
@@ -13,44 +13,21 @@
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪶</text></svg>">
 
-  <!-- Google Fonts: Vazirmatn for premium Kurdish Typography -->
+  <!-- Google Fonts: Classical Islamic Calligraphy (Amiri & Noto Naskh Arabic) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            kurdish: ['Vazirmatn', 'sans-serif'],
-            latin: ['Plus Jakarta Sans', 'sans-serif']
-          },
-          colors: {
-            brand: {
-              50: '#eefbfb',
-              100: '#d5f5f6',
-              400: '#00f2fe',
-              500: '#4facfe',
-              600: '#0072ff',
-              900: '#001a40'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="/css/tailwind.built.css?v=1.0">
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="/css/style.css?v=90.0&t=1795310000">
+  <link rel="stylesheet" href="/css/style.css?v=98.0&t=1795490000">
   <!-- Shared Palettes -->
-  <script src="/js/palettes.js?v=90.0&t=1795310000"></script>
+  <script src="/js/palettes.js?v=92.0&t=1795420000"></script>
   <script>
     if (typeof applyActiveSavedTheme === 'function') {
       applyActiveSavedTheme();
@@ -64,22 +41,16 @@
       right: 0 !important;
       width: 100% !important;
       z-index: 40 !important;
+      background: rgba(238, 224, 204, 0.96) !important;
+      border-bottom: 1px solid rgba(156, 120, 78, 0.32) !important;
+      box-shadow: 0 8px 24px -8px rgba(42, 24, 10, 0.14) !important;
     }
     .poem-verse-text {
-      font-feature-settings: "liga" 1;
+      font-feature-settings: "liga" 1, "calt" 1;
       text-wrap: balance;
     }
-  </style>
-  <style>
     html, body {
       background-color: #86b89c !important;
-      background: #86b89c !important;
-      background-image: none !important;
-    }
-    #poemsHeader, #articlesHeader {
-      background: rgba(236, 222, 202, 0.95) !important;
-      border-bottom: 1px solid rgba(156, 120, 78, 0.28) !important;
-      box-shadow: 0 4px 20px -4px rgba(50, 35, 20, 0.08) !important;
     }
     .brand-title {
       background: none !important;
@@ -90,7 +61,7 @@
       filter: none !important;
     }
     #btnBackToHome, #btnDialectDropdown {
-      background: rgba(222, 204, 180, 0.95) !important;
+      background: rgba(228, 212, 189, 0.96) !important;
       border: 1px solid rgba(156, 120, 78, 0.35) !important;
       color: #361c0c !important;
     }
@@ -98,9 +69,9 @@
       color: #85430e !important;
     }
     .glass-card, .poem-card, .article-card, .modal-content {
-      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98) 0%, rgba(228, 212, 189, 0.97) 100%) !important;
-      border: 1px solid rgba(156, 120, 78, 0.30) !important;
-      box-shadow: 0 16px 38px -10px rgba(50, 35, 20, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+      background: linear-gradient(166deg, rgba(244, 233, 216, 0.99) 0%, rgba(229, 212, 188, 0.97) 100%) !important;
+      border: 1px solid rgba(156, 120, 78, 0.36) !important;
+      box-shadow: 0 18px 42px -12px rgba(42, 24, 10, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
       color: #54371f !important;
     }
     h1, h2, h3, h4, .poem-title, .article-title {
@@ -111,28 +82,21 @@
     }
   </style>
 </head>
-<body class="light-theme light-mode in-landing text-slate-900 font-kurdish min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-white">
-
-  <!-- Ambient Glow Effects Hidden for 100% Matte Background -->
-  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10 hidden" style="display: none !important;">
-    <div class="absolute -top-40 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse"></div>
-    <div class="absolute top-1/3 -left-40 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl"></div>
-    <div class="absolute -bottom-40 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
-  </div>
+<body class="light-theme light-mode in-landing text-[#361c0c] font-kurdish min-h-screen flex flex-col antialiased selection:bg-amber-400 selection:text-[#2b1406]">
 
   <!-- Fixed Header / Navbar -->
-  <header id="poemsHeader" class="fixed top-0 left-0 right-0 z-50 w-full backdrop-blur-xl bg-[#ecdeca]/95 glass-header border-b border-[#9c784e]/30 transition-colors duration-300">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+  <header id="poemsHeader" class="fixed top-0 left-0 right-0 z-40 w-full backdrop-blur-xl transition-colors duration-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2">
       
       <!-- Brand Logo + Back to Home Button -->
-      <div class="flex items-center gap-3 sm:gap-4">
-        <a href="/" class="flex items-center gap-2.5 sm:gap-3 group cursor-pointer focus:outline-none select-none" title="گەڕانەوە بۆ پەڕەی سەرەکی">
-          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-amber-400 via-amber-500 to-sky-600 p-[1.5px] shadow-[0_0_20px_rgba(251,191,36,0.35)] group-hover:shadow-[0_0_28px_rgba(251,191,36,0.55)] transition-all duration-300 shrink-0">
-            <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-              <i class="fa-solid fa-feather-pointed text-amber-400 text-lg group-hover:scale-110 transition-transform"></i>
+      <div class="flex items-center gap-2.5 sm:gap-4 min-w-0">
+        <a href="/" class="flex items-center gap-2.5 sm:gap-3 group cursor-pointer focus:outline-none select-none shrink-0" title="گەڕانەوە بۆ پەڕەی سەرەکی">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 p-[1.5px] shadow-md transition-all duration-300 shrink-0">
+            <div class="w-full h-full bg-[#fdf6ec] rounded-[14px] flex items-center justify-center">
+              <i class="fa-solid fa-feather-pointed text-[#b45309] text-lg group-hover:scale-110 transition-transform"></i>
             </div>
           </div>
-          <span class="brand-title text-xl sm:text-2xl font-black tracking-wide text-[#361c0c] transition-all group-hover:brightness-110">
+          <span class="brand-title text-lg sm:text-2xl font-black tracking-wide text-[#361c0c] whitespace-nowrap">
             پریاسکەی عەبدی
           </span>
         </a>
@@ -141,16 +105,16 @@
         <a 
           href="/" 
           id="btnBackToHome"
-          class="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 hover:text-white transition-all duration-200 cursor-pointer shadow-sm group"
+          class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-[#e4d4bd] hover:bg-[#d9c4a6] border border-[#9c784e]/35 text-xs font-bold text-[#361c0c] transition-all duration-200 cursor-pointer shadow-sm group whitespace-nowrap"
           title="گەڕانەوە بۆ پەڕەی سەرەکی"
         >
-          <i class="fa-solid fa-arrow-right text-amber-400 text-xs transition-transform group-hover:translate-x-1"></i>
+          <i class="fa-solid fa-arrow-right text-[#85430e] text-xs transition-transform group-hover:translate-x-1"></i>
           <span id="btnBackToHomeText">گەڕانەوە بۆ سەرەکی</span>
         </a>
       </div>
 
       <!-- Header Controls: Dialect & Admin Add Button -->
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
         
         <!-- Dialect Selector Dropdown -->
         <div class="relative inline-block text-right z-40" id="dialectDropdownContainer">
@@ -158,47 +122,47 @@
             id="btnDialectDropdown" 
             type="button" 
             onclick="togglePoemDialect(event)"
-            class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/35 text-amber-300 hover:text-white hover:bg-amber-500/25 text-xs font-semibold transition-all duration-200 shadow-[0_0_12px_rgba(251,191,36,0.15)] cursor-pointer group"
+            class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-full bg-[#e4d4bd] hover:bg-[#d9c4a6] border border-[#9c784e]/35 text-[#361c0c] text-xs font-bold transition-all duration-200 shadow-sm cursor-pointer group"
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <i class="fa-solid fa-language text-amber-400 text-xs transition-transform group-hover:scale-110"></i>
+            <i class="fa-solid fa-language text-[#85430e] text-xs transition-transform group-hover:scale-110"></i>
             <span id="currentDialectLabel">شێوەزار: سۆرانی</span>
-            <i id="dialectChevron" class="fa-solid fa-chevron-down text-[9px] text-amber-400/70 transition-transform duration-200"></i>
+            <i id="dialectChevron" class="fa-solid fa-chevron-down text-[9px] text-[#78350f] transition-transform duration-200"></i>
           </button>
 
           <!-- Floating Dialect Menu -->
           <div 
             id="dialectDropdownMenu" 
-            class="hidden absolute top-full mt-2.5 left-1/2 -translate-x-1/2 w-64 sm:w-72 rounded-2xl border border-white/15 p-2.5 shadow-2xl z-50 text-right bg-[#080c1b]/98 backdrop-blur-2xl animate-dropdown-in"
+            class="hidden absolute top-full mt-2.5 left-1/2 -translate-x-1/2 w-64 sm:w-72 rounded-2xl border border-[#9c784e]/40 p-2.5 shadow-2xl z-50 text-right bg-[#f5ead9] animate-dropdown-in"
           >
-            <div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 border-b border-white/10 mb-1.5 flex items-center justify-between">
+            <div class="px-3 py-1.5 text-[11px] font-bold text-[#78350f] border-b border-[#9c784e]/20 mb-1.5 flex items-center justify-between">
               <span>شێوەزارەکانی زمانی کوردی</span>
-              <i class="fa-solid fa-shapes text-amber-400/70 text-[10px]"></i>
+              <i class="fa-solid fa-shapes text-[#b45309] text-[10px]"></i>
             </div>
 
-            <button type="button" onclick="selectPoemDialect('sorani')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-colors text-slate-200 hover:text-white group cursor-pointer">
+            <button type="button" onclick="selectPoemDialect('sorani')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-colors text-[#361c0c] hover:bg-amber-500/20 group cursor-pointer">
               <div class="flex items-center gap-2.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]"></span>
-                <span class="font-bold text-white text-sm">سۆرانی</span>
-                <span class="text-[11px] text-slate-400 font-latin">(Sorani)</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-600 shadow-sm"></span>
+                <span class="font-bold text-[#361c0c] text-sm">سۆرانی</span>
+                <span class="text-[11px] text-[#785336] font-latin">(Sorani)</span>
               </div>
-              <i class="fa-solid fa-check text-amber-400 text-xs"></i>
+              <i class="fa-solid fa-check text-[#b45309] text-xs"></i>
             </button>
 
-            <button type="button" onclick="selectPoemDialect('kurmanji')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-colors text-slate-200 hover:text-white group cursor-pointer">
+            <button type="button" onclick="selectPoemDialect('kurmanji')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-colors text-[#361c0c] hover:bg-amber-500/20 group cursor-pointer">
               <div class="flex items-center gap-2.5">
                 <span class="w-2.5 h-2.5 rounded-full bg-transparent"></span>
-                <span class="font-bold text-white text-sm">کرمانجی</span>
-                <span class="text-[11px] text-slate-400 font-latin">(Kurmancî)</span>
+                <span class="font-bold text-[#361c0c] text-sm">کرمانجی</span>
+                <span class="text-[11px] text-[#785336] font-latin">(Kurmancî)</span>
               </div>
             </button>
 
-            <button type="button" onclick="selectPoemDialect('hawrami')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-colors text-slate-200 hover:text-white group cursor-pointer">
+            <button type="button" onclick="selectPoemDialect('hawrami')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-colors text-[#361c0c] hover:bg-amber-500/20 group cursor-pointer">
               <div class="flex items-center gap-2.5">
                 <span class="w-2.5 h-2.5 rounded-full bg-transparent"></span>
-                <span class="font-bold text-white text-sm">هەورامی</span>
-                <span class="text-[11px] text-slate-400 font-latin">(Hawramî)</span>
+                <span class="font-bold text-[#361c0c] text-sm">هەورامی</span>
+                <span class="text-[11px] text-[#785336] font-latin">(Hawramî)</span>
               </div>
             </button>
           </div>
@@ -210,7 +174,7 @@
             id="btnOpenNewPoemModal" 
             type="button" 
             onclick="openNewPoemModal()"
-            class="px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs font-black gap-2 shadow-lg inline-flex items-center rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white transition active:scale-95 cursor-pointer"
+            class="px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs font-bold gap-2 shadow-md inline-flex items-center rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white transition active:scale-95 cursor-pointer"
           >
             <i class="fa-solid fa-plus text-xs"></i>
             <span class="hidden sm:inline">دانانی شیعری نوێ</span>
@@ -228,29 +192,28 @@
   <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
 
     <!-- Hero Header for Poems Page -->
-    <section class="glass-card p-6 sm:p-9 rounded-3xl border border-amber-500/25 text-center relative overflow-hidden shadow-2xl">
-      <!-- Glow inside hero -->
-      <div class="absolute -top-20 right-1/4 w-64 h-64 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-20 left-1/4 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <section class="glass-card p-6 sm:p-9 rounded-3xl border border-[#9c784e]/35 text-center relative overflow-hidden shadow-2xl">
+      <div class="pointer-events-none absolute inset-2 rounded-[1.25rem] border border-[#9c784e]/25"></div>
+      <div class="pointer-events-none absolute top-0 left-[22%] right-[22%] h-[2px] bg-gradient-to-r from-transparent via-amber-600/70 to-transparent"></div>
 
       <div class="relative z-10 max-w-2xl mx-auto space-y-3.5">
         <!-- Feather Icon Badge -->
-        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-amber-500/25 via-amber-400/20 to-sky-500/20 border border-amber-400/40 flex items-center justify-center text-3xl shadow-[0_0_25px_rgba(251,191,36,0.35)]">
-          🪶
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 border border-amber-200/60 flex items-center justify-center text-2xl shadow-md text-[#241206]">
+          <i class="fa-solid fa-feather-pointed"></i>
         </div>
 
-        <h1 id="poemsPageTitle" class="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+        <h1 id="poemsPageTitle" class="text-3xl sm:text-4xl font-bold text-[#361c0c] tracking-tight">
           پریاسکەی ئەدەبی
         </h1>
 
-        <p id="poemsPageSubtitle" class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 max-w-xl mx-auto leading-relaxed font-medium">
+        <p id="poemsPageSubtitle" class="text-xs sm:text-base text-[#54371f] max-w-xl mx-auto leading-relaxed font-medium">
           هۆنراوە و بەرهەمە ئەدەبی و ڕۆحییەکانی ئازاد عەبدی
         </p>
 
         <!-- Stats & Action Bar -->
         <div class="pt-2 flex items-center justify-center gap-3 flex-wrap">
-          <span id="poemsCountBadge" class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-800 dark:text-amber-300 text-xs font-black">
-            <i class="fa-solid fa-feather text-[11px]"></i>
+          <span id="poemsCountBadge" class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#e4d4bd] border border-[#9c784e]/35 text-[#361c0c] text-xs font-bold shadow-sm">
+            <i class="fa-solid fa-feather text-[#b45309] text-[11px]"></i>
             <span id="poemsCountText">یەک بابەت بڵاوکراوەتەوە</span>
           </span>
         </div>
@@ -258,13 +221,13 @@
         <!-- Search Poems Bar -->
         <div class="pt-2 max-w-md mx-auto">
           <div class="relative">
-            <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 text-[#85430e] text-xs"></i>
             <input 
               type="text" 
               id="poemsSearchInput" 
               oninput="filterPoems(this.value)"
               placeholder="گەڕان لەناو دێڕ و ناونیشانەکان..." 
-              class="w-full pr-9 pl-4 py-2.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-xs sm:text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500 shadow-sm transition"
+              class="w-full pr-9 pl-4 py-2.5 rounded-2xl bg-[#fbf7f0] border border-[#9c784e]/35 text-xs sm:text-sm font-medium text-[#361c0c] placeholder:text-[#8c6846] focus:outline-none focus:border-amber-600 shadow-sm transition"
             >
           </div>
         </div>
@@ -275,8 +238,8 @@
     <!-- Poems Feed Section -->
     <section id="poemsFeedContainer" class="space-y-6">
       <div id="poemsFeed" class="max-w-3xl mx-auto space-y-6">
-        <div class="glass-card p-10 text-center text-slate-400 animate-pulse space-y-3 rounded-3xl">
-          <i class="fa-solid fa-spinner fa-spin text-2xl text-amber-500"></i>
+        <div class="glass-card p-10 text-center text-[#54371f] animate-pulse space-y-3 rounded-3xl">
+          <i class="fa-solid fa-spinner fa-spin text-2xl text-[#b45309]"></i>
           <p class="text-sm font-bold">شیعرەکان باردەکرێن...</p>
         </div>
       </div>
@@ -286,9 +249,9 @@
     <div class="pt-6 pb-2 text-center">
       <a 
         href="/" 
-        class="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200 hover:text-white transition-all cursor-pointer shadow-sm group"
+        class="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-xl bg-[#f4e9d8] hover:bg-[#e4d4bd] border border-[#9c784e]/35 text-xs sm:text-sm font-bold text-[#361c0c] transition-all cursor-pointer shadow-md group"
       >
-        <i class="fa-solid fa-arrow-right text-amber-400 text-xs transition-transform group-hover:translate-x-1"></i>
+        <i class="fa-solid fa-arrow-right text-[#b45309] text-xs transition-transform group-hover:translate-x-1"></i>
         <span>گەڕانەوە بۆ پەڕەی سەرەکیی پریاسکەی عەبدی</span>
       </a>
     </div>
@@ -296,16 +259,16 @@
   </main>
 
   <!-- Footer -->
-  <footer class="mt-auto border-t border-white/10 py-6 text-center text-xs text-slate-400 bg-slate-950/60 backdrop-blur-md">
+  <footer class="mt-auto border-t border-[#9c784e]/30 py-6 text-center text-xs text-[#54371f] bg-[#eee0cc]/96 backdrop-blur-md">
     <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-        <span class="font-bold text-white">پریاسکەی عەبدی</span>
+        <span class="w-2 h-2 rounded-full bg-amber-600"></span>
+        <span class="font-bold text-[#361c0c]">پریاسکەی عەبدی</span>
       </div>
       <p>
         سەرجەم مافەکان پارێزراون بۆ پریاسکەی عەبدی © 2026
       </p>
-      <a href="/" class="text-amber-400 hover:underline text-xs flex items-center gap-1 font-bold">
+      <a href="/" class="text-[#78350f] hover:underline text-xs flex items-center gap-1 font-bold">
         <span>پەڕەی سەرەکی</span>
         <i class="fa-solid fa-house text-[10px]"></i>
       </a>
@@ -315,71 +278,71 @@
   <!-- ========================================== -->
   <!-- MODAL: Add New Poem (#modalNewPoem) -->
   <!-- ========================================== -->
-  <div id="modalNewPoem" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden animate-fade-in">
-    <div class="bg-white dark:bg-slate-900 border border-amber-500/40 rounded-3xl p-6 sm:p-7 w-full max-w-xl shadow-2xl relative max-h-[90vh] overflow-y-auto text-right text-slate-900 dark:text-white">
+  <div id="modalNewPoem" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1a241b]/65 backdrop-blur-md hidden animate-fade-in">
+    <div class="modal-content rounded-3xl p-6 sm:p-7 w-full max-w-xl shadow-2xl relative max-h-[90vh] overflow-y-auto text-right text-[#361c0c]">
       
       <!-- Close Button -->
-      <button onclick="closeNewPoemModal()" type="button" class="absolute top-4 left-4 text-slate-400 hover:text-slate-900 dark:hover:text-white p-2 rounded-xl transition cursor-pointer">
+      <button onclick="closeNewPoemModal()" type="button" class="absolute top-4 left-4 text-[#78350f] hover:text-[#361c0c] p-2 rounded-xl transition cursor-pointer">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
 
       <!-- Modal Title -->
-      <div class="flex items-center gap-3 border-b border-amber-500/20 pb-4 mb-5">
-        <div class="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-400/30 text-amber-600 dark:text-amber-300 flex items-center justify-center text-lg shadow-sm">
+      <div class="flex items-center gap-3 border-b border-[#9c784e]/25 pb-4 mb-5">
+        <div class="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-600/30 text-[#b45309] flex items-center justify-center text-lg shadow-sm">
           <i class="fa-solid fa-feather-pointed"></i>
         </div>
         <div>
-          <h3 class="text-xl font-black text-slate-950 dark:text-white">دانانی شیعری نوێ</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">بڵاوکردنەوەی هۆنراوەیەکی نوێ لە پریاسکەی ئەدەبی</p>
+          <h3 class="text-xl font-bold text-[#361c0c]">دانانی شیعری نوێ</h3>
+          <p class="text-xs text-[#54371f] font-medium">بڵاوکردنەوەی هۆنراوەیەکی نوێ لە پریاسکەی ئەدەبی</p>
         </div>
       </div>
 
       <!-- Form -->
       <form id="formNewPoem" onsubmit="submitNewPoem(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-black text-slate-800 dark:text-slate-200 mb-1.5">ناونیشانی شیعر:</label>
+          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">ناونیشانی شیعر:</label>
           <input 
             type="text" 
             id="poemInputTitle" 
             required
             placeholder="نموونە: پریاسکەی عەبدی، شەوی خەڵوەت..."
-            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-bold text-slate-950 dark:text-white focus:outline-none focus:border-amber-500"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#9c784e]/35 bg-[#fbf7f0] text-sm font-bold text-[#361c0c] placeholder-[#8c6846] focus:outline-none focus:border-amber-600"
           >
         </div>
 
         <div>
-          <label class="block text-xs font-black text-slate-800 dark:text-slate-200 mb-1.5">دەق و دێڕەکانی شیعر (هەر دێڕێک لە خەتێکی جیاواز):</label>
+          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">دەق و دێڕەکانی شیعر (هەر دێڕێک لە خەتێکی جیاواز):</label>
           <textarea 
             id="poemInputContent" 
             rows="8" 
             required
             placeholder="دێڕەکانی هۆنراوەکە لێرە بنووسە..."
-            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-serif leading-loose text-slate-950 dark:text-white focus:outline-none focus:border-amber-500"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#9c784e]/35 bg-[#fbf7f0] text-sm font-serif leading-loose text-[#361c0c] placeholder-[#8c6846] focus:outline-none focus:border-amber-600"
           ></textarea>
         </div>
 
         <div>
-          <label class="block text-xs font-black text-slate-800 dark:text-slate-200 mb-1.5">ناوی شاعیر / خاوەن بەرهەم:</label>
+          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">ناوی شاعیر / خاوەن بەرهەم:</label>
           <input 
             type="text" 
             id="poemInputAuthor" 
             value="م. ئازاد"
-            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-bold text-slate-950 dark:text-white focus:outline-none focus:border-amber-500"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#9c784e]/35 bg-[#fbf7f0] text-sm font-bold text-[#361c0c] focus:outline-none focus:border-amber-600"
           >
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-[#9c784e]/25">
           <button 
             type="button" 
             onclick="closeNewPoemModal()" 
-            class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer"
+            class="px-4 py-2 rounded-xl bg-[#e4d4bd] text-[#361c0c] font-bold text-xs hover:bg-[#d9c4a6] border border-[#9c784e]/30 transition cursor-pointer"
           >
             پەشیمانبوونەوە
           </button>
           <button 
             type="submit" 
             id="btnSubmitPoem"
-            class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-black text-xs sm:text-sm shadow-md transition active:scale-95 cursor-pointer flex items-center gap-1.5"
+            class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs sm:text-sm shadow-md transition active:scale-95 cursor-pointer flex items-center gap-1.5"
           >
             <i class="fa-solid fa-paper-plane text-xs"></i>
             <span>بڵاوکردنەوەی شیعر</span>
@@ -390,16 +353,18 @@
   </div>
 
   <!-- Toast Notification Container -->
-  <div id="poemToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden px-4 py-2 rounded-2xl bg-slate-900 text-white text-xs font-black shadow-2xl border border-amber-400/40 flex items-center gap-2">
-    <i class="fa-solid fa-circle-check text-amber-400"></i>
+  <div id="poemToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden px-4 py-2 rounded-2xl bg-[#f4e9d8] text-[#361c0c] text-xs font-bold shadow-2xl border border-[#9c784e]/45 flex items-center gap-2">
+    <i class="fa-solid fa-circle-check text-[#b45309]"></i>
     <span id="poemToastText">پەیام</span>
   </div>
 
   <!-- Socket.io -->
   <script src="/socket.io/socket.io.js"></script>
   <!-- Dedicated Poems Script -->
-  <script src="/js/poems.js?v=8.0&t=1795360000"></script>
+  <script src="/js/poems.js?v=9.0&t=1795420000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=4.0&t=1795380000"></script>
+  <script src="/js/post-comments.js?v=1.0" defer></script>
+  <script src="/js/global-search.js?v=1.0" defer></script>
 </body>
 </html>

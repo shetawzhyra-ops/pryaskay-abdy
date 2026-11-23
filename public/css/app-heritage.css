@@ -1,0 +1,1311 @@
+/**
+ * ============================================================================
+ * PRYASKAY ABDY — INSIDE APPLICATION MODERN HERITAGE / MANUSCRIPT LUXE THEME
+ * Extends the outer landing page Modern Heritage aesthetic into every inside
+ * section of #mainApp: Top Header, Classrooms Lobby, Classroom Chat Stage,
+ * Members Sidebar, Main Menu Drawer, Feed Cards & All Inside Modals.
+ * Palette preserved: Sufi Sage (#86b89c), Warm Parchment (#f4e9d8 / #efe3d1 /
+ * #fbf7f0), Espresso Ink (#361c0c / #54371f), Royal Amber Gold (#f59e0b/#d97706).
+ * ============================================================================
+ */
+
+/* ==========================================================================
+   1. TOP NAVIGATION BAR (#mainApp > header) — MANUSCRIPT GLASS HEADER
+   ========================================================================== */
+#mainApp > header {
+  background: rgba(238, 224, 204, 0.96) !important;
+  backdrop-filter: blur(22px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.36) !important;
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 251, 244, 0.65),
+    0 10px 26px -10px rgba(42, 24, 10, 0.16) !important;
+  min-height: 58px !important;
+  padding-top: 0.45rem !important;
+  padding-bottom: 0.45rem !important;
+}
+
+/* Jewel-Crafted Brand Logo & Visible Calligraphic Brand Title */
+#mainApp > header img[alt*="پریاسکە"] {
+  border: 1.5px solid rgba(180, 83, 9, 0.48) !important;
+  box-shadow:
+    0 4px 12px -2px rgba(54, 28, 12, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+  background: #fdf6ec !important;
+  padding: 2px !important;
+}
+
+#mainApp > header h2 {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #361c0c !important;
+  color: #361c0c !important;
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: 1.08rem !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 0 rgba(255, 250, 240, 0.72) !important;
+}
+
+#mainApp > header #onlineCountText {
+  color: #2d6245 !important;
+  font-weight: 700 !important;
+}
+
+/* Header Action Pills: Back, Active Room, Dreams, Home, Push Bell, Menu */
+#backToClassroomsLobbyBtn,
+#headerActiveRoomBadge,
+#dreamAdminNavBtn,
+#topExecutiveHubBtn,
+#pushNotificationBtn,
+#mainMenuBtn {
+  background: linear-gradient(145deg, rgba(250, 244, 234, 0.98) 0%, rgba(232, 217, 194, 0.95) 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.38) !important;
+  color: #361c0c !important;
+  border-radius: 0.85rem !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    0 3px 8px -2px rgba(42, 24, 10, 0.10) !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#backToClassroomsLobbyBtn:hover,
+#dreamAdminNavBtn:hover,
+#topExecutiveHubBtn:hover,
+#pushNotificationBtn:hover,
+#mainMenuBtn:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  border-color: rgba(180, 83, 9, 0.55) !important;
+  color: #2b1406 !important;
+  transform: translateY(-1px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.75),
+    0 6px 14px -3px rgba(180, 83, 9, 0.30) !important;
+}
+
+#backToClassroomsLobbyBtn i,
+#headerActiveRoomBadge i,
+#dreamAdminNavBtn i,
+#topExecutiveHubBtn i,
+#pushNotificationBtn i,
+#mainMenuBtn i {
+  color: #b45309 !important;
+  transition: color 0.2s ease !important;
+}
+
+#backToClassroomsLobbyBtn:hover i,
+#dreamAdminNavBtn:hover i,
+#topExecutiveHubBtn:hover i,
+#pushNotificationBtn:hover i,
+#mainMenuBtn:hover i {
+  color: #2b1406 !important;
+}
+
+#dreamAdminNavBtn span:not(#dreamUnreadBadge),
+#topExecutiveHubBtn span,
+#pushNotificationBtn span,
+#mainMenuBtn span:not(#mainMenuBadgeDot),
+#headerActiveRoomBadge span {
+  color: inherit !important;
+}
+
+#dreamAdminNavBtn #dreamUnreadBadge {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 248, 225, 0.55) !important;
+  box-shadow: 0 2px 6px rgba(180, 83, 9, 0.35) !important;
+}
+
+/* Live Lesson Nav Pill (Warm Heritage Crimson-Ivory when inside classroom) */
+#liveLessonNavBtn {
+  background: linear-gradient(145deg, #fdf3f2 0%, #f5dbd8 100%) !important;
+  border: 1px solid rgba(190, 18, 60, 0.34) !important;
+  color: #9f1239 !important;
+  border-radius: 0.85rem !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 3px 8px -2px rgba(159, 18, 57, 0.14) !important;
+}
+
+#liveLessonNavBtn:hover {
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
+  border-color: rgba(159, 18, 57, 0.6) !important;
+  color: #ffffff !important;
+}
+
+#liveLessonNavBtn i {
+  color: #be123c !important;
+}
+
+#liveLessonNavBtn:hover i,
+#liveLessonNavBtn:hover span {
+  color: #ffffff !important;
+}
+
+#liveLessonPulseDot {
+  background: #e11d48 !important;
+  border-color: rgba(255, 228, 230, 0.8) !important;
+}
+
+#liveLessonActiveBadge {
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
+  color: #ffffff !important;
+}
+
+/* Header User Profile Pill */
+#mainApp > header div[onclick="openMyProfile()"] {
+  background: linear-gradient(145deg, #fdfaf4 0%, #eee0cc 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.38) !important;
+  border-radius: 0.95rem !important;
+  padding: 0.3rem 0.75rem !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 3px 8px -2px rgba(42, 24, 10, 0.10) !important;
+  transition: all 0.2s ease !important;
+}
+
+#mainApp > header div[onclick="openMyProfile()"]:hover {
+  border-color: rgba(180, 83, 9, 0.55) !important;
+  background: linear-gradient(145deg, #ffffff 0%, #f4e9d8 100%) !important;
+}
+
+#mainApp > header #headerFullName {
+  color: #361c0c !important;
+  font-weight: 800 !important;
+}
+
+#mainApp > header #headerRoleBadge {
+  background: rgba(134, 184, 156, 0.22) !important;
+  border: 1px solid rgba(61, 122, 89, 0.30) !important;
+  color: #1e5237 !important;
+  border-radius: 999px !important;
+  padding: 0.08rem 0.45rem !important;
+}
+
+#mainApp > header #headerRoleBadge i {
+  color: #2d6245 !important;
+}
+
+#mainApp > header #headerStarBadge,
+#mainApp > header #headerStarCount {
+  color: #92400e !important;
+}
+
+/* Notification & Curfew Banners */
+#notificationPermissionBanner,
+#nightCurfewBanner {
+  background: linear-gradient(90deg, rgba(247, 238, 224, 0.98) 0%, rgba(235, 220, 198, 0.98) 100%) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.34) !important;
+  color: #361c0c !important;
+}
+
+/* ==========================================================================
+   2. CLASSROOMS LOBBY (#classroomsLobbyView) — VELVETY SAGE + MANUSCRIPT FOLIOS
+   ========================================================================== */
+#classroomsLobbyView,
+body.light-theme #classroomsLobbyView,
+body.light-mode #classroomsLobbyView {
+  background-color: #86b89c !important;
+  background-image:
+    linear-gradient(to right, rgba(34, 66, 48, 0.042) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 66, 48, 0.042) 1px, transparent 1px),
+    radial-gradient(ellipse 85% 55% at 50% 10%, rgba(255, 252, 240, 0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 70% at 50% 100%, rgba(28, 56, 40, 0.15) 0%, transparent 60%) !important;
+  background-size: 42px 42px, 42px 42px, 100% 100%, 100% 100% !important;
+}
+
+/* Lobby Hero Header Ribbon */
+#classroomsLobbyView > div:first-child,
+body.light-theme #classroomsLobbyView > div:first-child,
+body.light-mode #classroomsLobbyView > div:first-child {
+  background: linear-gradient(168deg, rgba(244, 233, 216, 0.98) 0%, rgba(232, 216, 193, 0.96) 100%) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.36) !important;
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 251, 244, 0.65),
+    0 12px 28px -12px rgba(34, 22, 10, 0.20) !important;
+  padding: 1rem 1.25rem !important;
+}
+
+/* Jewel Graduation Cap Emblem in Lobby Header */
+#classroomsLobbyView > div:first-child .w-9.h-9 {
+  width: 2.85rem !important;
+  height: 2.85rem !important;
+  border-radius: 0.95rem !important;
+  background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 55%, #d97706 100%) !important;
+  border: 1px solid rgba(254, 243, 199, 0.65) !important;
+  color: #241206 !important;
+  box-shadow:
+    0 8px 18px -4px rgba(180, 83, 9, 0.34),
+    inset 0 1px 1px rgba(255, 255, 255, 0.72) !important;
+}
+
+#classroomsLobbyView > div:first-child .w-9.h-9 i {
+  color: #241206 !important;
+}
+
+#classroomsLobbyView > div:first-child h2 {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: clamp(1.25rem, 2vw, 1.55rem) !important;
+  font-weight: 700 !important;
+  color: #361c0c !important;
+  text-shadow: 0 1px 0 rgba(255, 252, 244, 0.7) !important;
+}
+
+#classroomsLobbyView > div:first-child p {
+  color: #54371f !important;
+  font-size: 0.78rem !important;
+}
+
+#classroomsTotalCountBadge {
+  background: linear-gradient(145deg, #fdf6ec, #e6d5bd) !important;
+  border: 1px solid rgba(180, 83, 9, 0.35) !important;
+  color: #78350f !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+}
+
+#classroomsSearchInput {
+  background: #ffffff !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  border-radius: 0.85rem !important;
+  color: #361c0c !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+  box-shadow: inset 0 1px 3px rgba(54, 28, 12, 0.06) !important;
+}
+
+#classroomsSearchInput:focus {
+  border-color: rgba(217, 119, 6, 0.85) !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.20) !important;
+}
+
+#createClassroomBtn {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 55%, #d97706 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 1px solid rgba(180, 83, 9, 0.48) !important;
+  border-radius: 0.85rem !important;
+  padding: 0.52rem 0.95rem !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.65),
+    0 6px 16px -4px rgba(180, 83, 9, 0.38) !important;
+  transition: all 0.22s ease !important;
+}
+
+#createClassroomBtn *,
+#createClassroomBtn span,
+#createClassroomBtn i {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+#createClassroomBtn:hover {
+  transform: translateY(-1.5px) !important;
+  filter: brightness(1.05) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.8),
+    0 10px 22px -4px rgba(180, 83, 9, 0.45) !important;
+}
+
+/* Classrooms Cards Grid — Architectural Double-Frame Manuscript Folios */
+#classroomsGridContainer {
+  gap: 1.1rem !important;
+}
+
+#classroomsLobbyView .classroom-lobby-card,
+.classroom-lobby-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: space-between !important;
+  gap: 0.9rem !important;
+  padding: 1.25rem 1.35rem !important;
+  min-height: 152px !important;
+  border-radius: 1.5rem !important;
+  background: linear-gradient(166deg, rgba(244, 233, 216, 0.99) 0%, rgba(228, 211, 187, 0.97) 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.40) !important;
+  box-shadow:
+    0 18px 38px -12px rgba(34, 22, 10, 0.24),
+    0 4px 10px -3px rgba(34, 22, 10, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Signature Inner Manuscript Hairline Border */
+.classroom-lobby-card::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 1.12rem;
+  border: 1px solid rgba(156, 120, 78, 0.20);
+  pointer-events: none;
+  z-index: 1;
+  transition: border-color 0.28s ease;
+}
+
+.classroom-lobby-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(180, 83, 9, 0.56) !important;
+  box-shadow:
+    0 24px 48px -12px rgba(34, 22, 10, 0.28),
+    0 8px 18px -4px rgba(180, 83, 9, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+.classroom-lobby-card:hover::before {
+  border-color: rgba(217, 119, 6, 0.36);
+}
+
+.classroom-lobby-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Top Section inside Classroom Card (Jewel Icon + Full Readable Title) */
+.classroom-lobby-card > div:first-child {
+  align-items: flex-start !important;
+  gap: 0.9rem !important;
+  width: 100% !important;
+}
+
+/* Jewel Golden Icon Tile */
+.classroom-lobby-card > div:first-child > div:first-child {
+  width: 3rem !important;
+  height: 3rem !important;
+  border-radius: 0.95rem !important;
+  background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 55%, #d97706 100%) !important;
+  border: 1px solid rgba(254, 243, 199, 0.65) !important;
+  color: #241206 !important;
+  font-size: 1.15rem !important;
+  box-shadow:
+    0 8px 16px -4px rgba(180, 83, 9, 0.34),
+    inset 0 1px 1px rgba(255, 255, 255, 0.72) !important;
+}
+
+.classroom-lobby-card > div:first-child > div:first-child i {
+  color: #241206 !important;
+}
+
+.classroom-lobby-card.is-live > div:first-child > div:first-child {
+  background: linear-gradient(145deg, #f43f5e 0%, #e11d48 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(254, 205, 211, 0.65) !important;
+}
+
+.classroom-lobby-card.is-live > div:first-child > div:first-child i {
+  color: #ffffff !important;
+}
+
+.classroom-lobby-card h3 {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  line-height: 1.45 !important;
+  color: #361c0c !important;
+  white-space: normal !important;
+  overflow: visible !important;
+}
+
+.classroom-lobby-card .text-amber-300,
+.classroom-lobby-card .text-amber-300\/80 {
+  color: #85430e !important;
+}
+
+.classroom-lobby-card .text-slate-400,
+.classroom-lobby-card .text-slate-400\/80 {
+  color: #54371f !important;
+}
+
+/* "سەرەکی" Pill inside Main Classroom Card */
+.classroom-lobby-card span.bg-amber-400\/20 {
+  background: rgba(134, 184, 156, 0.28) !important;
+  border: 1px solid rgba(61, 122, 89, 0.38) !important;
+  color: #1e5237 !important;
+  border-radius: 999px !important;
+  padding: 0.1rem 0.55rem !important;
+}
+
+/* Bottom Editorial Action Strip inside Classroom Card */
+.classroom-lobby-card > div:last-child {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 0.5rem !important;
+  padding-top: 0.72rem !important;
+  margin-top: auto !important;
+  border-top: 1px solid rgba(156, 120, 78, 0.22) !important;
+}
+
+/* Circular Antique Gold Enter Arrow matching Outer Landing Cards */
+.classroom-lobby-card > div:last-child > div:last-child {
+  width: 2rem !important;
+  height: 2rem !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.14) 100%) !important;
+  border: 1px solid rgba(180, 83, 9, 0.36) !important;
+  color: #78350f !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  margin-right: auto !important;
+}
+
+.classroom-lobby-card:hover > div:last-child > div:last-child {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 60%, #d97706 100%) !important;
+  border-color: rgba(180, 83, 9, 0.58) !important;
+  color: #2b1406 !important;
+  box-shadow: 0 4px 10px -2px rgba(180, 83, 9, 0.35) !important;
+}
+
+/* Admin Edit / Delete Mini Buttons on Classroom Card */
+.classroom-lobby-card button[onclick*="openCreateClassroomModal"],
+.classroom-lobby-card button[onclick*="deleteClassroom"] {
+  width: 1.9rem !important;
+  height: 1.9rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 0.6rem !important;
+  background: rgba(251, 247, 240, 0.88) !important;
+  border: 1px solid rgba(156, 120, 78, 0.28) !important;
+  color: #785336 !important;
+}
+
+.classroom-lobby-card button[onclick*="openCreateClassroomModal"]:hover {
+  background: rgba(245, 158, 11, 0.20) !important;
+  border-color: rgba(180, 83, 9, 0.45) !important;
+  color: #78350f !important;
+}
+
+.classroom-lobby-card button[onclick*="deleteClassroom"]:hover {
+  background: rgba(225, 29, 72, 0.12) !important;
+  border-color: rgba(225, 29, 72, 0.35) !important;
+  color: #be123c !important;
+}
+
+/* ==========================================================================
+   3. MEMBERS SIDEBAR (#membersSidebar & #classroomMembersSidebar)
+   ========================================================================== */
+#membersSidebar,
+#classroomMembersSidebar,
+body.light-theme #membersSidebar,
+body.light-mode #membersSidebar {
+  background: linear-gradient(180deg, rgba(243, 232, 215, 0.98) 0%, rgba(232, 217, 194, 0.98) 100%) !important;
+  border-color: rgba(156, 120, 78, 0.36) !important;
+  box-shadow: 4px 0 24px -10px rgba(42, 24, 10, 0.14) !important;
+}
+
+#membersSidebar > div:first-child,
+#classroomMembersSidebar > div:first-child {
+  background: rgba(238, 224, 204, 0.95) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.28) !important;
+  padding: 0.9rem 1rem !important;
+}
+
+#membersSidebar > div:first-child i.fa-users {
+  color: #b45309 !important;
+  font-size: 1rem !important;
+}
+
+#membersSidebar > div:first-child h3 {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: #361c0c !important;
+}
+
+#membersSidebarCount {
+  background: linear-gradient(145deg, #fdf6ec, #e6d5bd) !important;
+  border: 1px solid rgba(180, 83, 9, 0.32) !important;
+  color: #78350f !important;
+  font-weight: 800 !important;
+}
+
+/* Segmented Filter Tab Bar (Matching Auth Screen Tab Switcher) */
+#membersSidebar > div:nth-child(2) {
+  background: #e4d4bd !important;
+  border: 1px solid rgba(156, 120, 78, 0.30) !important;
+  border-radius: 0.95rem !important;
+  margin: 0.65rem 0.75rem 0.35rem 0.75rem !important;
+  padding: 0.25rem !important;
+  gap: 0.2rem !important;
+  box-shadow: inset 0 1px 3px rgba(54, 28, 12, 0.08) !important;
+}
+
+#membersSidebar #tabMemberAll,
+#membersSidebar #tabMemberStudents,
+#membersSidebar #tabMemberAdmins {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0.72rem !important;
+  color: #54371f !important;
+  padding: 0.42rem 0.5rem !important;
+  font-weight: 700 !important;
+  transition: all 0.2s ease !important;
+}
+
+#membersSidebar #tabMemberAll:hover,
+#membersSidebar #tabMemberStudents:hover,
+#membersSidebar #tabMemberAdmins:hover {
+  color: #361c0c !important;
+  background: rgba(255, 252, 245, 0.45) !important;
+}
+
+#membersSidebar #tabMemberAll.bg-indigo-600,
+#membersSidebar #tabMemberStudents.bg-indigo-600,
+#membersSidebar #tabMemberAdmins.bg-indigo-600 {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: 0 4px 10px -2px rgba(180, 83, 9, 0.36) !important;
+  font-weight: 800 !important;
+}
+
+/* Members Search Box Container */
+#membersSidebar > div:nth-child(3) {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.20) !important;
+  padding: 0.45rem 0.75rem 0.7rem 0.75rem !important;
+}
+
+#membersSearchInput {
+  background: #ffffff !important;
+  border: 1px solid rgba(156, 120, 78, 0.35) !important;
+  border-radius: 0.85rem !important;
+  color: #361c0c !important;
+  padding-top: 0.45rem !important;
+  padding-bottom: 0.45rem !important;
+  box-shadow: inset 0 1px 3px rgba(54, 28, 12, 0.05) !important;
+}
+
+#membersSearchInput:focus {
+  border-color: rgba(217, 119, 6, 0.85) !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.20) !important;
+}
+
+/* Individual Member Cards (#membersListContainer > div) */
+#membersListContainer > div {
+  background: linear-gradient(166deg, #fdfaf4 0%, #f4eadb 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.30) !important;
+  border-radius: 1.1rem !important;
+  padding: 0.72rem 0.8rem !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 4px 12px -4px rgba(42, 24, 10, 0.08) !important;
+  transition: all 0.22s ease !important;
+}
+
+#membersListContainer > div:hover {
+  border-color: rgba(180, 83, 9, 0.48) !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 8px 18px -6px rgba(42, 24, 10, 0.14) !important;
+}
+
+/* Member Avatar Frame (Luminous Sunlit Parchment + Gold Rim) */
+#membersListContainer > div .w-9.h-9.rounded-xl {
+  width: 2.55rem !important;
+  height: 2.55rem !important;
+  border-radius: 0.85rem !important;
+  background: linear-gradient(145deg, #fdf8f0 0%, #e7d7bf 100%) !important;
+  border: 1.5px solid rgba(180, 83, 9, 0.36) !important;
+  color: #78350f !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 3px 8px -2px rgba(42, 24, 10, 0.10) !important;
+}
+
+/* Info Button on Member Cards */
+#membersListContainer > div button[onclick*="openUserProfileModal"] {
+  background: rgba(180, 83, 9, 0.10) !important;
+  border: 1px solid rgba(180, 83, 9, 0.22) !important;
+  color: #85430e !important;
+  border-radius: 0.65rem !important;
+}
+
+#membersListContainer > div button[onclick*="openUserProfileModal"]:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  color: #2b1406 !important;
+  border-color: rgba(180, 83, 9, 0.45) !important;
+}
+
+/* Harmonized Role & Star Badges (Replacing Neon Blue & Neon Yellow) */
+.badge-student {
+  background: linear-gradient(135deg, #e2f0e7 0%, #cee5d7 100%) !important;
+  border: 1px solid rgba(61, 122, 89, 0.40) !important;
+  color: #1e5237 !important;
+  box-shadow: none !important;
+  border-radius: 999px !important;
+  padding: 0.15rem 0.6rem !important;
+}
+
+.badge-student-girl {
+  background: linear-gradient(135deg, #fbeae8 0%, #f5d8d5 100%) !important;
+  border: 1px solid rgba(190, 24, 93, 0.28) !important;
+  color: #881337 !important;
+  box-shadow: none !important;
+  border-radius: 999px !important;
+  padding: 0.15rem 0.6rem !important;
+}
+
+.badge-new-student,
+.badge-new-student-girl,
+.badge-guest {
+  background: linear-gradient(135deg, #f5ead9 0%, #e7d6be 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.38) !important;
+  color: #78350f !important;
+  box-shadow: none !important;
+  border-radius: 999px !important;
+  padding: 0.15rem 0.6rem !important;
+}
+
+.role-text-teacher {
+  color: #92400e !important;
+}
+
+.role-text-admin {
+  color: #2d6245 !important;
+}
+
+.star-badge {
+  background: linear-gradient(145deg, #fdf4e0 0%, #f3e0b8 100%) !important;
+  border: 1px solid rgba(180, 83, 9, 0.34) !important;
+  color: #78350f !important;
+  border-radius: 999px !important;
+  padding: 0.14rem 0.55rem !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+}
+
+/* ==========================================================================
+   4. CLASSROOM CHAT STAGE (#classroomChatStage & #messagesContainer)
+   ========================================================================== */
+#classroomChatStage,
+#messagesContainer,
+#chatMessagesArea {
+  background-color: #86b89c !important;
+  background-image:
+    linear-gradient(to right, rgba(34, 66, 48, 0.038) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 66, 48, 0.038) 1px, transparent 1px),
+    radial-gradient(ellipse 85% 55% at 50% 0%, rgba(255, 252, 240, 0.09) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 70% at 50% 100%, rgba(28, 56, 40, 0.14) 0%, transparent 60%) !important;
+  background-size: 42px 42px, 42px 42px, 100% 100%, 100% 100% !important;
+}
+
+/* Top Podium Ribbon inside Classroom Chat */
+#topPodiumWidget {
+  background: linear-gradient(180deg, rgba(243, 232, 215, 0.97) 0%, rgba(233, 219, 197, 0.96) 100%) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.34) !important;
+  box-shadow: 0 6px 16px -8px rgba(42, 24, 10, 0.14) !important;
+}
+
+#togglePodiumBtn {
+  background: linear-gradient(145deg, #fdf4e0 0%, #f1ddb5 100%) !important;
+  border: 1px solid rgba(180, 83, 9, 0.36) !important;
+  color: #78350f !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+}
+
+#togglePodiumBtn:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  color: #2b1406 !important;
+}
+
+#togglePodiumBtn i {
+  color: #b45309 !important;
+}
+
+#topPodiumWidget button[onclick="openLeaderboardModal()"] {
+  color: #85430e !important;
+  background: rgba(251, 247, 240, 0.8) !important;
+  border: 1px solid rgba(156, 120, 78, 0.28) !important;
+}
+
+#topPodiumWidget button[onclick="openLeaderboardModal()"]:hover {
+  background: rgba(245, 158, 11, 0.20) !important;
+  color: #361c0c !important;
+}
+
+/* Slide-Down Chat Search Bar */
+#chatSearchBar {
+  background: linear-gradient(180deg, rgba(244, 233, 216, 0.98) 0%, rgba(233, 218, 196, 0.97) 100%) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.36) !important;
+  box-shadow: 0 8px 20px -8px rgba(42, 24, 10, 0.16) !important;
+}
+
+#chatSearchInput {
+  background: #ffffff !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  color: #361c0c !important;
+}
+
+#chatSearchResultsDropdown {
+  background: #fbf7f0 !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  color: #361c0c !important;
+}
+
+/* Chat Lock Banner (Warm Heritage Rose Parchment) */
+#chatLockBanner {
+  background: linear-gradient(90deg, #fdf2f2 0%, #fae4e4 100%) !important;
+  border-top: 1px solid rgba(190, 18, 60, 0.32) !important;
+  color: #9f1239 !important;
+}
+
+/* Own Chat Bubbles (Warm Royal Amber replacing cold Indigo) */
+[id^="msg-bubble-"].from-indigo-600,
+.chat-msg-item [id^="msg-bubble-"].bg-gradient-to-r.from-indigo-600 {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+  border: 1px solid rgba(254, 243, 199, 0.38) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 20px -6px rgba(146, 64, 14, 0.36) !important;
+}
+
+[id^="msg-bubble-"].from-indigo-600 *,
+.chat-msg-item [id^="msg-bubble-"].bg-gradient-to-r.from-indigo-600 * {
+  color: #ffffff !important;
+}
+
+/* Others' & Teacher Chat Bubbles */
+.chat-msg-item [id^="msg-bubble-"]:not(.from-indigo-600) {
+  background: linear-gradient(166deg, #fdfaf4 0%, #f4eadb 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.34) !important;
+  color: #361c0c !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 8px 20px -8px rgba(34, 22, 10, 0.16) !important;
+}
+
+/* Double-Hairline Heritage Frame on Rich Feed Cards inside Chat */
+div.poll-card,
+div[id^="poll-card-"],
+div.alarm-card,
+div[id^="alarm-card-"],
+.question-glow,
+.revealed-answers-card,
+.attendance-card {
+  position: relative !important;
+  border-radius: 1.5rem !important;
+  background: linear-gradient(166deg, rgba(244, 233, 216, 0.99) 0%, rgba(229, 212, 188, 0.97) 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.40) !important;
+  box-shadow:
+    0 18px 40px -12px rgba(34, 22, 10, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
+}
+
+div.poll-card::before,
+div[id^="poll-card-"]::before,
+div.alarm-card::before,
+div[id^="alarm-card-"]::before,
+.question-glow::before,
+.revealed-answers-card::before,
+.attendance-card::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 1.15rem;
+  border: 1px solid rgba(156, 120, 78, 0.18);
+  pointer-events: none;
+  z-index: 1;
+}
+
+div.poll-card > *,
+div[id^="poll-card-"] > *,
+div.alarm-card > *,
+div[id^="alarm-card-"] > *,
+.question-glow > *,
+.revealed-answers-card > *,
+.attendance-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Chat Input Dock & Floating Tools Menu */
+#chatInputBar {
+  background: rgba(238, 224, 204, 0.97) !important;
+  border-top: 1px solid rgba(156, 120, 78, 0.34) !important;
+  box-shadow: 0 -8px 24px -10px rgba(42, 24, 10, 0.14) !important;
+}
+
+#chatInputBar #messageInput {
+  background: #ffffff !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  color: #361c0c !important;
+  box-shadow: inset 0 1px 3px rgba(54, 28, 12, 0.05) !important;
+}
+
+#chatInputBar #messageInput:focus {
+  border-color: rgba(217, 119, 6, 0.85) !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18) !important;
+}
+
+#chatInputBar #sendBtn {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 55%, #d97706 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(254, 243, 199, 0.55) !important;
+  box-shadow: 0 6px 16px -3px rgba(180, 83, 9, 0.38) !important;
+}
+
+#chatInputBar #sendBtn i {
+  color: #ffffff !important;
+}
+
+#chatInputBar #publicChatToolsBtn {
+  background: linear-gradient(145deg, #fdfaf4, #e7d6be) !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  color: #85430e !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+}
+
+#publicChatToolsMenu,
+#customGroupToolsMenu {
+  background: linear-gradient(170deg, #faf3e8 0%, #eee0cb 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.42) !important;
+  box-shadow:
+    0 20px 44px -10px rgba(34, 22, 10, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+#publicChatToolsMenu button,
+#customGroupToolsMenu button {
+  color: #361c0c !important;
+}
+
+#publicChatToolsMenu button:hover,
+#customGroupToolsMenu button:hover {
+  background: rgba(245, 158, 11, 0.15) !important;
+  color: #2b1406 !important;
+}
+
+#publicChatToolsMenu button > div:first-child,
+#customGroupToolsMenu button > div:first-child {
+  background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 60%, #d97706 100%) !important;
+  border: 1px solid rgba(254, 243, 199, 0.65) !important;
+  color: #241206 !important;
+}
+
+#publicChatToolsMenu button > div:first-child i,
+#customGroupToolsMenu button > div:first-child i {
+  color: #241206 !important;
+}
+
+/* ==========================================================================
+   5. MAIN MENU DRAWER (#mainMenuDrawerPanel) — ILLUMINATED NAVIGATION FOLIO
+   ========================================================================== */
+#mainMenuDrawerPanel {
+  background: linear-gradient(175deg, #f5ead9 0%, #ead8be 100%) !important;
+  border-left: 1.5px solid rgba(156, 120, 78, 0.42) !important;
+  box-shadow: -16px 0 44px rgba(34, 22, 10, 0.24) !important;
+}
+
+#mainMenuDrawerPanel > div:first-child {
+  border-bottom: 1px solid rgba(156, 120, 78, 0.28) !important;
+}
+
+#mainMenuDrawerPanel > div:first-child h3 {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: 1.25rem !important;
+  color: #361c0c !important;
+}
+
+#drawerGeneralHeader,
+#drawerStaffHeader {
+  color: #78350f !important;
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: 0.95rem !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.20) !important;
+  padding-bottom: 0.35rem !important;
+}
+
+#mainMenuDrawerPanel div[onclick*="openMyProfile"] {
+  background: linear-gradient(166deg, #fdfaf4 0%, #f2e5d1 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 8px 20px -8px rgba(42, 24, 10, 0.14) !important;
+}
+
+/* All Drawer Tool Tiles (Explicitly overriding dark !from-*-950/40 Tailwind rules) */
+#mainMenuDrawerPanel .drawer-tool-btn,
+#mainMenuDrawerPanel #drawerDreamAdminBtn,
+#mainMenuDrawerPanel #drawerDreamPostsManageBtn,
+#mainMenuDrawerPanel #drawerAzadAddPoemBtn,
+#mainMenuDrawerPanel #drawerArticlesAdminBtn {
+  background: linear-gradient(166deg, #fdfaf4 0%, #f3e8d7 100%) !important;
+  background-image: linear-gradient(166deg, #fdfaf4 0%, #f3e8d7 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.32) !important;
+  border-radius: 1.15rem !important;
+  color: #361c0c !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 5px 14px -4px rgba(42, 24, 10, 0.10) !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#mainMenuDrawerPanel .drawer-tool-btn:hover,
+#mainMenuDrawerPanel #drawerDreamAdminBtn:hover,
+#mainMenuDrawerPanel #drawerDreamPostsManageBtn:hover,
+#mainMenuDrawerPanel #drawerAzadAddPoemBtn:hover,
+#mainMenuDrawerPanel #drawerArticlesAdminBtn:hover {
+  transform: translateX(-3px) !important;
+  border-color: rgba(180, 83, 9, 0.52) !important;
+  background: linear-gradient(166deg, #ffffff 0%, #f6ebda 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 10px 22px -6px rgba(42, 24, 10, 0.16) !important;
+}
+
+#mainMenuDrawerPanel .drawer-tool-icon-box {
+  background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 55%, #d97706 100%) !important;
+  border: 1px solid rgba(254, 243, 199, 0.65) !important;
+  color: #241206 !important;
+  box-shadow:
+    0 6px 14px -3px rgba(180, 83, 9, 0.32),
+    inset 0 1px 1px rgba(255, 255, 255, 0.72) !important;
+}
+
+#mainMenuDrawerPanel .drawer-tool-icon-box i {
+  color: #241206 !important;
+}
+
+#mainMenuDrawerPanel .drawer-tool-title {
+  color: #361c0c !important;
+  font-weight: 800 !important;
+}
+
+#drawerSettingsSection,
+#drawerSettingsList {
+  background: rgba(247, 239, 227, 0.85) !important;
+  border-color: rgba(156, 120, 78, 0.28) !important;
+}
+
+/* Harmonized Heritage Logout Button inside Drawer */
+#mainMenuDrawerPanel button[onclick*="handleLogout"] {
+  background: linear-gradient(145deg, #fdf2f2 0%, #f7dcdc 100%) !important;
+  border: 1px solid rgba(190, 18, 60, 0.34) !important;
+  color: #9f1239 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 4px 12px -4px rgba(159, 18, 57, 0.14) !important;
+}
+
+#mainMenuDrawerPanel button[onclick*="handleLogout"]:hover {
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
+  border-color: rgba(159, 18, 57, 0.6) !important;
+  color: #ffffff !important;
+}
+
+#mainMenuDrawerPanel button[onclick*="handleLogout"]:hover * {
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   6. ALL INSIDE MODALS — MANUSCRIPT LUXE SHELLS, HEADERS, TABS & SUB-PANELS
+   ========================================================================== */
+div[id$="Modal"]:not(#authScreen) {
+  background: rgba(32, 58, 44, 0.62) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+div[id$="Modal"]:not(#authScreen):not(#imageZoomModal):not(#logoPopupModal) > div:not(.absolute.inset-0) {
+  background: linear-gradient(166deg, rgba(244, 233, 216, 0.99) 0%, rgba(231, 216, 194, 0.98) 100%) !important;
+  border: 1.5px solid rgba(156, 120, 78, 0.44) !important;
+  box-shadow:
+    0 28px 64px -16px rgba(34, 22, 10, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+  color: #361c0c !important;
+}
+
+/* Sweep ALL remaining dark modal headers & gradient ribbons across every modal */
+div[id$="Modal"] :is(
+  [class*="from-purple-950"],
+  [class*="from-rose-950"],
+  [class*="from-amber-950"],
+  [class*="from-cyan-950"],
+  [class*="from-sky-950"],
+  [class*="from-teal-950"],
+  [class*="from-indigo-950"],
+  [class*="from-slate-9"],
+  [class*="via-slate-9"],
+  [class*="via-indigo-950"],
+  [class*="via-amber-950"],
+  [class*="via-rose-950"],
+  [class*="via-teal-950"],
+  [class*="bg-purple-950"],
+  [class*="bg-sky-950"],
+  [class*="bg-rose-950"],
+  [class*="bg-cyan-950"]
+):not(.fixed.inset-0):not(video):not([class*="bg-rose-6"]):not([class*="bg-emerald-6"]) {
+  background-color: #efe2ce !important;
+  background-image: linear-gradient(166deg, #f8f0e3 0%, #ebdcc5 100%) !important;
+  border-color: rgba(156, 120, 78, 0.32) !important;
+  color: #361c0c !important;
+}
+
+/* Calligraphic Amiri Titles in All Modal Headers */
+div[id$="Modal"] h2,
+div[id$="Modal"] h3 {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  color: #361c0c !important;
+}
+
+/* Refined Close (×) Buttons across Inside Modals */
+div[id$="Modal"] button[onclick*="close"]:not([class*="from-amber-"]):not([class*="from-emerald-"]):not([class*="from-rose-"]) {
+  background: rgba(251, 247, 240, 0.90) !important;
+  border: 1px solid rgba(156, 120, 78, 0.34) !important;
+  color: #785336 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
+}
+
+div[id$="Modal"] button[onclick*="close"]:not([class*="from-amber-"]):not([class*="from-emerald-"]):not([class*="from-rose-"]):hover {
+  background: rgba(225, 29, 72, 0.14) !important;
+  border-color: rgba(225, 29, 72, 0.38) !important;
+  color: #be123c !important;
+}
+
+/* Modal Inputs, Textareas & Selects: Crisp Ivory + Gold Focus Halo */
+div[id$="Modal"] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]),
+div[id$="Modal"] textarea,
+div[id$="Modal"] select {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  color: #361c0c !important;
+  box-shadow: inset 0 1px 3px rgba(54, 28, 12, 0.05) !important;
+}
+
+div[id$="Modal"] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]):focus,
+div[id$="Modal"] textarea:focus,
+div[id$="Modal"] select:focus {
+  outline: none !important;
+  border-color: rgba(217, 119, 6, 0.85) !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.20) !important;
+}
+
+/* --- 6A. ADMIN CONTROL PANEL (#adminModal) --- */
+.admin-subtab-tile,
+#adminModal .admin-subtab-tile {
+  background: linear-gradient(166deg, #fdfaf4 0%, #f2e5d1 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.34) !important;
+  color: #54371f !important;
+  border-radius: 1rem !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 4px 10px -4px rgba(42, 24, 10, 0.10) !important;
+  transition: all 0.22s ease !important;
+}
+
+.admin-subtab-tile:hover,
+#adminModal .admin-subtab-tile:hover {
+  background: linear-gradient(166deg, #ffffff 0%, #f5ead9 100%) !important;
+  border-color: rgba(180, 83, 9, 0.52) !important;
+  color: #361c0c !important;
+  transform: translateY(-2px) !important;
+}
+
+.admin-subtab-tile.active,
+#adminModal .admin-subtab-tile.active {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  border: 1.5px solid rgba(180, 83, 9, 0.65) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.65),
+    0 8px 18px -4px rgba(180, 83, 9, 0.40) !important;
+}
+
+.admin-subtab-tile.active *,
+.admin-subtab-tile.active .admin-tile-label,
+.admin-subtab-tile.active i {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.admin-subtab-tile.active .admin-subtab-icon-box {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+
+#pendingUsersList > div,
+#allUsersList > div,
+#profileChangesList > div,
+#passwordResetsList > div,
+#adminBackupsList > div {
+  background: linear-gradient(166deg, #fdfaf4 0%, #f3e8d7 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.32) !important;
+  border-radius: 1.15rem !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 5px 14px -5px rgba(42, 24, 10, 0.10) !important;
+}
+
+/* --- 6B. USER PROFILE MODAL (#userProfileModal) --- */
+#profRegularStatsGrid > div,
+#profStarsBox,
+#profPublishDreamPostContainer,
+#profPublishPoemContainer,
+#profStarsAdjustContainer,
+#profSpecialBadgeAdminCard,
+#profBadgesOverviewCard,
+#profCoursesViewCard,
+#profCoursesEditCard,
+#profNotificationContainer {
+  background: linear-gradient(166deg, #fdfaf4 0%, #f3e8d7 100%) !important;
+  background-image: linear-gradient(166deg, #fdfaf4 0%, #f3e8d7 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.34) !important;
+  border-radius: 1.25rem !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 6px 16px -6px rgba(42, 24, 10, 0.10) !important;
+}
+
+#badgeBtnBlue,
+#badgeBtnRed,
+#badgeBtnPurple {
+  background: linear-gradient(166deg, #fdfaf4 0%, #f2e4ce 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.34) !important;
+  color: #361c0c !important;
+}
+
+#badgeBtnBlue:hover,
+#badgeBtnRed:hover,
+#badgeBtnPurple:hover {
+  border-color: rgba(180, 83, 9, 0.55) !important;
+  background: #ffffff !important;
+}
+
+/* --- 6C. DIGITAL LIBRARY (#libraryModal) & RECORDED LESSONS (#recordedLessonsModal) --- */
+#libraryModal #libViewGridBtn,
+#libraryModal #libViewListBtn {
+  border-radius: 0.7rem !important;
+}
+
+#libraryModal .bg-teal-600 {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(180, 83, 9, 0.5) !important;
+}
+
+#libraryModal .library-book-card,
+#recordedLessonsModal .lesson-card,
+#recordedLessonsModal .folder-card,
+#leaderboardList > div,
+#questionsArchiveList > div {
+  background: linear-gradient(166deg, #fdfaf4 0%, #f3e8d7 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.32) !important;
+  border-radius: 1.2rem !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+    0 6px 16px -6px rgba(42, 24, 10, 0.12) !important;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease !important;
+}
+
+#libraryModal .library-book-card:hover,
+#recordedLessonsModal .lesson-card:hover,
+#recordedLessonsModal .folder-card:hover,
+#leaderboardList > div:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(180, 83, 9, 0.52) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 12px 24px -8px rgba(42, 24, 10, 0.16) !important;
+}
+
+/* --- 6D. LIVE LESSON ROOM (#liveLessonModal) --- */
+#liveLessonModal #liveParticipantsList,
+#liveLessonModal .flex-1.bg-slate-950\/95 {
+  background-color: #86b89c !important;
+  background-image:
+    linear-gradient(to right, rgba(34, 66, 48, 0.036) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 66, 48, 0.036) 1px, transparent 1px) !important;
+  background-size: 42px 42px !important;
+}
+
+#liveLessonModal .live-action-dock {
+  background: linear-gradient(166deg, #faf3e8 0%, #eadac3 100%) !important;
+  border: 1.5px solid rgba(156, 120, 78, 0.42) !important;
+  box-shadow:
+    0 14px 32px -8px rgba(34, 22, 10, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+/* --- 6E. SPLIT-PANEL CHATS (#dreamAdminModal, #privateChatModal, #customGroupChatModal, #aiAdvisorModal) --- */
+#customGroupMessagesContainer,
+#privateChatMessagesContainer,
+#dreamAdminMessagesContainer,
+#aiAdvisorMessagesContainer {
+  background: linear-gradient(180deg, #faf4ea 0%, #f2e7d6 100%) !important;
+}
+
+#dreamAdminSessionsSidebar,
+#dreamSubmissionsSidebar {
+  background: linear-gradient(180deg, #f3e8d7 0%, #e7d6be 100%) !important;
+  border-color: rgba(156, 120, 78, 0.34) !important;
+}
+
+#dreamSessionsList > div.bg-purple-950\/70,
+#dreamSessionsList > div.ring-1 {
+  background: linear-gradient(145deg, #fef5df 0%, #f5dfb2 100%) !important;
+  border: 1.5px solid rgba(217, 119, 6, 0.62) !important;
+  box-shadow: 0 6px 16px -4px rgba(180, 83, 9, 0.18) !important;
+}
+
+#customGroupVoiceRecordSection,
+#dreamAdminVoiceBar {
+  background: linear-gradient(90deg, #fdf2f2 0%, #fae4e4 100%) !important;
+  border-top: 1px solid rgba(190, 18, 60, 0.32) !important;
+  color: #9f1239 !important;
+}
+
+#customGroupAdvisorTyping {
+  background: linear-gradient(90deg, #eef6f1 0%, #e1efe6 100%) !important;
+  border-top: 1px solid rgba(61, 122, 89, 0.34) !important;
+  color: #1e5237 !important;
+}
+
+/* --- 6F. EXECUTIVE HUB, COMPLAINTS, ACTIVITY DB & AI SECURITY --- */
+#executiveHubModal .bg-slate-800,
+#executiveHubModal .bg-slate-800\/50,
+#executiveHubModal .bg-slate-900\/80,
+#complaintsModal .bg-slate-800\/60,
+#activityDatabaseModal .bg-slate-800\/60 {
+  background: linear-gradient(166deg, #fdfaf4 0%, #f3e8d7 100%) !important;
+  border-color: rgba(156, 120, 78, 0.32) !important;
+  color: #361c0c !important;
+}
+
+/* ==========================================================================
+   7. MOBILE RESPONSIVE PROTECTION (<= 640px)
+   ========================================================================== */
+@media (max-width: 640px) {
+  #classroomsLobbyView .classroom-lobby-card,
+  .classroom-lobby-card {
+    padding: 1rem 1.05rem !important;
+    min-height: 132px !important;
+    border-radius: 1.3rem !important;
+  }
+
+  .classroom-lobby-card > div:first-child > div:first-child {
+    width: 2.55rem !important;
+    height: 2.55rem !important;
+    font-size: 1rem !important;
+  }
+
+  .classroom-lobby-card h3 {
+    font-size: 1.05rem !important;
+  }
+
+  /* Keep Compact Mobile Icon Rail cleanly centered (matching style.css:12771) */
+  #mainMenuDrawerPanel .drawer-tool-btn,
+  #mainMenuDrawerPanel #drawerDreamAdminBtn,
+  #mainMenuDrawerPanel #drawerDreamPostsManageBtn,
+  #mainMenuDrawerPanel #drawerAzadAddPoemBtn,
+  #mainMenuDrawerPanel #drawerArticlesAdminBtn {
+    border-radius: 1rem !important;
+  }
+
+  #mainMenuDrawerPanel .drawer-tool-btn:hover,
+  #mainMenuDrawerPanel #drawerDreamAdminBtn:hover,
+  #mainMenuDrawerPanel #drawerDreamPostsManageBtn:hover,
+  #mainMenuDrawerPanel #drawerAzadAddPoemBtn:hover,
+  #mainMenuDrawerPanel #drawerArticlesAdminBtn:hover {
+    transform: none !important;
+  }
+}

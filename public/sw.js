@@ -1,50 +1,122 @@
 /**
- * Service Worker for پریاسکەی عەبدی (PWA & Android App Support)
+ * Service Worker for پریاسکەی عەبدی (PWA, Offline Fallback & Background Push Notifications)
  */
 
-const CACHE_NAME = 'pryaska-cache-v1';
+const CACHE_NAME = 'pryaska-cache-v2';
 const STATIC_ASSETS = [
   '/',
+  '/offline.html',
   '/manifest.json',
-  '/images/logo.png',
+  '/css/tailwind.built.css',
+  '/css/style.css',
+  '/css/landing-heritage-test.css',
+  '/css/app-heritage.css',
+  '/css/dreams-heritage.css',
+  '/js/global-search.js',
+  '/js/post-comments.js',
+  '/images/logo.jpg',
+  '/images/avatar_male.svg?v=3.0',
+  '/images/avatar_female.svg?v=3.0',
   '/images/icon-192.png',
   '/images/icon-512.png',
-  '/favicon.ico'
+  '/favicon.png'
 ];
 
-// Install: pre-cache minimal shell
+// Install: pre-cache app shell + offline folio
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS).catch(() => {});
-    }).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then((cache) => Promise.allSettled(STATIC_ASSETS.map((url) => cache.add(url))))
+      .then(() => self.skipWaiting())
   );
 });
 
-// Activate: cleanup old caches
+// Activate: clean up stale cache versions
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-      );
-    }).then(() => self.clients.claim())
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch: network-first strategy for dynamic content, cache fallback for assets
+// Background Web Push Notifications (VAPID)
+self.addEventListener('push', (event) => {
+  let payload = {
+    title: 'پریاسکەی عەبدی',
+    body: 'ئاگادارییەکی نوێت بۆ هاتووە',
+    icon: '/images/logo.jpg',
+    badge: '/favicon.png',
+    tag: 'pryaska-notif',
+    data: { url: '/' }
+  };
+
+  if (event.data) {
+    try {
+      const parsed = event.data.json();
+      payload = { ...payload, ...parsed };
+    } catch (e) {
+      payload.body = event.data.text() || payload.body;
+    }
+  }
+
+  const options = {
+    body: payload.body || '',
+    icon: payload.icon || '/images/logo.jpg',
+    badge: payload.badge || '/favicon.png',
+    tag: payload.tag || 'pryaska-notif',
+    dir: 'rtl',
+    lang: 'ckb',
+    renotify: true,
+    vibrate: [140, 60, 140],
+    data: payload.data || { url: '/' }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(payload.title || 'پریاسکەی عەبدی', options)
+  );
+});
+
+// Clicking a notification focuses or opens the exact target URL
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = (event.notification.data && event.notification.data.url) || '/';
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if ('focus' in client) {
+          client.focus();
+          if (targetUrl && targetUrl !== '/' && 'navigate' in client) {
+            return client.navigate(targetUrl).catch(() => client);
+          }
+          return client;
+        }
+      }
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(targetUrl);
+      }
+    })
+  );
+});
+
+// Fetch: network-first for dynamic pages & assets, offline.html fallback for navigations
 self.addEventListener('fetch', (event) => {
   const req = event.request;
-  
-  // Skip non-GET and API or Socket.io requests
-  if (req.method !== 'GET' || req.url.includes('/socket.io/') || req.url.includes('/api/')) {
+
+  // Skip non-GET, API calls, Socket.IO, and Range media requests
+  if (
+    req.method !== 'GET' ||
+    req.headers.has('range') ||
+    req.url.includes('/socket.io/') ||
+    req.url.includes('/api/')
+  ) {
     return;
   }
 
   event.respondWith(
     fetch(req)
       .then((networkRes) => {
-        // Cache successful basic responses for static assets
         if (networkRes && networkRes.status === 200 && networkRes.type === 'basic') {
           const resClone = networkRes.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -53,16 +125,16 @@ self.addEventListener('fetch', (event) => {
         }
         return networkRes;
       })
-      .catch(() => {
-        // Offline fallback from cache
-        return caches.match(req).then((cachedRes) => {
-          if (cachedRes) return cachedRes;
-          // Fallback to home page if navigating
-          if (req.mode === 'navigate') {
-            return caches.match('/');
-          }
-          return new Response('Off-line', { status: 503, statusText: 'Offline' });
-        });
+      .catch(async () => {
+        const cached = await caches.match(req);
+        if (cached) return cached;
+        if (req.mode === 'navigate') {
+          const offlinePage = await caches.match('/offline.html');
+          if (offlinePage) return offlinePage;
+          const home = await caches.match('/');
+          if (home) return home;
+        }
+        return new Response('Offline', { status: 503, statusText: 'Offline' });
       })
   );
 });

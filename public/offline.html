@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#86b89c">
+  <title>بێ ئینتەرنێت | پریاسکەی عەبدی</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      font-family: 'Noto Naskh Arabic', 'Amiri', 'Segoe UI', Tahoma, serif;
+      background-color: #86b89c;
+      background-image:
+        linear-gradient(to right, rgba(34, 66, 48, 0.045) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(34, 66, 48, 0.045) 1px, transparent 1px),
+        radial-gradient(ellipse 85% 55% at 50% 10%, rgba(255, 252, 240, 0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 100% 70% at 50% 100%, rgba(28, 56, 40, 0.18) 0%, transparent 60%);
+      background-size: 42px 42px, 42px 42px, 100% 100%, 100% 100%;
+      color: #361c0c;
+    }
+    .folio {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      padding: 2.25rem 1.85rem;
+      border-radius: 1.75rem;
+      background: linear-gradient(166deg, rgba(244, 233, 216, 0.99) 0%, rgba(228, 211, 187, 0.98) 100%);
+      border: 1.5px solid rgba(156, 120, 78, 0.44);
+      box-shadow:
+        0 26px 56px -14px rgba(34, 22, 10, 0.30),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
+      text-align: center;
+    }
+    .folio::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 1.25rem;
+      border: 1px solid rgba(156, 120, 78, 0.22);
+      pointer-events: none;
+    }
+    .inner { position: relative; z-index: 2; }
+    .jewel {
+      width: 4rem;
+      height: 4rem;
+      margin: 0 auto 1.15rem;
+      border-radius: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 55%, #d97706 100%);
+      border: 1px solid rgba(254, 243, 199, 0.72);
+      box-shadow: 0 10px 22px -4px rgba(180, 83, 9, 0.38), inset 0 1px 1px rgba(255, 255, 255, 0.78);
+      font-size: 1.65rem;
+    }
+    h1 {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: #361c0c;
+      margin-bottom: 0.4rem;
+    }
+    .divider {
+      width: 5rem;
+      height: 2px;
+      margin: 0.65rem auto 1rem;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(180, 83, 9, 0.5), rgba(217, 119, 6, 0.95), rgba(180, 83, 9, 0.5), transparent);
+    }
+    p {
+      font-size: 0.96rem;
+      line-height: 1.85;
+      color: #54371f;
+      margin-bottom: 1.5rem;
+    }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 0.8rem 1.2rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(180, 83, 9, 0.52);
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 55%, #d97706 100%);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.98rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px -4px rgba(180, 83, 9, 0.40), inset 0 1px 0 rgba(255, 250, 230, 0.65);
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.04); }
+    .btn-secondary {
+      display: inline-block;
+      width: 100%;
+      padding: 0.72rem 1rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(156, 120, 78, 0.36);
+      background: rgba(251, 247, 240, 0.92);
+      color: #54371f;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .btn-secondary:hover { background: #ffffff; color: #361c0c; }
+  </style>
+</head>
+<body>
+  <main class="folio">
+    <div class="inner">
+      <div class="jewel" aria-hidden="true">📡</div>
+      <h1>پەیوەندی ئینتەرنێت پچڕاوە</h1>
+      <div class="divider"></div>
+      <p>
+        ئێستا ئامێرەکەت بە ئینتەرنێتەوە نەبەستراوەتەوە. تکایە دڵنیابە لە پەیوەندییەکەت و دووبارە هەوڵ بدەوە بۆ گەڕانەوە بۆ پێگەی <strong>پریاسکەی عەبدی</strong>.
+      </p>
+      <div class="actions">
+        <button type="button" class="btn-primary" onclick="window.location.reload()">دووبارە هەوڵبدەوە ↻</button>
+        <a href="/" class="btn-secondary">گەڕانەوە بۆ پەڕەی سەرەکی</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

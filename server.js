@@ -1,4 +1,13 @@
+try { require('dotenv').config(); } catch (e) {}
 const express = require('express');
+const crypto = require('crypto');
+const { createBackupManager } = require('./lib/backup');
+const { createSearchEngine } = require('./lib/search');
+const { securityHeaders, createCorsOptions, authLimiter, publicWriteLimiter, apiGeneralLimiter } = require('./middleware/security');
+const { createUploadMiddleware } = require('./middleware/uploads');
+const { validateRegistrationPayload } = require('./lib/registration');
+const { registerPublicPlatformRoutes } = require('./routes/publicContent');
+const { registerPublicCommentsRoutes } = require('./routes/publicComments');
 let compression;
 try { compression = require('compression'); } catch(e) {}
 const http = require('http');
@@ -13,9 +22,17 @@ let archiver;
 try { archiver = require('archiver'); } catch (e) {}
 let DatabaseSync;
 try { DatabaseSync = require('node:sqlite').DatabaseSync; } catch (e) {}
-const { db, classrooms, initDb, users, poemsDb, articlesDb, messages, questions, library, dreamSessions, dreamMessages, settings, passwordResets, privateMessages, messageReactions, profileChangeRequests, pushSubscriptions, calculateStars, liveRecordings, recordedLessons, lessonTeachers, lessonFolders, lessonProgress, getDreamTeacherAlias, aiSecurity, advisorDb, buttonClicks, customGroups, pollsDb, alarmsDb, complaints, attendanceDb, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, getDreamPosts, reactToDreamPost, createDreamPost, deleteDreamPost, updateDreamPost } = require('./db');
+const { db, dbPath, classrooms, initDb, users, poemsDb, articlesDb, messages, questions, library, dreamSessions, dreamMessages, settings, passwordResets, privateMessages, messageReactions, profileChangeRequests, pushSubscriptions, calculateStars, liveRecordings, recordedLessons, lessonTeachers, lessonFolders, lessonProgress, getDreamTeacherAlias, aiSecurity, advisorDb, buttonClicks, customGroups, pollsDb, alarmsDb, complaints, attendanceDb, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, getDreamPosts, reactToDreamPost, createDreamPost, deleteDreamPost, updateDreamPost } = require('./db');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'seereen_group_chat_super_secret_key_2026';
+const DEFAULT_DEV_JWT = 'seereen_group_chat_super_secret_key_2026';
+if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || process.env.JWT_SECRET === DEFAULT_DEV_JWT)) {
+  console.error('❌ FATAL: Set a strong JWT_SECRET in .env before running in production!');
+  process.exit(1);
+}
+if (!process.env.JWT_SECRET) {
+  console.warn('⚠️ [Security Notice] JWT_SECRET not set in .env — using local development key. Run "npm run generate-secret" for production.');
+}
+const JWT_SECRET = process.env.JWT_SECRET || DEFAULT_DEV_JWT;
 const PORT = process.env.PORT || 7000;
 
 process.on('uncaughtException', (err) => {
@@ -28,6 +45,15 @@ process.on('unhandledRejection', (reason) => {
 // Initialize Database
 initDb();
 try { questions.renumberQuestions(); } catch (e) {}
+const searchEngine = createSearchEngine(db);
+searchEngine.initSearchIndex();
+let _searchRebuildTimer = null;
+function scheduleSearchReindex() {
+  if (_searchRebuildTimer) clearTimeout(_searchRebuildTimer);
+  _searchRebuildTimer = setTimeout(() => {
+    try { searchEngine.rebuildSearchIndex(); } catch (e) {}
+  }, 300);
+}
 
 // Web Push Notification Setup (VAPID)
 let webpush;
@@ -44,7 +70,7 @@ if (webpush) {
       fs.writeFileSync(vapidPath, JSON.stringify(vapidKeys, null, 2), 'utf8');
     }
     webpush.setVapidDetails(
-      'mailto:support@seereen.duckdns.org',
+      'mailto:admin@localhost',
       vapidKeys.publicKey,
       vapidKeys.privateKey
     );
@@ -60,7 +86,7 @@ async function sendPushNotificationToAll(payload, excludeUserId = null) {
     if (!subs || subs.length === 0) return;
 
     const payloadStr = JSON.stringify({
-      title: payload.title || 'ستافی سیرین 🌸',
+      title: payload.title || 'پریاسکەی عەبدی',
       body: payload.body || '',
       icon: payload.icon || '/images/logo.jpg',
       badge: payload.badge || '/images/logo.jpg',
@@ -96,7 +122,7 @@ async function sendPushNotificationToUser(userId, payload) {
     if (!subs || subs.length === 0) return;
 
     const payloadStr = JSON.stringify({
-      title: payload.title || 'ستافی سیرین 🌸',
+      title: payload.title || 'پریاسکەی عەبدی',
       body: payload.body || '',
       icon: payload.icon || '/images/logo.jpg',
       badge: payload.badge || '/images/logo.jpg',
@@ -177,34 +203,8 @@ try {
   }
 } catch (e) {}
 
-function createBackupSnapshot(isAuto = false) {
-  try {
-    const dbPath = path.join(__dirname, 'chat_data.db');
-    if (!fs.existsSync(dbPath)) return null;
-
-    const dateStr = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-    const backupFileName = `chat_backup_${dateStr}${isAuto ? '_auto' : '_manual'}.db`;
-    const targetPath = path.join(backupsDir, backupFileName);
-    fs.copyFileSync(dbPath, targetPath);
-
-    // Prune old backups, keep latest 15
-    const files = fs.readdirSync(backupsDir)
-      .filter(f => f.startsWith('chat_backup_') && f.endsWith('.db'))
-      .map(f => ({ name: f, time: fs.statSync(path.join(backupsDir, f)).mtime.getTime() }))
-      .sort((a, b) => b.time - a.time);
-
-    if (files.length > 15) {
-      files.slice(15).forEach(f => {
-        try { fs.unlinkSync(path.join(backupsDir, f.name)); } catch (e) {}
-      });
-    }
-
-    return { name: backupFileName, size: fs.statSync(targetPath).size, createdAt: Date.now() };
-  } catch (err) {
-    console.error('Backup creation error:', err);
-    return null;
-  }
-}
+const backupManager = createBackupManager({ db, dbPath, backupsDir });
+const createBackupSnapshot = (isAuto = false) => backupManager.createBackupSnapshot(isAuto);
 
 if (!process.env.VERCEL) {
   // Auto snapshot every 6 hours
@@ -228,20 +228,8 @@ function isSpamming(userId) {
   return times.length > 5;
 }
 
-// Multer Storage Configuration (Supports Images, Videos, Voice, and Docs)
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname) || (file.mimetype.includes('video') ? '.mp4' : file.mimetype.includes('audio') ? '.webm' : '.jpg');
-    cb(null, `${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`);
-  }
-});
-const upload = multer({
-  storage,
-  limits: { fileSize: 2048 * 1024 * 1024 } // 2GB (2048MB) for recorded audio lessons, videos, and media
-});
+// Hardened Multer Upload Middleware (Extension/MIME allowlist + Sharp WebP Auto-Optimization)
+const { upload, optimizeUploadedImage, optimizeSingleFile } = createUploadMiddleware(uploadsDir);
 
 const app = express();
 const server = http.createServer(app);
@@ -251,48 +239,28 @@ server.timeout = 0; // Disable socket idle timeout
 server.requestTimeout = 30 * 60 * 1000; // 30 minutes for slow large uploads
 server.keepAliveTimeout = 65000;
 server.headersTimeout = 66000;
+const corsOptions = createCorsOptions();
 const io = new Server(server, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
+    origin: corsOptions.origin,
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
 app.disable('x-powered-by');
 
-// =========================================================================
-// HTTP SECURITY HEADERS (A+ Grade on Mozilla Observatory & SecurityHeaders)
-// =========================================================================
-app.use((req, res, next) => {
-  // Prevent MIME-sniffing
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  // Protect against clickjacking
-  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-  // Enforce HTTPS
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-  // Privacy-friendly referrer header
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  // Limit sensitive APIs to origin
-  res.setHeader('Permissions-Policy', 'camera=(self), microphone=(self), geolocation=()');
-  // Robust Content Security Policy (allows Tailwind, Socket.io, FontAwesome, MP3 Quran audio, and WebSockets)
-  res.setHeader(
-    'Content-Security-Policy',
-    "default-src 'self' blob: data:; " +
-    "base-uri 'self'; " +
-    "object-src 'none'; " +
-    "form-action 'self'; " +
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.socket.io https://cdn.jsdelivr.net; " +
-    "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " +
-    "font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; " +
-    "img-src 'self' data: blob: https:; " +
-    "media-src 'self' blob: data: https: https://*.mp3quran.net; " +
-    "connect-src 'self' wss: ws: https: http:; " +
-    "frame-ancestors 'self';"
-  );
-  next();
-});
-
-app.use(cors());
+// Modular Security Headers (Strict CSP without Tailwind CDN / unsafe-eval) & CORS
+app.set('trust proxy', 1);
+app.use(securityHeaders);
+app.use(cors(corsOptions));
+app.use('/api/', apiGeneralLimiter);
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
+app.use('/api/auth/forgot-password', authLimiter);
+app.use('/api/dreams/posts/:id/react', publicWriteLimiter);
+app.use('/api/poems/:id/react', publicWriteLimiter);
+app.use('/api/articles/:id/react', publicWriteLimiter);
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 if (compression) {
@@ -304,6 +272,8 @@ if (compression) {
 
 app.use(express.static(path.join(__dirname, 'public'), {
   etag: true,
+  acceptRanges: true,
+  index: false,
   maxAge: '1h',
   setHeaders: (res, filePath) => {
     if (filePath.endsWith('.html')) {
@@ -367,6 +337,7 @@ app.post('/api/poems', (req, res) => {
     }
 
     const poem = poemsDb.create(title.trim(), content.trim(), 'م. ئازاد');
+    scheduleSearchReindex();
     if (io) io.emit('new_poem_published', poem);
     res.json({ success: true, poem });
   } catch (err) {
@@ -398,6 +369,7 @@ app.delete('/api/poems/:id', (req, res) => {
     }
 
     poemsDb.delete(req.params.id);
+    scheduleSearchReindex();
     if (io) io.emit('poem_deleted', { id: Number(req.params.id) });
     res.json({ success: true });
   } catch (err) {
@@ -543,6 +515,7 @@ app.put('/api/admin/articles/:id/status', (req, res) => {
     }
 
     const ok = articlesDb.updateStatus(req.params.id, status, authedUser.full_name || authedUser.username);
+    scheduleSearchReindex();
     if (ok) {
       if (typeof io !== 'undefined' && io) {
         io.emit('article_status_updated', {
@@ -576,6 +549,7 @@ app.delete('/api/admin/articles/:id', (req, res) => {
     }
 
     articlesDb.delete(req.params.id);
+    scheduleSearchReindex();
     if (typeof io !== 'undefined' && io) io.emit('article_deleted', { id: Number(req.params.id) });
     res.json({ success: true });
   } catch (err) {
@@ -611,6 +585,7 @@ app.post('/api/announcements', (req, res) => {
       return res.status(400).json({ error: 'تکایە ناونیشان و ناوەڕۆک پڕبکەرەوە' });
     }
     const created = createAnnouncement(title, content, tag, author);
+    scheduleSearchReindex();
     if (io) io.emit('announcement_created', created);
     res.json(created);
   } catch (err) {
@@ -623,6 +598,7 @@ app.put('/api/announcements/:id', (req, res) => {
     const { id } = req.params;
     const { title, content, tag, author } = req.body;
     const updated = updateAnnouncement(Number(id), title, content, tag, author);
+    scheduleSearchReindex();
     if (io) io.emit('announcement_updated', updated);
     res.json(updated);
   } catch (err) {
@@ -634,6 +610,7 @@ app.delete('/api/announcements/:id', (req, res) => {
   try {
     const { id } = req.params;
     deleteAnnouncement(Number(id));
+    scheduleSearchReindex();
     if (io) io.emit('announcement_deleted', { id: Number(id) });
     res.json({ success: true });
   } catch (err) {
@@ -670,13 +647,14 @@ app.post('/api/dreams/posts/:id/react', (req, res) => {
 });
 
 app.post('/api/dreams/upload-media', (req, res) => {
-  upload.single('media')(req, res, (err) => {
+  upload.single('media')(req, res, async (err) => {
     if (err) {
       return res.status(400).json({ error: err.message || 'هەڵە لە بارکردنی فایل' });
     }
     if (!req.file) {
       return res.status(400).json({ error: 'هیچ فایلێک دیاری نەکراوە' });
     }
+    await optimizeSingleFile(req.file);
     const fileUrl = `/uploads/${req.file.filename}`;
     let mediaType = 'image';
     if (req.file.mimetype.startsWith('video/')) mediaType = 'video';
@@ -722,6 +700,7 @@ app.post('/api/dreams/posts', (req, res) => {
       audio_duration: Number(audio_duration || 0)
     });
 
+    scheduleSearchReindex();
     if (io) io.emit('dream_post_created', post);
     res.json({ success: true, post, ...post });
   } catch (err) {
@@ -749,6 +728,7 @@ app.put('/api/dreams/posts/:id', (req, res) => {
     if (!updated) {
       return res.status(404).json({ error: 'پۆستەکە نەدۆزرایەوە' });
     }
+    scheduleSearchReindex();
     if (io) io.emit('dream_post_updated', updated);
     res.json({ success: true, post: updated });
   } catch (err) {
@@ -761,6 +741,7 @@ app.delete('/api/dreams/posts/:id', (req, res) => {
   try {
     const { id } = req.params;
     deleteDreamPost(Number(id));
+    scheduleSearchReindex();
     if (io) io.emit('dream_post_deleted', { id: Number(id) });
     res.json({ success: true });
   } catch (err) {
@@ -768,24 +749,20 @@ app.delete('/api/dreams/posts/:id', (req, res) => {
   }
 });
 
-app.get('/dreams', (req, res) => {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.sendFile(path.join(__dirname, 'public', 'dreams.html'));
+// Modular Public Routes: /api/health, /api/search (FTS5), /robots.txt, /sitemap.xml & Dynamic Open Graph SEO
+registerPublicPlatformRoutes(app, {
+  db,
+  dbPath,
+  jwtSecret: JWT_SECRET,
+  searchEngine,
+  publicDir: path.join(__dirname, 'public')
 });
-
-app.get('/poems', (req, res) => {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.sendFile(path.join(__dirname, 'public', 'poems.html'));
-});
-
-app.get('/articles', (req, res) => {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.sendFile(path.join(__dirname, 'public', 'articles.html'));
-});
-
-app.get('/', (req, res) => {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+registerPublicCommentsRoutes(app, {
+  db,
+  users,
+  jwtSecret: JWT_SECRET,
+  io,
+  publicWriteLimiter
 });
 
 // =========================================================================
@@ -1462,26 +1439,47 @@ setInterval(cleanupInactiveUsers, 6 * 60 * 60 * 1000);
 // 1. Register
 app.post('/api/auth/register', (req, res) => {
   try {
-    const { username, password, full_name, gender = 'male' } = req.body;
-    if (!username || !password || !full_name) {
-      return res.status(400).json({ error: 'تکایە هەموو خانەکان پڕبکەرەوە' });
+    const check = validateRegistrationPayload(req.body);
+    if (!check.valid) {
+      return res.status(400).json({ error: check.error, field: check.field });
     }
 
-    const trimmedUsername = username.trim().toLowerCase();
+    const {
+      username: trimmedUsername,
+      password,
+      full_name,
+      gender: safeGender,
+      phone,
+      languages,
+      profession,
+      residence,
+      certificate
+    } = check.data;
+
     const existing = users.findByUsername(trimmedUsername);
     if (existing) {
-      return res.status(400).json({ error: 'ئەم ناوی خوازراوە پێشتر بەکارهاتووە' });
+      return res.status(400).json({ error: 'ئەم ناوی خوازراوە پێشتر بەکارهاتووە', field: 'username' });
     }
 
-    const safeGender = gender === 'female' ? 'female' : 'male';
     const passwordHash = bcrypt.hashSync(password, 10);
-    const newId = users.create(trimmedUsername, passwordHash, full_name.trim(), safeGender, 'student', 'pending');
+    const newId = users.create(trimmedUsername, passwordHash, full_name, safeGender, 'student', 'pending', {
+      phone,
+      languages,
+      profession,
+      residence,
+      certificate
+    });
 
     io.emit('new_pending_user', {
       id: newId,
       username: trimmedUsername,
-      full_name: full_name.trim(),
+      full_name,
       gender: safeGender,
+      phone,
+      languages,
+      profession,
+      residence,
+      certificate,
       created_at: Date.now()
     });
 
@@ -1636,11 +1634,25 @@ app.get('/api/users/:id/profile', authMiddleware, (req, res) => {
   const userId = parseInt(req.params.id);
   const profile = users.getUserProfile(userId);
   if (!profile) return res.status(404).json({ error: 'بەکارهێنەر نەدۆزرایەوە' });
+  const canViewPersonalDetails =
+    req.user.id === userId ||
+    req.user.role === 'super_admin' ||
+    req.user.role === 'admin' ||
+    req.user.role === 'teacher' ||
+    canManageMembers(req.user) ||
+    hasSuperAdminPrivileges(req.user);
+  if (!canViewPersonalDetails) {
+    delete profile.phone;
+    delete profile.languages;
+    delete profile.profession;
+    delete profile.residence;
+    delete profile.certificate;
+  }
   res.json({ profile });
 });
 
 // Upload Profile Picture (Allowed for all users on their OWN profile)
-app.post('/api/users/profile/avatar', authMiddleware, upload.single('avatar'), (req, res) => {
+app.post('/api/users/profile/avatar', authMiddleware, upload.single('avatar'), optimizeUploadedImage, (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'تکایە وێنەیەک دیاری بکە' });
@@ -5519,7 +5531,7 @@ app.post('/api/admin/special-badge', authMiddleware, requireMasterSuperAdmin, (r
 });
 
 // --- ADMIN / TEACHER MEDIA UPLOADS (IMAGES, VIDEOS, PDF & DOCUMENTS) ---
-app.post('/api/chat/upload-image', authMiddleware, requireAdmin, upload.single('image'), (req, res) => {
+app.post('/api/chat/upload-image', authMiddleware, requireAdmin, upload.single('image'), optimizeUploadedImage, (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'هیچ فایلێک دیاری نەکراوە' });
     const caption = req.body.caption || '';
@@ -5565,7 +5577,7 @@ app.post('/api/chat/upload-image', authMiddleware, requireAdmin, upload.single('
     try {
       sendPushNotificationToAllChatSubscribers({
         title: `💬 ${freshUser.full_name}`,
-        body: isImage ? '📷 وێنەیەکی نارد' : (isVoice ? '🎤 دەنگێکی نارد' : '📄 فایلێکی نارد'),
+        body: attachmentType === 'image' ? '📷 وێنەیەکی نارد' : (attachmentType === 'video' ? '🎬 ڤیدیۆیەکی نارد' : '📄 فایلێکی نارد'),
         icon: freshUser.avatar_url || '/favicon.png',
         tag: 'chat-file-' + msg.id,
         data: { url: '/' }
@@ -5652,26 +5664,14 @@ app.post('/api/admin/unmute', authMiddleware, requireChatModerator, (req, res) =
 // --- DATABASE BACKUP ROUTES (SUPER ADMIN ONLY) ---
 app.get('/api/admin/backups', authMiddleware, requireSuperAdmin, (req, res) => {
   try {
-    const files = fs.readdirSync(backupsDir)
-      .filter(f => f.startsWith('chat_backup_') && f.endsWith('.db'))
-      .map(f => {
-        const stats = fs.statSync(path.join(backupsDir, f));
-        return {
-          filename: f,
-          sizeBytes: stats.size,
-          sizeFormatted: `${(stats.size / 1024).toFixed(1)} KB`,
-          createdAt: stats.mtime.getTime()
-        };
-      })
-      .sort((a, b) => b.createdAt - a.createdAt);
-    res.json({ backups: files });
+    res.json({ backups: backupManager.listBackups() });
   } catch (err) {
     res.status(500).json({ error: 'هەڵە لە هێنانی یەدەگەکان' });
   }
 });
 
 app.post('/api/admin/backups/create', authMiddleware, requireSuperAdmin, (req, res) => {
-  const result = createBackupSnapshot(false);
+  const result = backupManager.createBackupSnapshot(false);
   if (result) {
     res.json({ success: true, message: 'کۆپی یەدەگ بەسەرکەوتوویی دروستکرا', backup: result });
   } else {
@@ -5682,16 +5682,15 @@ app.post('/api/admin/backups/create', authMiddleware, requireSuperAdmin, (req, r
 app.get('/api/admin/backups/download', authMiddleware, requireSuperAdmin, (req, res) => {
   const filename = req.query.file;
   if (filename) {
-    const safeFile = path.basename(filename);
-    const target = path.join(backupsDir, safeFile);
-    if (fs.existsSync(target)) {
-      return res.download(target, safeFile);
+    const resolved = backupManager.resolveBackupPath(filename);
+    if (resolved) {
+      return res.download(resolved.target, resolved.safeFile);
     }
   }
-  const liveDb = path.join(__dirname, 'chat_data.db');
+  const liveDb = backupManager.getLiveDbPath();
   if (fs.existsSync(liveDb)) {
     const dateStr = new Date().toISOString().slice(0, 10);
-    return res.download(liveDb, `seereen_database_${dateStr}.db`);
+    return res.download(liveDb, `pryaska_database_${dateStr}.db`);
   }
   res.status(404).json({ error: 'داتابەیس نەدۆزرایەوە' });
 });
@@ -10127,22 +10126,35 @@ io.on('connection', (socket) => {
 });
 
 if (!process.env.VERCEL && process.env.NODE_ENV !== 'test') {
-  server.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 سێرڤەر بەسەرکەوتوویی لەسەر پۆرتی http://0.0.0.0:${PORT} دەستی پێکرد`);
-  });
-
-  // Secondary listener on port 4000 so both http://seereen.duckdns.org (port 80) and port 4000/cloudflared work
-  if (Number(PORT) === 80) {
+  function getLocalIp() {
     try {
-      const secondaryServer = http.createServer(app);
-      io.attach(secondaryServer);
-      secondaryServer.listen(4000, '0.0.0.0', () => {
-        console.log('🚀 پۆرتی 4000یش وەک یەدەگ چالاکە');
-      });
-    } catch (e) {
-      console.warn('Secondary port 4000 warning:', e.message);
-    }
+      const os = require('os');
+      const interfaces = os.networkInterfaces();
+      const physical = [];
+      const others = [];
+      for (const name of Object.keys(interfaces)) {
+        const isVirtual = /vmware|virtual|vbox|vethernet|hyper-v|wsl|loopback/i.test(name);
+        for (const iface of interfaces[name]) {
+          if (iface.family === 'IPv4' && !iface.internal) {
+            if (!isVirtual) physical.push(iface.address);
+            else others.push(iface.address);
+          }
+        }
+      }
+      if (physical.length > 0) return physical[0];
+      if (others.length > 0) return others[0];
+    } catch (e) {}
+    return '127.0.0.1';
   }
+
+  server.listen(PORT, '0.0.0.0', () => {
+    const localIp = getLocalIp();
+    console.log(`====================================================`);
+    console.log(`  🚀 پلاتفۆرمی پریاسکەی عەبدی - دەستی پێکرد`);
+    console.log(`  💻 بۆ کۆمپیوتەر (Localhost):  http://localhost:${PORT}`);
+    console.log(`  📱 بۆ مۆبایل (سەر هەمان وایفای): http://${localIp}:${PORT}`);
+    console.log(`====================================================`);
+  });
 }
 
 module.exports = app;

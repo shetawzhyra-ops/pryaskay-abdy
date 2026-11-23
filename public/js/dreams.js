@@ -327,13 +327,13 @@
     const toast = document.createElement('div');
     toast.className = 'toast-item pointer-events-auto';
 
-    let icon = 'fa-circle-info text-cyan-400';
-    if (type === 'success') icon = 'fa-circle-check text-emerald-400';
-    if (type === 'error') icon = 'fa-circle-exclamation text-rose-400';
+    let icon = 'fa-circle-info text-[#b45309]';
+    if (type === 'success') icon = 'fa-circle-check text-[#2d6245]';
+    if (type === 'error') icon = 'fa-circle-exclamation text-rose-700';
 
     toast.innerHTML = `
       <i class="fa-solid ${icon} text-sm"></i>
-      <span class="text-xs font-medium text-slate-100">${escapeHtml(message)}</span>
+      <span class="text-xs font-bold text-[#361c0c]">${escapeHtml(message)}</span>
     `;
 
     el.toastContainer.appendChild(toast);
@@ -404,7 +404,7 @@
       }
 
       if (dot) {
-        if (isSelected) dot.className = 'w-2.5 h-2.5 rounded-full bg-cyan-400 dialect-dot shadow-[0_0_8px_rgba(0,242,254,0.8)]';
+        if (isSelected) dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-600 dialect-dot shadow-sm';
         else dot.className = 'w-2.5 h-2.5 rounded-full bg-transparent dialect-dot';
       }
     });
@@ -445,9 +445,9 @@
 
     if (posts.length === 0) {
       el.dreamPostsFeed.innerHTML = `
-        <div class="glass-card p-10 text-center text-slate-400 space-y-3">
-          <i class="fa-solid fa-moon text-3xl text-cyan-400/60"></i>
-          <p class="text-sm font-medium">${d.emptyText}</p>
+        <div class="glass-card p-10 text-center text-[#54371f] space-y-3">
+          <i class="fa-solid fa-moon text-3xl text-[#b45309]/70"></i>
+          <p class="text-sm font-medium text-[#361c0c]">${d.emptyText}</p>
         </div>
       `;
       return;
@@ -455,34 +455,6 @@
 
     el.dreamPostsFeed.innerHTML = posts.map(post => {
       const isAdmin = state.currentUser?.role === 'admin' || state.currentUser?.role === 'super_admin' || state.currentUser?.role === 'teacher';
-      const totalReactions = (post.reactions_like || 0) + (post.reactions_dua || 0) + (post.reactions_heart || 0);
-
-      // Active reaction label & class
-      let reactionBtnClass = '';
-      let reactionBtnLabel = `<i class="fa-regular fa-thumbs-up text-base"></i> <span>${escapeHtml(d.reactionLike || 'بەدڵمە')}</span>`;
-
-      if (post.user_reaction === 'like') {
-        reactionBtnClass = 'reacted-like';
-        reactionBtnLabel = `<span class="flex items-center gap-1.5 text-base">👍 <span>${escapeHtml(d.reactionLike || 'بەدڵمە')}</span></span>`;
-      } else if (post.user_reaction === 'dua') {
-        reactionBtnClass = 'reacted-dua';
-        reactionBtnLabel = `<span class="flex items-center gap-1.5 text-base">🤲 <span>${escapeHtml(d.reactionDua || 'دوعا')}</span></span>`;
-      } else if (post.user_reaction === 'heart') {
-        reactionBtnClass = 'reacted-heart';
-        reactionBtnLabel = `<span class="flex items-center gap-1.5 text-base">❤️ <span>${escapeHtml(d.reactionHeart || 'دڵ')}</span></span>`;
-      }
-
-      // Reaction Cluster
-      let clusterHtml = '';
-      if (totalReactions > 0) {
-        clusterHtml = `
-          <div class="reactions-cluster">
-            ${post.reactions_like > 0 ? `<span class="reaction-cluster-icon reaction-cluster-like" title="${post.reactions_like} ڵایک">👍</span>` : ''}
-            ${post.reactions_dua > 0 ? `<span class="reaction-cluster-icon reaction-cluster-dua" title="${post.reactions_dua} دوعا">🤲</span>` : ''}
-            ${post.reactions_heart > 0 ? `<span class="reaction-cluster-icon reaction-cluster-heart" title="${post.reactions_heart} دڵ">❤️</span>` : ''}
-          </div>
-        `;
-      }
 
       // Author Details
       const authorName = post.author_name || d.teacherName || 'مامۆستای لێکدانەوە';
@@ -492,20 +464,20 @@
       let contentHtml = '';
       if (post.dream_text && post.interpretation && post.dream_text.trim() !== post.interpretation.trim()) {
         contentHtml = `
-          <div class="px-4 sm:px-5 pb-3 space-y-3 text-xs sm:text-sm text-slate-200">
-            <div class="fb-post-dream-box bg-slate-900/70 border-r-4 border-cyan-400 p-3.5 rounded-xl space-y-1">
-              <div class="flex items-center gap-1.5 text-xs font-bold text-cyan-300">
-                <i class="fa-solid fa-cloud-moon text-cyan-400"></i>
+          <div class="px-4 sm:px-5 pb-3 space-y-3 text-xs sm:text-sm text-[#361c0c]">
+            <div class="fb-post-dream-box bg-[#fbf7f0] border border-[#9c784e]/25 border-r-4 border-r-[#5f8f72] p-3.5 rounded-xl space-y-1">
+              <div class="flex items-center gap-1.5 text-xs font-bold text-[#2d6245]">
+                <i class="fa-solid fa-cloud-moon text-[#3d7a59]"></i>
                 <span>${escapeHtml(d.dreamLabelText || 'دەقی خەونەکە:')}</span>
               </div>
-              <p class="whitespace-pre-line leading-relaxed text-slate-300">${escapeHtml(post.dream_text)}</p>
+              <p class="whitespace-pre-line leading-relaxed text-[#54371f]">${escapeHtml(post.dream_text)}</p>
             </div>
-            <div class="fb-post-interpretation-box bg-slate-900/70 border-r-4 border-amber-400 p-3.5 rounded-xl space-y-1">
-              <div class="flex items-center gap-1.5 text-xs font-bold text-amber-300">
-                <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+            <div class="fb-post-interpretation-box bg-[#fbf7f0] border border-[#9c784e]/25 border-r-4 border-r-amber-600 p-3.5 rounded-xl space-y-1">
+              <div class="flex items-center gap-1.5 text-xs font-bold text-[#b45309]">
+                <i class="fa-solid fa-wand-magic-sparkles text-[#b45309]"></i>
                 <span>${escapeHtml(d.interpretationLabelText || 'تەئویل و لێکدانەوەی مامۆستا:')}</span>
               </div>
-              <p class="whitespace-pre-line leading-relaxed text-slate-100">${escapeHtml(post.interpretation)}</p>
+              <p class="whitespace-pre-line leading-relaxed text-[#361c0c]">${escapeHtml(post.interpretation)}</p>
             </div>
           </div>
         `;
@@ -513,9 +485,9 @@
         const singleText = post.interpretation || post.dream_text || '';
         if (singleText) {
           contentHtml = `
-            <div class="px-4 sm:px-5 pb-3 text-xs sm:text-sm text-slate-200">
-              <div class="fb-post-text-box bg-slate-900/70 border-r-4 border-amber-400 p-3.5 rounded-xl space-y-1">
-                <p class="whitespace-pre-line leading-relaxed text-slate-100 text-sm">${escapeHtml(singleText)}</p>
+            <div class="px-4 sm:px-5 pb-3 text-xs sm:text-sm text-[#361c0c]">
+              <div class="fb-post-text-box bg-[#fbf7f0] border border-[#9c784e]/25 border-r-4 border-r-amber-600 p-3.5 rounded-xl space-y-1">
+                <p class="whitespace-pre-line leading-relaxed text-[#361c0c] text-sm">${escapeHtml(singleText)}</p>
               </div>
             </div>
           `;
@@ -583,7 +555,7 @@
       let imageHtml = '';
       if (post.image_url) {
         imageHtml = `
-          <div class="fb-post-image-container relative overflow-hidden bg-slate-950">
+          <div class="fb-post-image-container relative overflow-hidden bg-[#efe3d1] border-y border-[#9c784e]/20">
             <img 
               src="${escapeHtml(post.image_url)}" 
               alt="${escapeHtml(post.title)}" 
@@ -601,17 +573,17 @@
           <div class="p-4 sm:p-5 pb-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
               <!-- Teacher Avatar with Gold Ring -->
-              <div class="relative w-11 h-11 rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-cyan-400 to-indigo-500 shadow-[0_0_12px_rgba(251,191,36,0.35)] shrink-0">
-                <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center overflow-hidden">
-                  <i class="fa-solid fa-graduation-cap text-cyan-400 text-base"></i>
+              <div class="relative w-11 h-11 rounded-full p-[2px] bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-600 shadow-sm shrink-0">
+                <div class="w-full h-full rounded-full bg-[#fdf6ec] flex items-center justify-center overflow-hidden">
+                  <i class="fa-solid fa-graduation-cap text-[#b45309] text-base"></i>
                 </div>
               </div>
               <div>
                 <div class="flex items-center gap-1.5 flex-wrap">
-                  <h4 class="text-sm font-bold text-white">${escapeHtml(authorName)}</h4>
-                  <i class="fa-solid fa-circle-check text-cyan-400 text-xs" title="هەژماری باوەڕپێکراو"></i>
+                  <h4 class="text-sm font-bold text-[#361c0c]">${escapeHtml(authorName)}</h4>
+                  <i class="fa-solid fa-circle-check text-[#3d7a59] text-xs" title="هەژماری باوەڕپێکراو"></i>
                 </div>
-                <div class="flex items-center gap-1 text-[11px] text-slate-400 mt-0.5 font-latin">
+                <div class="flex items-center gap-1 text-[11px] text-[#785336] mt-0.5 font-latin">
                   <span>${escapeHtml(d.timeToday || 'ئەمڕۆ')}</span>
                   <span>•</span>
                   <i class="fa-solid fa-earth-americas text-[10px]"></i>
@@ -622,14 +594,14 @@
             <!-- Actions (Admin Edit, Delete & Share) -->
             <div class="flex items-center gap-1.5 sm:gap-2">
               ${isAdmin ? `
-                <button type="button" class="btn-edit-dream-post text-slate-400 hover:text-amber-400 p-1.5 rounded-lg transition-colors cursor-pointer" title="دەستکاریکردنی نوسین یان وێنە" data-post-id="${post.id}">
+                <button type="button" class="btn-edit-dream-post text-[#785336] hover:text-[#b45309] p-1.5 rounded-lg transition-colors cursor-pointer" title="دەستکاریکردنی نوسین یان وێنە" data-post-id="${post.id}">
                   <i class="fa-solid fa-pen-to-square text-xs"></i>
                 </button>
-                <button type="button" class="btn-delete-dream-post text-slate-400 hover:text-rose-400 p-1.5 rounded-lg transition-colors cursor-pointer" title="سڕینەوەی پۆست" data-post-id="${post.id}">
+                <button type="button" class="btn-delete-dream-post text-[#785336] hover:text-rose-700 p-1.5 rounded-lg transition-colors cursor-pointer" title="سڕینەوەی پۆست" data-post-id="${post.id}">
                   <i class="fa-solid fa-trash-can text-xs"></i>
                 </button>
               ` : ''}
-              <button type="button" class="btn-share-dream-header text-slate-400 hover:text-white p-1.5 rounded-lg transition-colors cursor-pointer" title="هاوبەشکردن" data-post-id="${post.id}" data-post-title="${escapeHtml(post.title)}">
+              <button type="button" class="btn-share-dream-header text-[#785336] hover:text-[#361c0c] p-1.5 rounded-lg transition-colors cursor-pointer" title="هاوبەشکردن" data-post-id="${post.id}" data-post-title="${escapeHtml(post.title)}">
                 <i class="fa-solid fa-share-nodes text-xs"></i>
               </button>
             </div>
@@ -637,7 +609,7 @@
 
           <!-- Post Title -->
           <div class="px-4 sm:px-5 pb-2">
-            <h3 class="fb-post-title text-base sm:text-lg font-bold text-white leading-snug">
+            <h3 class="fb-post-title text-base sm:text-lg font-bold text-[#361c0c] leading-snug">
               ${escapeHtml(post.title)}
             </h3>
           </div>
@@ -654,61 +626,52 @@
           <!-- Post Image -->
           ${imageHtml}
 
-          <!-- Reactions Count Bar -->
-          <div class="px-4 sm:px-5 py-2.5 flex items-center justify-between text-xs text-slate-400 border-b border-white/5">
-            <div class="flex items-center gap-2">
-              ${clusterHtml}
-              <span class="reactions-count-label text-slate-300 font-latin font-semibold">
-                ${totalReactions > 0 ? totalReactions : '0'}
-              </span>
-            </div>
-            <div class="text-[11px] text-slate-400">
-              <span>فێرگە</span>
-            </div>
-          </div>
-
-          <!-- Facebook-style Reaction & Share Action Bar -->
-          <div class="p-2 px-3 sm:px-5 flex items-center justify-between gap-3 text-xs font-semibold relative border-t border-white/5">
-            
-            <!-- Reaction Button Container with Floating Picker -->
-            <div class="fb-reaction-wrapper flex-1 relative flex items-center justify-center">
-              <div class="fb-reaction-dock" data-post-id="${post.id}">
-                <button type="button" class="fb-reaction-item" data-reaction="like" data-post-id="${post.id}" title="${escapeHtml(d.reactionLike || 'بەدڵمە')}">
-                  <span class="fb-reaction-tooltip">${escapeHtml(d.reactionLike || 'بەدڵمە')}</span>
-                  <span class="fb-reaction-emoji">👍</span>
-                </button>
-                <button type="button" class="fb-reaction-item" data-reaction="dua" data-post-id="${post.id}" title="${escapeHtml(d.reactionDua || 'دوعا')}">
-                  <span class="fb-reaction-tooltip">${escapeHtml(d.reactionDua || 'دوعا')}</span>
-                  <span class="fb-reaction-emoji">🤲</span>
-                </button>
-                <button type="button" class="fb-reaction-item" data-reaction="heart" data-post-id="${post.id}" title="${escapeHtml(d.reactionHeart || 'دڵ')}">
-                  <span class="fb-reaction-tooltip">${escapeHtml(d.reactionHeart || 'دڵ')}</span>
-                  <span class="fb-reaction-emoji">❤️</span>
-                </button>
-              </div>
-
-              <!-- Primary Reaction Button -->
+          <!-- Clean Pill Actions: Heart, Dua, Like (Icon + Count) & Share -->
+          <div class="px-4 sm:px-5 py-3 border-t border-[#9c784e]/25 flex items-center justify-between gap-2 flex-wrap text-xs">
+            <div class="flex items-center gap-2 flex-wrap">
               <button 
                 type="button" 
-                class="fb-action-btn btn-toggle-reaction w-full ${reactionBtnClass}" 
+                class="dream-react-pill px-3.5 py-1.5 rounded-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-700 transition-all active:scale-95 inline-flex items-center gap-1.5 cursor-pointer shadow-sm group ${post.user_reaction === 'heart' ? 'ring-2 ring-rose-400/50 font-black' : 'font-bold'}"
+                data-reaction="heart"
                 data-post-id="${post.id}"
-                data-current-reaction="${post.user_reaction || ''}"
+                title="${escapeHtml(d.reactionHeart || 'دڵ')}"
               >
-                ${reactionBtnLabel}
+                <i class="fa-solid fa-heart text-[12px] text-rose-600 group-hover:scale-125 transition-transform"></i>
+                <span class="font-latin text-xs">${post.reactions_heart || 0}</span>
+              </button>
+
+              <button 
+                type="button" 
+                class="dream-react-pill px-3.5 py-1.5 rounded-full transition-all active:scale-95 inline-flex items-center gap-1.5 cursor-pointer shadow-sm group ${post.user_reaction === 'dua' ? 'bg-[#d7ebdf] border border-[#4a7c5e]/55 text-[#1e5237] ring-2 ring-[#5f8f72]/40 font-black' : 'bg-[#e8f3ec] hover:bg-[#d7ebdf] border border-[#5f8f72]/35 text-[#2d6245] font-bold'}"
+                data-reaction="dua"
+                data-post-id="${post.id}"
+                title="${escapeHtml(d.reactionDua || 'دوعا')}"
+              >
+                <span class="text-[13px] leading-none group-hover:scale-125 transition-transform">🤲</span>
+                <span class="font-latin text-xs">${post.reactions_dua || 0}</span>
+              </button>
+
+              <button 
+                type="button" 
+                class="dream-react-pill px-3.5 py-1.5 rounded-full transition-all active:scale-95 inline-flex items-center gap-1.5 cursor-pointer shadow-sm group ${post.user_reaction === 'like' ? 'bg-[#fae9cc] border border-amber-600/60 text-[#78350f] ring-2 ring-amber-500/40 font-black' : 'bg-[#fbf7f0] hover:bg-[#f2e4ce] border border-[#9c784e]/35 text-[#85430e] font-bold'}"
+                data-reaction="like"
+                data-post-id="${post.id}"
+                title="${escapeHtml(d.reactionLike || 'بەدڵمە')}"
+              >
+                <i class="fa-solid fa-thumbs-up text-[12px] text-[#b45309] group-hover:scale-125 transition-transform"></i>
+                <span class="font-latin text-xs">${post.reactions_like || 0}</span>
               </button>
             </div>
 
-            <!-- Share Button -->
             <button 
               type="button" 
-              class="fb-action-btn btn-share-post flex-1" 
+              class="btn-share-post px-3.5 py-1.5 rounded-full bg-[#e4d4bd]/85 hover:bg-[#d9c4a6] border border-[#9c784e]/30 text-[#361c0c] font-bold transition-all active:scale-95 inline-flex items-center gap-1.5 cursor-pointer shadow-sm"
               data-post-id="${post.id}"
               data-post-title="${escapeHtml(post.title)}"
             >
-              <i class="fa-solid fa-share text-base"></i>
+              <i class="fa-solid fa-share-nodes text-[11px] text-[#b45309]"></i>
               <span>${escapeHtml(d.btnShareText || 'هاوبەشکردن')}</span>
             </button>
-
           </div>
         </article>
       `;
@@ -1076,43 +1039,19 @@
     // Feed Event Delegation
     if (el.dreamPostsFeed) {
       el.dreamPostsFeed.addEventListener('click', (e) => {
-        // 1. Click on reaction emoji inside the floating reaction dock
-        const reactionItem = e.target.closest('.fb-reaction-item');
-        if (reactionItem) {
+        // 1. Direct Pill Reaction Click (Heart / Dua / Like)
+        const reactPill = e.target.closest('.dream-react-pill');
+        if (reactPill) {
           e.stopPropagation();
-          const postId = parseInt(reactionItem.getAttribute('data-post-id'), 10);
-          const reactionType = reactionItem.getAttribute('data-reaction');
+          const postId = parseInt(reactPill.getAttribute('data-post-id'), 10);
+          const reactionType = reactPill.getAttribute('data-reaction');
           if (postId && reactionType) {
             handleDreamReaction(postId, reactionType);
           }
-          // Close dock after picking
-          document.querySelectorAll('.fb-reaction-wrapper.active-dock').forEach(w => w.classList.remove('active-dock'));
           return;
         }
 
-        // 2. Primary Reaction Button Click / Tap (Opens dock and keeps it open)
-        const toggleBtn = e.target.closest('.btn-toggle-reaction');
-        if (toggleBtn) {
-          e.stopPropagation();
-          const wrapper = toggleBtn.closest('.fb-reaction-wrapper');
-          const isOpen = wrapper ? wrapper.classList.contains('active-dock') : false;
-
-          // Close all other open docks first
-          document.querySelectorAll('.fb-reaction-wrapper.active-dock').forEach(w => {
-            if (w !== wrapper) w.classList.remove('active-dock');
-          });
-
-          if (isOpen) {
-            // If already open, close it
-            wrapper.classList.remove('active-dock');
-          } else {
-            // Open and KEEP OPEN so user can easily choose without rush!
-            if (wrapper) wrapper.classList.add('active-dock');
-          }
-          return;
-        }
-
-        // 3. Share Button Click
+        // 2. Share Button Click
         const shareBtn = e.target.closest('.btn-share-post, .btn-share-dream-header');
         if (shareBtn) {
           const postId = parseInt(shareBtn.getAttribute('data-post-id'), 10);
@@ -1121,7 +1060,7 @@
           return;
         }
 
-        // 4. Admin Edit Button Click
+        // 3. Admin Edit Button Click
         const editBtn = e.target.closest('.btn-edit-dream-post');
         if (editBtn) {
           const postId = parseInt(editBtn.getAttribute('data-post-id'), 10);
@@ -1129,7 +1068,7 @@
           return;
         }
 
-        // 5. Admin Delete Button Click
+        // 4. Admin Delete Button Click
         const deleteBtn = e.target.closest('.btn-delete-dream-post');
         if (deleteBtn) {
           const postId = parseInt(deleteBtn.getAttribute('data-post-id'), 10);
@@ -1137,28 +1076,7 @@
           return;
         }
       });
-
-      // Mobile touchstart helper: tapping reaction button stably opens dock
-      el.dreamPostsFeed.addEventListener('touchstart', (e) => {
-        const toggleBtn = e.target.closest('.btn-toggle-reaction');
-        if (toggleBtn) {
-          const wrapper = toggleBtn.closest('.fb-reaction-wrapper');
-          if (wrapper && !wrapper.classList.contains('active-dock')) {
-            document.querySelectorAll('.fb-reaction-wrapper.active-dock').forEach(w => {
-              if (w !== wrapper) w.classList.remove('active-dock');
-            });
-            wrapper.classList.add('active-dock');
-          }
-        }
-      }, { passive: true });
     }
-
-    // Clicking outside closes all open reaction docks
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.fb-reaction-wrapper')) {
-        document.querySelectorAll('.fb-reaction-wrapper.active-dock').forEach(w => w.classList.remove('active-dock'));
-      }
-    });
 
     // Admin Modal Controls
     if (el.btnOpenNewDreamModal) {

@@ -147,68 +147,68 @@
       const dateStr = formatDate(art.created_at);
 
       return `
-        <article class="relative overflow-hidden rounded-3xl p-5 sm:p-8 bg-slate-900/80 border border-emerald-500/25 shadow-xl hover:border-emerald-500/40 transition-all duration-300 space-y-4">
+        <article class="glass-card relative overflow-hidden rounded-3xl p-5 sm:p-8 border border-[#9c784e]/35 shadow-xl hover:border-amber-600/50 transition-all duration-300 space-y-4">
           
           <!-- Top Row: Author Info & Approval Badge -->
-          <div class="flex items-center justify-between flex-wrap gap-3 pb-3 border-b border-white/5">
+          <div class="flex items-center justify-between flex-wrap gap-3 pb-3 border-b border-[#9c784e]/20">
             <div class="flex items-center gap-3">
-              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white font-black text-lg flex items-center justify-center shadow-md shrink-0">
+              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-[#2b1406] font-black text-lg flex items-center justify-center shadow-md border border-amber-200/60 shrink-0">
                 ${escapeHtml(authorInitial)}
               </div>
               <div>
-                <div class="flex items-center gap-2">
-                  <h4 class="font-black text-sm sm:text-base text-white hover:text-emerald-300 transition-colors">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h4 class="font-bold text-sm sm:text-base text-[#361c0c]">
                     ${escapeHtml(art.author_name)}
                   </h4>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                  <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-500/15 text-[#78350f] border border-[#9c784e]/30">
                     ${authorRoleLabel}
                   </span>
                 </div>
-                <p class="text-[11px] text-slate-400 mt-0.5">
-                  ${dateStr ? `<i class="fa-regular fa-clock text-[10px] ml-1"></i> ${dateStr}` : ''}
+                <p class="text-[11px] text-[#785336] mt-0.5 font-medium">
+                  ${dateStr ? `<i class="fa-regular fa-clock text-[10px] ml-1 text-[#b45309]"></i> ${dateStr}` : ''}
                 </p>
               </div>
             </div>
 
             <!-- Verified Approval Badge -->
-            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
-              <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-700/12 border border-emerald-700/30 text-emerald-900 text-xs font-bold">
+              <i class="fa-solid fa-circle-check text-emerald-700"></i>
               <span>پەسەندکراوە</span>
             </div>
           </div>
 
           <!-- Title -->
-          <h2 class="text-lg sm:text-2xl font-black text-white hover:text-emerald-300 transition-colors leading-snug">
+          <h2 class="text-xl sm:text-2xl font-bold text-[#361c0c] leading-snug">
             ${escapeHtml(art.title)}
           </h2>
 
           <!-- Content Body -->
-          <div class="article-body-text text-sm sm:text-[15px] text-slate-300 leading-relaxed pt-1">
+          <div class="article-body-text text-sm sm:text-base text-[#54371f] leading-loose pt-1 bg-[#fbf7f0]/75 p-4 sm:p-5 rounded-2xl border border-[#9c784e]/20">
             ${escapeHtml(art.content)}
           </div>
 
           <!-- Bottom Actions: Like, Share, Admin controls -->
-          <div class="flex items-center justify-between pt-4 border-t border-white/5">
+          <div class="flex items-center justify-between pt-3 border-t border-[#9c784e]/20">
             <div class="flex items-center gap-2 sm:gap-3">
               <!-- Like Button -->
               <button 
                 type="button" 
                 onclick="window.handleLikeArticle(${art.id}, this)"
-                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-rose-500/20 border border-white/10 hover:border-rose-500/40 text-slate-300 hover:text-rose-400 text-xs font-bold transition cursor-pointer"
+                class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-700 text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-sm group"
                 title="پێم باشە"
               >
-                <i class="fa-solid fa-heart text-rose-500"></i>
-                <span class="like-count">${art.likes || 0}</span>
+                <i class="fa-solid fa-heart text-[12px] text-rose-600 group-hover:scale-125 transition-transform"></i>
+                <span class="like-count font-latin">${art.likes || 0}</span>
               </button>
 
               <!-- Share Button -->
               <button 
                 type="button" 
                 onclick="window.handleShareArticle(${art.id}, '${escapeHtml(art.title)}')"
-                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white text-xs font-semibold transition cursor-pointer"
+                class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#e4d4bd]/85 hover:bg-[#d9c4a6] border border-[#9c784e]/30 text-[#361c0c] text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-sm"
                 title="هاوبەشکردن"
               >
-                <i class="fa-solid fa-share-nodes text-emerald-400"></i>
+                <i class="fa-solid fa-share-nodes text-[#b45309]"></i>
                 <span>هاوبەشکردن</span>
               </button>
             </div>
@@ -219,7 +219,7 @@
                 <button 
                   type="button" 
                   onclick="window.handleAdminDeleteArticle(${art.id})" 
-                  class="px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-bold transition cursor-pointer flex items-center gap-1.5"
+                  class="px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/35 text-rose-800 text-xs font-bold transition cursor-pointer flex items-center gap-1.5"
                   title="سڕینەوەی وتار (ئەدمین)"
                 >
                   <i class="fa-solid fa-trash-can text-[11px]"></i>

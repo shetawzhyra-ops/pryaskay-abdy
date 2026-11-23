@@ -2,7 +2,7 @@
 <html lang="ckb" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <script>try{sessionStorage.setItem('has_visited_section','true');}catch(e){}</script>
+  <script>try{sessionStorage.setItem('has_visited_section','true');document.documentElement.classList.remove('dark');}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png">
@@ -13,43 +13,21 @@
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖋️</text></svg>">
 
-  <!-- Google Fonts: Vazirmatn for premium Kurdish Typography -->
+  <!-- Google Fonts: Classical Islamic Calligraphy (Amiri & Noto Naskh Arabic) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            kurdish: ['Vazirmatn', 'sans-serif'],
-            latin: ['Plus Jakarta Sans', 'sans-serif']
-          },
-          colors: {
-            brand: {
-              50: '#ecfdf5',
-              100: '#d1fae5',
-              500: '#10b981',
-              600: '#059669',
-              900: '#064e3b'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="/css/tailwind.built.css?v=1.0">
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="/css/style.css?v=90.0&t=1795310000">
+  <link rel="stylesheet" href="/css/style.css?v=98.0&t=1795490000">
   <!-- Shared Palettes -->
-  <script src="/js/palettes.js?v=90.0&t=1795310000"></script>
+  <script src="/js/palettes.js?v=92.0&t=1795420000"></script>
   <script>
     if (typeof applyActiveSavedTheme === 'function') {
       applyActiveSavedTheme();
@@ -63,24 +41,18 @@
       right: 0 !important;
       width: 100% !important;
       z-index: 40 !important;
+      background: rgba(238, 224, 204, 0.96) !important;
+      border-bottom: 1px solid rgba(156, 120, 78, 0.32) !important;
+      box-shadow: 0 8px 24px -8px rgba(42, 24, 10, 0.14) !important;
+    }
+    html, body {
+      background-color: #86b89c !important;
     }
     .article-body-text {
-      font-feature-settings: "liga" 1;
+      font-feature-settings: "liga" 1, "calt" 1;
       text-wrap: pretty;
       white-space: pre-wrap;
       word-break: break-word;
-    }
-  </style>
-  <style>
-    html, body {
-      background-color: #86b89c !important;
-      background: #86b89c !important;
-      background-image: none !important;
-    }
-    #poemsHeader, #articlesHeader {
-      background: rgba(236, 222, 202, 0.95) !important;
-      border-bottom: 1px solid rgba(156, 120, 78, 0.28) !important;
-      box-shadow: 0 4px 20px -4px rgba(50, 35, 20, 0.08) !important;
     }
     .brand-title {
       background: none !important;
@@ -90,50 +62,29 @@
       text-shadow: none !important;
       filter: none !important;
     }
-    #btnBackToHome, #btnDialectDropdown {
-      background: rgba(222, 204, 180, 0.95) !important;
-      border: 1px solid rgba(156, 120, 78, 0.35) !important;
-      color: #361c0c !important;
-    }
-    #btnBackToHome i, #btnDialectDropdown i {
-      color: #85430e !important;
-    }
-    .glass-card, .poem-card, .article-card, .modal-content {
-      background: linear-gradient(165deg, rgba(239, 227, 209, 0.98) 0%, rgba(228, 212, 189, 0.97) 100%) !important;
-      border: 1px solid rgba(156, 120, 78, 0.30) !important;
-      box-shadow: 0 16px 38px -10px rgba(50, 35, 20, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-      color: #54371f !important;
-    }
-    h1, h2, h3, h4, .poem-title, .article-title {
-      color: #361c0c !important;
-    }
-    p, .poem-verse-text, .article-content {
+    .glass-card, .article-card, .modal-content {
+      background: linear-gradient(166deg, rgba(244, 233, 216, 0.99) 0%, rgba(229, 212, 188, 0.97) 100%) !important;
+      border: 1px solid rgba(156, 120, 78, 0.38) !important;
+      box-shadow: 0 18px 42px -12px rgba(42, 24, 10, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
       color: #54371f !important;
     }
   </style>
 </head>
-<body class="light-theme light-mode in-landing text-slate-900 font-kurdish min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
-
-  <!-- Ambient Glow Effects Hidden for 100% Matte Background -->
-  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10 hidden" style="display: none !important;">
-    <div class="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse"></div>
-    <div class="absolute top-1/3 -left-40 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl"></div>
-    <div class="absolute -bottom-40 right-1/4 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl"></div>
-  </div>
+<body class="light-theme light-mode in-landing text-[#361c0c] font-kurdish min-h-screen flex flex-col antialiased selection:bg-amber-400 selection:text-[#2b1406]">
 
   <!-- Fixed Header / Navbar -->
-  <header id="articlesHeader" class="fixed top-0 left-0 right-0 z-50 w-full backdrop-blur-xl bg-[#ecdeca]/95 glass-header border-b border-[#9c784e]/30 transition-colors duration-300">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+  <header id="articlesHeader" class="fixed top-0 left-0 right-0 z-40 w-full backdrop-blur-xl transition-colors duration-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2">
       
       <!-- Brand Logo + Back to Home Button -->
-      <div class="flex items-center gap-3 sm:gap-4">
-        <a href="/" class="flex items-center gap-2.5 sm:gap-3 group cursor-pointer focus:outline-none select-none" title="گەڕانەوە بۆ پەڕەی سەرەکی">
-          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-emerald-400 via-teal-500 to-cyan-600 p-[1.5px] shadow-[0_0_20px_rgba(16,185,129,0.35)] group-hover:shadow-[0_0_28px_rgba(16,185,129,0.55)] transition-all duration-300 shrink-0">
-            <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-              <i class="fa-solid fa-pen-nib text-emerald-400 text-lg group-hover:scale-110 transition-transform"></i>
+      <div class="flex items-center gap-2.5 sm:gap-4 min-w-0">
+        <a href="/" class="flex items-center gap-2.5 sm:gap-3 group cursor-pointer focus:outline-none select-none shrink-0" title="گەڕانەوە بۆ پەڕەی سەرەکی">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 p-[1.5px] shadow-md transition-all duration-300 shrink-0">
+            <div class="w-full h-full bg-[#fdf6ec] rounded-[14px] flex items-center justify-center">
+              <i class="fa-solid fa-pen-nib text-[#b45309] text-lg group-hover:scale-110 transition-transform"></i>
             </div>
           </div>
-          <span class="brand-title text-xl sm:text-2xl font-black tracking-wide text-[#361c0c] transition-all group-hover:brightness-110">
+          <span class="brand-title text-lg sm:text-2xl font-black tracking-wide text-[#361c0c] whitespace-nowrap">
             پریاسکەی عەبدی
           </span>
         </a>
@@ -142,22 +93,22 @@
         <a 
           href="/" 
           id="btnBackToHome"
-          class="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 hover:text-white transition-all duration-200 cursor-pointer shadow-sm group"
+          class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-[#e4d4bd] hover:bg-[#d9c4a6] border border-[#9c784e]/35 text-xs font-bold text-[#361c0c] transition-all duration-200 cursor-pointer shadow-sm group whitespace-nowrap"
           title="گەڕانەوە بۆ پەڕەی سەرەکی"
         >
-          <i class="fa-solid fa-arrow-right text-[11px] group-hover:translate-x-1 transition-transform"></i>
+          <i class="fa-solid fa-arrow-right text-[#85430e] text-[11px] group-hover:translate-x-1 transition-transform"></i>
           <span id="txtBackToHome">گەڕانەوە بۆ سەرەکی</span>
         </a>
       </div>
 
-      <!-- Right Actions: Write Button + Theme Toggle + Dialect Dropdown -->
-      <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Right Actions: Write Button + Dialect Dropdown -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
 
         <!-- New Article Button -->
         <button 
           id="btnOpenWriteArticle" 
           type="button" 
-          class="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm shadow-lg transition active:scale-95 cursor-pointer"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-bold text-xs sm:text-sm shadow-md transition active:scale-95 cursor-pointer border border-amber-800/20"
         >
           <i class="fa-solid fa-pen-to-square text-xs"></i>
           <span>نووسینی وتار</span>
@@ -168,43 +119,32 @@
           <button 
             id="dialectDropdownBtn" 
             type="button" 
-            class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-slate-300 hover:text-white transition cursor-pointer select-none"
+            class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#e4d4bd] hover:bg-[#d9c4a6] border border-[#9c784e]/35 text-xs font-bold text-[#361c0c] transition cursor-pointer select-none shadow-sm"
             aria-expanded="false"
           >
-            <i class="fa-solid fa-language text-emerald-400"></i>
+            <i class="fa-solid fa-language text-[#85430e]"></i>
             <span id="currentDialectLabel">شێوەزار: سۆرانی</span>
-            <i class="fa-solid fa-chevron-down text-[10px] opacity-60"></i>
+            <i class="fa-solid fa-chevron-down text-[10px] text-[#78350f]"></i>
           </button>
           
           <div 
             id="dialectDropdownMenu" 
-            class="hidden absolute left-0 mt-2 w-40 rounded-2xl bg-slate-900/95 border border-white/10 shadow-2xl backdrop-blur-xl p-1.5 z-50 text-right space-y-1"
+            class="hidden absolute left-0 mt-2 w-44 rounded-2xl bg-[#f5ead9] border border-[#9c784e]/40 shadow-2xl p-1.5 z-50 text-right space-y-1"
           >
-            <button type="button" data-dialect="sorani" class="dialect-opt w-full px-3 py-2 rounded-xl text-xs font-semibold text-slate-200 hover:bg-emerald-500/20 hover:text-emerald-300 transition text-right flex items-center justify-between">
+            <button type="button" data-dialect="sorani" class="dialect-opt w-full px-3 py-2 rounded-xl text-xs font-bold text-[#361c0c] hover:bg-amber-500/20 transition text-right flex items-center justify-between cursor-pointer">
               <span>سۆرانی (ناوەندی)</span>
-              <i class="fa-solid fa-check text-[10px] text-emerald-400 opacity-0 checkmark"></i>
+              <i class="fa-solid fa-check text-[10px] text-[#b45309] opacity-0 checkmark"></i>
             </button>
-            <button type="button" data-dialect="kurmanji" class="dialect-opt w-full px-3 py-2 rounded-xl text-xs font-semibold text-slate-200 hover:bg-emerald-500/20 hover:text-emerald-300 transition text-right flex items-center justify-between">
+            <button type="button" data-dialect="kurmanji" class="dialect-opt w-full px-3 py-2 rounded-xl text-xs font-bold text-[#361c0c] hover:bg-amber-500/20 transition text-right flex items-center justify-between cursor-pointer">
               <span>کرمانجی (بادینی)</span>
-              <i class="fa-solid fa-check text-[10px] text-emerald-400 opacity-0 checkmark"></i>
+              <i class="fa-solid fa-check text-[10px] text-[#b45309] opacity-0 checkmark"></i>
             </button>
-            <button type="button" data-dialect="hawrami" class="dialect-opt w-full px-3 py-2 rounded-xl text-xs font-semibold text-slate-200 hover:bg-emerald-500/20 hover:text-emerald-300 transition text-right flex items-center justify-between">
+            <button type="button" data-dialect="hawrami" class="dialect-opt w-full px-3 py-2 rounded-xl text-xs font-bold text-[#361c0c] hover:bg-amber-500/20 transition text-right flex items-center justify-between cursor-pointer">
               <span>هەورامی</span>
-              <i class="fa-solid fa-check text-[10px] text-emerald-400 opacity-0 checkmark"></i>
+              <i class="fa-solid fa-check text-[10px] text-[#b45309] opacity-0 checkmark"></i>
             </button>
           </div>
         </div>
-
-        <!-- Dark/Light Theme Toggle -->
-        <button 
-          id="themeToggleBtn" 
-          type="button" 
-          class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-300 hover:text-amber-400 transition cursor-pointer"
-          title="گۆڕینی دۆخی ڕووناک/تاریک"
-        >
-          <i class="fa-solid fa-sun text-sm dark:hidden"></i>
-          <i class="fa-solid fa-moon text-sm hidden dark:inline"></i>
-        </button>
 
       </div>
     </div>
@@ -213,36 +153,35 @@
   <!-- Main Content Container -->
   <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-16">
     
-    <!-- Hero Section Banner -->
-    <section class="relative overflow-hidden rounded-3xl p-6 sm:p-10 mb-8 sm:mb-12 border border-emerald-500/30 bg-gradient-to-br from-emerald-950/60 via-slate-900/90 to-teal-950/60 backdrop-blur-xl shadow-2xl text-center">
-      <div class="absolute -top-24 -left-24 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Hero Section Banner (Warm Parchment Manuscript Style) -->
+    <section class="glass-card relative overflow-hidden rounded-3xl p-6 sm:p-10 mb-8 sm:mb-10 text-center">
+      <!-- Inset Double Hairline Frame -->
+      <div class="pointer-events-none absolute inset-2 rounded-[1.25rem] border border-[#9c784e]/25"></div>
+      <div class="pointer-events-none absolute top-0 left-[22%] right-[22%] h-[2px] bg-gradient-to-r from-transparent via-amber-600/70 to-transparent"></div>
 
       <div class="relative z-10 space-y-4">
         <!-- Floating Pen Badge -->
-        <div class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white text-2xl sm:text-3xl shadow-xl shadow-emerald-500/25 mb-1 animate-bounce">
+        <div class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-[#2b1406] text-2xl sm:text-3xl shadow-md border border-amber-200/60 mb-1">
           <i class="fa-solid fa-pen-nib"></i>
         </div>
 
-        <h1 id="heroTitle" class="text-2xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-l from-white via-emerald-100 to-teal-300 tracking-tight drop-shadow-md">
+        <h1 id="heroTitle" class="text-3xl sm:text-4xl md:text-5xl font-bold text-[#361c0c] tracking-tight">
           پریاسکەی وتار
         </h1>
 
-        <p id="heroSubtitle" class="text-xs sm:text-base text-slate-300/90 font-medium max-w-2xl mx-auto leading-relaxed">
+        <p id="heroSubtitle" class="text-sm sm:text-base text-[#54371f] font-medium max-w-2xl mx-auto leading-relaxed">
           ناوەندێکی مەعریفی و ئەدەبی بۆ نووسین و بڵاوکردنەوەی وتارە زانستی، ئەدەبی و فکرییەکانی بەشداربوانی پێشکەوتووی پریاسکەی عەبدی.
         </p>
 
         <!-- Stats Badges -->
         <div class="flex items-center justify-center flex-wrap gap-2.5 pt-2">
-          <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
-            <i class="fa-solid fa-newspaper text-[11px]"></i>
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#e4d4bd] border border-[#9c784e]/35 text-[#361c0c] text-xs font-bold shadow-sm">
+            <i class="fa-solid fa-newspaper text-[#b45309] text-[11px]"></i>
             <span id="articlesCountText">0 وتار بڵاوکراوەتەوە</span>
           </span>
 
-
-
-          <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
-            <i class="fa-solid fa-users text-[11px]"></i>
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#e4d4bd] border border-[#9c784e]/35 text-[#361c0c] text-xs font-bold shadow-sm">
+            <i class="fa-solid fa-users text-[#b45309] text-[11px]"></i>
             <span>تایبەت بە بەشداربوانی پێشکەوتوو</span>
           </span>
         </div>
@@ -256,9 +195,9 @@
           type="text" 
           id="articleSearchInput"
           placeholder="گەڕان لەناو دێڕ، ناونیشانی وتار یان ناوی نووسەر..." 
-          class="w-full pl-11 pr-4 py-3 sm:py-3.5 rounded-2xl bg-slate-900/80 border border-white/10 text-slate-100 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-emerald-500/60 focus:ring-2 focus:ring-emerald-500/20 backdrop-blur-lg transition-all shadow-lg"
+          class="w-full pl-11 pr-4 py-3 sm:py-3.5 rounded-2xl bg-[#fbf7f0] border border-[#9c784e]/35 text-[#361c0c] placeholder-[#8c6846] text-xs sm:text-sm font-medium focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/20 transition-all shadow-md"
         >
-        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-[#85430e] pointer-events-none">
           <i class="fa-solid fa-magnifying-glass text-sm"></i>
         </div>
       </div>
@@ -268,38 +207,38 @@
     <div id="articlesFeed" class="space-y-6 sm:space-y-8">
       <!-- Loading Skeleton -->
       <div id="articlesLoadingSkeleton" class="space-y-4">
-        <div class="p-6 rounded-3xl bg-slate-900/60 border border-white/5 animate-pulse space-y-4">
+        <div class="glass-card p-6 rounded-3xl animate-pulse space-y-4">
           <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-2xl bg-white/5"></div>
+            <div class="w-12 h-12 rounded-2xl bg-[#d9c4a6]/50"></div>
             <div class="space-y-2 flex-1">
-              <div class="w-32 h-4 bg-white/5 rounded-full"></div>
-              <div class="w-20 h-3 bg-white/5 rounded-full"></div>
+              <div class="w-32 h-4 bg-[#d9c4a6]/50 rounded-full"></div>
+              <div class="w-20 h-3 bg-[#d9c4a6]/40 rounded-full"></div>
             </div>
           </div>
-          <div class="w-3/4 h-5 bg-white/5 rounded-full"></div>
-          <div class="w-full h-16 bg-white/5 rounded-2xl"></div>
+          <div class="w-3/4 h-5 bg-[#d9c4a6]/50 rounded-full"></div>
+          <div class="w-full h-16 bg-[#d9c4a6]/40 rounded-2xl"></div>
         </div>
       </div>
 
       <!-- Empty State Container -->
-      <div id="articlesEmptyState" class="hidden text-center py-16 px-4 rounded-3xl bg-slate-900/40 border border-white/5 backdrop-blur-sm space-y-4">
-        <div class="w-16 h-16 mx-auto rounded-3xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-3xl text-emerald-400">
+      <div id="articlesEmptyState" class="glass-card hidden text-center py-16 px-4 rounded-3xl space-y-4">
+        <div class="w-16 h-16 mx-auto rounded-3xl bg-amber-500/15 border border-amber-600/30 flex items-center justify-center text-3xl text-[#b45309]">
           <i class="fa-solid fa-feather-pointed"></i>
         </div>
-        <h3 class="text-lg font-bold text-slate-200">هێشتا هیچ کورتە وتارێک بڵاونەکراوەتەوە</h3>
-        <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
-          تۆ دەتوانیت یەکەم کەس بیت کورتە وتار بنووسیت! دوای پێداچوونەوە و پەسەندکردنی لەلایەن ئەدمین، لێرە بە ناوی خۆتەوە بڵاودەکرێتەوە.
+        <h3 class="text-xl font-bold text-[#361c0c]">هێشتا هیچ وتارێک بڵاونەکراوەتەوە</h3>
+        <p class="text-xs sm:text-sm text-[#54371f] max-w-md mx-auto leading-relaxed">
+          تۆ دەتوانیت یەکەم کەس بیت وتار بنووسیت! دوای پێداچوونەوە و پەسەندکردنی لەلایەن ئەدمین، لێرە بە ناوی خۆتەوە بڵاودەکرێتەوە.
         </p>
-        <button type="button" onclick="openPageWriteArticleModal()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-xs shadow-lg transition active:scale-95 cursor-pointer">
-          نووسینی یەکەم کورتە وتار
+        <button type="button" onclick="openPageWriteArticleModal()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-xs shadow-md transition active:scale-95 cursor-pointer">
+          نووسینی یەکەم وتار
         </button>
       </div>
     </div>
 
     <!-- Bottom Back to Top Link -->
-    <div class="text-center mt-12">
-      <a href="/" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-emerald-400 transition-colors">
-        <i class="fa-solid fa-arrow-right"></i>
+    <div class="text-center mt-10">
+      <a href="/" class="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-xl bg-[#f4e9d8] hover:bg-[#e4d4bd] border border-[#9c784e]/35 text-xs sm:text-sm font-bold text-[#361c0c] transition-all shadow-md group">
+        <i class="fa-solid fa-arrow-right text-[#b45309] text-xs group-hover:translate-x-1 transition-transform"></i>
         <span>گەڕانەوە بۆ پەڕەی سەرەکیی پریاسکەی عەبدی</span>
       </a>
     </div>
@@ -307,46 +246,46 @@
   </main>
 
   <!-- Modal: Write New Article -->
-  <div id="modalArticlePageWrite" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md">
-    <div class="w-full max-w-lg bg-slate-900 border-2 border-emerald-500/40 rounded-3xl p-5 sm:p-7 shadow-2xl relative overflow-hidden flex flex-col max-h-[92vh]">
-      <div class="flex items-center justify-between pb-3.5 border-b border-white/10 relative z-10">
+  <div id="modalArticlePageWrite" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#1a241b]/65 backdrop-blur-md">
+    <div class="modal-content w-full max-w-lg rounded-3xl p-5 sm:p-7 shadow-2xl relative overflow-hidden flex flex-col max-h-[92vh]">
+      <div class="flex items-center justify-between pb-3.5 border-b border-[#9c784e]/25 relative z-10">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-lg">
+          <div class="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-600/30 flex items-center justify-center text-[#b45309] text-lg">
             ✍️
           </div>
           <div>
-            <h3 class="font-black text-base text-white">نووسینی کورتە وتاری نوێ</h3>
-            <p class="text-xs text-emerald-300/80">ناردن بۆ ئەدمین و بەڕێوەبەر بۆ پەسەندکردن</p>
+            <h3 class="font-bold text-base sm:text-lg text-[#361c0c]">نووسینی وتاری نوێ</h3>
+            <p class="text-xs text-[#78350f]">ناردن بۆ ئەدمین بۆ پێداچوونەوە و بڵاوکردنەوە</p>
           </div>
         </div>
-        <button type="button" onclick="closePageWriteArticleModal()" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer">
+        <button type="button" onclick="closePageWriteArticleModal()" class="w-8 h-8 rounded-xl bg-[#e4d4bd] hover:bg-[#d9c4a6] text-[#361c0c] flex items-center justify-center transition cursor-pointer">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
       <form id="pageArticleForm" onsubmit="handlePageSubmitArticle(event)" class="space-y-4 pt-4 flex-1 overflow-y-auto pr-1 relative z-10">
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1.5">ناونیشانی وتارەکە <span class="text-rose-400">*</span></label>
-          <input type="text" id="pageArticleTitleInput" required placeholder="ناونیشانی کورتە وتار..." class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-white focus:outline-none focus:border-emerald-500">
+          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">ناونیشانی وتارەکە <span class="text-rose-600">*</span></label>
+          <input type="text" id="pageArticleTitleInput" required placeholder="ناونیشانی وتار..." class="w-full px-4 py-2.5 bg-[#fbf7f0] border border-[#9c784e]/35 rounded-xl text-xs sm:text-sm text-[#361c0c] placeholder-[#8c6846] focus:outline-none focus:border-amber-600">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1.5">دەقی کورتە وتارەکە <span class="text-rose-400">*</span></label>
-          <textarea id="pageArticleContentInput" required rows="6" placeholder="دەقی کورتە وتارەکەت لێرە بنووسە..." class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-white focus:outline-none focus:border-emerald-500 resize-y leading-relaxed"></textarea>
+          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">دەقی وتارەکە <span class="text-rose-600">*</span></label>
+          <textarea id="pageArticleContentInput" required rows="6" placeholder="دەقی وتارەکەت لێرە بنووسە..." class="w-full px-4 py-3 bg-[#fbf7f0] border border-[#9c784e]/35 rounded-xl text-xs sm:text-sm text-[#361c0c] placeholder-[#8c6846] focus:outline-none focus:border-amber-600 resize-y leading-relaxed"></textarea>
         </div>
 
-        <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-right">
-          <p class="text-xs text-amber-200/90 leading-relaxed font-medium">
+        <div class="p-3 rounded-2xl bg-amber-500/15 border border-amber-600/30 text-right">
+          <p class="text-xs text-[#54371f] leading-relaxed font-medium">
             ⚠️ <strong>مەرجی بڵاوبوونەوە:</strong> وتارەکەت ڕاستەوخۆ بڵاو نابێتەوە؛ سەرەتا دەچێتە بەردەستی ئەدمین، پاش پێداچوونەوە و قبوڵکردنی، بە ناوی خۆتەوە لەم پەڕەیە بڵاودەکرێتەوە.
           </p>
         </div>
 
         <div class="flex items-center gap-3 pt-2">
-          <button type="submit" id="pageArticleSubmitBtn" class="flex-1 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm rounded-xl shadow-lg transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+          <button type="submit" id="pageArticleSubmitBtn" class="flex-1 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
             <i class="fa-solid fa-paper-plane"></i>
             <span>ناردن بۆ چاودێری</span>
           </button>
-          <button type="button" onclick="closePageWriteArticleModal()" class="px-4 py-3 bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs rounded-xl transition cursor-pointer">
+          <button type="button" onclick="closePageWriteArticleModal()" class="px-4 py-3 bg-[#e4d4bd] hover:bg-[#d9c4a6] text-[#361c0c] font-bold text-xs rounded-xl border border-[#9c784e]/30 transition cursor-pointer">
             پاشگەزبوونەوە
           </button>
         </div>
@@ -355,28 +294,31 @@
   </div>
 
   <!-- Footer -->
-  <footer class="mt-auto border-t border-white/10 py-6 text-center text-xs text-slate-500">
+  <footer class="mt-auto border-t border-[#9c784e]/30 py-6 text-center text-xs text-[#54371f] bg-[#eee0cc]/96 backdrop-blur-md">
     <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <p>پریاسکەی عەبدی — پێگەی زانست، فێرکاری و تەئویلی خەون · سەرجەم مافەکان پارێزراون © 2026</p>
-      <div class="flex items-center gap-4 text-slate-400">
-        <a href="/" class="hover:text-emerald-400 transition">پەڕەی سەرەکی</a>
+      <p class="font-medium text-[#54371f]">پریاسکەی عەبدی — پێگەی زانست، فێرکاری و تەئویلی خەون · سەرجەم مافەکان پارێزراون © 2026</p>
+      <div class="flex items-center gap-4 text-[#361c0c] font-bold">
+        <a href="/" class="hover:text-[#b45309] transition">پەڕەی سەرەکی</a>
         <span>·</span>
-        <a href="/poems" class="hover:text-emerald-400 transition">پریاسکەی ئەدەبی</a>
+        <a href="/poems" class="hover:text-[#b45309] transition">پریاسکەی ئەدەبی</a>
         <span>·</span>
-        <a href="/dreams" class="hover:text-emerald-400 transition">خەونە لێکدراوەکان</a>
+        <a href="/dreams" class="hover:text-[#b45309] transition">خەونە لێکدراوەکان</a>
       </div>
     </div>
   </footer>
 
   <!-- Toast Notification -->
-  <div id="articleToast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl bg-slate-900 border border-emerald-500/50 shadow-2xl text-emerald-300 text-xs sm:text-sm font-bold flex items-center gap-2.5 backdrop-blur-xl animate-fade-in">
-    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+  <div id="articleToast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl bg-[#f4e9d8] border border-[#9c784e]/45 shadow-2xl text-[#361c0c] text-xs sm:text-sm font-bold flex items-center gap-2.5 backdrop-blur-xl animate-fade-in">
+    <i class="fa-solid fa-circle-check text-[#b45309]"></i>
     <span id="articleToastText"></span>
   </div>
 
+  <script src="/socket.io/socket.io.js"></script>
   <!-- Articles JavaScript -->
-  <script src="/js/articles.js?v=6.0&t=1795360000"></script>
+  <script src="/js/articles.js?v=8.0&t=1795470000"></script>
+  <script src="/js/post-comments.js?v=1.0" defer></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=4.0&t=1795380000"></script>
+  <script src="/js/global-search.js?v=1.0" defer></script>
 </body>
 </html>

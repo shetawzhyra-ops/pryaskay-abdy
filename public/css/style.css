@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 
 
@@ -52,7 +52,7 @@
 
 * {
 
-  font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Noto Naskh Arabic', 'Amiri', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
   box-sizing: border-box;
 
@@ -400,7 +400,7 @@ body.in-app {
 
   -webkit-text-stroke: 0 !important;
 
-  font-family: 'Vazirmatn', sans-serif !important;
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif !important;
 
   font-feature-settings: "liga" 1, "calt" 1;
 
@@ -444,7 +444,7 @@ body.in-app {
 
   -webkit-text-stroke: 0 !important;
 
-  font-family: 'Vazirmatn', sans-serif !important;
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif !important;
 
   font-feature-settings: "liga" 1, "calt" 1;
 
@@ -464,7 +464,7 @@ body.in-app {
 
   -webkit-text-stroke: 0 !important;
 
-  font-family: 'Vazirmatn', sans-serif !important;
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif !important;
 
   font-feature-settings: "liga" 1, "calt" 1;
 
@@ -484,7 +484,7 @@ body.in-app {
 
   -webkit-text-stroke: 0 !important;
 
-  font-family: 'Vazirmatn', sans-serif !important;
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif !important;
 
   font-feature-settings: "liga" 1, "calt" 1;
 
@@ -668,7 +668,7 @@ body.in-app {
 
   border: 1px solid transparent;
 
-  font-family: 'Vazirmatn', sans-serif;
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif;
 
   letter-spacing: 0.3px;
 
@@ -788,7 +788,7 @@ body.in-app {
 
   -webkit-text-stroke: 0 !important;
 
-  font-family: 'Vazirmatn', sans-serif !important;
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif !important;
 
   font-feature-settings: "liga" 1, "calt" 1;
 
@@ -816,7 +816,7 @@ body.in-app {
 
   -webkit-text-stroke: 0 !important;
 
-  font-family: 'Vazirmatn', sans-serif !important;
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif !important;
 
   font-feature-settings: "liga" 1, "calt" 1;
 
@@ -844,7 +844,7 @@ body.in-app {
 
   -webkit-text-stroke: 0 !important;
 
-  font-family: 'Vazirmatn', sans-serif !important;
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif !important;
 
   font-feature-settings: "liga" 1, "calt" 1;
 
@@ -6742,7 +6742,6 @@ body.light-theme .brand-title,
   -webkit-background-clip: unset !important;
   -webkit-text-fill-color: #361c0c !important;
   color: #361c0c !important;
-  filter: none !important;
 }
 
 
@@ -8214,7 +8213,6 @@ body.light-theme .landing-brand-word,
   background-clip: unset !important;
   -webkit-text-fill-color: #361c0c !important;
   color: #361c0c !important;
-  filter: none !important;
   text-shadow: none !important;
 }
 
@@ -8938,7 +8936,6 @@ body.light-theme .landing-brand-word,
   background-clip: unset !important;
   -webkit-text-fill-color: #361c0c !important;
   color: #361c0c !important;
-  filter: none !important;
   text-shadow: none !important;
 }
 
@@ -10110,7 +10107,7 @@ body.light-theme .landing-footer-brand {
 
 .voice-tag-badge {
 
-  font-family: 'Vazirmatn', sans-serif;
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif;
 
   direction: rtl;
 
@@ -10900,7 +10897,7 @@ body.light-theme #drawerStaffHeader {
   background: radial-gradient(ellipse at 50% 38%, #08291d 0%, #04160f 50%, #010805 100%);
   overflow: hidden;
   direction: rtl;
-  font-family: 'Vazirmatn', -apple-system, sans-serif;
+  font-family: 'Noto Naskh Arabic', 'Amiri', -apple-system, sans-serif;
   user-select: none;
   transition: opacity 0.95s cubic-bezier(0.4, 0, 0.2, 1), transform 0.95s cubic-bezier(0.4, 0, 0.2, 1), filter 0.95s ease;
 }
@@ -11658,7 +11655,6 @@ body.light-theme .brand-title {
   background-clip: unset !important;
   -webkit-text-fill-color: #361c0c !important;
   color: #361c0c !important;
-  filter: none !important;
   text-shadow: none !important;
 }
 
@@ -12914,3 +12910,638 @@ div[id$="Modal"],
 div[id$="ModalDialog"] {
   z-index: 100000 !important;
 }
+
+
+/* ==========================================================================
+   GLOBAL ISLAMIC CALLIGRAPHY TYPOGRAPHY (Amiri & Noto Naskh Arabic)
+   Applies across the entire platform while keeping FontAwesome & Latin intact
+   ========================================================================== */
+html,
+body,
+input,
+textarea,
+select,
+button,
+label,
+p,
+a,
+li,
+div {
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+  font-feature-settings: "liga" 1, "calt" 1;
+}
+
+span:not(.fa):not(.fas):not(.far):not(.fab):not(.fa-solid):not(.fa-regular):not(.fa-brands):not([class*="fa-"]):not(.font-latin):not(.quran-bracket):not(.quran-ayah-text) {
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+}
+
+.font-latin,
+.font-mono {
+  font-family: 'Plus Jakarta Sans', 'Noto Naskh Arabic', sans-serif !important;
+}
+
+/* Majestic Classical Islamic Naskh (Amiri) for Headings, Poems, Articles & Dreams */
+h1, h2, h3, h4, h5, h6,
+.brand-title,
+.landing-brand-word,
+#heroTitle,
+#heroSubtitle,
+#postsHeaderTitle,
+#annActiveTitle,
+#annActiveContent,
+#poemsPageTitle,
+#poemsPageSubtitle,
+#articlesPageTitle,
+#dreamsPageTitle,
+.poem-verse-text,
+.fb-post-title,
+.fb-post-text,
+.classroom-lobby-card h3,
+#mainMenuDrawerPanel h3,
+#mainMenuDrawerPanel h4,
+.font-serif {
+  font-family: 'Amiri', 'Noto Naskh Arabic', 'Scheherazade New', serif !important;
+  font-feature-settings: "liga" 1, "calt" 1, "kern" 1 !important;
+}
+
+/* Comfortable literary line spacing for Amiri prose */
+.poem-verse-text,
+.fb-post-text,
+#annActiveContent {
+  line-height: 2 !important;
+}
+
+/* ==========================================================================
+   UNIVERSAL DARK-ELIMINATION & WARM PARCHMENT HARMONIZATION LAYER (v93.0)
+   Replaces every unintended dark slate / obsidian / blackish / emerald-dark
+   box across all pages (/, /articles, /poems, /dreams) with Warm Parchment
+   (#f4e9d8 / #efe3d1 / #fbf7f0), Espresso Ink (#361c0c), and Warm Amber
+   while preserving .quran-intro-overlay, modal backdrops, and <video>.
+   ========================================================================== */
+
+html.dark,
+html.dark body {
+  color-scheme: light !important;
+}
+
+/* 1. Page Canvases & Top Podium Bar */
+body.bg-slate-950,
+body.light-theme,
+body.light-mode {
+  background-color: #86b89c !important;
+  color: #361c0c !important;
+}
+
+#topPodiumWidget,
+body.light-theme #topPodiumWidget,
+body.light-mode #topPodiumWidget {
+  background: linear-gradient(165deg, rgba(238, 224, 204, 0.97), rgba(228, 212, 189, 0.96)) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.30) !important;
+  color: #361c0c !important;
+}
+
+#topPodiumWidget #podiumItems,
+#topPodiumWidget #podiumItems span {
+  color: #54371f !important;
+}
+
+#topPodiumWidget button[onclick*="openLeaderboardModal"] {
+  color: #b45309 !important;
+}
+
+/* 2. Hero Banners & Glass / Post Cards across Subpages & Home */
+.hero-banner,
+.glass-card,
+.fb-post-card,
+.modal-card {
+  background: linear-gradient(168deg, rgba(244, 233, 216, 0.98) 0%, rgba(232, 216, 193, 0.97) 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  color: #361c0c !important;
+  box-shadow:
+    0 18px 42px -12px rgba(42, 24, 10, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+}
+
+.fb-post-dream-box,
+.fb-post-interpretation-box,
+.fb-post-text-box,
+.toast-item {
+  background: #fbf7f0 !important;
+  color: #361c0c !important;
+  border-color: rgba(156, 120, 78, 0.28) !important;
+}
+
+.toast-item {
+  background: #efe3d1 !important;
+  border: 1.5px solid rgba(156, 120, 78, 0.42) !important;
+  box-shadow: 0 12px 30px -6px rgba(42, 24, 10, 0.22) !important;
+}
+
+/* 3. Notifications, Curfew, Chat Search, Recording & Reply Bars */
+#notificationPermissionBanner,
+#nightCurfewBanner,
+#chatSearchBar,
+#chatSearchResultsDropdown,
+#recordingBar,
+#dreamVoiceRecordingBar,
+#privateRecordingBar,
+#imagePreviewBar,
+#chatLockBanner,
+#chatReplyPreviewBar,
+#chatInputBar,
+[id$="ChatInputBar"] {
+  background: linear-gradient(165deg, rgba(241, 229, 210, 0.98), rgba(229, 214, 191, 0.97)) !important;
+  background-image: linear-gradient(165deg, rgba(241, 229, 210, 0.98), rgba(229, 214, 191, 0.97)) !important;
+  border-color: rgba(156, 120, 78, 0.32) !important;
+  color: #361c0c !important;
+}
+
+#notificationPermissionBanner span.w-8.h-8,
+#nightCurfewBanner span {
+  color: #78350f !important;
+}
+
+#chatSearchBar input,
+#chatInputBar input,
+#chatInputBar textarea,
+#voiceWaveformCanvas {
+  background: #fbf7f0 !important;
+  border-color: rgba(156, 120, 78, 0.34) !important;
+  color: #361c0c !important;
+}
+
+/* 4. Auth Dropdowns, Dialect Menus & Reaction Pickers */
+#authLangBtn {
+  background: #e4d4bd !important;
+  border-color: rgba(156, 120, 78, 0.45) !important;
+  color: #361c0c !important;
+  box-shadow: 0 2px 8px rgba(42, 24, 10, 0.10) !important;
+}
+#authLangDropdown,
+#authLangNotice,
+#authLangNotice > div.rotate-45,
+#dialectDropdownMenu,
+[id^="reaction-picker-"] {
+  background: #f5ead9 !important;
+  border-color: rgba(156, 120, 78, 0.40) !important;
+  color: #361c0c !important;
+  box-shadow: 0 18px 38px -8px rgba(42, 24, 10, 0.22) !important;
+}
+
+#authLangDropdown button:not(.bg-amber-400\/15),
+#dialectDropdownMenu button {
+  color: #361c0c !important;
+}
+
+#dialectDropdownMenu button:hover,
+[id^="reaction-picker-"] button:hover {
+  background: rgba(180, 83, 9, 0.12) !important;
+}
+
+/* 5. Drawer Settings Accordions, Lobby Inputs, Members Sidebar Tabs */
+#drawerSettingsSection .bg-slate-900\/60,
+#drawerSettingsList .bg-slate-900\/60,
+#mainMenuDrawerPanel > div.border-t,
+#classroomsLobbyView input,
+#membersSidebar .bg-slate-950\/60,
+#membersSidebar .bg-slate-950\/40,
+#membersSidebar .bg-slate-800\/90,
+#membersSidebar input {
+  background: #fbf7f0 !important;
+  border-color: rgba(156, 120, 78, 0.28) !important;
+  color: #361c0c !important;
+}
+
+#drawerNotificationStatusBadge,
+#drawerAllChatNotificationBadge,
+#classroomsTotalCountBadge,
+#membersSidebarCount {
+  background: #e4d4bd !important;
+  border-color: rgba(156, 120, 78, 0.32) !important;
+  color: #54371f !important;
+}
+
+/* 6. Universal Sweep for Dark Slate / Obsidian / Dark-Emerald Utility Classes Inside App Panels & Modals */
+:is(
+  #mainApp,
+  #poemsFeed,
+  #articlesFeed,
+  #dreamPostsFeed,
+  #dialectDropdownMenu,
+  .modal-card,
+  .glass-card,
+  .fb-post-card,
+  div[id$="Modal"] > div,
+  #mainMenuDrawerPanel,
+  #authScreen > div
+) :is(
+  [class*="bg-slate-9"],
+  [class*="bg-slate-8"],
+  [class*="bg-gray-9"],
+  [class*="bg-[#0"],
+  [class*="from-emerald-950"],
+  [class*="from-teal-950"],
+  [class*="from-indigo-950"],
+  [class*="from-slate-9"],
+  [class*="from-slate-8"],
+  [class*="bg-emerald-950"],
+  [class*="bg-teal-950"],
+  [class*="bg-indigo-950"],
+  [class*="bg-rose-950"]
+):not(.fixed.inset-0):not(.modal-overlay):not(.quran-intro-overlay):not(.quran-card):not(video):not([class*="from-amber-"]):not([class*="from-emerald-6"]):not([class*="from-rose-6"]):not([class*="bg-amber-"]):not([class*="bg-emerald-6"]):not([class*="bg-rose-6"]):not([class*="bg-indigo-6"]) {
+  background-color: #f7f0e4 !important;
+  background-image: linear-gradient(165deg, #f9f3e9 0%, #efe3d1 100%) !important;
+  border-color: rgba(156, 120, 78, 0.28) !important;
+  color: #361c0c !important;
+}
+
+/* Protect select dropdowns & inputs inside converted modals/cards */
+div[id$="Modal"] select,
+div[id$="Modal"] option,
+.modal-card select,
+.modal-card option,
+div[id$="Modal"] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+div[id$="Modal"] textarea,
+.modal-card input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.modal-card textarea {
+  background: #fbf7f0 !important;
+  background-color: #fbf7f0 !important;
+  color: #361c0c !important;
+  border-color: rgba(156, 120, 78, 0.36) !important;
+}
+
+/* Readable typography inside converted parchment boxes & subpage cards */
+:is(
+  .hero-banner,
+  .glass-card,
+  .fb-post-card,
+  .modal-card,
+  .question-glow,
+  .revealed-answers-card,
+  div[id$="Modal"] > div,
+  #notificationPermissionBanner,
+  #nightCurfewBanner,
+  #chatSearchBar,
+  #drawerSettingsSection,
+  #dialectDropdownMenu,
+  #authLangDropdown,
+  #authLangNotice
+) :is(.text-white, .text-slate-100, .text-slate-200, .text-slate-300):not([class*="bg-amber-"]):not([class*="bg-emerald-6"]):not([class*="bg-emerald-7"]):not([class*="bg-rose-6"]):not([class*="bg-rose-7"]):not([class*="bg-indigo-6"]):not([class*="bg-indigo-7"]):not([class*="from-"]):not([class*="bg-[#b45309]"]):not([class*="bg-[#d97706]"]):not(button[class*="bg-gradient-"]) {
+  color: #361c0c !important;
+}
+
+/* Keep explicit CTA buttons with gradient/dark fills readable */
+:is(button, a)[class*="bg-gradient-to-"][class*="from-amber-"].text-white,
+:is(button, a)[class*="bg-gradient-to-"][class*="from-amber-"].text-white *,
+:is(button, a)[class*="bg-gradient-to-"][class*="from-emerald-"].text-white,
+:is(button, a)[class*="bg-gradient-to-"][class*="from-emerald-"].text-white *,
+:is(button, a)[class*="bg-gradient-to-"][class*="from-indigo-"].text-white,
+:is(button, a)[class*="bg-gradient-to-"][class*="from-rose-"].text-white,
+#btnSubmitDirectDream,
+#btnSubmitDirectDream * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Harmonize Direct Dream Entry Prompt & Dream Chat Modal with Auth Screen Royal Parchment */
+#dreamDirectPromptModal > div {
+  background: linear-gradient(180deg, #f4e9d8 0%, #efe3d1 55%, #e4d4bd 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.42) !important;
+  box-shadow: 0 25px 60px -15px rgba(42, 24, 10, 0.28) !important;
+  color: #361c0c !important;
+}
+
+#dreamDirectPromptModal > div > div:first-child {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.25) !important;
+}
+
+#dreamDirectPromptModal #directDreamerName {
+  background: #ffffff !important;
+  border-color: rgba(156, 120, 78, 0.35) !important;
+  color: #361c0c !important;
+}
+
+#dreamDirectPromptModal #directDreamerName:focus,
+#dreamChatModal #dreamTextInput:focus {
+  outline: none !important;
+  border-color: rgba(217, 119, 6, 0.85) !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.20) !important;
+}
+
+#dreamChatModal > div {
+  background: linear-gradient(180deg, #f4e9d8 0%, #efe3d1 100%) !important;
+  border-color: rgba(156, 120, 78, 0.42) !important;
+  color: #361c0c !important;
+}
+
+#dreamChatModal > div > div:first-child {
+  background: #eee0cc !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.30) !important;
+}
+
+#dreamChatModal #dreamMessagesContainer {
+  background: #f9f4eb !important;
+}
+
+:is(
+  .hero-banner,
+  .glass-card,
+  .fb-post-card,
+  .modal-card,
+  .question-glow,
+  .revealed-answers-card,
+  div[id$="Modal"] > div,
+  #dialectDropdownMenu
+) :is(.text-slate-400, .text-slate-500):not([class*="bg-amber-"]):not([class*="bg-indigo-6"]):not([class*="bg-emerald-6"]):not([class*="from-"]) {
+  color: #54371f !important;
+}
+
+:is(
+  .hero-banner,
+  .glass-card,
+  .fb-post-card,
+  .modal-card,
+  .question-glow,
+  .revealed-answers-card,
+  div[id$="Modal"] > div
+) :is(.text-cyan-300, .text-cyan-400, .text-sky-300, .text-indigo-300, .text-indigo-400, .text-emerald-200, .text-emerald-300) {
+  color: #2d6245 !important;
+}
+
+:is(
+  .hero-banner,
+  .glass-card,
+  .fb-post-card,
+  .modal-card,
+  .question-glow,
+  .revealed-answers-card,
+  div[id$="Modal"] > div
+) :is(.text-amber-200, .text-amber-300) {
+  color: #92400e !important;
+}
+
+/* ==========================================================================
+   SITEWIDE MODERN HERITAGE POLISH: VOICE PLAYERS, ARTICLES, POEMS & SCROLLBARS (v98.0)
+   ========================================================================== */
+
+/* 1. Custom Warm Manuscript Scrollbars Across Entire Site */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(232, 218, 197, 0.72) !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 120, 78, 0.45) !important;
+  border-radius: 999px !important;
+  border: 2px solid transparent !important;
+  background-clip: content-box !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(180, 83, 9, 0.65) !important;
+  border: 2px solid transparent !important;
+  background-clip: content-box !important;
+}
+
+/* 2. Modern Heritage Parchment Voice Player (.dream-voice-player across /dreams & /) */
+.dream-voice-player {
+  background: linear-gradient(166deg, #fbf7f0 0%, #efe3d1 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  border-radius: 1.25rem !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 8px 20px -6px rgba(42, 24, 10, 0.14) !important;
+  color: #361c0c !important;
+}
+
+.dream-voice-player:hover {
+  border-color: rgba(180, 83, 9, 0.52) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 12px 26px -6px rgba(42, 24, 10, 0.18) !important;
+}
+
+.dream-voice-player.is-playing {
+  border-color: rgba(217, 119, 6, 0.65) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 12px 28px -6px rgba(217, 119, 6, 0.24) !important;
+}
+
+.dream-voice-player::before {
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.14) 0%, transparent 70%) !important;
+}
+
+.dream-voice-player.is-playing::before {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, transparent 70%) !important;
+}
+
+.voice-play-btn {
+  background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 55%, #d97706 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(254, 243, 199, 0.65) !important;
+  box-shadow:
+    0 6px 16px -3px rgba(180, 83, 9, 0.40),
+    inset 0 1px 1px rgba(255, 255, 255, 0.65) !important;
+}
+
+.voice-play-btn i {
+  color: #ffffff !important;
+}
+
+.dream-voice-player.is-playing .voice-play-btn {
+  background: linear-gradient(145deg, #f59e0b 0%, #d97706 55%, #b45309 100%) !important;
+  box-shadow:
+    0 0 22px rgba(217, 119, 6, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.65) !important;
+}
+
+.voice-waveform-container {
+  background: rgba(255, 252, 246, 0.94) !important;
+  border: 1px solid rgba(156, 120, 78, 0.25) !important;
+  box-shadow: inset 0 1px 3px rgba(54, 28, 12, 0.06) !important;
+  border-radius: 0.75rem !important;
+  padding: 4px 10px !important;
+  justify-content: space-between !important;
+  gap: 3px !important;
+}
+
+.voice-waveform-container:hover,
+.voice-waveform-container.is-scrubbing {
+  background: #ffffff !important;
+  border-color: rgba(217, 119, 6, 0.42) !important;
+  box-shadow: inset 0 1px 4px rgba(180, 83, 9, 0.10) !important;
+}
+
+.voice-wave-bar {
+  flex: 1 1 0% !important;
+  min-width: 2px !important;
+  max-width: none !important;
+  background: rgba(156, 120, 78, 0.30) !important;
+}
+
+.voice-wave-bar.played,
+.dream-voice-player.is-playing .voice-wave-bar.played {
+  background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%) !important;
+  box-shadow: 0 0 6px rgba(217, 119, 6, 0.32) !important;
+}
+
+.voice-time-label {
+  color: #361c0c !important;
+  font-weight: 800 !important;
+}
+
+.voice-seek-btn,
+.voice-speed-pill {
+  background: linear-gradient(145deg, #f5ead9 0%, #e5d4bb 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.35) !important;
+  color: #54371f !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 1px 3px rgba(42, 24, 10, 0.06) !important;
+}
+
+.voice-seek-btn:hover,
+.voice-speed-pill:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  border-color: rgba(180, 83, 9, 0.5) !important;
+  color: #2b1406 !important;
+}
+
+.voice-tag-badge {
+  background: rgba(235, 219, 198, 0.85) !important;
+  border: 1px solid rgba(156, 120, 78, 0.35) !important;
+  color: #78350f !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Chat Waveform Cards (.voice-waveform-card) */
+.voice-waveform-card {
+  background: linear-gradient(166deg, #fbf7f0 0%, #efe3d1 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.34) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 4px 12px rgba(42, 24, 10, 0.10) !important;
+}
+
+.voice-waveform-card .waveform-bar {
+  background: rgba(156, 120, 78, 0.32) !important;
+}
+
+.voice-waveform-card .waveform-bar.played {
+  background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%) !important;
+}
+
+/* 3. Unify Modern Heritage Manuscript Craftsmanship on /articles & /poems */
+body.in-landing {
+  background-color: #86b89c !important;
+  background-image:
+    radial-gradient(ellipse 85% 55% at 50% 14%, rgba(255, 252, 240, 0.09) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 70% at 50% 100%, rgba(28, 56, 40, 0.14) 0%, transparent 60%) !important;
+  background-attachment: fixed !important;
+}
+
+#articlesHeader,
+#poemsHeader {
+  background: rgba(238, 224, 204, 0.95) !important;
+  backdrop-filter: blur(22px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.34) !important;
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 251, 244, 0.55),
+    0 10px 28px -10px rgba(42, 24, 10, 0.16) !important;
+}
+
+#articlesHeader .brand-title,
+#poemsHeader .brand-title {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  text-shadow: 0 1px 0 rgba(255, 250, 240, 0.7) !important;
+}
+
+#articlesHeader #btnBackToHome,
+#articlesHeader #dialectDropdownBtn,
+#poemsHeader #btnBackToHome,
+#poemsHeader #btnDialectDropdown {
+  background: rgba(235, 219, 198, 0.88) !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  color: #361c0c !important;
+  box-shadow:
+    inset 0 1px 3px rgba(54, 28, 12, 0.08),
+    0 2px 6px rgba(255, 255, 255, 0.55) !important;
+  transition: all 0.2s ease !important;
+}
+
+#articlesHeader #btnBackToHome:hover,
+#articlesHeader #dialectDropdownBtn:hover,
+#poemsHeader #btnBackToHome:hover,
+#poemsHeader #btnDialectDropdown:hover {
+  background: rgba(226, 206, 180, 0.98) !important;
+  border-color: rgba(180, 83, 9, 0.5) !important;
+  transform: translateY(-1px);
+}
+
+/* Engraved Antique Gold Ornamental Divider Under Article & Poem Hero Titles */
+#articlesPageTitle::after,
+#poemsPageTitle::after,
+main > section.glass-card h1::after {
+  content: "";
+  display: block;
+  width: 5.5rem;
+  height: 2px;
+  margin: 0.55rem auto 0.2rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(180, 83, 9, 0.45) 20%,
+    rgba(217, 119, 6, 0.9) 50%,
+    rgba(180, 83, 9, 0.45) 80%,
+    transparent 100%
+  );
+}
+
+/* Subtle Double-Hairline Inner Manuscript Frame on Dynamic Article & Poem Cards */
+#articlesFeed .glass-card,
+#poemsFeed .glass-card {
+  position: relative !important;
+  border-radius: 1.55rem !important;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease !important;
+}
+
+#articlesFeed .glass-card::before,
+#poemsFeed .glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 1.18rem;
+  border: 1px solid rgba(156, 120, 78, 0.20);
+  pointer-events: none;
+  z-index: 1;
+  transition: border-color 0.28s ease;
+}
+
+#articlesFeed .glass-card:hover,
+#poemsFeed .glass-card:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(180, 83, 9, 0.52) !important;
+  box-shadow:
+    0 24px 48px -14px rgba(34, 22, 10, 0.24),
+    0 8px 18px -4px rgba(180, 83, 9, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+#articlesFeed .glass-card:hover::before,
+#poemsFeed .glass-card:hover::before {
+  border-color: rgba(217, 119, 6, 0.34);
+}
+
+#articlesFeed .glass-card > *,
+#poemsFeed .glass-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+

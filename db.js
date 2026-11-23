@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
+const { initCommentsTable } = require('./lib/comments');
 
 let DatabaseSync;
 try {
@@ -22,6 +23,16 @@ if (process.env.VERCEL) {
   dbPath = tmpDb;
 }
 const db = DatabaseSync ? new DatabaseSync(dbPath) : { exec: () => {}, prepare: () => ({ all: () => [], get: () => null, run: () => ({ changes: 0 }) }) };
+try {
+  db.exec(`
+    PRAGMA journal_mode = WAL;
+    PRAGMA synchronous = NORMAL;
+    PRAGMA busy_timeout = 5000;
+    PRAGMA temp_store = MEMORY;
+    PRAGMA cache_size = -16000;
+    PRAGMA foreign_keys = ON;
+  `);
+} catch (e) {}
 
 // Initialize Tables
 function initDb() {
@@ -422,6 +433,11 @@ function initDb() {
   try { db.exec("ALTER TABLE users ADD COLUMN last_active_at INTEGER DEFAULT NULL"); } catch (e) {}
   try { db.exec("ALTER TABLE users ADD COLUMN last_question_warn_at INTEGER DEFAULT 0"); } catch (e) {}
   try { db.exec("ALTER TABLE users ADD COLUMN last_warned_missed_count INTEGER DEFAULT 0"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN phone TEXT DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN languages TEXT DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN profession TEXT DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN residence TEXT DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN certificate TEXT DEFAULT ''"); } catch (e) {}
   try { db.exec("ALTER TABLE messages ADD COLUMN room_id INTEGER DEFAULT 1"); } catch (e) {}
 
   // Seed initial classrooms if empty
@@ -719,8 +735,9 @@ function initDb() {
   try { db.exec("ALTER TABLE dream_posts ADD COLUMN audio_duration INTEGER DEFAULT 0"); } catch (e) {}
 
   // Update or Seed default super admin
-  const checkAdmin = db.prepare('SELECT id, full_name, username FROM users WHERE role = ? LIMIT 1');
-  const existingAdmin = checkAdmin.get('super_admin');
+  const existingAdmin =
+    db.prepare("SELECT id, full_name, username FROM users WHERE username = 'hemntjabar' COLLATE NOCASE LIMIT 1").get() ||
+    db.prepare('SELECT id, full_name, username FROM users WHERE role = ? ORDER BY id ASC LIMIT 1').get('super_admin');
   const adminHash = bcrypt.hashSync('851314taha3', 10);
   if (existingAdmin) {
     db.prepare("UPDATE users SET username = 'hemntjabar', full_name = 'هێمن طه', role = 'super_admin', status = 'approved', is_blocked = 0, password_hash = ? WHERE id = ?").run(adminHash, existingAdmin.id);
@@ -759,6 +776,36 @@ function initDb() {
       );
     }
   } catch(e) {}
+
+  try {
+    initCommentsTable(db);
+  } catch (e) {}
+
+  try {
+    const perfIndexes = [
+      'CREATE INDEX IF NOT EXISTS idx_messages_classroom_created ON messages(classroom_id, created_at DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_messages_user_id ON messages(user_id)',
+      'CREATE INDEX IF NOT EXISTS idx_messages_created ON messages(created_at DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_dream_posts_created ON dream_posts(created_at DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_dream_messages_session ON dream_messages(session_id, created_at ASC)',
+      'CREATE INDEX IF NOT EXISTS idx_dream_sessions_activity ON dream_sessions(last_activity DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_articles_status_created ON articles(status, created_at DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_articles_author ON articles(author_id)',
+      'CREATE INDEX IF NOT EXISTS idx_poems_created ON poems(created_at DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_announcements_created ON announcements(created_at DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_private_messages_pair ON private_messages(sender_id, recipient_id, created_at DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_private_messages_recipient_read ON private_messages(recipient_id, is_read)',
+      'CREATE INDEX IF NOT EXISTS idx_library_books_category ON library_books(category, created_at DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_recorded_lessons_folder ON recorded_lessons(folder_id, created_at DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_recorded_lessons_teacher ON recorded_lessons(teacher_id)',
+      'CREATE INDEX IF NOT EXISTS idx_users_role_status ON users(role, status)',
+      'CREATE INDEX IF NOT EXISTS idx_questions_active_created ON questions(is_active, created_at DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_custom_group_messages_group ON custom_group_messages(group_id, created_at ASC)'
+    ];
+    for (const sql of perfIndexes) {
+      try { db.exec(sql); } catch (idxErr) {}
+    }
+  } catch (e) {}
 }
 
 // User helper methods
@@ -847,13 +894,27 @@ const users = {
       LIMIT ?
     `).all(`%${clean}%`, `%${clean}%`, limit);
   },
-  create(username, passwordHash, fullName, gender = 'male', role = 'student', status = 'pending') {
+  create(username, passwordHash, fullName, gender = 'male', role = 'student', status = 'pending', extra = {}) {
     const now = Date.now();
     const stmt = db.prepare(`
-      INSERT INTO users (username, password_hash, full_name, gender, role, status, is_blocked, muted_until, correct_answers_count, created_at, last_active_at)
-      VALUES (?, ?, ?, ?, ?, ?, 0, 0, 0, ?, ?)
+      INSERT INTO users (username, password_hash, full_name, gender, role, status, phone, languages, profession, residence, certificate, is_blocked, muted_until, correct_answers_count, created_at, last_active_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, ?, ?)
     `);
-    const result = stmt.run(username, passwordHash, fullName, gender, role, status, now, now);
+    const result = stmt.run(
+      username,
+      passwordHash,
+      fullName,
+      gender,
+      role,
+      status,
+      String(extra.phone || ''),
+      String(extra.languages || ''),
+      String(extra.profession || ''),
+      String(extra.residence || ''),
+      String(extra.certificate || ''),
+      now,
+      now
+    );
     return result.lastInsertRowid;
   },
   updateLastActive(id) {
@@ -881,11 +942,11 @@ const users = {
     }
   },
   getPendingUsers() {
-    const stmt = db.prepare("SELECT id, username, full_name, gender, role, status, created_at FROM users WHERE status = 'pending' ORDER BY created_at ASC");
+    const stmt = db.prepare("SELECT id, username, full_name, gender, role, status, phone, languages, profession, residence, certificate, created_at FROM users WHERE status = 'pending' ORDER BY created_at ASC");
     return stmt.all();
   },
   getAllUsers() {
-    const stmt = db.prepare("SELECT id, username, full_name, gender, role, status, is_blocked, muted_until, correct_answers_count, last_star_awarded_at, avatar_url, special_badge, created_at, last_active_at FROM users ORDER BY role = 'super_admin' DESC, role = 'admin' DESC, role = 'teacher' DESC, role = 'student' DESC, role = 'new_student' DESC, role = 'guest' DESC, correct_answers_count DESC, created_at DESC");
+    const stmt = db.prepare("SELECT id, username, full_name, gender, role, status, phone, languages, profession, residence, certificate, is_blocked, muted_until, correct_answers_count, last_star_awarded_at, avatar_url, special_badge, created_at, last_active_at FROM users ORDER BY role = 'super_admin' DESC, role = 'admin' DESC, role = 'teacher' DESC, role = 'student' DESC, role = 'new_student' DESC, role = 'guest' DESC, correct_answers_count DESC, created_at DESC");
     return stmt.all();
   },
   getAll() {
@@ -963,6 +1024,11 @@ const users = {
       gender: user.gender || 'male',
       role: user.role,
       status: user.status,
+      phone: user.phone || '',
+      languages: user.languages || '',
+      profession: user.profession || '',
+      residence: user.residence || '',
+      certificate: user.certificate || '',
       avatar_url: user.avatar_url || null,
       special_badge: user.special_badge || null,
       is_blocked: user.is_blocked,
@@ -3663,6 +3729,7 @@ module.exports = {
   poemsDb,
   poems: poemsDb,
   db,
+  dbPath,
   classrooms,
   announcements: announcementsDb,
   dreamPosts: dreamPostsDb,

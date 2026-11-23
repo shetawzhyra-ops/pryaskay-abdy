@@ -314,7 +314,7 @@ function formatUserDisplayName(user) {
 
 function getGenderAvatarHtml(gender, customClass = 'w-full h-full') {
   const isFemale = gender === 'female';
-  const src = isFemale ? '/images/avatar_female.svg?v=2.0' : '/images/avatar_male.svg?v=2.0';
+  const src = isFemale ? '/images/avatar_female.svg?v=3.0' : '/images/avatar_male.svg?v=3.0';
   const alt = isFemale ? 'سێبەری باوقاری مێ (محاجبە)' : 'سێبەری باوقاری نێر';
   return `<img src="${src}" alt="${alt}" class="${customClass} object-cover rounded-[inherit] pointer-events-none select-none inline-block align-middle" draggable="false" />`;
 }
@@ -836,16 +836,106 @@ async function handleLogin(e) {
   }
 }
 
-// Handle Register with Gender
+function normalizeAuthDigits(str) {
+  return String(str || '')
+    .replace(/[\u0660-\u0669]/g, c => String(c.charCodeAt(0) - 0x0660))
+    .replace(/[\u06F0-\u06F9]/g, c => String(c.charCodeAt(0) - 0x06F0));
+}
+
+function validateClientRegisterField(elId, value, validatorFn) {
+  const errMsg = validatorFn(value);
+  if (errMsg) {
+    showAuthAlert(errMsg, 'error');
+    const el = document.getElementById(elId);
+    if (el) {
+      el.focus();
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return false;
+  }
+  return true;
+}
+
+// Handle Register with Gender & Mandatory Applicant Info
 async function handleRegister(e) {
   e.preventDefault();
   hideAuthAlert();
 
-  const fullName = document.getElementById('regFullName').value.trim();
-  const gender = document.querySelector('input[name="regGender"]:checked').value;
-  const username = document.getElementById('regUsername').value.trim();
-  const password = document.getElementById('regPassword').value;
+  const fullName = (document.getElementById('regFullName')?.value || '').replace(/\s+/g, ' ').trim();
+  const genderEl = document.querySelector('input[name="regGender"]:checked');
+  const gender = genderEl ? genderEl.value : '';
+  const phoneRaw = (document.getElementById('regPhone')?.value || '').replace(/\s+/g, ' ').trim();
+  const phone = normalizeAuthDigits(phoneRaw);
+  const languages = (document.getElementById('regLanguages')?.value || '').replace(/\s+/g, ' ').trim();
+  const profession = (document.getElementById('regProfession')?.value || '').replace(/\s+/g, ' ').trim();
+  const residence = (document.getElementById('regResidence')?.value || '').replace(/\s+/g, ' ').trim();
+  const certificate = (document.getElementById('regCertificate')?.value || '').replace(/\s+/g, ' ').trim();
+  const username = (document.getElementById('regUsername')?.value || '').replace(/\s+/g, ' ').trim();
+  const password = document.getElementById('regPassword')?.value || '';
   const btn = document.getElementById('regSubmitBtn');
+
+  const hasLetters = (s) => /[A-Za-z\u0600-\u06FF]/.test(s);
+  const isJunk = (s) => {
+    const c = s.replace(/\s+/g, '');
+    return (c.length >= 4 && /^(.)\1+$/.test(c)) || /^[.\-_!?@#$%^&*+=~/\\]+$/.test(c);
+  };
+
+  if (!validateClientRegisterField('regFullName', fullName, (v) => {
+    if (!v || v.length < 3 || !hasLetters(v) || isJunk(v)) return 'تکایە ناوی سیانی بە دروستی بنووسە (بەلایەنی کەم ٣ پیت).';
+    return '';
+  })) return;
+
+  if (gender !== 'male' && gender !== 'female') {
+    showAuthAlert('تکایە ڕەگەز هەڵبژێرە.', 'error');
+    return;
+  }
+
+  if (!validateClientRegisterField('regPhone', phone, (v) => {
+    if (!v) return 'تکایە ژمارەی تەلەفون بنووسە (ئیجبارییە).';
+    if (!/^[0-9+\s\-()]+$/.test(v)) return 'ژمارەی تەلەفون دەبێت تەنها ژمارە بێت (نموونە: 07501234567).';
+    const digits = v.replace(/\D/g, '');
+    if (digits.length < 7 || digits.length > 15 || /^(\d)\1{6,}$/.test(digits)) {
+      return 'تکایە ژمارەی تەلەفونی ڕاستەقینە بنووسە (٧ بۆ ١٥ ژمارە).';
+    }
+    return '';
+  })) return;
+
+  if (!validateClientRegisterField('regLanguages', languages, (v) => {
+    if (!v || isJunk(v)) return 'تکایە دیاری بکە چەند زمان دەزانیت (ئیجبارییە).';
+    const norm = normalizeAuthDigits(v);
+    if (/^\d+$/.test(norm)) {
+      const n = Number(norm);
+      if (n < 1 || n > 20) return 'ژمارەی زمانەکان پێویستە لە نێوان ١ بۆ ٢٠ بێت.';
+      return '';
+    }
+    if (v.length < 2 || !hasLetters(v)) return 'تکایە بە ڕوونی بنووسە چەند زمان و کام زمانانە دەزانیت.';
+    return '';
+  })) return;
+
+  if (!validateClientRegisterField('regProfession', profession, (v) => {
+    if (!v || v.length < 2 || !hasLetters(v) || isJunk(v)) return 'تکایە پیشەکەت بە دروستی بنووسە (ئیجبارییە).';
+    return '';
+  })) return;
+
+  if (!validateClientRegisterField('regCertificate', certificate, (v) => {
+    if (!v || v.length < 2 || !hasLetters(v) || isJunk(v)) return 'تکایە بڕوانامەکەت بە دروستی بنووسە (ئیجبارییە).';
+    return '';
+  })) return;
+
+  if (!validateClientRegisterField('regResidence', residence, (v) => {
+    if (!v || v.length < 2 || !hasLetters(v) || isJunk(v)) return 'تکایە شوێنی نیشتەجێبوونت بە دروستی بنووسە (ئیجبارییە).';
+    return '';
+  })) return;
+
+  if (!validateClientRegisterField('regUsername', username, (v) => {
+    if (!v || v.length < 2 || isJunk(v)) return 'تکایە ناوی خوازراو (Nickname) بە دروستی بنووسە.';
+    return '';
+  })) return;
+
+  if (!validateClientRegisterField('regPassword', password, (v) => {
+    if (!v || v.length < 4) return 'وشەی نهێنی پێویستە بە لایەنی کەم ٤ پیت یان ژمارە بێت.';
+    return '';
+  })) return;
 
   btn.disabled = true;
   btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> چاوەڕێبە...`;
@@ -854,7 +944,17 @@ async function handleRegister(e) {
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ full_name: fullName, gender, username, password })
+      body: JSON.stringify({
+        full_name: fullName,
+        gender,
+        phone,
+        languages,
+        profession,
+        residence,
+        certificate,
+        username,
+        password
+      })
     });
     const data = await res.json();
 
@@ -4269,7 +4369,7 @@ function appendMessage(msg, scroll = true) {
             <span class="text-[10px] text-slate-400 font-mono">${isPdf ? 'فایلی فەرمی PDF' : 'دۆکیومێنت'}</span>
           </div>
         </div>
-        <a href="${msg.attachment_url}" target="_blank" download="${escapeHtml(cleanFileName)}" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs shrink-0 flex items-center gap-1.5 transition active:scale-95 shadow" title="داگرتنی فایل">
+        <a href="${msg.attachment_url}" target="_blank" download="${escapeHtml(cleanFileName)}" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-105 text-white font-black text-xs shrink-0 flex items-center gap-1.5 transition active:scale-95 shadow" title="داگرتنی فایل">
           <i class="fa-solid fa-arrow-down-to-bracket text-xs"></i>
           <span>داگرتن</span>
         </a>
@@ -4297,7 +4397,7 @@ function appendMessage(msg, scroll = true) {
     // Telegram-style interactive waveform player
     attachmentHtml = `
       <div class="mt-2 voice-waveform-card flex items-center gap-2.5 p-2 rounded-2xl bg-slate-900/90 border border-slate-700/60 max-w-xs sm:max-w-sm select-none" id="waveform-card-${msg.id}">
-        <button id="wave-play-btn-${msg.id}" onclick="toggleWaveformAudio(${msg.id}, '${msg.attachment_url}', this)" class="w-10 h-10 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center text-sm shrink-0 shadow-md transition active:scale-95" title="لێدان / ڕاگرتن">
+        <button id="wave-play-btn-${msg.id}" onclick="toggleWaveformAudio(${msg.id}, '${msg.attachment_url}', this)" class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 hover:brightness-105 text-white flex items-center justify-center text-sm shrink-0 shadow-md transition active:scale-95" title="لێدان / ڕاگرتن">
           <i class="fa-solid fa-play"></i>
         </button>
         <div class="flex-1 flex flex-col justify-center gap-1 min-w-0">
@@ -4310,7 +4410,7 @@ function appendMessage(msg, scroll = true) {
           </div>
         </div>
         <div class="flex items-center gap-1 shrink-0">
-          <button id="wave-speed-${msg.id}" onclick="cycleAudioSpeed(${msg.id}, event)" class="px-2 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-[10px] font-bold text-indigo-300 hover:text-white transition" title="خێرایی دەنگ">
+          <button id="wave-speed-${msg.id}" onclick="cycleAudioSpeed(${msg.id}, event)" class="px-2 py-0.5 rounded-lg bg-[#e4d4bd] hover:bg-amber-500/25 border border-[#9c784e]/35 text-[10px] font-bold text-[#78350f] transition" title="خێرایی دەنگ">
             1x
           </button>
           ${downloadBtnHtml}
@@ -7622,6 +7722,30 @@ async function openUserProfileModal(userId) {
 
     // Course Participation Display & Edit Cards (تەنها بۆ فێرخوازانە، نەک مامۆستا و بەڕێوەبەر)
     let courses = Array.isArray(prof.course_enrollments) ? prof.course_enrollments : [];
+    const personalCard = document.getElementById('profPersonalInfoCard');
+    const personalGrid = document.getElementById('profPersonalInfoGrid');
+    if (personalCard && personalGrid) {
+      const infoRows = [
+        prof.phone ? { icon: 'fa-phone', label: 'ژمارەی تەلەفون', val: prof.phone, ltr: true } : null,
+        prof.languages ? { icon: 'fa-language', label: 'چەند زمان ئەزانێت', val: prof.languages } : null,
+        prof.profession ? { icon: 'fa-briefcase', label: 'پیشە', val: prof.profession } : null,
+        prof.certificate ? { icon: 'fa-graduation-cap', label: 'بڕوانامە', val: prof.certificate } : null,
+        prof.residence ? { icon: 'fa-location-dot', label: 'شوێنی نیشتەجێبوون', val: prof.residence, full: true } : null
+      ].filter(Boolean);
+      if (infoRows.length > 0) {
+        personalGrid.innerHTML = infoRows.map(item => `
+          <div class="${item.full ? 'sm:col-span-2' : ''} p-2 rounded-xl bg-[#f4eadb] border border-[#9c784e]/25">
+            <span class="block text-[10px] text-[#785336] font-bold mb-0.5"><i class="fa-solid ${item.icon} text-amber-700 ml-1"></i>${item.label}</span>
+            <span class="block text-xs font-extrabold text-[#361c0c]" ${item.ltr ? 'dir="ltr"' : ''}>${escapeHtml(item.val)}</span>
+          </div>
+        `).join('');
+        personalCard.classList.remove('hidden');
+      } else {
+        personalGrid.innerHTML = '';
+        personalCard.classList.add('hidden');
+      }
+    }
+
     const isTeacherOrManager = isExecutiveProfile || prof.role === 'teacher' || prof.role === 'admin' || prof.role === 'super_admin' || prof.username === 'admin' || prof.username === 'hemntjabar' || prof.id === 1 || prof.id === 3;
 
     const coursesViewCard = document.getElementById('profCoursesViewCard');
@@ -10183,6 +10307,13 @@ async function loadPendingUsersList() {
               <span>•</span>
               <span class="text-[11px] text-slate-400"><i class="fa-regular fa-clock text-[10px]"></i> ${createdDate}</span>
             </div>
+            <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px]">
+              ${u.phone ? `<span class="px-2 py-1 rounded-lg bg-[#fbf7f0] border border-[#9c784e]/25 text-[#361c0c] font-bold" dir="ltr"><i class="fa-solid fa-phone text-amber-700 ml-1"></i>${escapeHtml(u.phone)}</span>` : ''}
+              ${u.languages ? `<span class="px-2 py-1 rounded-lg bg-[#fbf7f0] border border-[#9c784e]/25 text-[#361c0c] font-bold"><i class="fa-solid fa-language text-amber-700 ml-1"></i>زمان: ${escapeHtml(u.languages)}</span>` : ''}
+              ${u.profession ? `<span class="px-2 py-1 rounded-lg bg-[#fbf7f0] border border-[#9c784e]/25 text-[#361c0c] font-bold"><i class="fa-solid fa-briefcase text-amber-700 ml-1"></i>پیشە: ${escapeHtml(u.profession)}</span>` : ''}
+              ${u.certificate ? `<span class="px-2 py-1 rounded-lg bg-[#fbf7f0] border border-[#9c784e]/25 text-[#361c0c] font-bold"><i class="fa-solid fa-graduation-cap text-amber-700 ml-1"></i>بڕوانامە: ${escapeHtml(u.certificate)}</span>` : ''}
+              ${u.residence ? `<span class="sm:col-span-2 px-2 py-1 rounded-lg bg-[#fbf7f0] border border-[#9c784e]/25 text-[#361c0c] font-bold"><i class="fa-solid fa-location-dot text-amber-700 ml-1"></i>نیشتەجێبوون: ${escapeHtml(u.residence)}</span>` : ''}
+            </div>
           </div>
         </div>
 
@@ -12012,7 +12143,7 @@ function appendDreamMessage(msg, isAdminView = false) {
     } else {
       msgElem.className = 'flex justify-center my-2';
       msgElem.innerHTML = `
-        <div class="px-3 py-1.5 rounded-xl bg-slate-900 border border-purple-500/20 text-[11px] text-purple-200 text-center max-w-md whitespace-pre-line leading-relaxed shadow">
+        <div class="px-3.5 py-2 rounded-xl bg-[#efe3d1] border border-[#9c784e]/35 text-[11px] text-[#54371f] text-center max-w-md whitespace-pre-line leading-relaxed shadow-sm font-medium">
           ${escapeHtml(msg.content)}
         </div>
       `;
@@ -12075,9 +12206,9 @@ function appendDreamMessage(msg, isAdminView = false) {
     if (isStaffSender) {
       const alias = getDreamTeacherAlias(msg.sender_name);
       senderBadge = '<span class="role-text-teacher font-black text-[10px] inline-flex items-center gap-1 mr-1.5 select-none" title="مامۆستا"><i class="fa-solid fa-graduation-cap text-[9px]"></i> مامۆستا</span>';
-      senderNameHtml = `<span class="text-amber-300 font-black">${escapeHtml(alias)}</span>`;
+      senderNameHtml = `<span class="${isMine ? 'text-white' : 'text-[#b45309]'} font-black">${escapeHtml(alias)}</span>`;
     } else {
-      senderBadge = '<span class="text-[9px] font-bold text-purple-300 mr-1.5">خەون بین</span>';
+      senderBadge = `<span class="text-[9px] font-bold ${isMine ? 'text-white/90' : 'text-[#78350f]'} mr-1.5">خەون بین</span>`;
       senderNameHtml = `<span>${escapeHtml(msg.sender_name)}</span>`;
     }
   }
@@ -12089,7 +12220,7 @@ function appendDreamMessage(msg, isAdminView = false) {
   ` : '';
 
   msgElem.innerHTML = `
-    <div class="max-w-[85%] rounded-2xl p-3 shadow-md ${isMine ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-slate-800 text-slate-100 rounded-bl-none border border-slate-700/60'}">
+    <div class="max-w-[85%] rounded-2xl p-3 shadow-md ${isMine ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-br-none' : 'bg-[#fbf7f0] text-[#361c0c] rounded-bl-none border border-[#9c784e]/30'}">
       <div class="flex items-center justify-between gap-3 text-[10px] mb-1 opacity-80">
         <span class="font-bold flex items-center">${senderBadge} ${senderNameHtml}</span>
         <div class="flex items-center gap-1 font-mono text-[9px]">

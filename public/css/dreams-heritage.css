@@ -1,0 +1,311 @@
+/**
+ * ============================================================================
+ * PRYASKAY ABDY — DREAMS SECTION (/dreams) MODERN HERITAGE / MANUSCRIPT LUXE
+ * Matches the landing page Modern Heritage style (landing-heritage-test.css):
+ * Velvety Sage Canvas (#86b89c), Warm Parchment Double-Frame Folios,
+ * Engraved Gold Dividers, Classical Amiri Calligraphy & Soft Tactile Shadows.
+ * ============================================================================
+ */
+
+/* 1. VELVETY SAGE CANVAS DEPTH + SUBTLE MANUSCRIPT GRID */
+html,
+body {
+  background-color: #86b89c !important;
+  background-image:
+    radial-gradient(ellipse 85% 55% at 50% 14%, rgba(255, 252, 240, 0.09) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 70% at 50% 100%, rgba(28, 56, 40, 0.14) 0%, transparent 60%) !important;
+  background-attachment: fixed !important;
+}
+
+.dreams-grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(34, 66, 48, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 66, 48, 0.045) 1px, transparent 1px) !important;
+  background-size: 42px 42px !important;
+  mask-image: radial-gradient(ellipse at 50% 35%, rgba(0, 0, 0, 0.85) 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 35%, rgba(0, 0, 0, 0.85) 20%, transparent 80%);
+}
+
+/* 2. CLEAN MANUSCRIPT TOP NAVBAR (#dreamsHeader) */
+#dreamsHeader {
+  background: rgba(238, 224, 204, 0.95) !important;
+  backdrop-filter: blur(22px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.34) !important;
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 251, 244, 0.55),
+    0 10px 28px -10px rgba(42, 24, 10, 0.16) !important;
+}
+
+#dreamsHeader .brand-title {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: clamp(1.28rem, 2vw, 1.58rem) !important;
+  font-weight: 700 !important;
+  color: #361c0c !important;
+  -webkit-text-fill-color: #361c0c !important;
+  text-shadow: 0 1px 0 rgba(255, 250, 240, 0.7) !important;
+}
+
+#dreamsHeader a[title*="سەرەکی"] > div:first-child {
+  background: linear-gradient(145deg, #fdf6ec 0%, #e4d4bd 100%) !important;
+  border: 1.5px solid rgba(180, 83, 9, 0.42) !important;
+  box-shadow:
+    0 4px 12px -2px rgba(54, 28, 12, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+  padding: 2px !important;
+}
+
+#dreamsHeader a[title*="سەرەکی"] > div:first-child > div {
+  background: transparent !important;
+}
+
+#dreamsHeader #btnBackToHome,
+#dreamsHeader #btnDialectDropdown {
+  background: rgba(235, 219, 198, 0.88) !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  color: #361c0c !important;
+  box-shadow:
+    inset 0 1px 3px rgba(54, 28, 12, 0.08),
+    0 2px 6px rgba(255, 255, 255, 0.55) !important;
+  transition: all 0.2s ease !important;
+}
+
+#dreamsHeader #btnBackToHome:hover,
+#dreamsHeader #btnDialectDropdown:hover {
+  background: rgba(226, 206, 180, 0.98) !important;
+  border-color: rgba(180, 83, 9, 0.5) !important;
+  transform: translateY(-1px);
+}
+
+/* 3. HERO STAGE — ROYAL MANUSCRIPT DOUBLE-FRAME FOLIO */
+#dreamsHeroCard {
+  background: linear-gradient(168deg, rgba(244, 233, 216, 0.99) 0%, rgba(230, 213, 190, 0.98) 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.42) !important;
+  border-radius: 1.75rem !important;
+  padding-top: 2.1rem !important;
+  padding-bottom: 2.1rem !important;
+  box-shadow:
+    0 24px 52px -14px rgba(34, 22, 10, 0.24),
+    0 8px 18px -6px rgba(34, 22, 10, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+#dreamsHeroCard::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 1.32rem;
+  border: 1px solid rgba(156, 120, 78, 0.24);
+  pointer-events: none;
+  z-index: 1;
+}
+
+#dreamsHeroCard::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 1.32rem;
+  background: radial-gradient(ellipse 65% 45% at 50% 0%, rgba(255, 250, 232, 0.45) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+#dreamsHeroCard > .relative {
+  position: relative;
+  z-index: 3 !important;
+}
+
+.dreams-hero-top-beam {
+  position: absolute;
+  top: 0;
+  left: 22%;
+  right: 22%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(217, 119, 6, 0.72) 50%, transparent 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Jewel-Crafted Moon Emblem Matching Landing Card Tile */
+#dreamsHeroMoonBadge {
+  width: 3.75rem !important;
+  height: 3.75rem !important;
+  border-radius: 1.1rem !important;
+  background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%) !important;
+  border: 1px solid rgba(254, 243, 199, 0.65) !important;
+  box-shadow:
+    0 10px 22px -4px rgba(180, 83, 9, 0.36),
+    inset 0 1px 1px rgba(255, 255, 255, 0.72) !important;
+  transition: transform 0.25s ease !important;
+}
+
+#dreamsHeroCard:hover #dreamsHeroMoonBadge {
+  transform: scale(1.04);
+}
+
+#dreamsPageTitle {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: clamp(1.8rem, 3.4vw, 2.45rem) !important;
+  line-height: 1.45 !important;
+  font-weight: 700 !important;
+  color: #361c0c !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 1px 0 rgba(255, 252, 244, 0.75) !important;
+  margin-top: 0.25rem !important;
+}
+
+/* Engraved Antique Gold Ornamental Divider Under Hero Title */
+#dreamsPageTitle::after {
+  content: "";
+  display: block;
+  width: 5.5rem;
+  height: 2px;
+  margin: 0.5rem auto 0.2rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(180, 83, 9, 0.45) 20%,
+    rgba(217, 119, 6, 0.9) 50%,
+    rgba(180, 83, 9, 0.45) 80%,
+    transparent 100%
+  );
+}
+
+#dreamsPageSubtitle {
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif !important;
+  color: #54371f !important;
+  line-height: 1.9 !important;
+}
+
+#dreamsCountBadge,
+#dreamsExpertBadgePill {
+  background: linear-gradient(145deg, rgba(244, 233, 216, 0.98), rgba(226, 208, 184, 0.95)) !important;
+  border: 1px solid rgba(156, 120, 78, 0.36) !important;
+  color: #361c0c !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 4px 10px -3px rgba(42, 24, 10, 0.12) !important;
+}
+
+/* 4. DREAM POST CARDS — ARCHITECTURAL MANUSCRIPT DOUBLE-FRAME FOLIOS */
+#dreamPostsFeed .fb-post-card {
+  position: relative !important;
+  border-radius: 1.55rem !important;
+  background: linear-gradient(166deg, rgba(244, 233, 216, 0.99) 0%, rgba(229, 212, 188, 0.97) 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.38) !important;
+  box-shadow:
+    0 20px 44px -14px rgba(34, 22, 10, 0.22),
+    0 6px 14px -4px rgba(34, 22, 10, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76) !important;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease !important;
+  overflow: hidden !important;
+}
+
+/* Inner manuscript hairline frame around each Dream card */
+#dreamPostsFeed .fb-post-card::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 1.18rem;
+  border: 1px solid rgba(156, 120, 78, 0.20);
+  pointer-events: none;
+  z-index: 1;
+  transition: border-color 0.28s ease;
+}
+
+#dreamPostsFeed .fb-post-card:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(180, 83, 9, 0.52) !important;
+  box-shadow:
+    0 26px 52px -14px rgba(34, 22, 10, 0.28),
+    0 8px 18px -4px rgba(180, 83, 9, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+#dreamPostsFeed .fb-post-card:hover::before {
+  border-color: rgba(217, 119, 6, 0.34);
+}
+
+/* Keep card content above ::before hairline */
+#dreamPostsFeed .fb-post-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+#dreamPostsFeed .fb-post-title {
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: clamp(1.18rem, 2vw, 1.42rem) !important;
+  line-height: 1.6 !important;
+  color: #361c0c !important;
+}
+
+/* Refined Dream & Interpretation Boxes inside Card */
+#dreamPostsFeed .fb-post-dream-box,
+#dreamPostsFeed .fb-post-interpretation-box,
+#dreamPostsFeed .fb-post-text-box {
+  background: linear-gradient(180deg, rgba(253, 249, 242, 0.97) 0%, rgba(247, 240, 228, 0.95) 100%) !important;
+  border-color: rgba(156, 120, 78, 0.24) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 4px 12px -4px rgba(42, 24, 10, 0.06) !important;
+}
+
+#dreamPostsFeed .fb-post-dream-box {
+  border-right-color: #5f8f72 !important;
+}
+
+#dreamPostsFeed .fb-post-interpretation-box,
+#dreamPostsFeed .fb-post-text-box {
+  border-right-color: #d97706 !important;
+}
+
+/* Editorial Footer Strip & Simple Clean Reaction Pills */
+#dreamPostsFeed .fb-post-card > div:last-child {
+  border-top-color: rgba(156, 120, 78, 0.22) !important;
+}
+
+#dreamPostsFeed .btn-share-post {
+  background: linear-gradient(145deg, rgba(244, 233, 216, 0.96), rgba(226, 208, 184, 0.94)) !important;
+  border: 1px solid rgba(156, 120, 78, 0.34) !important;
+  color: #361c0c !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 2px 6px rgba(42, 24, 10, 0.08) !important;
+  transition: all 0.2s ease !important;
+}
+
+#dreamPostsFeed .btn-share-post:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  border-color: rgba(180, 83, 9, 0.5) !important;
+  color: #2b1406 !important;
+  transform: translateY(-1px) !important;
+}
+
+#dreamPostsFeed .btn-share-post:hover i {
+  color: #2b1406 !important;
+}
+
+/* 5. BOTTOM RETURN PILL & MANUSCRIPT FOOTER */
+#dreamsBottomReturnBtn {
+  background: linear-gradient(145deg, rgba(244, 233, 216, 0.98), rgba(228, 211, 188, 0.96)) !important;
+  border: 1px solid rgba(156, 120, 78, 0.38) !important;
+  border-radius: 1.1rem !important;
+  color: #361c0c !important;
+  box-shadow:
+    0 10px 24px -8px rgba(34, 22, 10, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#dreamsBottomReturnBtn:hover {
+  border-color: rgba(180, 83, 9, 0.55) !important;
+  transform: translateY(-2px) !important;
+  box-shadow:
+    0 14px 28px -8px rgba(34, 22, 10, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+footer {
+  background: rgba(238, 224, 204, 0.96) !important;
+  border-top: 1px solid rgba(156, 120, 78, 0.34) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 251, 244, 0.6) !important;
+}

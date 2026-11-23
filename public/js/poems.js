@@ -127,7 +127,7 @@
 
     if (!list || list.length === 0) {
       container.innerHTML = `
-        <div class="glass-card p-12 text-center text-slate-500 dark:text-slate-400 rounded-3xl space-y-3">
+        <div class="glass-card p-12 text-center text-[#54371f] rounded-3xl space-y-3">
           <i class="fa-solid fa-feather-pointed text-3xl text-amber-500/50 block"></i>
           <p class="font-bold text-sm">هیچ شیعرێک نەدۆزرایەوە</p>
         </div>
@@ -159,20 +159,18 @@
       ` : '';
 
       return `
-        <article class="glass-card rounded-3xl p-5 sm:p-8 border border-amber-500/20 shadow-xl hover:shadow-2xl hover:border-amber-500/35 transition-all duration-300 relative overflow-hidden group">
-          <div class="absolute -top-12 -right-12 w-32 h-32 bg-amber-400/10 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
-
+        <article class="glass-card rounded-3xl p-5 sm:p-8 border border-[#9c784e]/35 shadow-xl hover:shadow-2xl hover:border-amber-600/50 transition-all duration-300 relative overflow-hidden group">
           <!-- Card Header -->
-          <div class="flex items-center justify-between gap-3 pb-3.5 mb-4 border-b border-slate-200/80 dark:border-slate-800/80">
+          <div class="flex items-center justify-between gap-3 pb-3.5 mb-4 border-b border-[#9c784e]/25">
             <div class="flex items-center gap-2.5 min-w-0">
-              <span class="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-amber-400 to-amber-600 shadow-[0_0_8px_rgba(251,191,36,0.6)] shrink-0"></span>
-              <h2 class="text-base sm:text-xl font-black text-slate-900 dark:text-amber-100 tracking-tight truncate">
+              <span class="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-amber-500 to-amber-700 shadow-sm shrink-0"></span>
+              <h2 class="text-lg sm:text-xl font-bold text-[#361c0c] tracking-tight truncate">
                 ${escapeHtml(poem.title)}
               </h2>
             </div>
             <div class="flex items-center gap-2 shrink-0">
-              <span class="text-[11px] text-slate-500 dark:text-slate-400 font-bold flex items-center gap-1">
-                <i class="fa-regular fa-calendar-days text-[10px] text-amber-500"></i>
+              <span class="text-[11px] text-[#785336] font-bold flex items-center gap-1">
+                <i class="fa-regular fa-calendar-days text-[10px] text-[#b45309]"></i>
                 <span>${dateStr}</span>
               </span>
               ${deleteBtn}
@@ -180,34 +178,34 @@
           </div>
 
           <!-- Poem Verses Body -->
-          <div class="my-4 p-5 sm:p-7 rounded-2xl bg-gradient-to-b from-amber-50/60 to-white/80 dark:from-slate-900/60 dark:to-slate-950/80 border border-amber-900/10 dark:border-amber-400/10 shadow-inner">
-            <div class="poem-verse-text text-center font-serif text-sm sm:text-base md:text-lg text-slate-900 dark:text-slate-100 leading-[2.3] sm:leading-[2.6] whitespace-pre-line select-text font-medium tracking-wide">
+          <div class="my-4 p-5 sm:p-7 rounded-2xl bg-[#fbf7f0]/90 border border-[#9c784e]/25 shadow-inner">
+            <div class="poem-verse-text text-center font-serif text-base sm:text-lg md:text-xl text-[#361c0c] leading-[2.3] sm:leading-[2.5] whitespace-pre-line select-text font-medium tracking-wide">
 ${escapeHtml(poem.content)}
             </div>
           </div>
 
           <!-- Card Footer -->
-          <div class="pt-3 border-t border-slate-200/80 dark:border-slate-800/80 flex items-center justify-end gap-3 flex-wrap text-xs">
+          <div class="pt-3 border-t border-[#9c784e]/25 flex items-center justify-end gap-3 flex-wrap text-xs">
 
             <!-- Actions: Like & Share -->
             <div class="flex items-center gap-2">
               <button 
                 onclick="sharePoem(${poem.id})" 
-                class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-sm"
+                class="px-3.5 py-1.5 rounded-xl bg-[#e4d4bd]/85 hover:bg-[#d9c4a6] border border-[#9c784e]/30 text-[#361c0c] font-bold transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-sm"
                 title="هاوبەشکردن یان لەبەرگرتنەوەی شیعرەکە"
               >
-                <i class="fa-solid fa-share-nodes text-[11px] text-amber-500"></i>
+                <i class="fa-solid fa-share-nodes text-[11px] text-[#b45309]"></i>
                 <span>هاوبەشکردن</span>
               </button>
 
               <button 
                 onclick="reactToPoem(${poem.id})" 
                 id="btnLikePoem_${poem.id}"
-                class="px-3.5 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-rose-200 dark:border-rose-800/50 text-rose-600 dark:text-rose-400 font-black transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-sm group"
+                class="px-3.5 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-700 font-bold transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-sm group"
                 title="بەدڵمە"
               >
-                <i class="fa-solid fa-heart text-[12px] group-hover:scale-125 transition-transform text-rose-500"></i>
-                <span id="poemLikes_${poem.id}" class="font-mono text-xs">${poem.likes || 0}</span>
+                <i class="fa-solid fa-heart text-[12px] group-hover:scale-125 transition-transform text-rose-600"></i>
+                <span id="poemLikes_${poem.id}" class="font-latin text-xs">${poem.likes || 0}</span>
               </button>
             </div>
           </div>
