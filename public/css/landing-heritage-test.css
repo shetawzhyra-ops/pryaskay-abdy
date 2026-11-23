@@ -589,3 +589,9 @@ html body #landingPage #landingQuranHero #heroSubtitle.quran-hero-subtitle {
   padding-top: 1.45rem !important;
   padding-bottom: 1.45rem !important;
 }
+
+/* Strictly hide top header search button on landing page */
+#landingHeader #globalSearchTriggerBtn,
+#landingHeader .pgs-trigger-btn {
+  display: none !important;
+}
