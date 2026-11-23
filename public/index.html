@@ -1943,7 +1943,7 @@ background: rgba(56, 189, 248, 0.85);
 }
 </style>
 <!-- Experimental Modern Heritage Landing Style (Non-color-changing, clean revertable) -->
-  <link id="landingHeritageTestCss" rel="stylesheet" href="/css/landing-heritage-test.css?v=9.0&t=1795590000&t=1795440000">
+  <link id="landingHeritageTestCss" rel="stylesheet" href="/css/landing-heritage-test.css?v=10.0&t=1795600000">
   <!-- Inside Application Modern Heritage / Manuscript Luxe Style -->
   <link id="appHeritageCss" rel="stylesheet" href="/css/app-heritage.css?v=1.0&t=1795500000">
 </head>
@@ -2364,7 +2364,7 @@ title="بڵاوکراوەی دواتر"
 </div>
 <!-- Admin-only Add Announcement Button -->
 <button 
-id="btnAdminAddAnn" 
+id="btnAdminAddAnn" style="display:none;" 
 type="button" 
 onclick="openAnnouncementModal(false)"
 class="hidden btn-primary-gradient px-3.5 py-1.5 text-xs font-bold gap-1.5 shadow-md cursor-pointer"
@@ -2421,7 +2421,7 @@ title="زیادکردنی بڵاوکراوەی نوێ"
 <span class="ann-dot active"></span>
 </div>
 <!-- Admin controls for active card (Edit / Delete) -->
-<div id="annAdminCardActions" class="hidden flex items-center gap-2">
+<div id="annAdminCardActions" style="display:none;" class="hidden flex items-center gap-2">
 <button type="button" id="btnEditCurrentAnn" onclick="editCurrentAnnouncement()" class="text-xs font-bold transition-all px-3 py-1.5 rounded-xl cursor-pointer flex items-center gap-1.5 shadow-sm" style="background: rgba(217,119,6,0.16); border: 1px solid rgba(180,83,9,0.35); color: #78350f;" title="دەستکاری دەق، وێنە یان ڤیدیۆ">
 <i class="fa-solid fa-pen-to-square text-[11px]"></i>
 <span>دەستکاری و گۆڕین</span>
@@ -2436,7 +2436,7 @@ title="زیادکردنی بڵاوکراوەی نوێ"
 </div>
 <!-- Admin-Only Slot (Strictly hidden for visitors) -->
 <div 
-id="emptyPostSlot" 
+id="emptyPostSlot" style="display:none;" 
 onclick="openAnnouncementModal(false)"
 class="hidden mt-3 glass-card post-card p-4 border-2 border-dashed border-cyan-500/25 hover:border-cyan-400/50 bg-cyan-950/10 transition-all duration-300 flex items-center justify-between text-right group cursor-pointer"
 title="کلیک بکە بۆ دانانی بڵاوکراوەی نوێ"
@@ -8686,7 +8686,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=94.0&t=1795580000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=107.0&t=1795580000"></script>
+<script src="/js/app.js?v=108.0&t=1795600000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->

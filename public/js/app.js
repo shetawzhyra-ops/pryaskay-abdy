@@ -24457,9 +24457,18 @@ function updateLandingAdminState() {
   const btnAdminAdd = document.getElementById('btnAdminAddAnn');
   const adminActions = document.getElementById('annAdminCardActions');
 
-  if (emptySlot) emptySlot.classList.toggle('hidden', !canManage);
-  if (btnAdminAdd) btnAdminAdd.classList.toggle('hidden', !canManage);
-  if (adminActions) adminActions.classList.toggle('hidden', !canManage);
+  if (emptySlot) {
+    emptySlot.classList.toggle('hidden', !canManage);
+    emptySlot.style.display = canManage ? '' : 'none';
+  }
+  if (btnAdminAdd) {
+    btnAdminAdd.classList.toggle('hidden', !canManage);
+    btnAdminAdd.style.display = canManage ? 'inline-flex' : 'none';
+  }
+  if (adminActions) {
+    adminActions.classList.toggle('hidden', !canManage);
+    adminActions.style.display = canManage ? 'flex' : 'none';
+  }
 }
 
 function renderAnnEditorMediaPreview(url, mediaType) {
