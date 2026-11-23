@@ -13,14 +13,14 @@
       backToHome: 'گەڕانەوە بۆ سەرەکی',
       dialectLabel: 'شێوەزار: سۆرانی',
       pageTitle: 'خەونە لێکدراوەکان',
-      pageSubtitle: 'لێکدانەوەی نوێترین خەونەکان بە شێوازی زانستی و شەرعی لەلایەن معەبیر و مامۆستایانی فێرگە.',
+      pageSubtitle: 'لێکدانەوەی نوێترین خەونەکان بە شێوازی زانستی و شەرعی لەلایەن موعەبیر و مامۆستایانی فێرگە.',
       expertBadge: 'تایبەت بە مامۆستایانی فێرگە',
       countSuffix: 'خەونی لێکدراوە',
       loadingText: 'بارکردنی خەونە لێکدراوەکان...',
       emptyText: 'هیچ خەونێکی لێکدراوە لە ئێستادا بەردەست نییە.',
       dreamLabelText: 'دەقی خەونەکە:',
       interpretationLabelText: 'تەئویل و لێکدانەوەی مامۆستا:',
-      teacherRole: 'معەبیر و مامۆستای فێرگە',
+      teacherRole: 'موعەبیر و مامۆستای فێرگە',
       teacherName: 'مامۆستای لێکدانەوە',
       timeYesterday: 'دوێنێ',
       timeToday: 'ئەمڕۆ',
@@ -71,7 +71,7 @@
       backToHome: 'ئەوەگێڵای پەڕەو سەرەکی',
       dialectLabel: 'شێواز: هەورامی',
       pageTitle: 'خەونێ ماناکریێ',
-      pageSubtitle: 'ماناکەردەیو تازەتەرین خەونا بە شێوازی زانستی و شەرعی جەلایەن معەبیر و مامۆستایاو فێرگەی.',
+      pageSubtitle: 'ماناکەردەیو تازەتەرین خەونا بە شێوازی زانستی و شەرعی جەلایەن موعەبیر و مامۆستایاو فێرگەی.',
       expertBadge: 'تایبەت بە مامۆستایاو فێرگەی',
       countSuffix: 'خەونێ مانا کریێ',
       loadingText: 'بارکەردەیو خەونە ماناکریەکا...',
@@ -458,7 +458,7 @@
 
       // Author Details
       const authorName = post.author_name || d.teacherName || 'مامۆستای لێکدانەوە';
-      const authorBadge = post.author_badge || d.teacherRole || 'معەبیر و مامۆستای فێرگە';
+      const authorBadge = post.author_badge || d.teacherRole || 'موعەبیر و مامۆستای فێرگە';
 
       // Text Content Layout
       let contentHtml = '';
