@@ -253,7 +253,7 @@
     overlay.id = 'pryaskaGlobalSearchOverlay';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
-    overlay.setAttribute('aria-label', 'گەڕانی گشتی لە پریاسکەی عەبدی');
+    overlay.setAttribute('aria-label', 'گەڕانی گشتی لە پریاسکە');
     overlay.innerHTML = `
       <div id="pryaskaGlobalSearchDialog">
         <div class="pgs-head">
@@ -267,7 +267,7 @@
         </div>
         <div class="pgs-filters" id="pryaskaGlobalSearchFilters"></div>
         <div class="pgs-body" id="pryaskaGlobalSearchResults">
-          <div class="pgs-empty">وشەیەک بنووسە بۆ گەڕانی خێرا لە هەموو بەشەکانی پریاسکەی عەبدی...</div>
+          <div class="pgs-empty">وشەیەک بنووسە بۆ گەڕانی خێرا لە هەموو بەشەکانی پریاسکە...</div>
         </div>
       </div>
     `;
@@ -322,7 +322,7 @@
     const q = input.value.trim();
 
     if (!q) {
-      resultsEl.innerHTML = '<div class="pgs-empty">وشەیەک بنووسە بۆ گەڕانی خێرا لە هەموو بەشەکانی پریاسکەی عەبدی...</div>';
+      resultsEl.innerHTML = '<div class="pgs-empty">وشەیەک بنووسە بۆ گەڕانی خێرا لە هەموو بەشەکانی پریاسکە...</div>';
       return;
     }
 
