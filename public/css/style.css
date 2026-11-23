@@ -12767,84 +12767,8 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateG
   color: #361c0c !important;
 }
 
-/* ================= MOBILE VIEW: ONLY SHOW ICONS ================= */
+/* ================= MOBILE VIEW ================= */
 @media (max-width: 640px) {
-  /* 1. Main Menu Drawer on Mobile: Compact Icon Rail / Dock */
-  #mainMenuDrawerPanel {
-    width: 82px !important;
-    min-width: 82px !important;
-    max-width: 82px !important;
-    padding: 0.5rem 0.25rem !important;
-  }
-  #mainMenuDrawerPanel > div:first-child {
-    padding: 0.6rem 0.25rem !important;
-    justify-content: center !important;
-  }
-  #mainMenuDrawerPanel > div:first-child > div:first-child > div:last-child {
-    display: none !important; /* Hide title & subtitle */
-  }
-  #mainMenuDrawerPanel div[onclick*="openMyProfile"] {
-    margin: 0.25rem auto !important;
-    padding: 0.35rem !important;
-    justify-content: center !important;
-    width: 54px !important;
-    height: 54px !important;
-    border-radius: 1rem !important;
-  }
-  #mainMenuDrawerPanel div[onclick*="openMyProfile"] > div:first-child > div:last-child,
-  #mainMenuDrawerPanel div[onclick*="openMyProfile"] span,
-  #mainMenuDrawerPanel div[onclick*="openMyProfile"] i:not(.fa-user) {
-    display: none !important; /* Hide profile texts, only show avatar */
-  }
-  .drawer-tool-btn,
-  #mainMenuDrawerPanel .drawer-tool-btn,
-  #mainMenuDrawerPanel .overflow-y-auto button {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 52px !important;
-    height: 52px !important;
-    min-height: 52px !important;
-    padding: 0 !important;
-    margin: 0.35rem auto !important;
-    border-radius: 1rem !important;
-  }
-  .drawer-tool-title,
-  .drawer-tool-badge,
-  #mainMenuDrawerPanel .drawer-tool-title,
-  #mainMenuDrawerPanel .drawer-tool-badge,
-  #mainMenuDrawerPanel span:not(.fa-solid):not(.fa-regular):not(.fa-brands),
-  #mainMenuDrawerPanel .fa-chevron-left,
-  #mainMenuDrawerPanel p {
-    display: none !important; /* ONLY ICONS APPEAR ON MOBILE */
-  }
-  .drawer-tool-icon-box,
-  #mainMenuDrawerPanel .drawer-tool-icon-box {
-    margin: 0 !important;
-    width: 42px !important;
-    height: 42px !important;
-    border-radius: 0.85rem !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  .drawer-tool-icon-box i,
-  #mainMenuDrawerPanel .drawer-tool-icon-box i {
-    font-size: 1.15rem !important;
-  }
-  #mainMenuDrawerPanel .border-t button[onclick*="logout"],
-  #mainMenuDrawerPanel .border-t button[onclick*="Logout"] {
-    width: 52px !important;
-    height: 52px !important;
-    padding: 0 !important;
-    margin: 0.35rem auto !important;
-    justify-content: center !important;
-    border-radius: 1rem !important;
-  }
-  #mainMenuDrawerPanel .border-t button[onclick*="logout"] span,
-  #mainMenuDrawerPanel .border-t button[onclick*="Logout"] span {
-    display: none !important;
-  }
 
   /* 2. Chat Floating Tools Menu on Mobile: Horizontal Icon Row */
   #publicChatToolsMenu,
