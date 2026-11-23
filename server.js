@@ -569,6 +569,22 @@ app.post('/api/articles/:id/react', (req, res) => {
   }
 });
 
+function canManageAnnouncements(user) {
+  if (!user) return false;
+  const uname = String(user.username || '').toLowerCase().trim();
+  const fname = String(user.full_name || '').trim();
+  const isAzad = uname === 'azad' || user.id === 6 || (user.role === 'super_admin' && (uname === 'azad' || fname.includes('ئازاد')));
+  return (
+    user.role === 'super_admin' ||
+    user.role === 'admin' ||
+    isAzad ||
+    uname === 'hemntjabar' ||
+    uname === 'hemn' ||
+    uname === 'admin' ||
+    user.id === 1
+  );
+}
+
 app.get('/api/announcements', (req, res) => {
   try {
     const list = getAnnouncements();
@@ -578,13 +594,48 @@ app.get('/api/announcements', (req, res) => {
   }
 });
 
-app.post('/api/announcements', (req, res) => {
+app.post('/api/announcements/upload-media', authMiddleware, (req, res) => {
+  if (!canManageAnnouncements(req.user)) {
+    return res.status(403).json({ error: 'تەنها بەڕێوەبەر و مامۆستا ئازاد دەسەڵاتی گۆڕینی بڵاوکراوەکانیان هەیە' });
+  }
+  upload.single('media')(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ error: err.message || 'هەڵە لە بارکردنی فایل' });
+    }
+    if (!req.file) {
+      return res.status(400).json({ error: 'هیچ فایلێک دیاری نەکراوە' });
+    }
+    const mime = String(req.file.mimetype || '').toLowerCase();
+    const ext = path.extname(req.file.originalname || req.file.filename || '').toLowerCase();
+    const isVideo = mime.startsWith('video/') || (!mime.startsWith('audio/') && ['.mp4', '.mov', '.mkv', '.m4v', '.webm', '.ogv'].includes(ext));
+    const isImage = mime.startsWith('image/') || ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif', '.bmp'].includes(ext);
+    if (!isVideo && !isImage) {
+      try { fs.unlinkSync(req.file.path); } catch (e) {}
+      return res.status(400).json({ error: 'تەنها وێنەی ئاسایی، وێنەی جوڵاو (GIF) یان کورتە ڤیدیۆ ڕێگەپێدراوە' });
+    }
+    if (isImage) {
+      await optimizeSingleFile(req.file);
+    }
+    const fileUrl = '/uploads/' + req.file.filename;
+    res.json({
+      success: true,
+      media_url: fileUrl,
+      media_type: isVideo ? 'video' : 'image',
+      filename: req.file.filename
+    });
+  });
+});
+
+app.post('/api/announcements', authMiddleware, (req, res) => {
   try {
-    const { title, content, tag, author } = req.body;
+    if (!canManageAnnouncements(req.user)) {
+      return res.status(403).json({ error: 'تەنها بەڕێوەبەر و مامۆستا ئازاد دەسەڵاتی دانانی بڵاوکراوەیان هەیە' });
+    }
+    const { title, content, tag, author, media_url, media_type } = req.body;
     if (!title || !content) {
       return res.status(400).json({ error: 'تکایە ناونیشان و ناوەڕۆک پڕبکەرەوە' });
     }
-    const created = createAnnouncement(title, content, tag, author);
+    const created = createAnnouncement(title, content, tag, author, media_url || '', media_type || '');
     scheduleSearchReindex();
     if (io) io.emit('announcement_created', created);
     res.json(created);
@@ -593,11 +644,17 @@ app.post('/api/announcements', (req, res) => {
   }
 });
 
-app.put('/api/announcements/:id', (req, res) => {
+app.put('/api/announcements/:id', authMiddleware, (req, res) => {
   try {
+    if (!canManageAnnouncements(req.user)) {
+      return res.status(403).json({ error: 'تەنها بەڕێوەبەر و مامۆستا ئازاد دەسەڵاتی دەستکاریکردنی بڵاوکراوەیان هەیە' });
+    }
     const { id } = req.params;
-    const { title, content, tag, author } = req.body;
-    const updated = updateAnnouncement(Number(id), title, content, tag, author);
+    const { title, content, tag, author, media_url, media_type } = req.body;
+    if (!title || !content) {
+      return res.status(400).json({ error: 'تکایە ناونیشان و ناوەڕۆک پڕبکەرەوە' });
+    }
+    const updated = updateAnnouncement(Number(id), title, content, tag, author, media_url || '', media_type || '');
     scheduleSearchReindex();
     if (io) io.emit('announcement_updated', updated);
     res.json(updated);
@@ -606,8 +663,11 @@ app.put('/api/announcements/:id', (req, res) => {
   }
 });
 
-app.delete('/api/announcements/:id', (req, res) => {
+app.delete('/api/announcements/:id', authMiddleware, (req, res) => {
   try {
+    if (!canManageAnnouncements(req.user)) {
+      return res.status(403).json({ error: 'تەنها بەڕێوەبەر و مامۆستا ئازاد دەسەڵاتی سڕینەوەی بڵاوکراوەیان هەیە' });
+    }
     const { id } = req.params;
     deleteAnnouncement(Number(id));
     scheduleSearchReindex();

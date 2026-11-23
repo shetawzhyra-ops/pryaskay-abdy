@@ -733,6 +733,8 @@ function initDb() {
   try { db.exec("ALTER TABLE dream_posts ADD COLUMN video_url TEXT DEFAULT ''"); } catch (e) {}
   try { db.exec("ALTER TABLE dream_posts ADD COLUMN audio_url TEXT DEFAULT ''"); } catch (e) {}
   try { db.exec("ALTER TABLE dream_posts ADD COLUMN audio_duration INTEGER DEFAULT 0"); } catch (e) {}
+  try { db.exec("ALTER TABLE announcements ADD COLUMN media_url TEXT DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE announcements ADD COLUMN media_type TEXT DEFAULT ''"); } catch (e) {}
 
   // Update or Seed default super admin
   const existingAdmin =
@@ -3433,13 +3435,17 @@ const announcementsDb = {
   getAnnouncements() {
     return db.prepare('SELECT * FROM announcements ORDER BY id DESC').all();
   },
-  createAnnouncement(title, content, tag = 'جێگیرکراو', author = 'سەرپەرشتیاری فێرگە') {
+  createAnnouncement(title, content, tag = 'جێگیرکراو', author = 'سەرپەرشتیاری فێرگە', mediaUrl = '', mediaType = '') {
     const now = Date.now();
-    const res = db.prepare('INSERT INTO announcements (title, content, tag, author, created_at) VALUES (?, ?, ?, ?, ?)').run(title, content, tag, author, now);
-    return { id: Number(res.lastInsertRowid), title, content, tag, author, created_at: now };
+    const safeMediaUrl = String(mediaUrl || '').trim();
+    const safeMediaType = safeMediaUrl ? (mediaType === 'video' ? 'video' : 'image') : '';
+    const res = db.prepare('INSERT INTO announcements (title, content, tag, author, media_url, media_type, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)').run(title, content, tag, author, safeMediaUrl, safeMediaType, now);
+    return { id: Number(res.lastInsertRowid), title, content, tag, author, media_url: safeMediaUrl, media_type: safeMediaType, created_at: now };
   },
-  updateAnnouncement(id, title, content, tag, author) {
-    db.prepare('UPDATE announcements SET title = ?, content = ?, tag = ?, author = ? WHERE id = ?').run(title, content, tag, author, id);
+  updateAnnouncement(id, title, content, tag, author, mediaUrl = '', mediaType = '') {
+    const safeMediaUrl = String(mediaUrl || '').trim();
+    const safeMediaType = safeMediaUrl ? (mediaType === 'video' ? 'video' : 'image') : '';
+    db.prepare('UPDATE announcements SET title = ?, content = ?, tag = ?, author = ?, media_url = ?, media_type = ? WHERE id = ?').run(title, content, tag, author, safeMediaUrl, safeMediaType, id);
     return db.prepare('SELECT * FROM announcements WHERE id = ?').get(id);
   },
   deleteAnnouncement(id) {

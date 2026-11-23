@@ -1676,7 +1676,7 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateG
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="پریاسکەی عەبدی">
 <!-- Tailwind CSS CDN -->
-<link rel="stylesheet" href="/css/tailwind.built.css?v=1.0">
+<link rel="stylesheet" href="/css/tailwind.built.css?v=2.0">
 <!-- FontAwesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <!-- Custom Styles -->
@@ -2445,12 +2445,23 @@ title="زیادکردنی بڵاوکراوەی نوێ"
 </span>
 <span class="text-[11px] text-slate-400 font-latin flex items-center gap-1.5" id="annActiveDate">پێش 5 کاتژمێر</span>
 </div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
+<div class="flex-1 min-w-0 space-y-2.5">
 <h4 id="annActiveTitle" class="text-base sm:text-xl font-black text-white transition-colors leading-snug">
 بەخێربێن بۆ فێرگە – دەستپێکی گەشتێکی زانستی
 </h4>
 <p id="annActiveContent" class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal whitespace-pre-line">
 لەم بەشەدا نوێترین ئاگاداری، وتار، هەواڵ و ڕاگەیەندراوەکانی فێرگە بڵاودەکرێنەوە و بەردەوام نوێ دەکرێنەوە.
 </p>
+</div>
+<!-- Media Showcase Slot (Left side in RTL) -->
+<div id="annActiveMediaContainer" class="hidden w-full sm:w-48 md:w-56 lg:w-64 shrink-0">
+<div class="relative rounded-2xl overflow-hidden border border-[#9c784e]/35 bg-[#f7efe3]/85 shadow-md p-1.5 flex items-center justify-center">
+<img id="annActiveImage" src="" alt="وێنەی بڵاوکراوە" onclick="openAnnMediaLightbox(this.src)" class="hidden w-full max-h-52 sm:max-h-40 object-contain rounded-xl cursor-pointer transition-transform duration-300 hover:scale-[1.03]" loading="lazy" />
+<video id="annActiveVideo" src="" controls autoplay muted loop playsinline onplay="pauseAnnouncementTimer()" onended="restartAnnouncementAutoTimer()" class="hidden w-full max-h-52 sm:max-h-40 rounded-xl object-contain bg-black/5"></video>
+</div>
+</div>
+</div>
 </div>
 <div class="mt-2 pt-3.5 border-t border-white/10 flex items-center justify-between text-xs text-slate-400 flex-wrap gap-2">
 <span class="landing-ann-author flex items-center gap-2 font-bold">
@@ -2463,11 +2474,13 @@ title="زیادکردنی بڵاوکراوەی نوێ"
 </div>
 <!-- Admin controls for active card (Edit / Delete) -->
 <div id="annAdminCardActions" class="hidden flex items-center gap-2">
-<button type="button" id="btnEditCurrentAnn" onclick="editCurrentAnnouncement()" class="text-xs text-slate-400 hover:text-cyan-300 transition-colors px-2.5 py-1 rounded-lg bg-white/5 cursor-pointer" title="دەستکاریکردن">
-<i class="fa-solid fa-pen-to-square text-[10px]"></i> دەستکاری
+<button type="button" id="btnEditCurrentAnn" onclick="editCurrentAnnouncement()" class="text-xs font-bold transition-all px-3 py-1.5 rounded-xl cursor-pointer flex items-center gap-1.5 shadow-sm" style="background: rgba(217,119,6,0.16); border: 1px solid rgba(180,83,9,0.35); color: #78350f;" title="دەستکاری دەق، وێنە یان ڤیدیۆ">
+<i class="fa-solid fa-pen-to-square text-[11px]"></i>
+<span>دەستکاری و گۆڕین</span>
 </button>
-<button type="button" id="btnDeleteCurrentAnn" onclick="deleteCurrentAnnouncement()" class="text-xs text-slate-400 hover:text-rose-400 transition-colors px-2.5 py-1 rounded-lg bg-white/5 cursor-pointer" title="سڕینەوە">
-<i class="fa-solid fa-trash-can text-[10px]"></i> سڕینەوە
+<button type="button" id="btnDeleteCurrentAnn" onclick="deleteCurrentAnnouncement()" class="text-xs font-bold transition-all px-2.5 py-1.5 rounded-xl cursor-pointer flex items-center gap-1" style="background: rgba(225,29,72,0.1); border: 1px solid rgba(225,29,72,0.25); color: #be123c;" title="سڕینەوە">
+<i class="fa-solid fa-trash-can text-[10px]"></i>
+<span>سڕینەوە</span>
 </button>
 </div>
 </div>
@@ -2515,49 +2528,83 @@ title="کلیک بکە بۆ دانانی بڵاوکراوەی نوێ"
 </div>
 </footer>
 <!-- Admin Announcement Editor Modal (#modalAnnouncementEditor) -->
-<div id="modalAnnouncementEditor" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay hidden">
-<div class="glass-card modal-content w-full max-w-lg p-6 sm:p-7 border border-white/15 shadow-2xl relative">
-<button id="btnCloseAnnModal" onclick="closeAnnouncementModal()" type="button" class="absolute top-4 left-4 text-slate-400 hover:text-white p-2 rounded-lg transition-colors cursor-pointer">
-<i class="fa-solid fa-xmark text-lg"></i>
+<div id="modalAnnouncementEditor" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm hidden overflow-y-auto">
+<div class="w-full max-w-lg rounded-3xl p-5 sm:p-6 shadow-2xl relative my-auto border border-[#9c784e]/40" style="background: linear-gradient(165deg, #fdfbf7 0%, #f3eadb 100%); color: #361c0c;">
+<button id="btnCloseAnnModal" onclick="closeAnnouncementModal()" type="button" class="absolute top-4 left-4 w-8 h-8 rounded-xl flex items-center justify-center transition-colors cursor-pointer" style="background: rgba(156,120,78,0.14); color: #54371f;">
+<i class="fa-solid fa-xmark text-base"></i>
 </button>
-<div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-5">
-<div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-400/20 text-cyan-400 flex items-center justify-center text-lg">
+<div class="flex items-center gap-3 pb-3.5 mb-4" style="border-bottom: 1px solid rgba(156,120,78,0.22);">
+<div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0" style="background: rgba(217,119,6,0.16); border: 1px solid rgba(217,119,6,0.35); color: #b45309;">
 <i class="fa-solid fa-bullhorn"></i>
 </div>
 <div>
-<h3 id="annModalTitle" class="text-xl font-bold text-white">بڵاوکراوەی نوێ</h3>
-<p class="text-xs text-slate-400">دانان یان دەستکاریکردنی ئاگاداری لە بەشی بڵاوکراوەکان</p>
+<h3 id="annModalTitle" class="text-base sm:text-lg font-black" style="color: #2b1708 !important;">بڵاوکراوەی نوێ</h3>
+<p class="text-[11px] font-semibold" style="color: #78350f !important;">گۆڕینی دەق، وێنەی ئاسایی، وێنەی جوڵاو (GIF) یان کورتە ڤیدیۆ</p>
 </div>
 </div>
-<form id="formAnnouncement" onsubmit="submitAnnouncementForm(event)" class="space-y-4">
+<form id="formAnnouncement" onsubmit="submitAnnouncementForm(event)" class="space-y-3.5">
 <input type="hidden" id="annInputId" value="" />
+<input type="hidden" id="annInputMediaUrl" value="" />
+<input type="hidden" id="annInputMediaType" value="" />
 <div>
-<label class="block text-xs font-medium text-slate-300 mb-1.5">ناونیشانی بڵاوکراوە</label>
-<input type="text" id="annInputTitle" required placeholder="ناونیشانی ئاگاداری یان وتار" class="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 border border-white/10 text-white text-sm focus:border-cyan-400 outline-none" />
+<label class="block text-xs font-bold mb-1" style="color: #3b2314 !important;">ناونیشانی بڵاوکراوە</label>
+<input type="text" id="annInputTitle" required placeholder="ناونیشانی ئاگاداری یان وتار" class="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none" style="background: #ffffff !important; border: 1px solid rgba(156,120,78,0.38) !important; color: #2b1708 !important;" />
 </div>
 <div>
-<label class="block text-xs font-medium text-slate-300 mb-1.5">ناوەڕۆک</label>
-<textarea id="annInputContent" rows="4" required placeholder="دەقی بڵاوکراوەکە لێرە بنووسە..." class="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 border border-white/10 text-white text-sm focus:border-cyan-400 outline-none resize-none"></textarea>
+<label class="block text-xs font-bold mb-1" style="color: #3b2314 !important;">ناوەڕۆک</label>
+<textarea id="annInputContent" rows="3" required placeholder="دەقی بڵاوکراوەکە لێرە بنووسە..." class="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none resize-none" style="background: #ffffff !important; border: 1px solid rgba(156,120,78,0.38) !important; color: #2b1708 !important;"></textarea>
 </div>
 <div class="grid grid-cols-2 gap-3">
 <div>
-<label class="block text-xs font-medium text-slate-300 mb-1.5">تاگ / جۆر</label>
-<input type="text" id="annInputTag" value="نوێ" placeholder="جێگیرکراو، نوێ، گرنگ" class="w-full px-3.5 py-2 rounded-xl bg-slate-900/80 border border-white/10 text-white text-xs focus:border-cyan-400 outline-none" />
+<label class="block text-xs font-bold mb-1" style="color: #3b2314 !important;">تاگ / جۆر</label>
+<input type="text" id="annInputTag" value="نوێ" placeholder="جێگیرکراو، نوێ، گرنگ" class="w-full px-3 py-2 rounded-xl text-xs outline-none" style="background: #ffffff !important; border: 1px solid rgba(156,120,78,0.38) !important; color: #2b1708 !important;" />
 </div>
 <div>
-<label class="block text-xs font-medium text-slate-300 mb-1.5">نووسەر / بڵاوکەرەوە</label>
-<input type="text" id="annInputAuthor" value="سەرپەرشتیاری پریاسکەی عەبدی" class="w-full px-3.5 py-2 rounded-xl bg-slate-900/80 border border-white/10 text-white text-xs focus:border-cyan-400 outline-none" />
+<label class="block text-xs font-bold mb-1" style="color: #3b2314 !important;">نووسەر / بڵاوکەرەوە</label>
+<input type="text" id="annInputAuthor" value="سەرپەرشتیاری پریاسکەی عەبدی" class="w-full px-3 py-2 rounded-xl text-xs outline-none" style="background: #ffffff !important; border: 1px solid rgba(156,120,78,0.38) !important; color: #2b1708 !important;" />
 </div>
 </div>
-<div class="pt-2 flex justify-end gap-3">
-<button type="button" onclick="closeAnnouncementModal()" class="btn-secondary-glass px-4 py-2.5 text-xs font-semibold cursor-pointer">پەشیمانبوونەوە</button>
-<button type="submit" class="btn-primary-gradient px-6 py-2.5 text-xs sm:text-sm font-bold gap-2 cursor-pointer">
+<!-- Media Upload Section (Image, Animated GIF, Short Video) -->
+<div class="p-3 rounded-2xl space-y-2.5" style="background: rgba(255,255,255,0.75); border: 1px dashed rgba(180,83,9,0.4);">
+<div class="flex items-center justify-between gap-2 flex-wrap">
+<span class="text-xs font-bold flex items-center gap-1.5" style="color: #3b2314 !important;">
+<i class="fa-solid fa-photo-film text-amber-600"></i>
+<span>وێنە، وێنەی جوڵاو (GIF) یان کورتە ڤیدیۆ</span>
+</span>
+<div class="flex items-center gap-2">
+<input type="file" id="annInputMediaFile" accept="image/*,image/gif,video/mp4,video/webm,video/quicktime,.gif,.mp4,.webm,.mov,.m4v" onchange="handleAnnMediaFileChange(this)" class="hidden" />
+<button type="button" onclick="document.getElementById('annInputMediaFile').click()" class="px-3 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 shadow-sm" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #ffffff !important;">
+<i class="fa-solid fa-cloud-arrow-up text-[11px]"></i>
+<span>هەڵبژاردنی فایل</span>
+</button>
+</div>
+</div>
+<p id="annEditorUploadStatus" class="hidden text-[11px] font-bold" style="color: #b45309;"></p>
+<div id="annEditorMediaPreviewBox" class="hidden relative rounded-xl overflow-hidden border p-1.5 flex items-center justify-center bg-black/5" style="border-color: rgba(156,120,78,0.3);">
+<img id="annEditorPreviewImg" src="" alt="" class="hidden max-h-40 w-auto object-contain rounded-lg" />
+<video id="annEditorPreviewVid" src="" controls muted loop playsinline class="hidden max-h-40 w-auto rounded-lg"></video>
+<button type="button" onclick="clearAnnEditorMedia()" class="absolute top-2 left-2 px-2 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold shadow cursor-pointer flex items-center gap-1" title="لابردن">
+<i class="fa-solid fa-trash-can"></i>
+<span>لابردن</span>
+</button>
+</div>
+</div>
+<div class="pt-2 flex justify-end gap-2.5">
+<button type="button" onclick="closeAnnouncementModal()" class="px-4 py-2 rounded-xl text-xs font-bold cursor-pointer" style="background: rgba(156,120,78,0.16); color: #3b2314 !important;">پەشیمانبوونەوە</button>
+<button type="submit" id="btnSubmitAnnForm" class="px-6 py-2 rounded-xl text-xs sm:text-sm font-black flex items-center gap-1.5 cursor-pointer shadow-md" style="background: linear-gradient(135deg, #059669 0%, #0d9488 100%); color: #ffffff !important;">
 <span>پاشەکەوتکردن</span>
 <i class="fa-solid fa-check text-xs"></i>
 </button>
 </div>
 </form>
 </div>
+</div>
+<!-- Fullscreen Lightbox for Announcement Image / GIF -->
+<div id="annMediaLightboxModal" onclick="closeAnnMediaLightbox()" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm cursor-pointer">
+<button type="button" onclick="closeAnnMediaLightbox()" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center text-lg cursor-pointer">
+<i class="fa-solid fa-xmark"></i>
+</button>
+<img id="annLightboxImg" src="" alt="وێنە" class="max-w-full max-h-[88vh] object-contain rounded-2xl shadow-2xl" onclick="event.stopPropagation()" />
 </div>
 </div>
 <!-- ================= AUTH SCREEN ================= -->
@@ -8691,7 +8738,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=90.0&t=1795310000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=102.0&t=1795490000"></script>
+<script src="/js/app.js?v=103.0&t=1795520000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=4.0&t=1795380000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->

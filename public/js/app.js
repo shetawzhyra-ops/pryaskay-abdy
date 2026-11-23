@@ -24262,6 +24262,22 @@ function populateAnnouncementData() {
   const contentEl = document.getElementById('annActiveContent');
   const authorEl = document.getElementById('annActiveAuthor');
   const dotsEl = document.getElementById('annDotsContainer');
+  const mediaContainer = document.getElementById('annActiveMediaContainer');
+  const mediaImg = document.getElementById('annActiveImage');
+  const mediaVid = document.getElementById('annActiveVideo');
+
+  const hideActiveMedia = () => {
+    if (mediaContainer) mediaContainer.classList.add('hidden');
+    if (mediaImg) {
+      mediaImg.classList.add('hidden');
+      mediaImg.removeAttribute('src');
+    }
+    if (mediaVid) {
+      try { mediaVid.pause(); } catch (e) {}
+      mediaVid.classList.add('hidden');
+      mediaVid.removeAttribute('src');
+    }
+  };
 
   if (!list || list.length === 0) {
     if (counter) counter.textContent = '0 / 0';
@@ -24271,6 +24287,7 @@ function populateAnnouncementData() {
     if (contentEl) contentEl.textContent = 'بەڕێوەبەری فێرگە لە داهاتوویەکی نزیکدا ئاگاداری و بڵاوکراوەی نوێ لێرە دادەنێت.';
     if (authorEl) authorEl.textContent = 'سەرپەرشتیاری فێرگە';
     if (dotsEl) dotsEl.innerHTML = '';
+    hideActiveMedia();
     return;
   }
 
@@ -24295,6 +24312,24 @@ function populateAnnouncementData() {
   if (titleEl) titleEl.textContent = current.title;
   if (contentEl) contentEl.textContent = current.content;
   if (authorEl) authorEl.textContent = current.author || 'سەرپەرشتیاری فێرگە';
+
+  const mediaUrl = (current.media_url || '').trim();
+  const isVideo = current.media_type === 'video' || /\.(mp4|webm|mov|m4v|ogv)$/i.test(mediaUrl);
+  if (mediaUrl && mediaContainer) {
+    mediaContainer.classList.remove('hidden');
+    if (isVideo && mediaVid) {
+      if (mediaImg) { mediaImg.classList.add('hidden'); mediaImg.removeAttribute('src'); }
+      mediaVid.src = mediaUrl;
+      mediaVid.classList.remove('hidden');
+    } else if (mediaImg) {
+      if (mediaVid) { try { mediaVid.pause(); } catch (e) {} mediaVid.classList.add('hidden'); mediaVid.removeAttribute('src'); }
+      mediaImg.src = mediaUrl;
+      mediaImg.alt = current.title || 'وێنەی بڵاوکراوە';
+      mediaImg.classList.remove('hidden');
+    }
+  } else {
+    hideActiveMedia();
+  }
 
   if (dotsEl) {
     dotsEl.innerHTML = list.map((_, idx) => `
@@ -24392,16 +24427,141 @@ function pauseAnnouncementTimer() {
   }
 }
 
-// Admin Controls
+// Admin Controls (Hemn & M. Azad)
+let isAnnMediaUploading = false;
+
+function canCurrentUserManageAnnouncements() {
+  if (!currentUser) return false;
+  const uname = (currentUser.username || '').toLowerCase().trim();
+  return (
+    currentUser.role === 'super_admin' ||
+    currentUser.role === 'admin' ||
+    uname === 'azad' ||
+    currentUser.id === 6 ||
+    uname === 'hemntjabar' ||
+    uname === 'hemn' ||
+    uname === 'admin' ||
+    currentUser.id === 1 ||
+    (typeof isAzadUserLoggedIn === 'function' && isAzadUserLoggedIn())
+  );
+}
+
 function updateLandingAdminState() {
-  const isAdmin = currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'admin' || currentUser.username === 'admin' || currentUser.username === 'hemntjabar');
+  const canManage = canCurrentUserManageAnnouncements();
   const emptySlot = document.getElementById('emptyPostSlot');
   const btnAdminAdd = document.getElementById('btnAdminAddAnn');
   const adminActions = document.getElementById('annAdminCardActions');
 
-  if (emptySlot) emptySlot.classList.toggle('hidden', !isAdmin);
-  if (btnAdminAdd) btnAdminAdd.classList.toggle('hidden', !isAdmin);
-  if (adminActions) adminActions.classList.toggle('hidden', !isAdmin);
+  if (emptySlot) emptySlot.classList.toggle('hidden', !canManage);
+  if (btnAdminAdd) btnAdminAdd.classList.toggle('hidden', !canManage);
+  if (adminActions) adminActions.classList.toggle('hidden', !canManage);
+}
+
+function renderAnnEditorMediaPreview(url, mediaType) {
+  const box = document.getElementById('annEditorMediaPreviewBox');
+  const img = document.getElementById('annEditorPreviewImg');
+  const vid = document.getElementById('annEditorPreviewVid');
+  if (!box) return;
+
+  const cleanUrl = (url || '').trim();
+  if (!cleanUrl) {
+    box.classList.add('hidden');
+    if (img) { img.classList.add('hidden'); img.removeAttribute('src'); }
+    if (vid) { try { vid.pause(); } catch (e) {} vid.classList.add('hidden'); vid.removeAttribute('src'); }
+    return;
+  }
+
+  const isVideo = mediaType === 'video' || /\.(mp4|webm|mov|m4v|ogv)$/i.test(cleanUrl);
+  box.classList.remove('hidden');
+  if (isVideo && vid) {
+    if (img) { img.classList.add('hidden'); img.removeAttribute('src'); }
+    vid.src = cleanUrl;
+    vid.classList.remove('hidden');
+  } else if (img) {
+    if (vid) { try { vid.pause(); } catch (e) {} vid.classList.add('hidden'); vid.removeAttribute('src'); }
+    img.src = cleanUrl;
+    img.classList.remove('hidden');
+  }
+}
+
+function clearAnnEditorMedia() {
+  const mediaUrlInput = document.getElementById('annInputMediaUrl');
+  const mediaTypeInput = document.getElementById('annInputMediaType');
+  const fileInput = document.getElementById('annInputMediaFile');
+  const statusEl = document.getElementById('annEditorUploadStatus');
+  if (mediaUrlInput) mediaUrlInput.value = '';
+  if (mediaTypeInput) mediaTypeInput.value = '';
+  if (fileInput) fileInput.value = '';
+  if (statusEl) statusEl.classList.add('hidden');
+  renderAnnEditorMediaPreview('', '');
+}
+
+async function handleAnnMediaFileChange(input) {
+  const file = input && input.files && input.files[0];
+  if (!file) return;
+
+  const statusEl = document.getElementById('annEditorUploadStatus');
+  const submitBtn = document.getElementById('btnSubmitAnnForm');
+  const mediaUrlInput = document.getElementById('annInputMediaUrl');
+  const mediaTypeInput = document.getElementById('annInputMediaType');
+
+  isAnnMediaUploading = true;
+  if (submitBtn) submitBtn.disabled = true;
+  if (statusEl) {
+    statusEl.textContent = '⏳ خەریکی بارکردنی فایلە... تکایە چاوەڕێ بکە';
+    statusEl.style.color = '#b45309';
+    statusEl.classList.remove('hidden');
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('media', file);
+    const res = await fetch('/api/announcements/upload-media', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || 'هەڵە لە بارکردنی فایل');
+    }
+
+    if (mediaUrlInput) mediaUrlInput.value = data.media_url;
+    if (mediaTypeInput) mediaTypeInput.value = data.media_type;
+    renderAnnEditorMediaPreview(data.media_url, data.media_type);
+    if (statusEl) {
+      statusEl.textContent = '✅ فایلەکە بە سەرکەوتوویی بارکرا؛ پەنجە بنێ بە پاشەکەوتکردن.';
+      statusEl.style.color = '#047857';
+      statusEl.classList.remove('hidden');
+    }
+  } catch (err) {
+    if (statusEl) {
+      statusEl.textContent = '❌ ' + (err.message || 'هەڵە لە بارکردن');
+      statusEl.style.color = '#be123c';
+      statusEl.classList.remove('hidden');
+    }
+    input.value = '';
+  } finally {
+    isAnnMediaUploading = false;
+    if (submitBtn) submitBtn.disabled = false;
+  }
+}
+
+function openAnnMediaLightbox(src) {
+  if (!src) return;
+  const modal = document.getElementById('annMediaLightboxModal');
+  const img = document.getElementById('annLightboxImg');
+  if (img) img.src = src;
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeAnnMediaLightbox() {
+  const modal = document.getElementById('annMediaLightboxModal');
+  const img = document.getElementById('annLightboxImg');
+  if (modal) modal.classList.add('hidden');
+  if (img) img.removeAttribute('src');
 }
 
 function openAnnouncementModal(isEdit = false, item = null) {
@@ -24413,7 +24573,14 @@ function openAnnouncementModal(isEdit = false, item = null) {
   const contentInput = document.getElementById('annInputContent');
   const tagInput = document.getElementById('annInputTag');
   const authorInput = document.getElementById('annInputAuthor');
+  const mediaUrlInput = document.getElementById('annInputMediaUrl');
+  const mediaTypeInput = document.getElementById('annInputMediaType');
+  const fileInput = document.getElementById('annInputMediaFile');
+  const statusEl = document.getElementById('annEditorUploadStatus');
   const modalTitle = document.getElementById('annModalTitle');
+
+  if (fileInput) fileInput.value = '';
+  if (statusEl) statusEl.classList.add('hidden');
 
   if (isEdit && item) {
     if (modalTitle) modalTitle.textContent = 'دەستکاریکردنی بڵاوکراوە';
@@ -24422,13 +24589,19 @@ function openAnnouncementModal(isEdit = false, item = null) {
     if (contentInput) contentInput.value = item.content;
     if (tagInput) tagInput.value = item.tag || 'جێگیرکراو';
     if (authorInput) authorInput.value = item.author || (currentUser ? currentUser.full_name : 'سەرپەرشتیاری فێرگە');
+    if (mediaUrlInput) mediaUrlInput.value = item.media_url || '';
+    if (mediaTypeInput) mediaTypeInput.value = item.media_type || '';
+    renderAnnEditorMediaPreview(item.media_url || '', item.media_type || '');
   } else {
     if (modalTitle) modalTitle.textContent = 'بڵاوکراوەی نوێ';
     const form = document.getElementById('formAnnouncement');
     if (form) form.reset();
     if (idInput) idInput.value = '';
     if (tagInput) tagInput.value = 'نوێ';
-    if (authorInput) authorInput.value = currentUser ? currentUser.full_name : 'سەرپەرشتیاری فێرگە';
+    if (authorInput) authorInput.value = currentUser ? currentUser.full_name : 'سەرپەرشتیاری پریاسکەی عەبدی';
+    if (mediaUrlInput) mediaUrlInput.value = '';
+    if (mediaTypeInput) mediaTypeInput.value = '';
+    renderAnnEditorMediaPreview('', '');
   }
 
   modal.classList.remove('hidden');
@@ -24467,7 +24640,8 @@ async function deleteCurrentAnnouncement() {
       }
       renderCurrentAnnouncement();
     } else {
-      alert('هەڵە ڕوویدا لە سڕینەوە');
+      const err = await res.json().catch(() => ({}));
+      alert(err.error || 'هەڵە ڕوویدا لە سڕینەوە');
     }
   } catch (e) {
     alert('هەڵەی پەیوەندی');
@@ -24476,11 +24650,17 @@ async function deleteCurrentAnnouncement() {
 
 async function submitAnnouncementForm(event) {
   event.preventDefault();
+  if (isAnnMediaUploading) {
+    alert('تکایە چاوەڕێ بکە تا فایلەکە بە تەواوی بار دەکرێت');
+    return;
+  }
   const id = document.getElementById('annInputId')?.value;
   const title = document.getElementById('annInputTitle')?.value.trim();
   const content = document.getElementById('annInputContent')?.value.trim();
   const tag = document.getElementById('annInputTag')?.value.trim() || 'نوێ';
-  const author = document.getElementById('annInputAuthor')?.value.trim() || 'سەرپەرشتیاری فێرگە';
+  const author = document.getElementById('annInputAuthor')?.value.trim() || 'سەرپەرشتیاری پریاسکەی عەبدی';
+  const media_url = document.getElementById('annInputMediaUrl')?.value.trim() || '';
+  const media_type = document.getElementById('annInputMediaType')?.value.trim() || '';
 
   if (!title || !content) return;
 
@@ -24495,14 +24675,14 @@ async function submitAnnouncementForm(event) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ title, content, tag, author })
+      body: JSON.stringify({ title, content, tag, author, media_url, media_type })
     });
 
     if (res.ok) {
       closeAnnouncementModal();
       await loadAnnouncements();
     } else {
-      const err = await res.json();
+      const err = await res.json().catch(() => ({}));
       alert(err.error || 'هەڵە لە پاشەکەوتکردن');
     }
   } catch (e) {
@@ -25463,6 +25643,7 @@ function isAzadUserLoggedIn() {
 }
 
 function checkAzadPoemPrivilege() {
+  if (typeof updateLandingAdminState === 'function') { updateLandingAdminState(); }
   const isAzad = isAzadUserLoggedIn();
 
   const addBtn = document.getElementById('btnOpenAddPoemModal');
