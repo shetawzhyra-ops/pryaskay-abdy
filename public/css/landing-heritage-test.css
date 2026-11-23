@@ -38,21 +38,84 @@
   padding-bottom: 0.72rem !important;
 }
 
-/* Restore Smooth Brand Word "پریاسکەی عەبدی" Sliding Animation from Under Emblem */
-#landingHeader .logo-text-animated,
-#landingHeader .landing-brand-word {
-  display: inline-block;
-  animation: pryaskaUnderLogo 8.4s cubic-bezier(0.25, 1, 0.5, 1) infinite !important;
-  transform-origin: right center;
-  will-change: transform, opacity, filter, clip-path;
-  color: #361c0c !important;
-  -webkit-text-fill-color: #361c0c !important;
-  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
-  font-size: clamp(1.32rem, 2vw, 1.65rem) !important;
-  line-height: 1.35 !important;
+/* Exquisite Islamic Calligraphic Brand Word "پریاسکە" Sliding & Emerging from Emblem */
+@keyframes pryaskaIslamicEmergence {
+  0%, 10% {
+    opacity: 0;
+    transform: translateX(38px) scale(0.72) rotate(-2deg);
+    filter: blur(6px);
+    clip-path: inset(-30% -20% -35% 100%);
+    pointer-events: none;
+  }
+  22% {
+    opacity: 1;
+    transform: translateX(-3px) scale(1.04) rotate(0deg);
+    filter: blur(0px) drop-shadow(0 2px 8px rgba(217, 119, 6, 0.28));
+    clip-path: inset(-30% -20% -35% -20%);
+    pointer-events: auto;
+  }
+  27% {
+    opacity: 1;
+    transform: translateX(0) scale(1) rotate(0deg);
+    filter: blur(0px) drop-shadow(0 1px 4px rgba(23, 73, 47, 0.15));
+    clip-path: inset(-30% -20% -35% -20%);
+  }
+  55% {
+    opacity: 1;
+    transform: translateX(-1.5px) translateY(-1px) scale(1.02);
+    filter: blur(0px) drop-shadow(0 3px 10px rgba(217, 119, 6, 0.30));
+    clip-path: inset(-30% -20% -35% -20%);
+  }
+  84% {
+    opacity: 1;
+    transform: translateX(0) scale(1) rotate(0deg);
+    filter: blur(0px);
+    clip-path: inset(-30% -20% -35% -20%);
+    pointer-events: auto;
+  }
+  95%, 100% {
+    opacity: 0;
+    transform: translateX(38px) scale(0.72) rotate(-2deg);
+    filter: blur(6px);
+    clip-path: inset(-30% -20% -35% 100%);
+    pointer-events: none;
+  }
+}
+
+html body #landingHeader .logo-text-wrapper {
+  overflow: visible !important;
+  padding: 0.1rem 0.2rem !important;
+}
+
+html body #landingHeader .logo-text-animated,
+html body #landingHeader .landing-brand-word {
+  display: inline-block !important;
+  animation: pryaskaIslamicEmergence 7.6s cubic-bezier(0.22, 1, 0.36, 1) infinite !important;
+  transform-origin: right center !important;
+  will-change: transform, opacity, filter, clip-path !important;
+  color: #17492f !important;
+  -webkit-text-fill-color: #17492f !important;
+  font-family: 'Aref Ruqaa', 'Amiri Quran', 'Amiri', serif !important;
+  font-size: clamp(1.55rem, 2.45vw, 1.95rem) !important;
+  line-height: 1.32 !important;
   font-weight: 700 !important;
   letter-spacing: 0 !important;
-  text-shadow: 0 1px 0 rgba(255, 250, 240, 0.7) !important;
+  padding: 0.05rem 0.35rem 0.18rem !important;
+  text-shadow:
+    0 1px 0 rgba(255, 252, 244, 0.96),
+    0 2px 0 rgba(180, 128, 44, 0.36),
+    0 5px 14px rgba(23, 73, 47, 0.20) !important;
+}
+
+html body #landingHeader .landing-brand-word::after {
+  content: "" !important;
+  display: block !important;
+  width: 88% !important;
+  height: 2px !important;
+  margin: -0.08rem auto 0 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(90deg, transparent 0%, #d97706 30%, #fbbf24 55%, #b45309 85%, transparent 100%) !important;
+  opacity: 0.88 !important;
 }
 
 #landingHeader .landing-emblem-box {
