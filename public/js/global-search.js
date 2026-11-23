@@ -395,7 +395,133 @@
     if (overlay) overlay.classList.remove('is-open');
   }
 
+  let inlineDebounceTimer = null;
+  let inlineController = null;
+
+  async function runInlineHeroSearch() {
+    const input = document.getElementById('heroInlineSearchInput');
+    const resultsEl = document.getElementById('heroInlineSearchResults');
+    const clearBtn = document.getElementById('heroInlineSearchClearBtn');
+    if (!input || !resultsEl) return;
+
+    const q = input.value.trim();
+    if (clearBtn) {
+      if (q.length > 0) {
+        clearBtn.classList.remove('hidden');
+        clearBtn.classList.add('inline-flex');
+      } else {
+        clearBtn.classList.add('hidden');
+        clearBtn.classList.remove('inline-flex');
+      }
+    }
+
+    if (!q) {
+      resultsEl.classList.add('hidden');
+      resultsEl.innerHTML = '';
+      return;
+    }
+
+    if (inlineController) inlineController.abort();
+    inlineController = new AbortController();
+
+    injectStyles();
+    resultsEl.classList.remove('hidden');
+    resultsEl.innerHTML = '<div class="pgs-empty" style="padding: 1rem 0.75rem;">لە گەڕاندایە...</div>';
+
+    try {
+      const headers = {};
+      const token = (() => { try { return localStorage.getItem('token'); } catch (e) { return null; } })();
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const url = `/api/search?q=${encodeURIComponent(q)}&type=all&limit=15`;
+      const res = await fetch(url, { headers, signal: inlineController.signal });
+      const data = await res.json();
+
+      if (!data.success || !Array.isArray(data.results) || data.results.length === 0) {
+        resultsEl.innerHTML = `<div class="pgs-empty" style="padding: 1rem 0.75rem;">هیچ ئەنجامێک بۆ «${escapeHtml(q)}» نەدۆزرایەوە.</div>`;
+        return;
+      }
+
+      resultsEl.innerHTML = `<div class="flex flex-col gap-2">${data.results.map((item) => `
+        <a class="pgs-item" href="${escapeHtml(item.url)}" data-type="${escapeHtml(item.type)}" data-id="${escapeHtml(item.id)}">
+          <div class="pgs-item-top">
+            <span class="pgs-item-title">${escapeHtml(item.title)}</span>
+            <span class="pgs-badge">${escapeHtml(item.typeLabel)}</span>
+          </div>
+          ${item.snippet ? `<div class="pgs-snippet">${escapeHtml(item.snippet)}</div>` : ''}
+        </a>
+      `).join('')}</div>`;
+
+      resultsEl.querySelectorAll('.pgs-item').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          const itemType = link.getAttribute('data-type');
+          if (itemType === 'book' && typeof window.openLibraryModal === 'function') {
+            e.preventDefault();
+            resultsEl.classList.add('hidden');
+            window.openLibraryModal();
+          } else if (itemType === 'lesson' && typeof window.openRecordedLessonsModal === 'function') {
+            e.preventDefault();
+            resultsEl.classList.add('hidden');
+            window.openRecordedLessonsModal();
+          } else {
+            resultsEl.classList.add('hidden');
+          }
+        });
+      });
+    } catch (err) {
+      if (err && err.name === 'AbortError') return;
+      resultsEl.innerHTML = '<div class="pgs-empty" style="padding: 1rem 0.75rem;">هەڵەیەک لە گەڕاندا ڕوویدا.</div>';
+    }
+  }
+
+  function initInlineHeroSearch() {
+    const input = document.getElementById('heroInlineSearchInput');
+    const resultsEl = document.getElementById('heroInlineSearchResults');
+    const clearBtn = document.getElementById('heroInlineSearchClearBtn');
+    const container = document.getElementById('heroInlineSearchContainer');
+    if (!input || input.__inlineBound) return;
+    input.__inlineBound = true;
+
+    input.addEventListener('input', () => {
+      clearTimeout(inlineDebounceTimer);
+      inlineDebounceTimer = setTimeout(runInlineHeroSearch, 180);
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && resultsEl) {
+        resultsEl.classList.add('hidden');
+        input.blur();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        clearTimeout(inlineDebounceTimer);
+        runInlineHeroSearch();
+      }
+    });
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        input.value = '';
+        clearBtn.classList.add('hidden');
+        clearBtn.classList.remove('inline-flex');
+        if (resultsEl) {
+          resultsEl.classList.add('hidden');
+          resultsEl.innerHTML = '';
+        }
+        input.focus();
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!resultsEl || resultsEl.classList.contains('hidden')) return;
+      if (container && !container.contains(e.target)) {
+        resultsEl.classList.add('hidden');
+      }
+    });
+  }
+
   function mountTriggerButton() {
+    initInlineHeroSearch();
     if (document.getElementById('globalSearchTriggerBtn')) return;
     injectStyles();
 
@@ -410,12 +536,11 @@
       return btn;
     };
 
-    // Mount cleanly in landing / subpage headers
-    const landingActions =
-      document.querySelector('#landingHeader .flex.items-center.gap-2, #landingHeader .flex.items-center.gap-1\\.5') ||
+    // Mount cleanly in subpage headers (/dreams, /articles, /poems)
+    const subpageActions =
       document.querySelector('#dreamsHeader .flex.items-center.gap-2, #articlesHeader .flex.items-center.gap-2, #poemsHeader .flex.items-center.gap-2');
-    if (landingActions) {
-      landingActions.prepend(makeBtn('globalSearchTriggerBtn'));
+    if (subpageActions) {
+      subpageActions.prepend(makeBtn('globalSearchTriggerBtn'));
     }
 
     // Also mount in #mainApp header for logged-in users
