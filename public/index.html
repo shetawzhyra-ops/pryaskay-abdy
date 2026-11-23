@@ -2293,123 +2293,18 @@ class="quran-hero-pill-outline px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs 
 <i class="fa-solid fa-pen-nib text-xs"></i>
 <span>پریاسکەی وتار</span>
 </a>
+<button 
+id="btnLandingAddPoemAzad" 
+type="button" 
+onclick="openAddPoemModal()" 
+class="hidden quran-hero-pill-primary px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-black items-center gap-2 cursor-pointer transition-all active:scale-95"
+title="دانانی شیعری نوێ لەلایەن مامۆستا ئازاد"
+>
+<i class="fa-solid fa-feather-pointed text-xs"></i>
+<span>+ نووسینی شیعری نوێ</span>
+</button>
 </div>
 </section>
-<!-- ================= DUAL FEATURED SECTIONS: 1. DREAM SUBMISSION & 2. POEMS OF M. AZAD ================= -->
-<!-- ================= DUAL FEATURED ACTION BUTTONS ================= -->
-<section id="landingFeaturedDualSection" class="my-6 sm:my-10">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 max-w-6xl mx-auto items-stretch">
-<!-- Button 1: ناردنی خەون بۆ لێکدانەوە -->
-          <button 
-            type="button" 
-            onclick="openDirectDreamPrompt()" 
-            class="h-full group relative overflow-hidden rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-[#9c784e]/30 bg-gradient-to-br from-[#efe3d1] to-[#e4d4bd] shadow-lg flex items-center justify-between gap-2.5 sm:gap-3 cursor-pointer backdrop-blur-xl"
-            title="خەونەکەت بنێرە"
-          >
-            <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
-<div class="flex items-center gap-3 min-w-0 relative z-10">
-              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center text-lg sm:text-xl shadow-md shrink-0 group-hover:scale-105 group-hover:rotate-6 transition-transform">
-                <span>🌙</span>
-              </div>
-              <div class="min-w-0">
-                <div class="flex items-center gap-1.5 mb-0.5">
-                  <h3 class="font-black text-sm sm:text-[15px] text-[#361c0c] transition-colors leading-snug">
-                    خەونەکەت بنێرە
-                  </h3>
-                  <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" title="کارایە"></span>
-                </div>
-                <p class="text-[11px] sm:text-xs text-[#54371f] font-semibold truncate">
-                  ڕاستەوخۆ و نهێنی لەگەڵ مامۆستا
-                </p>
-              </div>
-            </div>
-<div class="shrink-0 relative z-10 flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-600/35 text-[#361c0c] font-black text-xs transition-all shadow-sm">
-              <span>چات</span>
-              <i class="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-1 transition-transform"></i>
-            </div>
-          </button>
-<!-- Button 2: شیعرەکانی م. ئازاد (کردنەوەی پەڕەی تایبەت بە شیعرەکان) -->
-          <div class="flex flex-col gap-2 h-full">
-            <a 
-              href="/poems"
-              class="flex-1 group relative overflow-hidden rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-[#9c784e]/30 bg-gradient-to-br from-[#efe3d1] to-[#e4d4bd] shadow-lg flex items-center justify-between gap-2.5 sm:gap-3 cursor-pointer backdrop-blur-xl no-underline"
-              title="پریاسکەی ئەدەبی — کردنەوەی دیوانی شیعرەکان"
-            >
-              <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
-<div class="flex items-center gap-3 min-w-0 relative z-10">
-                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center text-lg sm:text-xl shadow-md shrink-0 group-hover:scale-105 group-hover:-rotate-6 transition-transform">
-                  <i class="fa-solid fa-feather-pointed text-slate-950"></i>
-                </div>
-                <div class="min-w-0">
-                  <h3 class="font-black text-sm sm:text-[15px] text-[#361c0c] transition-colors leading-snug">
-                    پریاسکەی ئەدەبی
-                  </h3>
-                </div>
-              </div>
-<div class="shrink-0 relative z-10 flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-600/35 text-[#361c0c] font-black text-xs transition-all shadow-sm">
-                <span>دیوان</span>
-                <i class="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-1 transition-transform"></i>
-              </div>
-            </a>
-<!-- Dedicated Write Poem Button (ONLY for M. Azad on the landing page) -->
-            <button 
-              id="btnLandingAddPoemAzad" 
-              type="button" 
-              onclick="openAddPoemModal()" 
-              class="hidden w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-black text-xs shadow-lg shadow-amber-500/20 border border-amber-300/40 items-center justify-center gap-2 transition active:scale-95 cursor-pointer"
-              title="دانانی شیعری نوێ لەلایەن مامۆستا ئازاد"
-            >
-              <i class="fa-solid fa-feather-pointed text-sm"></i>
-              <span>+ نووسینی شیعری نوێ</span>
-            </button>
-          </div>
-<!-- Button 3: خەونە لێکدراوەکان (کردنەوەی پەڕەی خەونە لێکدراوەکان) -->
-          <a 
-            href="/dreams"
-            id="btnGoToDreams"
-            class="h-full group relative overflow-hidden rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-[#9c784e]/30 bg-gradient-to-br from-[#efe3d1] to-[#e4d4bd] shadow-lg flex items-center justify-between gap-2.5 sm:gap-3 cursor-pointer backdrop-blur-xl no-underline"
-            title="خەونە لێکدراوەکان"
-          >
-            <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
-<div class="flex items-center gap-3 min-w-0 relative z-10">
-              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center text-lg sm:text-xl shadow-md shrink-0 group-hover:scale-105 group-hover:-rotate-6 transition-transform">
-                <i class="fa-solid fa-moon text-slate-950"></i>
-              </div>
-              <div class="min-w-0">
-                <h3 id="dreamGatewayTitle" class="font-black text-sm sm:text-[15px] text-[#361c0c] transition-colors leading-snug">
-                  خەونە لێکدراوەکان
-                </h3>
-              </div>
-            </div>
-<div class="shrink-0 relative z-10 flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-600/35 text-[#361c0c] font-black text-xs transition-all shadow-sm">
-              <span id="btnGoToDreamsText">بینین</span>
-              <i class="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-1 transition-transform"></i>
-            </div>
-          </a>
-<!-- Button 4: کورتە وتار (کردنەوەی پەڕەی تایبەت بە کورتە وتارەکانی قوتابیان) -->
-          <a 
-            href="/articles"
-            class="h-full group relative overflow-hidden rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 text-right transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] border border-[#9c784e]/30 bg-gradient-to-br from-[#efe3d1] to-[#e4d4bd] shadow-lg flex items-center justify-between gap-2.5 sm:gap-3 cursor-pointer backdrop-blur-xl no-underline"
-            title="پریاسکەی وتار"
-          >
-            <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
-<div class="flex items-center gap-3 min-w-0 relative z-10">
-              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center text-lg sm:text-xl shadow-md shrink-0 group-hover:scale-105 group-hover:rotate-6 transition-transform">
-                <i class="fa-solid fa-pen-nib text-slate-950"></i>
-              </div>
-              <div class="min-w-0">
-                <h3 class="font-black text-sm sm:text-[15px] text-[#361c0c] transition-colors leading-snug">
-                  پریاسکەی وتار
-                </h3>
-              </div>
-            </div>
-<div class="shrink-0 relative z-10 flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-600/35 text-[#361c0c] font-black text-xs transition-all shadow-sm">
-              <span>وتارەکان</span>
-              <i class="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-1 transition-transform"></i>
-            </div>
-          </a>
-</div>
-      </section>
 <!-- Reserved Space for Posts, Publications & Announcements (بۆشایی بڵاوکراوە و ئاگادارییەکان) -->
 <section id="announcementsSection" class="space-y-4">
 <!-- Section Header with Sequential Carousel Controls -->
