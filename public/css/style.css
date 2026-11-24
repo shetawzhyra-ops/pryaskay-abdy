@@ -13467,3 +13467,7 @@ main > section.glass-card h1::after {
 }
 
 
+
+
+/* Strictly hide top header global search button inside #mainApp */
+#globalSearchTriggerBtnApp, #mainApp #globalSearchTriggerBtnApp { display: none !important; }

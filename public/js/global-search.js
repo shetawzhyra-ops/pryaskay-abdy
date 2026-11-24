@@ -542,12 +542,6 @@
     if (subpageActions) {
       subpageActions.prepend(makeBtn('globalSearchTriggerBtn'));
     }
-
-    // Also mount in #mainApp header for logged-in users
-    const appActions = document.querySelector('#mainApp > header > div:last-child');
-    if (appActions && !document.getElementById('globalSearchTriggerBtnApp')) {
-      appActions.prepend(makeBtn('globalSearchTriggerBtnApp'));
-    }
   }
 
   window.openPryaskaGlobalSearch = openGlobalSearch;
