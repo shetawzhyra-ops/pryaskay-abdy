@@ -26250,9 +26250,34 @@ function closePoemsModal() {
 
 
 // =========================================================================
-// APP BACK BUTTON / EXIT CONFIRMATION GUARD
+// APP BACK BUTTON / STEP-BY-STEP NAVIGATION & EXIT CONFIRMATION GUARD
 // =========================================================================
 window._pryaskaAllowExit = false;
+window._pryaskaBackTrail = [];
+
+function pushPryaskaBackTrail(parentId) {
+  if (!parentId) return;
+  const arr = window._pryaskaBackTrail;
+  if (arr[arr.length - 1] !== parentId) {
+    arr.push(parentId);
+    if (arr.length > 6) arr.shift();
+  }
+}
+
+function restorePreviousParentStep(justClosedId) {
+  const arr = window._pryaskaBackTrail;
+  if (!Array.isArray(arr) || arr.length === 0) return false;
+  const prev = arr.pop();
+  if (prev === 'userProfileModal' && (justClosedId === 'modalAdminArticles' || justClosedId === 'privateChatModal')) {
+    if (typeof openMyProfile === 'function') openMyProfile();
+    return true;
+  }
+  if (prev === 'mainMenuDrawer') {
+    if (typeof openMainMenuDrawer === 'function') openMainMenuDrawer();
+    return true;
+  }
+  return false;
+}
 
 function armAppExitBackGuard() {
   if (window._pryaskaAllowExit) return;
@@ -26299,6 +26324,172 @@ function confirmAppExit() {
   }, 200);
 }
 
+function handleStepByStepBackNavigation() {
+  // 0. If Exit Confirm modal is open, cancel it cleanly
+  const exitModal = document.getElementById('appExitConfirmModal');
+  if (exitModal && !exitModal.classList.contains('hidden')) {
+    cancelAppExit();
+    return true;
+  }
+
+  const isOpen = (id) => {
+    const el = document.getElementById(id);
+    return !!(el && !el.classList.contains('hidden') && el.style.display !== 'none');
+  };
+
+  // 1. Highest-priority sub-modals / lightboxes / overlays
+  const orderedSubModals = [
+    ['annMediaLightboxModal', () => typeof closeAnnMediaLightbox === 'function' && closeAnnMediaLightbox()],
+    ['imageZoomModal', () => typeof closeImageZoom === 'function' && closeImageZoom()],
+    ['articleRejectReasonModal', () => typeof closeArticleRejectModal === 'function' && closeArticleRejectModal()],
+    ['editDreamPostModal', () => typeof closeEditDreamPostModal === 'function' && closeEditDreamPostModal()],
+    ['manageDreamPostsModal', () => typeof closeManageDreamPostsModal === 'function' && closeManageDreamPostsModal()],
+    ['publishDreamPostModal', () => typeof closePublishDreamPostModal === 'function' && closePublishDreamPostModal()],
+    ['editPollModal', () => typeof closeEditPollModal === 'function' && closeEditPollModal()],
+    ['editAlarmModal', () => typeof closeEditAlarmModal === 'function' && closeEditAlarmModal()],
+    ['createPollModal', () => typeof closeCreatePollModal === 'function' && closeCreatePollModal()],
+    ['createAlarmModal', () => typeof closeCreateAlarmModal === 'function' && closeCreateAlarmModal()],
+    ['editQuestionModal', () => typeof closeEditQuestionModal === 'function' && closeEditQuestionModal()],
+    ['editRecordedLessonModal', () => typeof closeEditRecordedLessonModal === 'function' && closeEditRecordedLessonModal()],
+    ['editLessonFolderModal', () => typeof closeEditLessonFolderModal === 'function' && closeEditLessonFolderModal()],
+    ['editLessonTeacherModal', () => typeof closeEditLessonTeacherModal === 'function' && closeEditLessonTeacherModal()],
+    ['libraryVolumesModal', () => typeof closeLibraryVolumesModal === 'function' && closeLibraryVolumesModal()],
+    ['customGroupManageModal', () => typeof closeCustomGroupManageModal === 'function' && closeCustomGroupManageModal()],
+    ['liveParticipantActionModal', () => typeof closeLiveParticipantActionModal === 'function' && closeLiveParticipantActionModal()],
+    ['aiIncidentDetailsModal', () => typeof closeIncidentDetailsModal === 'function' && closeIncidentDetailsModal()],
+    ['leaveRequestModal', () => typeof closeLeaveModal === 'function' && closeLeaveModal()],
+    ['requestProfileChangeModal', () => typeof closeRequestProfileChangeModal === 'function' && closeRequestProfileChangeModal()],
+    ['reactionUsersModal', () => typeof closeReactionUsersModal === 'function' && closeReactionUsersModal()],
+    ['activeNonRespondingModal', () => typeof closeActiveNonRespondingModal === 'function' && closeActiveNonRespondingModal()],
+    ['buttonAttendanceModal', () => typeof closeButtonAttendanceModal === 'function' && closeButtonAttendanceModal()],
+    ['addPoemModal', () => typeof closeAddPoemModal === 'function' && closeAddPoemModal()],
+    ['modalAnnouncementEditor', () => typeof closeAnnouncementModal === 'function' && closeAnnouncementModal()],
+    ['manualInstallModal', () => typeof closeManualInstallModal === 'function' && closeManualInstallModal()],
+    ['installAppModal', () => typeof closeInstallAppModal === 'function' && closeInstallAppModal()]
+  ];
+
+  for (const [id, fn] of orderedSubModals) {
+    if (isOpen(id)) {
+      try { fn(); } catch (e) { document.getElementById(id)?.classList.add('hidden'); }
+      return true;
+    }
+  }
+
+  // 2. Step back inside multi-level modals before closing them
+  if (isOpen('recordedLessonsModal')) {
+    const navHeader = document.getElementById('recordedLessonsNavHeader');
+    if (navHeader && !navHeader.classList.contains('hidden') && typeof navigateRecordedLessonsBack === 'function') {
+      navigateRecordedLessonsBack();
+      return true;
+    }
+  }
+  if (isOpen('dreamAdminModal')) {
+    const chatArea = document.getElementById('dreamAdminChatArea');
+    const sidebar = document.getElementById('dreamAdminSessionsSidebar');
+    if (window.innerWidth < 768 && chatArea && !chatArea.classList.contains('hidden') && sidebar && sidebar.classList.contains('hidden') && typeof backToDreamAdminSessions === 'function') {
+      backToDreamAdminSessions();
+      return true;
+    }
+  }
+  if (isOpen('privateChatModal')) {
+    const chatArea = document.getElementById('privateChatArea');
+    const sidebar = document.getElementById('privateConversationsSidebar');
+    if (window.innerWidth < 768 && chatArea && !chatArea.classList.contains('hidden') && sidebar && sidebar.classList.contains('hidden') && typeof showPrivateConversationsSidebarMobile === 'function') {
+      showPrivateConversationsSidebarMobile();
+      return true;
+    }
+  }
+
+  // 3. Main Modals (restore previous step if opened from Profile or Menu Drawer)
+  const orderedMainModals = [
+    ['modalAdminArticles', () => typeof closeArticlesAdminModal === 'function' && closeArticlesAdminModal()],
+    ['privateChatModal', () => typeof closePrivateChatModal === 'function' && closePrivateChatModal()],
+    ['userProfileModal', () => typeof closeUserProfileModal === 'function' && closeUserProfileModal()],
+    ['customGroupChatModal', () => typeof closeCustomGroupChatModal === 'function' && closeCustomGroupChatModal()],
+    ['createCustomGroupModal', () => typeof closeCreateCustomGroupModal === 'function' && closeCreateCustomGroupModal()],
+    ['recordedLessonsModal', () => typeof closeRecordedLessonsModal === 'function' && closeRecordedLessonsModal()],
+    ['libraryModal', () => typeof closeLibraryModal === 'function' && closeLibraryModal()],
+    ['questionsArchiveModal', () => typeof closeQuestionsArchiveModal === 'function' && closeQuestionsArchiveModal()],
+    ['leaderboardModal', () => typeof closeLeaderboardModal === 'function' && closeLeaderboardModal()],
+    ['unansweredStatsModal', () => typeof closeUnansweredStatsModal === 'function' && closeUnansweredStatsModal()],
+    ['activeQuestionModal', () => typeof closeActiveQuestionModal === 'function' && closeActiveQuestionModal()],
+    ['questionModal', () => typeof closePostQuestionModal === 'function' && closePostQuestionModal()],
+    ['adminModal', () => typeof closeAdminModal === 'function' && closeAdminModal()],
+    ['dreamAdminModal', () => typeof closeDreamAdminModal === 'function' && closeDreamAdminModal()],
+    ['dreamChatModal', () => typeof closeDreamChatModal === 'function' && closeDreamChatModal()],
+    ['dreamAuthModal', () => typeof closeDreamAuthModal === 'function' && closeDreamAuthModal()],
+    ['dreamDirectPromptModal', () => typeof closeDirectDreamPrompt === 'function' && closeDirectDreamPrompt()],
+    ['liveLessonModal', () => typeof closeAndCleanLiveRoom === 'function' && closeAndCleanLiveRoom()],
+    ['liveRecordingsModal', () => typeof closeLiveRecordingsModal === 'function' && closeLiveRecordingsModal()],
+    ['aiAdvisorModal', () => typeof closeAiAdvisorModal === 'function' && closeAiAdvisorModal()],
+    ['aiSecurityModal', () => typeof closeAiSecurityModal === 'function' && closeAiSecurityModal()],
+    ['complaintsModal', () => typeof closeComplaintsModal === 'function' && closeComplaintsModal()],
+    ['activityDatabaseModal', () => typeof closeActivityModal === 'function' && closeActivityModal()],
+    ['executiveHubModal', () => typeof closeExecutiveHubModal === 'function' && closeExecutiveHubModal()],
+    ['createClassroomModal', () => typeof closeCreateClassroomModal === 'function' && closeCreateClassroomModal()],
+    ['logoPopupModal', () => typeof closeLogoPopupAnimation === 'function' && closeLogoPopupAnimation()],
+    ['announcementModal', () => typeof closeAnnouncementModal === 'function' && closeAnnouncementModal()],
+    ['poemsModal', () => typeof closePoemsModal === 'function' && closePoemsModal()],
+    ['themeModal', () => typeof closeThemeModal === 'function' && closeThemeModal()],
+    ['authScreen', () => typeof closeAuthScreen === 'function' && closeAuthScreen()]
+  ];
+
+  for (const [id, fn] of orderedMainModals) {
+    if (isOpen(id)) {
+      try { fn(); } catch (e) { document.getElementById(id)?.classList.add('hidden'); }
+      restorePreviousParentStep(id);
+      return true;
+    }
+  }
+
+  // 4. Open Slide-Out Menu Drawer / Mobile Members Sidebar / Floating Popups
+  if (isOpen('mainMenuDrawer')) {
+    window._pryaskaBackTrail = [];
+    if (typeof closeMainMenuDrawer === 'function') closeMainMenuDrawer();
+    return true;
+  }
+  const membersSidebar = document.getElementById('membersSidebar');
+  if (window.innerWidth < 768 && membersSidebar && membersSidebar.classList.contains('translate-x-0')) {
+    if (typeof closeMembersSidebar === 'function') closeMembersSidebar();
+    return true;
+  }
+  if (isOpen('publicChatToolsMenu') && typeof closePublicChatToolsMenu === 'function') {
+    closePublicChatToolsMenu();
+    return true;
+  }
+  if (isOpen('customGroupToolsMenu') && typeof closeCustomGroupToolsMenu === 'function') {
+    closeCustomGroupToolsMenu();
+    return true;
+  }
+  const chatSearchBar = document.getElementById('chatSearchBar');
+  if (chatSearchBar && !chatSearchBar.classList.contains('hidden') && typeof toggleChatSearch === 'function') {
+    toggleChatSearch();
+    return true;
+  }
+
+  // 5. Classroom Chat -> Classrooms Lobby
+  if (isOpen('mainApp')) {
+    const lobby = document.getElementById('classroomsLobbyView');
+    const chatView = document.getElementById('chatView');
+    if (chatView && !chatView.classList.contains('hidden') && lobby && lobby.classList.contains('hidden') && typeof returnToClassroomsLobby === 'function') {
+      returnToClassroomsLobby();
+      return true;
+    }
+  }
+
+  // 6. Catch-all for any other visible fixed modal
+  const anyVisibleModal = Array.from(document.querySelectorAll('[id$="Modal"]:not(#appExitConfirmModal):not(#authScreen)')).find(el => {
+    return !el.classList.contains('hidden') && el.style.display !== 'none';
+  });
+  if (anyVisibleModal) {
+    anyVisibleModal.classList.add('hidden');
+    restorePreviousParentStep(anyVisibleModal.id);
+    return true;
+  }
+
+  return false;
+}
+
 (function initAppExitBackGuard() {
   try {
     if (!window.history.state || !window.history.state.pryaskaGuard) {
@@ -26306,6 +26497,33 @@ function confirmAppExit() {
       window.history.pushState({ pryaskaGuard: true }, document.title, window.location.href);
     }
   } catch (e) {}
+
+  // Track navigation steps so phone Back steps back cleanly (Profile / Menu Drawer)
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    if (!target || !target.closest) return;
+
+    const drawerAction = target.closest('#mainMenuDrawerPanel [onclick*="closeMainMenuDrawer"]');
+    if (drawerAction) {
+      const oc = drawerAction.getAttribute('onclick') || '';
+      // Only push drawer back onto trail if it opens another modal/section (not simply closing drawer)
+      if (!/^closeMainMenuDrawer();?$/.test(oc.trim()) && !oc.includes('goToHomePage')) {
+        pushPryaskaBackTrail('mainMenuDrawer');
+      }
+      return;
+    }
+
+    if (target.closest('#profArticlesAdminBtn') || target.closest('#profPrivateChatBtn')) {
+      pushPryaskaBackTrail('userProfileModal');
+      return;
+    }
+
+    // Clear trail if user explicitly taps a manual close (X) button or backdrop
+    const closeBtn = target.closest('[onclick*="close"], #mainMenuDrawerBackdrop');
+    if (closeBtn && !target.closest('#appExitConfirmModal')) {
+      window._pryaskaBackTrail = [];
+    }
+  }, true);
 
   const rearmOnInteraction = () => {
     if (!window._pryaskaAllowExit) {
@@ -26318,6 +26536,9 @@ function confirmAppExit() {
   window.addEventListener('popstate', () => {
     if (window._pryaskaAllowExit) return;
     armAppExitBackGuard();
-    openAppExitConfirmModal();
+    const handledStep = handleStepByStepBackNavigation();
+    if (!handledStep) {
+      openAppExitConfirmModal();
+    }
   });
 })();
