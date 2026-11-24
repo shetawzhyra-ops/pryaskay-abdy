@@ -1860,7 +1860,8 @@ const dreamSessions = {
         (SELECT COUNT(*) FROM dream_messages m WHERE m.session_id = s.id) as message_count,
         (SELECT COUNT(*) FROM dream_messages m WHERE m.session_id = s.id AND (m.type = 'voice' OR (m.attachment_url IS NOT NULL AND (m.attachment_url LIKE '%.webm%' OR m.attachment_url LIKE '%.ogg%' OR m.attachment_url LIKE '%.mp3%' OR m.attachment_url LIKE '%.m4a%')) OR m.content LIKE '%.webm%' OR m.content LIKE '%.ogg%' OR m.content LIKE '%.mp3%' OR m.content LIKE '%.m4a%') AND m.sender_type = 'dreamer') as has_voice,
         (SELECT content FROM dream_messages m WHERE m.session_id = s.id ORDER BY m.created_at DESC LIMIT 1) as last_message_content,
-        (SELECT type FROM dream_messages m WHERE m.session_id = s.id ORDER BY m.created_at DESC LIMIT 1) as last_message_type
+        (SELECT type FROM dream_messages m WHERE m.session_id = s.id ORDER BY m.created_at DESC LIMIT 1) as last_message_type,
+        (SELECT sender_type FROM dream_messages m WHERE m.session_id = s.id ORDER BY m.created_at DESC LIMIT 1) as last_message_sender_type
       FROM dream_sessions s 
       WHERE (SELECT COUNT(*) FROM dream_messages m WHERE m.session_id = s.id AND m.sender_type = 'dreamer') > 0
       ORDER BY s.last_activity DESC

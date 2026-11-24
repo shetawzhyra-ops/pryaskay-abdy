@@ -2861,35 +2861,7 @@ body.light-theme #liveLessonNavBtn i {
 
 
 
-/* Dream Interpretation Nav Button (Seamless, no border) */
-
-body.light-theme #dreamAdminNavBtn {
-
-  background: transparent !important;
-
-  color: #6b21a8 !important;
-
-  border: none !important;
-
-  box-shadow: none !important;
-
-  border-radius: 9999px !important;
-
-}
-
-body.light-theme #dreamAdminNavBtn:hover {
-
-  background-color: #f3e8ff !important;
-
-  color: #581c87 !important;
-
-}
-
-body.light-theme #dreamAdminNavBtn i {
-
-  color: #9333ea !important;
-
-}
+/* Dream Interpretation Nav Button uses heritage/dark theme pills cleanly */
 
 
 

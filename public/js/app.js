@@ -2447,12 +2447,21 @@ function initSocket() {
     }
   });
 
-  // Receive live dream messages for Super Admin, Teacher, and Purple Badge
+  // Receive live dream messages for Super Admin, Admin, Teacher, and Purple Badge
   socket.on('dream_new_message', (msg) => {
     if (canUserManageDreams(currentUser)) {
-      if (typeof activeDreamAdminSessionId !== 'undefined' && activeDreamAdminSessionId && (msg.session_id == activeDreamAdminSessionId || msg.sessionId == activeDreamAdminSessionId)) {
+      const sessId = msg && (msg.session_id || msg.sessionId);
+      const modalEl = document.getElementById('dreamAdminModal');
+      const isModalOpen = modalEl && !modalEl.classList.contains('hidden');
+      if (typeof activeDreamAdminSessionId !== 'undefined' && activeDreamAdminSessionId && sessId == activeDreamAdminSessionId) {
         appendDreamMessage(msg, true);
         scrollDreamMessagesToBottom(true);
+        if (isModalOpen && typeof markDreamSessionSeen === 'function') {
+          markDreamSessionSeen(sessId, Date.now());
+        }
+      }
+      if (msg && msg.sender_type === 'dreamer') {
+        loadDreamSessionsCount();
       }
     }
   });
@@ -2461,12 +2470,21 @@ function initSocket() {
     if (canUserManageDreams(currentUser)) {
       const msg = data.message || data;
       const sessId = data.sessionId || (msg && msg.session_id);
+      const modalEl = document.getElementById('dreamAdminModal');
+      const isModalOpen = modalEl && !modalEl.classList.contains('hidden');
+      const isViewingThisSession = isModalOpen && typeof activeDreamAdminSessionId !== 'undefined' && activeDreamAdminSessionId && activeDreamAdminSessionId == sessId;
       if (typeof activeDreamAdminSessionId !== 'undefined' && activeDreamAdminSessionId && activeDreamAdminSessionId == sessId) {
         appendDreamMessage(msg, true);
         scrollDreamMessagesToBottom(true);
       }
+      if (isViewingThisSession && typeof markDreamSessionSeen === 'function') {
+        markDreamSessionSeen(sessId, Date.now());
+      }
       if (msg && msg.sender_type === 'dreamer') {
         playSound('message');
+        if (!isModalOpen && typeof bumpDreamUnreadBadgeOptimistic === 'function') {
+          bumpDreamUnreadBadgeOptimistic();
+        }
       }
       loadDreamSessionsCount();
       if (typeof loadDreamAdminSessions === 'function') {
@@ -2497,14 +2515,14 @@ function initSocket() {
   });
 
   socket.on('dream_session_updated', () => {
-    if (currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher')) {
+    if (canUserManageDreams(currentUser)) {
       loadDreamSessionsCount();
       if (typeof loadDreamAdminSessions === 'function') loadDreamAdminSessions();
     }
   });
 
   socket.on('dream_session_deleted', (data) => {
-    if (currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher')) {
+    if (canUserManageDreams(currentUser)) {
       if (data && data.sessionId) {
         dreamAdminSessionsCache = dreamAdminSessionsCache.filter(x => x.id !== data.sessionId);
         if (activeDreamAdminSessionId === data.sessionId) {
@@ -2521,7 +2539,7 @@ function initSocket() {
   });
 
   socket.on('dream_session_favorited', (data) => {
-    if (currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher')) {
+    if (canUserManageDreams(currentUser)) {
       if (data && data.sessionId) {
         const s = dreamAdminSessionsCache.find(x => x.id === data.sessionId);
         if (s) s.is_favorite = data.is_favorite;
@@ -2544,7 +2562,7 @@ function initSocket() {
   });
 
   socket.on('dream_session_interpreted', (data) => {
-    if (currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher')) {
+    if (canUserManageDreams(currentUser)) {
       if (data && data.sessionId) {
         const s = dreamAdminSessionsCache.find(x => x.id === data.sessionId);
         if (s) {
@@ -2588,7 +2606,7 @@ function initSocket() {
   });
 
   socket.on('dream_session_answered', (data) => {
-    if (currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher')) {
+    if (canUserManageDreams(currentUser)) {
       if (data && data.sessionId) {
         const s = dreamAdminSessionsCache.find(x => x.id === data.sessionId);
         if (s) {
@@ -12444,6 +12462,62 @@ async function stopAndSendDreamVoice(isAdmin = false) {
 
 // --- SUPER ADMIN & TEACHER DASHBOARD (بەشی بەڕێوەبردنی خەونەکان) ---
 
+function getDreamSeenMap() {
+  try {
+    const raw = localStorage.getItem('pryaska_dream_seen_map');
+    const parsed = raw ? JSON.parse(raw) : {};
+    return (parsed && typeof parsed === 'object') ? parsed : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function markDreamSessionSeen(sessionId, timestamp = Date.now()) {
+  if (!sessionId) return;
+  try {
+    const map = getDreamSeenMap();
+    const key = String(sessionId);
+    const prev = Number(map[key] || 0);
+    map[key] = Math.max(prev, Number(timestamp || Date.now()));
+    localStorage.setItem('pryaska_dream_seen_map', JSON.stringify(map));
+  } catch (e) {}
+}
+
+function updateDreamUnreadBadgeUI(unreadCount) {
+  const modal = document.getElementById('dreamAdminModal');
+  const isModalOpen = modal && !modal.classList.contains('hidden');
+  const badge = document.getElementById('dreamUnreadBadge');
+  const mobileBadge = document.getElementById('mobileDreamUnreadBadge');
+
+  if (unreadCount > 0 && !isModalOpen) {
+    if (badge) {
+      badge.innerText = unreadCount;
+      badge.classList.remove('hidden');
+      badge.classList.add('inline-flex');
+    }
+    if (mobileBadge) {
+      mobileBadge.innerText = unreadCount;
+      mobileBadge.classList.remove('hidden');
+      mobileBadge.classList.add('inline-flex');
+    }
+  } else {
+    if (badge) {
+      badge.classList.add('hidden');
+      badge.classList.remove('inline-flex');
+    }
+    if (mobileBadge) {
+      mobileBadge.classList.add('hidden');
+      mobileBadge.classList.remove('inline-flex');
+    }
+  }
+}
+
+function bumpDreamUnreadBadgeOptimistic() {
+  const badge = document.getElementById('dreamUnreadBadge');
+  const current = badge && !badge.classList.contains('hidden') ? (parseInt(badge.innerText, 10) || 0) : 0;
+  updateDreamUnreadBadgeUI(current + 1);
+}
+
 async function loadDreamSessionsCount() {
   if (!token || !currentUser) return;
   if (!canUserManageDreams(currentUser)) return;
@@ -12461,36 +12535,27 @@ async function loadDreamSessionsCount() {
 
     const modal = document.getElementById('dreamAdminModal');
     const isModalOpen = modal && !modal.classList.contains('hidden');
-    const lastVisit = parseInt(localStorage.getItem('seereen_last_dream_visit') || '0', 10);
+    const seenMap = getDreamSeenMap();
+    const baseline = parseInt(localStorage.getItem('seereen_last_dream_visit') || '0', 10);
 
-    const unreadSessions = sessions.filter(s => new Date(s.last_activity).getTime() > lastVisit);
-    const unreadCount = unreadSessions.length;
-
-    const badge = document.getElementById('dreamUnreadBadge');
-    const mobileBadge = document.getElementById('mobileDreamUnreadBadge');
-
-    if (unreadCount > 0 && !isModalOpen) {
-      if (badge) {
-        badge.innerText = unreadCount;
-        badge.classList.remove('hidden');
+    const unreadSessions = sessions.filter(s => {
+      if (isModalOpen && typeof activeDreamAdminSessionId !== 'undefined' && activeDreamAdminSessionId && Number(s.id) === Number(activeDreamAdminSessionId)) {
+        return false;
       }
-      if (mobileBadge) {
-        mobileBadge.innerText = unreadCount;
-        mobileBadge.classList.remove('hidden');
-      }
-    } else {
-      if (badge) badge.classList.add('hidden');
-      if (mobileBadge) mobileBadge.classList.add('hidden');
-    }
+      const isDreamerLast = !s.last_message_sender_type || s.last_message_sender_type === 'dreamer';
+      if (!isDreamerLast) return false;
+      const act = Number(s.last_activity || 0);
+      const seenAt = Number(seenMap[String(s.id)] || 0);
+      if (seenAt > 0) return act > seenAt;
+      const isUnanswered = !s.answered_at && !Number(s.is_interpreted || 0) && s.status !== 'closed';
+      return isUnanswered || (baseline > 0 && act > baseline);
+    });
+    updateDreamUnreadBadgeUI(unreadSessions.length);
   } catch (e) {}
 }
 
 function openDreamAdminModal() {
-  localStorage.setItem('seereen_last_dream_visit', Date.now().toString());
-  const badge = document.getElementById('dreamUnreadBadge');
-  const mobileBadge = document.getElementById('mobileDreamUnreadBadge');
-  if (badge) badge.classList.add('hidden');
-  if (mobileBadge) mobileBadge.classList.add('hidden');
+  updateDreamUnreadBadgeUI(0);
 
   const modal = document.getElementById('dreamAdminModal');
   if (!modal) return;
@@ -12543,6 +12608,7 @@ function openDreamAdminModal() {
 function closeDreamAdminModal() {
   const modal = document.getElementById('dreamAdminModal');
   if (modal) modal.classList.add('hidden');
+  loadDreamSessionsCount();
 }
 
 function backToDreamAdminSessions() {
@@ -12723,11 +12789,11 @@ async function loadDreamAdminSessions() {
 }
 
 async function selectDreamSession(sessionId) {
-  localStorage.setItem('seereen_last_dream_visit', Date.now().toString());
-  const badge = document.getElementById('dreamUnreadBadge');
-  const mobileBadge = document.getElementById('mobileDreamUnreadBadge');
-  if (badge) badge.classList.add('hidden');
-  if (mobileBadge) mobileBadge.classList.add('hidden');
+  const sessObj = (typeof dreamAdminSessionsCache !== 'undefined' && Array.isArray(dreamAdminSessionsCache))
+    ? dreamAdminSessionsCache.find(x => Number(x.id) === Number(sessionId))
+    : null;
+  markDreamSessionSeen(sessionId, Math.max(Number(sessObj?.last_activity || 0), Date.now()));
+  loadDreamSessionsCount();
 
   activeDreamAdminSessionId = sessionId;
   renderDreamAdminSessionsCards(); // refresh active highlight

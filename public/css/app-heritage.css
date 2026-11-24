@@ -116,10 +116,10 @@
 }
 
 #dreamAdminNavBtn #dreamUnreadBadge {
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(255, 248, 225, 0.55) !important;
-  box-shadow: 0 2px 6px rgba(180, 83, 9, 0.35) !important;
+  border: 1.5px solid #fff8eb !important;
+  box-shadow: 0 2px 8px rgba(190, 18, 60, 0.45) !important;
 }
 
 /* Live Lesson Nav Pill (Warm Heritage Crimson-Ivory when inside classroom) */
