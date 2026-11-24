@@ -3119,28 +3119,36 @@ function renderClassrooms() {
     const isDefault = c.id === 1;
 
     return `
-      <div onclick="if (!event.target.closest('button')) enterClassroom(${c.id})" class="classroom-lobby-card relative ${isLive ? 'is-live ring-1 ring-rose-500/40' : ''} transition duration-200 group cursor-pointer">
+      <div onclick="if (!event.target.closest('button')) enterClassroom(${c.id})" class="classroom-lobby-card relative ${isLive ? 'is-live' : ''} transition duration-200 group cursor-pointer">
         
-        <!-- Tied Pryaska Crest / Knot & Ribbon Loops (Matching the Brand Logo) -->
-        <div class="pryaska-card-crest" aria-hidden="true">
-          <svg viewBox="0 0 120 46" class="w-full h-full overflow-visible" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="pryaskaGold-${c.id}" x1="15" y1="4" x2="105" y2="44" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#f59e0b"/>
-                <stop offset="50%" stop-color="#b47b1e"/>
-                <stop offset="100%" stop-color="#8a5a10"/>
-              </linearGradient>
-            </defs>
-            <!-- Left Folded Cloth Leaf Loop -->
-            <path d="M56 30 C44 26, 30 17, 32 8 C42 7, 54 15, 58 27 Z" fill="url(#pryaskaGold-${c.id})" fill-opacity="0.22" stroke="url(#pryaskaGold-${c.id})" stroke-width="3.2" stroke-linejoin="round"/>
-            <!-- Right Folded Cloth Leaf Loop (Larger Grace Curve like Logo) -->
-            <path d="M62 28 C66 13, 82 3, 94 5 C93 17, 81 26, 63 31 Z" fill="url(#pryaskaGold-${c.id})" fill-opacity="0.26" stroke="url(#pryaskaGold-${c.id})" stroke-width="3.2" stroke-linejoin="round"/>
-            <!-- Tied Neck Wrap Ribbon -->
-            <path d="M36 42 Q60 28 84 42" stroke="url(#pryaskaGold-${c.id})" stroke-width="3.6" stroke-linecap="round"/>
-            <path d="M47 36 Q60 29 73 36" stroke="#fde68a" stroke-width="1.3" stroke-linecap="round" opacity="0.85"/>
-            <circle cx="60" cy="31" r="4.2" fill="url(#pryaskaGold-${c.id})" stroke="#fffbeb" stroke-width="1"/>
-          </svg>
-        </div>
+        <!-- Authentic Folded Cloth Pryaska Silhouette (Full Tied Bundle Backdrop) -->
+        <svg class="pryaska-pouch-svg" viewBox="0 0 360 304" preserveAspectRatio="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <!-- Two Soft Draped Cloth Corners Falling Together to One Side (Left) -->
+          <path class="pryaska-svg-fold pryaska-svg-stroke" vector-effect="non-scaling-stroke" d="M 170,22 C 145,10 112,14 88,30 C 82,34 80,44 76,56 C 92,58 112,48 134,42 C 150,37 162,36 172,38 Z"/>
+          <path class="pryaska-svg-body pryaska-svg-stroke" vector-effect="non-scaling-stroke" d="M 164,32 C 138,34 114,48 94,68 C 91,72 90,82 95,92 C 108,90 124,78 140,64 C 152,54 162,48 172,44 Z"/>
+          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 155,27 C 132,26 110,33 92,46"/>
+          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 156,42 C 135,48 117,62 103,79"/>
+
+          <!-- Cushioned Folded-Cloth Pryaska Body -->
+          <path class="pryaska-svg-body pryaska-svg-stroke" vector-effect="non-scaling-stroke" d="M 165,42 C 142,56 106,70 72,96 C 36,124 14,162 14,208 C 14,264 56,294 180,296 C 304,294 346,264 346,208 C 346,162 324,124 288,96 C 254,70 218,56 195,42 Z"/>
+
+          <!-- Diagonal Overlapping Cloth-Wrap Panels on Both Shoulders -->
+          <path class="pryaska-svg-fold-overlay" d="M 162,45 C 134,76 86,104 34,138 C 48,116 74,94 106,76 C 132,61 152,52 165,42 Z"/>
+          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 163,46 C 135,78 88,107 32,144"/>
+          <path class="pryaska-svg-fold-overlay" d="M 198,45 C 226,76 274,104 326,138 C 312,116 286,94 254,76 C 228,61 208,52 195,42 Z"/>
+          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 197,46 C 225,78 272,107 328,144"/>
+
+          <!-- Delicate Inner Stitched Cloth Hairline -->
+          <path class="pryaska-svg-stitch" vector-effect="non-scaling-stroke" d="M 168,56 C 144,69 112,82 80,106 C 46,132 26,166 26,208 C 26,256 64,282 180,284 C 296,282 334,256 334,208 C 334,166 314,132 280,106 C 248,82 216,69 192,56"/>
+
+          <!-- Soft Gathered Fabric Pleats Below Neck -->
+          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 166,48 C 158,64 148,78 134,88"/>
+          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 194,48 C 202,64 212,78 226,88"/>
+
+          <!-- Tied Cloth Knot Centerpiece -->
+          <ellipse class="pryaska-svg-knot pryaska-svg-stroke" vector-effect="non-scaling-stroke" cx="180" cy="37" rx="19" ry="12"/>
+          <path class="pryaska-svg-stroke" vector-effect="non-scaling-stroke" fill="none" d="M 169,44 C 174,34 182,28 192,27"/>
+        </svg>
 
         <!-- Center Content inside Pryaska Pouch -->
         <div class="pryaska-card-body min-w-0">
