@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>ئیمتیحانی ئەلکترۆنی — پریاسکەی عەبدی</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png?v=5">
+  <meta name="theme-color" content="#1b432e">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!-- Apply saved theme immediately to avoid flash -->
+  <script>
+    try {
+      var _t = localStorage.getItem('seereen_theme');
+      if (_t === 'dark') {
+        document.documentElement.classList.add('dark', 'dark-theme');
+      } else {
+        document.documentElement.classList.remove('dark', 'dark-theme');
+      }
+    } catch (e) {}
+  </script>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/css/exams.css?v=1.0">
+</head>
+<body>
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="exam-topbar">
+    <div class="exam-topbar-inner">
+      <div class="exam-brand-wrap">
+        <button id="examBackBtn" type="button" class="exam-back-btn" title="گەڕانەوە">
+          <i class="fa-solid fa-arrow-right"></i>
+          <span id="examBackLabel">سەرەکی</span>
+        </button>
+        <div class="exam-brand-icon">
+          <i class="fa-solid fa-file-signature"></i>
+        </div>
+        <div style="min-width:0;">
+          <h1 class="exam-brand-title">پەڕەی ئیمتیحانی ئەلکترۆنی</h1>
+          <p id="examBrandSub" class="exam-brand-sub">سیستمی ئیمتیحان و هەڵسەنگاندنی پریاسکەی عەبدی</p>
+        </div>
+      </div>
+
+      <div class="exam-top-actions">
+        <div id="examUserPill" class="exam-user-pill hidden">
+          <i class="fa-solid fa-user-graduate" style="color:var(--exam-gold);"></i>
+          <span id="examUserName" class="exam-user-name-txt"></span>
+          <span id="examRoleTag" class="exam-role-tag"></span>
+        </div>
+        <button id="examThemeToggle" type="button" class="exam-icon-btn" title="گۆڕینی دۆخی ڕووناک / تاریک">
+          <i id="examThemeIcon" class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="exam-main">
+
+    <!-- LOADING STATE -->
+    <section id="viewLoading" class="exam-empty-box">
+      <div class="exam-empty-icon"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
+      <h2 style="margin:0 0 0.35rem; color:var(--exam-ink); font-size:1.15rem;">ئامادەکردنی پەڕەی ئیمتیحانەکان...</h2>
+      <p style="margin:0; font-size:0.86rem;">تکایە چەند چرکەیەک چاوەڕێ بە</p>
+    </section>
+
+    <!-- AUTH REQUIRED STATE -->
+    <section id="viewAuthRequired" class="exam-empty-box hidden">
+      <div class="exam-empty-icon"><i class="fa-solid fa-lock"></i></div>
+      <h2 style="margin:0 0 0.45rem; color:var(--exam-ink); font-size:1.25rem;">پێویستە سەرەتا بچیتە ژوورەوە</h2>
+      <p style="margin:0 0 1.2rem; font-size:0.9rem;">بۆ بینین و ئەنجامدانی ئیمتیحانە ئەلکترۆنییەکان، تکایە لە پەڕەی سەرەکی بچۆ ناو ئەکاونتەکەتەوە.</p>
+      <a href="/" class="exam-btn exam-btn-primary">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        گەڕانەوە بۆ چوونەژوورەوە
+      </a>
+    </section>
+
+    <!-- ================================================================
+         VIEW 1: EXAMS DASHBOARD (MANAGER OR STUDENT)
+         ================================================================ -->
+    <section id="viewExamsList" class="hidden">
+      <div class="exam-hero-bar">
+        <div>
+          <h2 id="listHeroTitle" class="exam-hero-title">ئیمتیحانە ئەلکترۆنییەکان</h2>
+          <p id="listHeroDesc" class="exam-hero-desc"></p>
+        </div>
+        <div id="managerHeroActions" class="hidden" style="display:flex; gap:0.55rem; flex-wrap:wrap;">
+          <button id="btnNewExam" type="button" class="exam-btn exam-btn-primary">
+            <i class="fa-solid fa-plus"></i>
+            دانانی ئیمتیحانی نوێ
+          </button>
+        </div>
+      </div>
+
+      <div id="listStatsGrid" class="exam-stats-grid"></div>
+      <div id="examsCardsContainer" class="exam-cards-grid"></div>
+      <div id="examsEmptyState" class="exam-empty-box hidden">
+        <div class="exam-empty-icon"><i class="fa-solid fa-scroll"></i></div>
+        <h3 id="emptyListTitle" style="margin:0 0 0.35rem; color:var(--exam-ink);">هیچ ئیمتیحانێک نییە</h3>
+        <p id="emptyListSub" style="margin:0; font-size:0.88rem;"></p>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         VIEW 2: MANAGER EXAM BUILDER (SUPPORTS 100+ QUESTIONS + RICH MEDIA)
+         ================================================================ -->
+    <section id="viewExamBuilder" class="hidden">
+      <div class="exam-sticky-ribbon">
+        <div class="exam-ribbon-metrics">
+          <span class="exam-ribbon-pill is-highlight">
+            <i class="fa-solid fa-list-ol"></i>
+            پرسیارەکان: <strong id="builderQCount">0</strong>
+          </span>
+          <span class="exam-ribbon-pill">
+            <i class="fa-solid fa-star" style="color:var(--exam-gold);"></i>
+            کۆی نمرە: <strong id="builderTotalScore">0</strong>
+          </span>
+        </div>
+        <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+          <button id="btnBuilderSaveDraft" type="button" class="exam-btn exam-btn-soft exam-btn-sm">
+            <i class="fa-solid fa-floppy-disk"></i>
+            پاشەکەوت وەک ڕەشنووس
+          </button>
+          <button id="btnBuilderPublish" type="button" class="exam-btn exam-btn-primary exam-btn-sm">
+            <i class="fa-solid fa-paper-plane"></i>
+            بڵاوکردنەوەی ئیمتیحان
+          </button>
+        </div>
+      </div>
+
+      <div class="exam-paper-sheet">
+        <div class="exam-paper-masthead">
+          <div class="exam-paper-emblem">
+            <i class="fa-solid fa-feather-pointed"></i>
+            <span id="builderModeHeading">ئامادەکردنی پەڕەی ئیمتیحانی نوێ</span>
+          </div>
+          <p style="margin:0; font-size:0.85rem; color:var(--exam-ink-muted);">
+            دەتوانیت زیاتر لە ١٠٠ پرسیار دابنێیت و لە هەر پرسیارێکدا وێنە، ڤیدیۆ، دەنگ یان فایل زیاد بکەیت
+          </p>
+        </div>
+
+        <!-- Exam Header Info -->
+        <div class="exam-field-grid">
+          <div>
+            <label class="exam-label" for="builderTitle">ناونیشانی ئیمتیحان *</label>
+            <input id="builderTitle" type="text" class="exam-input" placeholder="نموونە: ئیمتیحانی مانگانەی یەکەم — وانەی تەعبیر">
+          </div>
+          <div>
+            <label class="exam-label" for="builderSubject">بابەت یان بەش (دڵخواز)</label>
+            <input id="builderSubject" type="text" class="exam-input" placeholder="نموونە: تەعبیری خەون، شەرع، ئەدەب...">
+          </div>
+        </div>
+
+        <div style="margin-bottom:1.15rem;">
+          <label class="exam-label" for="builderDesc">ڕێنمایی و تێبینی بۆ قوتابیان (دڵخواز)</label>
+          <textarea id="builderDesc" class="exam-textarea" style="min-height:66px;" placeholder="نموونە: تکایە پێش جێگیرکردنی هەر وەڵامێک بە وردی بیخوێنەرەوە..."></textarea>
+        </div>
+
+        <!-- Quick Jump Navigator for 100+ questions -->
+        <div id="builderNavPanel" class="exam-nav-panel hidden">
+          <div id="builderNavToggle" class="exam-nav-header">
+            <span><i class="fa-solid fa-compass" style="color:var(--exam-gold); margin-left:0.35rem;"></i>گەشتی خێرا بۆ پرسیارەکان</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div id="builderNavGrid" class="exam-nav-grid"></div>
+        </div>
+
+        <!-- Questions List -->
+        <div id="builderQuestionsList" class="exam-questions-list"></div>
+
+        <!-- Fast Add Question Controls (1, +5, +10 for 100+ exams) -->
+        <div class="exam-paper-footer-box">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:0.6rem; margin-bottom:1rem;">
+            <button id="btnAddOneQ" type="button" class="exam-btn exam-btn-gold">
+              <i class="fa-solid fa-plus-circle"></i>
+              زیادکردنی پرسیاری نوێ
+            </button>
+            <button id="btnAddFiveQ" type="button" class="exam-btn exam-btn-soft">
+              <i class="fa-solid fa-layer-group"></i>
+              + ٥ پرسیار بەیەکەوە
+            </button>
+            <button id="btnAddTenQ" type="button" class="exam-btn exam-btn-soft">
+              <i class="fa-solid fa-cubes"></i>
+              + ١٠ پرسیار بەیەکەوە
+            </button>
+          </div>
+          <p style="margin:0; font-size:0.78rem; color:var(--exam-ink-muted);">
+            هەر پرسیارێک پشتگیری وێنە، ڤیدیۆ، دەنگ (تۆمارکردنی ڕاستەوخۆ یان فایل) و هەموو جۆرە فایلێک دەکات
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         VIEW 3: STUDENT ELECTRONIC EXAM PAPER (LOCK ANSWERS & SUBMIT / VIEW RESULT)
+         ================================================================ -->
+    <section id="viewStudentExam" class="hidden">
+      <div id="studentStickyRibbon" class="exam-sticky-ribbon">
+        <div class="exam-ribbon-metrics">
+          <span class="exam-ribbon-pill is-highlight">
+            <i class="fa-solid fa-lock"></i>
+            جێگیرکراو: <strong id="studentLockedCount">0</strong> / <strong id="studentTotalQCount">0</strong>
+          </span>
+          <span id="studentStatusPill" class="exam-ribbon-pill"></span>
+        </div>
+        <button id="btnStudentJumpSubmit" type="button" class="exam-btn exam-btn-gold exam-btn-sm">
+          <i class="fa-solid fa-paper-plane"></i>
+          بۆ کۆتایی پەڕە و ناردن
+        </button>
+      </div>
+
+      <article class="exam-paper-sheet">
+        <!-- Giant Official Result Stamp (shown ONLY when status === 'graded') -->
+        <div id="studentResultBanner" class="exam-result-banner hidden"></div>
+
+        <!-- Waiting for Grade Banner (shown when status === 'submitted') -->
+        <div id="studentSubmittedNotice" class="exam-result-banner hidden" style="padding:1.1rem 1rem;">
+          <div class="exam-result-seal-top" style="background:var(--exam-gold); color:#ffffff;">
+            <i class="fa-solid fa-hourglass-half"></i>
+            پەڕەکەت بە سەرکەوتوویی نێردراوە بۆ مامۆستا
+          </div>
+          <p style="margin:0.35rem 0 0; font-size:0.92rem; color:var(--exam-ink); font-weight:700;">
+            وەڵامەکانت پارێزراون و ناردراون. هەرکات مامۆستا هەڵسەنگاندنی تەواو کرد، نمرەی کۆتایی بەگەورەیی لەسەر ئەم پەڕەیە دەردەکەوێت و ئاگادار دەکرێیتەوە.
+          </p>
+        </div>
+
+        <!-- Official Paper Masthead -->
+        <header class="exam-paper-masthead">
+          <div class="exam-paper-emblem">
+            <i class="fa-solid fa-award"></i>
+            <span>پەڕەی ئیمتیحانی فەرمی — پریاسکەی عەبدی</span>
+          </div>
+          <h2 id="studentExamTitle" class="exam-paper-title"></h2>
+          <p id="studentExamDesc" class="exam-paper-desc hidden"></p>
+          <div id="studentExamMeta" class="exam-meta-strip"></div>
+        </header>
+
+        <!-- Quick Question Navigator -->
+        <div id="studentNavPanel" class="exam-nav-panel">
+          <div id="studentNavToggle" class="exam-nav-header">
+            <span><i class="fa-solid fa-table-cells" style="color:var(--exam-gold); margin-left:0.35rem;"></i>نەخشەی پرسیارەکان (کلیک بکە بۆ چوونە سەر هەر پرسیارێک)</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div id="studentNavGrid" class="exam-nav-grid"></div>
+        </div>
+
+        <!-- Student Questions Sheet -->
+        <div id="studentQuestionsList" class="exam-questions-list"></div>
+
+        <!-- Final Submit Button at Bottom of Paper -->
+        <div id="studentSubmitSection" class="exam-paper-footer-box hidden">
+          <h3 style="margin:0 0 0.4rem; font-family:'Amiri',serif; font-size:1.3rem; color:var(--exam-ink);">
+            کۆتایی پەڕەی ئیمتیحان
+          </h3>
+          <p id="studentSubmitSummaryText" style="margin:0 0 1rem; font-size:0.88rem; color:var(--exam-ink-muted);"></p>
+          <button id="btnSubmitExamPaper" type="button" class="exam-btn exam-btn-primary exam-btn-lg">
+            <i class="fa-solid fa-paper-plane"></i>
+            ناردنی ئیمتیحان بۆ مامۆستا
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================================================================
+         VIEW 4: MANAGER SUBMISSIONS LIST FOR AN EXAM
+         ================================================================ -->
+    <section id="viewExamSubmissions" class="hidden">
+      <div class="exam-hero-bar">
+        <div>
+          <h2 id="subsExamTitle" class="exam-hero-title">وەڵامی قوتابیان</h2>
+          <p id="subsExamMeta" class="exam-hero-desc"></p>
+        </div>
+        <button id="btnRefreshSubs" type="button" class="exam-btn exam-btn-soft exam-btn-sm">
+          <i class="fa-solid fa-rotate"></i>
+          نوێکردنەوە
+        </button>
+      </div>
+
+      <div id="subsFilterTabs" class="exam-filter-tabs">
+        <button type="button" class="exam-filter-tab is-active" data-filter="all">هەموو (<span id="subCountAll">0</span>)</button>
+        <button type="button" class="exam-filter-tab" data-filter="submitted">چاوەڕوانی هەڵسەنگاندن (<span id="subCountSubmitted">0</span>)</button>
+        <button type="button" class="exam-filter-tab" data-filter="graded">تەواوکراو و نمرەدراو (<span id="subCountGraded">0</span>)</button>
+      </div>
+
+      <div id="submissionsListContainer"></div>
+      <div id="submissionsEmptyState" class="exam-empty-box hidden">
+        <div class="exam-empty-icon"><i class="fa-solid fa-inbox"></i></div>
+        <h3 style="margin:0 0 0.35rem; color:var(--exam-ink);">هێشتا هیچ قوتابییەک ئیمتیحانەکەی نەناردووە</h3>
+        <p style="margin:0; font-size:0.88rem;">هەرکات قوتابییەک وەڵامەکانی نارد، ڕاستەوخۆ لێرە دەردەکەوێت.</p>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         VIEW 5: MANAGER GRADING PAPER (✅ / ❌ + SCORE + 1-BUTTON FINALIZE)
+         ================================================================ -->
+    <section id="viewGradeSubmission" class="hidden">
+      <div class="exam-sticky-ribbon">
+        <div class="exam-ribbon-metrics">
+          <span class="exam-ribbon-pill is-highlight">
+            <i class="fa-solid fa-calculator"></i>
+            کۆی نمرە: <strong id="gradeLiveScore">0</strong> / <strong id="gradeLiveMax">0</strong>
+          </span>
+          <span class="exam-ribbon-pill" style="color:#15803d;">
+            <i class="fa-solid fa-check"></i>
+            ڕاست: <strong id="gradeLiveCorrect">0</strong>
+          </span>
+          <span class="exam-ribbon-pill" style="color:var(--exam-crimson);">
+            <i class="fa-solid fa-xmark"></i>
+            هەڵە: <strong id="gradeLiveWrong">0</strong>
+          </span>
+        </div>
+        <button id="btnGradeJumpFinalize" type="button" class="exam-btn exam-btn-gold exam-btn-sm">
+          <i class="fa-solid fa-trophy"></i>
+          کۆتایی هێنان بە ئەنجام
+        </button>
+      </div>
+
+      <article class="exam-paper-sheet">
+        <!-- Giant Official Result Stamp (appears immediately after clicking Finalize!) -->
+        <div id="gradeResultBanner" class="exam-result-banner hidden"></div>
+
+        <header class="exam-paper-masthead">
+          <div class="exam-paper-emblem">
+            <i class="fa-solid fa-pen-clip"></i>
+            <span>پەڕەی هەڵسەنگاندنی مامۆستا</span>
+          </div>
+          <h2 id="gradeExamTitle" class="exam-paper-title"></h2>
+          <div id="gradeStudentMeta" class="exam-meta-strip"></div>
+        </header>
+
+        <!-- Quick Question Navigator for Grading 100+ questions -->
+        <div id="gradeNavPanel" class="exam-nav-panel">
+          <div id="gradeNavToggle" class="exam-nav-header">
+            <span><i class="fa-solid fa-table-cells" style="color:var(--exam-gold); margin-left:0.35rem;"></i>پرسیارەکانی ئەم پەڕەیە (سەوز: ڕاست | سوور: هەڵە)</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div id="gradeNavGrid" class="exam-nav-grid"></div>
+        </div>
+
+        <!-- Questions + Student Answers + Instant ✅/❌ & Score Controls -->
+        <div id="gradeQuestionsList" class="exam-questions-list"></div>
+
+        <!-- Single-Button Auto-Sum Finalize Section -->
+        <div id="gradeFinalizeBox" class="exam-paper-footer-box">
+          <h3 style="margin:0 0 0.45rem; font-family:'Amiri',serif; font-size:1.35rem; color:var(--exam-ink);">
+            کۆتایی هێنان بە هەڵسەنگاندن و دەرکردنی ئەنجام
+          </h3>
+          <p style="margin:0 0 0.9rem; font-size:0.86rem; color:var(--exam-ink-muted);">
+            بە داگرتنی ئەم دوگمەیە هەموو نمرەکان بەشێوەی ئەلکترۆنی کۆدەکرێنەوە، نەتیجەکە بەگەورەیی لەسەر پەڕەی ئیمتیحانەکە دەنووسرێت و ڕاستەوخۆ دەگەڕێتەوە بۆ قوتابی.
+          </p>
+          <div style="max-width:600px; margin:0 auto 1rem; text-align:right;">
+            <label class="exam-label" for="gradeOverallFeedback">تێبینی گشتی مامۆستا بۆ قوتابی (دڵخواز)</label>
+            <textarea id="gradeOverallFeedback" class="exam-textarea" style="min-height:64px;" placeholder="نموونە: دەستخۆشیت لێ دەکەم، وەڵامەکانت زۆر ڕوون و جوان بوون..."></textarea>
+          </div>
+          <div style="margin-bottom:1rem; font-size:1.05rem; font-weight:800; color:var(--exam-ink);">
+            کۆی نمرەی کۆکراوە:
+            <span id="gradeFinalizePreviewScore" style="color:var(--exam-emerald); font-family:'Plus Jakarta Sans',sans-serif; font-size:1.35rem; margin-right:0.35rem;">0 / 0</span>
+          </div>
+          <button id="btnFinalizeGrading" type="button" class="exam-btn exam-btn-primary exam-btn-lg">
+            <i class="fa-solid fa-award"></i>
+            کۆتایی هێنان و ناردنی ئەنجام بۆ قوتابی
+          </button>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- CONFIRMATION MODAL -->
+  <div id="examConfirmModal" class="exam-modal-backdrop hidden">
+    <div class="exam-modal-card">
+      <div id="confirmModalIcon" style="font-size:2.3rem; color:var(--exam-gold); margin-bottom:0.55rem;">
+        <i class="fa-solid fa-circle-question"></i>
+      </div>
+      <h3 id="confirmModalTitle" style="margin:0 0 0.45rem; font-size:1.18rem; color:var(--exam-ink);">دڵنیایت؟</h3>
+      <p id="confirmModalBody" style="margin:0 0 1.25rem; font-size:0.9rem; color:var(--exam-ink-muted); line-height:1.7;"></p>
+      <div style="display:flex; gap:0.6rem; justify-content:center;">
+        <button id="confirmModalCancel" type="button" class="exam-btn exam-btn-soft">پاشگەزبوونەوە</button>
+        <button id="confirmModalOk" type="button" class="exam-btn exam-btn-primary">بەڵێ، دڵنیام</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMAGE LIGHTBOX MODAL -->
+  <div id="examLightboxModal" class="exam-modal-backdrop hidden" style="cursor:zoom-out;">
+    <img id="examLightboxImg" class="exam-lightbox-img" src="" alt="وێنەی پرسیار">
+  </div>
+
+  <!-- TOAST STACK -->
+  <div id="examToastStack" class="exam-toast-stack"></div>
+
+  <!-- Socket.IO + Exams Controller -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/exams.js?v=1.0"></script>
+</body>
+</html>

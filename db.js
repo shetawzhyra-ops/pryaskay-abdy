@@ -802,8 +802,77 @@ function initDb() {
       'CREATE INDEX IF NOT EXISTS idx_recorded_lessons_teacher ON recorded_lessons(teacher_id)',
       'CREATE INDEX IF NOT EXISTS idx_users_role_status ON users(role, status)',
       'CREATE INDEX IF NOT EXISTS idx_questions_active_created ON questions(is_active, created_at DESC)',
-      'CREATE INDEX IF NOT EXISTS idx_custom_group_messages_group ON custom_group_messages(group_id, created_at ASC)'
+      'CREATE INDEX IF NOT EXISTS idx_custom_group_messages_group ON custom_group_messages(group_id, created_at ASC)',
+      'CREATE INDEX IF NOT EXISTS idx_exam_questions_exam ON exam_questions(exam_id, sort_order ASC)',
+      'CREATE INDEX IF NOT EXISTS idx_exam_submissions_exam ON exam_submissions(exam_id, status)',
+      'CREATE INDEX IF NOT EXISTS idx_exam_submissions_student ON exam_submissions(student_id, status)',
+      'CREATE INDEX IF NOT EXISTS idx_exam_answers_sub ON exam_answers(submission_id, question_id)'
     ];
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS exams (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        description TEXT DEFAULT '',
+        subject TEXT DEFAULT '',
+        creator_id INTEGER NOT NULL,
+        creator_name TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'published',
+        total_max_score REAL NOT NULL DEFAULT 0,
+        created_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS exam_questions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        exam_id INTEGER NOT NULL,
+        sort_order INTEGER NOT NULL DEFAULT 0,
+        question_text TEXT NOT NULL DEFAULT '',
+        question_type TEXT NOT NULL DEFAULT 'text',
+        options_json TEXT DEFAULT '[]',
+        attachments_json TEXT DEFAULT '[]',
+        max_score REAL NOT NULL DEFAULT 1,
+        created_at INTEGER NOT NULL,
+        FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS exam_submissions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        exam_id INTEGER NOT NULL,
+        student_id INTEGER NOT NULL,
+        student_name TEXT NOT NULL,
+        student_username TEXT DEFAULT '',
+        status TEXT NOT NULL DEFAULT 'in_progress',
+        total_score REAL NOT NULL DEFAULT 0,
+        max_total_score REAL NOT NULL DEFAULT 0,
+        correct_count INTEGER NOT NULL DEFAULT 0,
+        wrong_count INTEGER NOT NULL DEFAULT 0,
+        teacher_feedback TEXT DEFAULT '',
+        graded_by_id INTEGER DEFAULT NULL,
+        graded_by_name TEXT DEFAULT '',
+        started_at INTEGER NOT NULL,
+        submitted_at INTEGER DEFAULT NULL,
+        graded_at INTEGER DEFAULT NULL,
+        UNIQUE(exam_id, student_id),
+        FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS exam_answers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        submission_id INTEGER NOT NULL,
+        exam_id INTEGER NOT NULL,
+        question_id INTEGER NOT NULL,
+        answer_text TEXT NOT NULL DEFAULT '',
+        is_locked INTEGER NOT NULL DEFAULT 0,
+        locked_at INTEGER DEFAULT NULL,
+        is_correct INTEGER DEFAULT NULL,
+        score REAL DEFAULT NULL,
+        teacher_note TEXT DEFAULT '',
+        updated_at INTEGER NOT NULL,
+        UNIQUE(submission_id, question_id),
+        FOREIGN KEY (submission_id) REFERENCES exam_submissions(id) ON DELETE CASCADE,
+        FOREIGN KEY (question_id) REFERENCES exam_questions(id) ON DELETE CASCADE
+      );
+    `);
     for (const sql of perfIndexes) {
       try { db.exec(sql); } catch (idxErr) {}
     }
@@ -3734,6 +3803,463 @@ const poemsDb = {
   }
 };
 
+// ================= ELECTRONIC EXAMS SYSTEM (سیستەمی ئیمتیحانی ئەلکترۆنی) =================
+function safeParseJsonArray(raw) {
+  if (Array.isArray(raw)) return raw;
+  try {
+    const parsed = JSON.parse(raw || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function roundExamScore(val) {
+  const num = Number(val);
+  if (!Number.isFinite(num) || num < 0) return 0;
+  return Math.round(num * 100) / 100;
+}
+
+function sanitizeQuestionInput(q, idx) {
+  const questionText = String(q?.question_text ?? q?.text ?? '').trim();
+  const qType = q?.question_type === 'choice' ? 'choice' : 'text';
+  const rawOpts = Array.isArray(q?.options) ? q.options : safeParseJsonArray(q?.options_json);
+  const options = qType === 'choice'
+    ? rawOpts.map(o => String(o || '').trim()).filter(Boolean)
+    : [];
+  const rawAtts = Array.isArray(q?.attachments) ? q.attachments : safeParseJsonArray(q?.attachments_json);
+  const attachments = rawAtts
+    .filter(a => a && typeof a.url === 'string' && a.url.trim())
+    .map(a => ({
+      url: String(a.url).trim(),
+      type: ['image', 'video', 'audio', 'file'].includes(a.type) ? a.type : 'file',
+      name: String(a.name || 'فایل').trim().slice(0, 180),
+      size: Number(a.size || 0)
+    }));
+  const maxScore = roundExamScore(q?.max_score != null && q?.max_score !== '' ? q.max_score : 1);
+  return {
+    id: q?.id ? parseInt(q.id, 10) : null,
+    sort_order: idx + 1,
+    question_text: questionText,
+    question_type: qType,
+    options_json: JSON.stringify(options),
+    attachments_json: JSON.stringify(attachments),
+    max_score: maxScore > 0 ? maxScore : 1
+  };
+}
+
+const examsDb = {
+  formatQuestion(row) {
+    if (!row) return null;
+    return {
+      ...row,
+      options: safeParseJsonArray(row.options_json),
+      attachments: safeParseJsonArray(row.attachments_json),
+      max_score: roundExamScore(row.max_score)
+    };
+  },
+
+  recalcExamMaxScore(examId) {
+    const row = db.prepare('SELECT COALESCE(SUM(max_score), 0) as total FROM exam_questions WHERE exam_id = ?').get(examId);
+    const total = roundExamScore(row ? row.total : 0);
+    db.prepare('UPDATE exams SET total_max_score = ?, updated_at = ? WHERE id = ?').run(total, Date.now(), examId);
+    return total;
+  },
+
+  createExam({ title, description = '', subject = '', creator_id, creator_name, status = 'published', questions = [] }) {
+    const now = Date.now();
+    const safeStatus = ['draft', 'published', 'closed'].includes(status) ? status : 'published';
+    const cleanQuestions = (Array.isArray(questions) ? questions : []).map((q, idx) => sanitizeQuestionInput(q, idx));
+    const totalMax = roundExamScore(cleanQuestions.reduce((acc, q) => acc + q.max_score, 0));
+
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      const res = db.prepare(`
+        INSERT INTO exams (title, description, subject, creator_id, creator_name, status, total_max_score, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(String(title || '').trim(), String(description || '').trim(), String(subject || '').trim(), creator_id, String(creator_name || 'بەڕێوەبەر').trim(), safeStatus, totalMax, now, now);
+      const examId = Number(res.lastInsertRowid);
+
+      const insQ = db.prepare(`
+        INSERT INTO exam_questions (exam_id, sort_order, question_text, question_type, options_json, attachments_json, max_score, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `);
+      for (const q of cleanQuestions) {
+        insQ.run(examId, q.sort_order, q.question_text, q.question_type, q.options_json, q.attachments_json, q.max_score, now);
+      }
+      db.exec('COMMIT');
+      return this.getExamWithQuestions(examId);
+    } catch (err) {
+      db.exec('ROLLBACK');
+      throw err;
+    }
+  },
+
+  updateExam(examId, { title, description = '', subject = '', status = 'published', questions = [] }) {
+    const existing = db.prepare('SELECT * FROM exams WHERE id = ?').get(examId);
+    if (!existing) return null;
+    const now = Date.now();
+    const safeStatus = ['draft', 'published', 'closed'].includes(status) ? status : existing.status;
+    const cleanQuestions = (Array.isArray(questions) ? questions : []).map((q, idx) => sanitizeQuestionInput(q, idx));
+    const totalMax = roundExamScore(cleanQuestions.reduce((acc, q) => acc + q.max_score, 0));
+
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      db.prepare(`
+        UPDATE exams SET title = ?, description = ?, subject = ?, status = ?, total_max_score = ?, updated_at = ?
+        WHERE id = ?
+      `).run(String(title || existing.title).trim(), String(description || '').trim(), String(subject || '').trim(), safeStatus, totalMax, now, examId);
+
+      const existingIds = new Set(
+        db.prepare('SELECT id FROM exam_questions WHERE exam_id = ?').all(examId).map(r => Number(r.id))
+      );
+      const keepIds = new Set();
+
+      const updQ = db.prepare(`
+        UPDATE exam_questions
+        SET sort_order = ?, question_text = ?, question_type = ?, options_json = ?, attachments_json = ?, max_score = ?
+        WHERE id = ? AND exam_id = ?
+      `);
+      const insQ = db.prepare(`
+        INSERT INTO exam_questions (exam_id, sort_order, question_text, question_type, options_json, attachments_json, max_score, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `);
+
+      for (const q of cleanQuestions) {
+        if (q.id && existingIds.has(Number(q.id))) {
+          updQ.run(q.sort_order, q.question_text, q.question_type, q.options_json, q.attachments_json, q.max_score, q.id, examId);
+          keepIds.add(Number(q.id));
+        } else {
+          const r = insQ.run(examId, q.sort_order, q.question_text, q.question_type, q.options_json, q.attachments_json, q.max_score, now);
+          keepIds.add(Number(r.lastInsertRowid));
+        }
+      }
+
+      for (const oldId of existingIds) {
+        if (!keepIds.has(oldId)) {
+          db.prepare('DELETE FROM exam_answers WHERE question_id = ?').run(oldId);
+          db.prepare('DELETE FROM exam_questions WHERE id = ? AND exam_id = ?').run(oldId, examId);
+        }
+      }
+
+      db.exec('COMMIT');
+      return this.getExamWithQuestions(examId);
+    } catch (err) {
+      db.exec('ROLLBACK');
+      throw err;
+    }
+  },
+
+  updateExamStatus(examId, status) {
+    if (!['draft', 'published', 'closed'].includes(status)) return null;
+    db.prepare('UPDATE exams SET status = ?, updated_at = ? WHERE id = ?').run(status, Date.now(), examId);
+    return db.prepare('SELECT * FROM exams WHERE id = ?').get(examId);
+  },
+
+  deleteExam(examId) {
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      db.prepare('DELETE FROM exam_answers WHERE exam_id = ?').run(examId);
+      db.prepare('DELETE FROM exam_submissions WHERE exam_id = ?').run(examId);
+      db.prepare('DELETE FROM exam_questions WHERE exam_id = ?').run(examId);
+      const res = db.prepare('DELETE FROM exams WHERE id = ?').run(examId);
+      db.exec('COMMIT');
+      return res.changes > 0;
+    } catch (err) {
+      db.exec('ROLLBACK');
+      throw err;
+    }
+  },
+
+  getExamById(examId) {
+    return db.prepare('SELECT * FROM exams WHERE id = ?').get(examId) || null;
+  },
+
+  getExamWithQuestions(examId) {
+    const exam = this.getExamById(examId);
+    if (!exam) return null;
+    const questions = db.prepare('SELECT * FROM exam_questions WHERE exam_id = ? ORDER BY sort_order ASC, id ASC')
+      .all(examId)
+      .map(r => this.formatQuestion(r));
+    return { ...exam, questions };
+  },
+
+  listAdminExams() {
+    return db.prepare(`
+      SELECT e.*,
+        (SELECT COUNT(*) FROM exam_questions q WHERE q.exam_id = e.id) as question_count,
+        (SELECT COUNT(*) FROM exam_submissions s WHERE s.exam_id = e.id AND s.status IN ('submitted', 'graded')) as total_submissions,
+        (SELECT COUNT(*) FROM exam_submissions s WHERE s.exam_id = e.id AND s.status = 'submitted') as ungraded_submissions,
+        (SELECT COUNT(*) FROM exam_submissions s WHERE s.exam_id = e.id AND s.status = 'graded') as graded_submissions,
+        (SELECT COUNT(*) FROM exam_submissions s WHERE s.exam_id = e.id AND s.status = 'in_progress') as in_progress_submissions
+      FROM exams e
+      ORDER BY e.created_at DESC
+    `).all();
+  },
+
+  listStudentExams(studentId) {
+    return db.prepare(`
+      SELECT e.*,
+        (SELECT COUNT(*) FROM exam_questions q WHERE q.exam_id = e.id) as question_count,
+        s.id as submission_id,
+        s.status as submission_status,
+        s.total_score as student_score,
+        s.max_total_score as student_max_score,
+        s.correct_count as student_correct_count,
+        s.wrong_count as student_wrong_count,
+        s.submitted_at as student_submitted_at,
+        s.graded_at as student_graded_at,
+        s.graded_by_name as student_graded_by,
+        (SELECT COUNT(*) FROM exam_answers a WHERE a.submission_id = s.id AND a.is_locked = 1) as locked_answers_count
+      FROM exams e
+      LEFT JOIN exam_submissions s ON s.exam_id = e.id AND s.student_id = ?
+      WHERE e.status = 'published' OR (e.status = 'closed' AND s.id IS NOT NULL)
+      ORDER BY CASE WHEN s.status = 'graded' THEN 0 WHEN e.status = 'published' AND (s.status IS NULL OR s.status = 'in_progress') THEN 1 ELSE 2 END, e.created_at DESC
+    `).all(studentId);
+  },
+
+  getOrCreateSubmission(examId, user, createIfMissing = true) {
+    let sub = db.prepare('SELECT * FROM exam_submissions WHERE exam_id = ? AND student_id = ?').get(examId, user.id);
+    if (sub) return sub;
+    if (!createIfMissing) return null;
+    const exam = this.getExamById(examId);
+    if (!exam) return null;
+    const now = Date.now();
+    const res = db.prepare(`
+      INSERT INTO exam_submissions (exam_id, student_id, student_name, student_username, status, total_score, max_total_score, started_at)
+      VALUES (?, ?, ?, ?, 'in_progress', 0, ?, ?)
+    `).run(examId, user.id, user.full_name || user.username, user.username || '', roundExamScore(exam.total_max_score), now);
+    return db.prepare('SELECT * FROM exam_submissions WHERE id = ?').get(Number(res.lastInsertRowid));
+  },
+
+  getSubmissionById(submissionId) {
+    return db.prepare('SELECT * FROM exam_submissions WHERE id = ?').get(submissionId) || null;
+  },
+
+  getSubmissionAnswers(submissionId) {
+    return db.prepare('SELECT * FROM exam_answers WHERE submission_id = ? ORDER BY id ASC').all(submissionId);
+  },
+
+  lockStudentAnswer(submissionId, examId, questionId, answerText) {
+    const cleanText = String(answerText || '').trim();
+    if (!cleanText) return { error: 'تکایە سەرەتا وەڵامەکەت بنووسە یان هەڵبژێرە' };
+
+    const existing = db.prepare('SELECT * FROM exam_answers WHERE submission_id = ? AND question_id = ?').get(submissionId, questionId);
+    if (existing && Number(existing.is_locked) === 1) {
+      return { error: 'ئەم وەڵامە پێشتر جێگیرکراوە و ناکرێت بگۆڕدرێت یان بسڕدرێتەوە', locked: true, answer: existing };
+    }
+
+    const now = Date.now();
+    if (existing) {
+      db.prepare(`
+        UPDATE exam_answers SET answer_text = ?, is_locked = 1, locked_at = ?, updated_at = ?
+        WHERE id = ?
+      `).run(cleanText, now, now, existing.id);
+    } else {
+      db.prepare(`
+        INSERT INTO exam_answers (submission_id, exam_id, question_id, answer_text, is_locked, locked_at, updated_at)
+        VALUES (?, ?, ?, ?, 1, ?, ?)
+      `).run(submissionId, examId, questionId, cleanText, now, now);
+    }
+    const saved = db.prepare('SELECT * FROM exam_answers WHERE submission_id = ? AND question_id = ?').get(submissionId, questionId);
+    const lockedRow = db.prepare('SELECT COUNT(*) as c FROM exam_answers WHERE submission_id = ? AND is_locked = 1').get(submissionId);
+    return { success: true, answer: saved, lockedCount: lockedRow ? lockedRow.c : 0 };
+  },
+
+  submitStudentExam(submissionId, examId, pendingAnswers = []) {
+    const sub = this.getSubmissionById(submissionId);
+    if (!sub) return { error: 'تۆمار نەدۆزرایەوە' };
+    if (sub.status !== 'in_progress') {
+      return { error: 'ئەم ئیمتیحانە پێشتر نێردراوە' };
+    }
+
+    const validQIds = new Set(
+      db.prepare('SELECT id FROM exam_questions WHERE exam_id = ?').all(examId).map(r => Number(r.id))
+    );
+    const now = Date.now();
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      if (Array.isArray(pendingAnswers)) {
+        for (const item of pendingAnswers) {
+          const qId = parseInt(item?.question_id, 10);
+          const txt = String(item?.answer_text || '').trim();
+          if (!qId || !validQIds.has(qId) || !txt) continue;
+          const existing = db.prepare('SELECT * FROM exam_answers WHERE submission_id = ? AND question_id = ?').get(submissionId, qId);
+          if (existing && Number(existing.is_locked) === 1) continue; // Never overwrite locked answers
+          if (existing) {
+            db.prepare('UPDATE exam_answers SET answer_text = ?, is_locked = 1, locked_at = ?, updated_at = ? WHERE id = ?').run(txt, now, now, existing.id);
+          } else {
+            db.prepare('INSERT INTO exam_answers (submission_id, exam_id, question_id, answer_text, is_locked, locked_at, updated_at) VALUES (?, ?, ?, ?, 1, ?, ?)').run(submissionId, examId, qId, txt, now, now);
+          }
+        }
+      }
+      const maxRow = db.prepare('SELECT COALESCE(SUM(max_score), 0) as total FROM exam_questions WHERE exam_id = ?').get(examId);
+      const maxScore = roundExamScore(maxRow ? maxRow.total : 0);
+      db.prepare(`
+        UPDATE exam_submissions
+        SET status = 'submitted', max_total_score = ?, submitted_at = ?
+        WHERE id = ?
+      `).run(maxScore, now, submissionId);
+      db.exec('COMMIT');
+      return { success: true, submission: this.getSubmissionById(submissionId) };
+    } catch (err) {
+      db.exec('ROLLBACK');
+      throw err;
+    }
+  },
+
+  listSubmissionsForExam(examId) {
+    return db.prepare(`
+      SELECT s.*,
+        (SELECT COUNT(*) FROM exam_questions q WHERE q.exam_id = s.exam_id) as total_questions,
+        (SELECT COUNT(*) FROM exam_answers a WHERE a.submission_id = s.id AND a.answer_text != '') as answered_count,
+        (SELECT COUNT(*) FROM exam_answers a WHERE a.submission_id = s.id AND a.is_correct IS NOT NULL) as graded_answers_count
+      FROM exam_submissions s
+      WHERE s.exam_id = ?
+      ORDER BY CASE WHEN s.status = 'submitted' THEN 0 WHEN s.status = 'graded' THEN 1 ELSE 2 END, COALESCE(s.submitted_at, s.started_at) DESC
+    `).all(examId);
+  },
+
+  computeSubmissionTotals(submissionId, examId) {
+    const maxRow = db.prepare('SELECT COALESCE(SUM(max_score), 0) as total FROM exam_questions WHERE exam_id = ?').get(examId);
+    const maxTotal = roundExamScore(maxRow ? maxRow.total : 0);
+    const ansRows = db.prepare('SELECT is_correct, score FROM exam_answers WHERE submission_id = ?').all(submissionId);
+    let totalScore = 0;
+    let correctCount = 0;
+    let wrongCount = 0;
+    let gradedCount = 0;
+    for (const a of ansRows) {
+      if (a.score != null && Number.isFinite(Number(a.score))) {
+        totalScore += Number(a.score);
+      }
+      if (a.is_correct === 1) {
+        correctCount++;
+        gradedCount++;
+      } else if (a.is_correct === 0) {
+        wrongCount++;
+        gradedCount++;
+      } else if (a.score != null) {
+        gradedCount++;
+      }
+    }
+    return {
+      total_score: roundExamScore(totalScore),
+      max_total_score: maxTotal,
+      correct_count: correctCount,
+      wrong_count: wrongCount,
+      graded_count: gradedCount
+    };
+  },
+
+  gradeSingleAnswer(submissionId, questionId, { is_correct, score, teacher_note = '' }) {
+    const sub = this.getSubmissionById(submissionId);
+    if (!sub) return null;
+    const question = db.prepare('SELECT * FROM exam_questions WHERE id = ? AND exam_id = ?').get(questionId, sub.exam_id);
+    if (!question) return null;
+
+    const now = Date.now();
+    const safeCorrect = is_correct === 1 || is_correct === true ? 1 : (is_correct === 0 || is_correct === false ? 0 : null);
+    let safeScore = score !== undefined && score !== null && score !== '' ? roundExamScore(score) : null;
+    if (safeScore === null && safeCorrect === 1) safeScore = roundExamScore(question.max_score);
+    if (safeScore === null && safeCorrect === 0) safeScore = 0;
+    const cleanNote = String(teacher_note || '').trim();
+
+    const existing = db.prepare('SELECT * FROM exam_answers WHERE submission_id = ? AND question_id = ?').get(submissionId, questionId);
+    if (existing) {
+      db.prepare(`
+        UPDATE exam_answers SET is_correct = ?, score = ?, teacher_note = ?, updated_at = ?
+        WHERE id = ?
+      `).run(safeCorrect, safeScore, cleanNote, now, existing.id);
+    } else {
+      db.prepare(`
+        INSERT INTO exam_answers (submission_id, exam_id, question_id, answer_text, is_locked, is_correct, score, teacher_note, updated_at)
+        VALUES (?, ?, ?, '', 0, ?, ?, ?, ?)
+      `).run(submissionId, sub.exam_id, questionId, safeCorrect, safeScore, cleanNote, now);
+    }
+
+    const totals = this.computeSubmissionTotals(submissionId, sub.exam_id);
+    db.prepare('UPDATE exam_submissions SET total_score = ?, max_total_score = ?, correct_count = ?, wrong_count = ? WHERE id = ?')
+      .run(totals.total_score, totals.max_total_score, totals.correct_count, totals.wrong_count, submissionId);
+
+    const saved = db.prepare('SELECT * FROM exam_answers WHERE submission_id = ? AND question_id = ?').get(submissionId, questionId);
+    return { answer: saved, totals };
+  },
+
+  finalizeSubmission(submissionId, graderUser, { grades = [], teacher_feedback = '' } = {}) {
+    const sub = this.getSubmissionById(submissionId);
+    if (!sub) return null;
+
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      if (Array.isArray(grades)) {
+        for (const g of grades) {
+          const qId = parseInt(g?.question_id, 10);
+          if (!qId) continue;
+          const question = db.prepare('SELECT * FROM exam_questions WHERE id = ? AND exam_id = ?').get(qId, sub.exam_id);
+          if (!question) continue;
+          const safeCorrect = g.is_correct === 1 || g.is_correct === true ? 1 : (g.is_correct === 0 || g.is_correct === false ? 0 : null);
+          let safeScore = g.score !== undefined && g.score !== null && g.score !== '' ? roundExamScore(g.score) : null;
+          if (safeScore === null && safeCorrect === 1) safeScore = roundExamScore(question.max_score);
+          if (safeScore === null && safeCorrect === 0) safeScore = 0;
+          const cleanNote = String(g.teacher_note || '').trim();
+          const now = Date.now();
+          const existing = db.prepare('SELECT id FROM exam_answers WHERE submission_id = ? AND question_id = ?').get(submissionId, qId);
+          if (existing) {
+            db.prepare('UPDATE exam_answers SET is_correct = ?, score = ?, teacher_note = ?, updated_at = ? WHERE id = ?')
+              .run(safeCorrect, safeScore, cleanNote, now, existing.id);
+          } else {
+            db.prepare(`
+              INSERT INTO exam_answers (submission_id, exam_id, question_id, answer_text, is_locked, is_correct, score, teacher_note, updated_at)
+              VALUES (?, ?, ?, '', 0, ?, ?, ?, ?)
+            `).run(submissionId, sub.exam_id, qId, safeCorrect, safeScore, cleanNote, now);
+          }
+        }
+      }
+
+      const totals = this.computeSubmissionTotals(submissionId, sub.exam_id);
+      const now = Date.now();
+      const graderName = graderUser.full_name || graderUser.username || 'بەڕێوەبەر';
+      db.prepare(`
+        UPDATE exam_submissions
+        SET status = 'graded',
+            total_score = ?,
+            max_total_score = ?,
+            correct_count = ?,
+            wrong_count = ?,
+            teacher_feedback = ?,
+            graded_by_id = ?,
+            graded_by_name = ?,
+            graded_at = ?
+        WHERE id = ?
+      `).run(totals.total_score, totals.max_total_score, totals.correct_count, totals.wrong_count, String(teacher_feedback || '').trim(), graderUser.id, graderName, now, submissionId);
+
+      db.exec('COMMIT');
+      return this.getSubmissionById(submissionId);
+    } catch (err) {
+      db.exec('ROLLBACK');
+      throw err;
+    }
+  },
+
+  getManagerSummary() {
+    const totalExams = db.prepare('SELECT COUNT(*) as c FROM exams').get()?.c || 0;
+    const publishedExams = db.prepare("SELECT COUNT(*) as c FROM exams WHERE status = 'published'").get()?.c || 0;
+    const ungradedSubmissions = db.prepare("SELECT COUNT(*) as c FROM exam_submissions WHERE status = 'submitted'").get()?.c || 0;
+    return { totalExams, publishedExams, ungradedSubmissions };
+  },
+
+  getStudentSummary(studentId) {
+    const activeExams = db.prepare("SELECT COUNT(*) as c FROM exams WHERE status = 'published'").get()?.c || 0;
+    const unsubmittedActive = db.prepare(`
+      SELECT COUNT(*) as c FROM exams e
+      LEFT JOIN exam_submissions s ON s.exam_id = e.id AND s.student_id = ?
+      WHERE e.status = 'published' AND (s.id IS NULL OR s.status = 'in_progress')
+    `).get(studentId)?.c || 0;
+    const gradedResults = db.prepare("SELECT COUNT(*) as c FROM exam_submissions WHERE student_id = ? AND status = 'graded'").get(studentId)?.c || 0;
+    return { activeExams, unsubmittedActive, gradedResults };
+  }
+};
+
 module.exports = {
   articlesDb,
   articles: articlesDb,
@@ -3781,5 +4307,6 @@ module.exports = {
   pollsDb,
   alarmsDb,
   complaints,
-  attendanceDb
+  attendanceDb,
+  examsDb
 };

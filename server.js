@@ -8,6 +8,7 @@ const { createUploadMiddleware } = require('./middleware/uploads');
 const { validateRegistrationPayload } = require('./lib/registration');
 const { registerPublicPlatformRoutes } = require('./routes/publicContent');
 const { registerPublicCommentsRoutes } = require('./routes/publicComments');
+const { registerExamRoutes } = require('./routes/exams');
 let compression;
 try { compression = require('compression'); } catch(e) {}
 const http = require('http');
@@ -22,7 +23,7 @@ let archiver;
 try { archiver = require('archiver'); } catch (e) {}
 let DatabaseSync;
 try { DatabaseSync = require('node:sqlite').DatabaseSync; } catch (e) {}
-const { db, dbPath, classrooms, initDb, users, poemsDb, articlesDb, messages, questions, library, dreamSessions, dreamMessages, settings, passwordResets, privateMessages, messageReactions, profileChangeRequests, pushSubscriptions, calculateStars, liveRecordings, recordedLessons, lessonTeachers, lessonFolders, lessonProgress, getDreamTeacherAlias, aiSecurity, advisorDb, buttonClicks, customGroups, pollsDb, alarmsDb, complaints, attendanceDb, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, getDreamPosts, reactToDreamPost, createDreamPost, deleteDreamPost, updateDreamPost } = require('./db');
+const { db, dbPath, classrooms, initDb, users, poemsDb, articlesDb, messages, questions, library, dreamSessions, dreamMessages, settings, passwordResets, privateMessages, messageReactions, profileChangeRequests, pushSubscriptions, calculateStars, liveRecordings, recordedLessons, lessonTeachers, lessonFolders, lessonProgress, getDreamTeacherAlias, aiSecurity, advisorDb, buttonClicks, customGroups, pollsDb, alarmsDb, complaints, attendanceDb, examsDb, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, getDreamPosts, reactToDreamPost, createDreamPost, deleteDreamPost, updateDreamPost } = require('./db');
 
 const DEFAULT_DEV_JWT = 'seereen_group_chat_super_secret_key_2026';
 if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || process.env.JWT_SECRET === DEFAULT_DEV_JWT)) {
@@ -1175,6 +1176,19 @@ function isHemnOrAzadUser(user) {
     fname.includes('ئازاد')
   );
 }
+
+// Electronic Exams System Routes (Managers Hemn & Azad + Students)
+registerExamRoutes(app, {
+  examsDb,
+  privateMessages,
+  authMiddleware,
+  isHemnOrAzadUser,
+  upload,
+  optimizeSingleFile,
+  io,
+  onlineUsers,
+  publicDir: path.join(__dirname, 'public')
+});
 
 const ALL_SPECIAL_BADGES = ['white', 'blue', 'green', 'black', 'red', 'purple'];
 

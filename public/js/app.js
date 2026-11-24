@@ -1289,6 +1289,10 @@ function updateUserUI() {
     });
   }
 
+  if (typeof checkExamsSummaryBadge === 'function') {
+    checkExamsSummaryBadge();
+  }
+
   // Member Management & Members List visibility (Admin, Super Admin, Teacher, Black Badge, Green Badge)
   if (canViewMembers) {
     if (drawerMembersBtn) {
@@ -2668,6 +2672,41 @@ function initSocket() {
         loadAdminArticles();
       }
     }
+  });
+
+  socket.on('exam_submitted', (data) => {
+    if (typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
+      if (typeof checkExamsSummaryBadge === 'function') checkExamsSummaryBadge();
+      if (typeof playSound === 'function') playSound('message');
+      if (typeof showToast === 'function') {
+        showToast(`📝 پەڕەی ئیمتیحانی نوێ لە «${(data && data.studentName) || 'قوتابی'}» گەیشت!`, 'success');
+      }
+    }
+  });
+
+  socket.on('exam_published', (data) => {
+    if (!(typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser))) {
+      if (typeof checkExamsSummaryBadge === 'function') checkExamsSummaryBadge();
+      if (typeof playSound === 'function') playSound('message');
+      if (typeof showToast === 'function') {
+        showToast(`📄 ئیمتیحانی نوێ بڵاوکرایەوە: ${(data && data.title) || ''}`, 'success');
+      }
+    }
+  });
+
+  socket.on('exam_graded', (data) => {
+    if (!(typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser))) {
+      if (typeof checkExamsSummaryBadge === 'function') checkExamsSummaryBadge();
+      if (typeof playSound === 'function') playSound('message');
+      if (typeof showToast === 'function') {
+        const sc = data && data.totalScore != null ? `${data.totalScore} / ${data.maxTotalScore}` : '';
+        showToast(`🏆 ئەنجامی ئیمتیحانی «${(data && data.examTitle) || ''}» دەرچوو ${sc ? '(' + sc + ')' : ''}`, 'success');
+      }
+    }
+  });
+
+  socket.on('exam_summary_updated', () => {
+    if (typeof checkExamsSummaryBadge === 'function') checkExamsSummaryBadge();
   });
 
   socket.on('dream_message_deleted', (data) => {
@@ -7935,6 +7974,24 @@ async function openUserProfileModal(userId) {
         privateChatCard.classList.add('hidden');
       }
     }
+    const examsManagerCard = document.getElementById('profExamsManagerCard');
+    if (examsManagerCard) {
+      if (isMe && typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
+        examsManagerCard.classList.remove('hidden');
+        if (typeof checkExamsSummaryBadge === 'function') checkExamsSummaryBadge();
+      } else {
+        examsManagerCard.classList.add('hidden');
+      }
+    }
+    const studentExamsCard = document.getElementById('profStudentExamsCard');
+    if (studentExamsCard) {
+      if (isMe && !(typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser))) {
+        studentExamsCard.classList.remove('hidden');
+        if (typeof checkExamsSummaryBadge === 'function') checkExamsSummaryBadge();
+      } else {
+        studentExamsCard.classList.add('hidden');
+      }
+    }
     const roleHistorySec = document.getElementById('profRoleHistorySection');
     const solvedSec = document.getElementById('profSolvedQuestionsSection');
 
@@ -8405,6 +8462,56 @@ async function checkPendingArticlesCount() {
     if (data.success && Array.isArray(data.articles)) {
       window._adminAllArticles = data.articles;
       updateAdminArticlesPendingBadge();
+    }
+  } catch (e) {}
+}
+
+async function checkExamsSummaryBadge() {
+  if (!token || !currentUser) return;
+  try {
+    const res = await fetch('/api/exams/summary', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (!data || !data.success) return;
+
+    const headerBadge = document.getElementById('headerExamsBadge');
+    const drawerBadge = document.getElementById('drawerExamsBadge');
+    const profMgrBadge = document.getElementById('profExamsPendingBadge');
+    const profStuBadge = document.getElementById('profStudentExamsBadge');
+
+    const applyPill = (el, count, useFlex = true) => {
+      if (!el) return;
+      if (count > 0) {
+        el.textContent = count > 99 ? '99+' : String(count);
+        el.classList.remove('hidden');
+        if (useFlex) el.classList.add('inline-flex');
+      } else {
+        el.classList.add('hidden');
+        if (useFlex) el.classList.remove('inline-flex', 'flex');
+      }
+    };
+
+    if (data.isManager) {
+      const pending = Number(data.ungradedSubmissions || 0);
+      applyPill(profMgrBadge, pending, true);
+      applyPill(headerBadge, pending, true);
+      applyPill(drawerBadge, pending, false);
+      if (headerBadge && pending > 0) {
+        headerBadge.classList.remove('bg-emerald-700');
+        headerBadge.classList.add('bg-rose-600');
+        headerBadge.title = 'پەڕەی ئیمتیحانی چاوەڕوانی هەڵسەنگاندن';
+      }
+    } else {
+      const activeTodo = Number(data.unsubmittedActive || 0);
+      applyPill(profStuBadge, activeTodo, true);
+      applyPill(headerBadge, activeTodo, true);
+      applyPill(drawerBadge, activeTodo, false);
+      if (headerBadge && activeTodo > 0) {
+        headerBadge.classList.remove('bg-rose-600');
+        headerBadge.classList.add('bg-emerald-700');
+        headerBadge.title = 'ئیمتیحانی چالاکی بەردەست';
+      }
     }
   } catch (e) {}
 }
