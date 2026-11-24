@@ -680,6 +680,18 @@ function showMainApp() {
     fetchDreamAvailability();
   }
 
+  // Executive Hub Check & Auto-Launch for Manager & Hemn
+  if (typeof isExecutiveUser === 'function' && isExecutiveUser(currentUser)) {
+    updateExecutiveHubUI();
+    if (!sessionStorage.getItem('exec_hub_shown_session')) {
+      sessionStorage.setItem('exec_hub_shown_session', '1');
+      setTimeout(() => {
+        if (typeof openExecutiveHubModal === 'function') openExecutiveHubModal();
+      }, 450);
+    }
+  }
+}
+
 function isExecutiveUser(u) {
   if (!u) return false;
   return u.role === 'super_admin' || 
@@ -712,18 +724,6 @@ function updateExecutiveHubUI() {
   const topBtn = document.getElementById('topExecutiveHubBtn');
   if (topBtn) {
     topBtn.classList.remove('hidden');
-  }
-}
-
-  // Executive Hub Check & Auto-Launch for Manager & Hemn
-  if (typeof isExecutiveUser === 'function' && isExecutiveUser(currentUser)) {
-    updateExecutiveHubUI();
-    if (!sessionStorage.getItem('exec_hub_shown_session')) {
-      sessionStorage.setItem('exec_hub_shown_session', '1');
-      setTimeout(() => {
-        openExecutiveHubModal();
-      }, 450);
-    }
   }
 }
 
