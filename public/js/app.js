@@ -3080,48 +3080,69 @@ function renderClassrooms() {
     const isDefault = c.id === 1;
 
     return `
-      <div onclick="if (!event.target.closest('button')) enterClassroom(${c.id})" class="classroom-lobby-card relative p-3 sm:p-4 rounded-2xl bg-slate-900/85 border ${isLive ? 'border-rose-500/70 shadow-lg shadow-rose-950/40 is-live ring-1 ring-rose-500/40' : 'border-slate-800/80 hover:border-amber-400/40'} flex items-center justify-between gap-2.5 sm:gap-3.5 transition duration-200 group cursor-pointer">
+      <div onclick="if (!event.target.closest('button')) enterClassroom(${c.id})" class="classroom-lobby-card relative ${isLive ? 'is-live ring-1 ring-rose-500/40' : ''} transition duration-200 group cursor-pointer">
         
-        <!-- Right side (in RTL): Icon + Main Info -->
-        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+        <!-- Tied Pryaska Crest / Knot & Ribbon Loops (Matching the Brand Logo) -->
+        <div class="pryaska-card-crest" aria-hidden="true">
+          <svg viewBox="0 0 120 46" class="w-full h-full overflow-visible" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="pryaskaGold-${c.id}" x1="15" y1="4" x2="105" y2="44" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#f59e0b"/>
+                <stop offset="50%" stop-color="#b47b1e"/>
+                <stop offset="100%" stop-color="#8a5a10"/>
+              </linearGradient>
+            </defs>
+            <!-- Left Folded Cloth Leaf Loop -->
+            <path d="M56 30 C44 26, 30 17, 32 8 C42 7, 54 15, 58 27 Z" fill="url(#pryaskaGold-${c.id})" fill-opacity="0.22" stroke="url(#pryaskaGold-${c.id})" stroke-width="3.2" stroke-linejoin="round"/>
+            <!-- Right Folded Cloth Leaf Loop (Larger Grace Curve like Logo) -->
+            <path d="M62 28 C66 13, 82 3, 94 5 C93 17, 81 26, 63 31 Z" fill="url(#pryaskaGold-${c.id})" fill-opacity="0.26" stroke="url(#pryaskaGold-${c.id})" stroke-width="3.2" stroke-linejoin="round"/>
+            <!-- Tied Neck Wrap Ribbon -->
+            <path d="M36 42 Q60 28 84 42" stroke="url(#pryaskaGold-${c.id})" stroke-width="3.6" stroke-linecap="round"/>
+            <path d="M47 36 Q60 29 73 36" stroke="#fde68a" stroke-width="1.3" stroke-linecap="round" opacity="0.85"/>
+            <circle cx="60" cy="31" r="4.2" fill="url(#pryaskaGold-${c.id})" stroke="#fffbeb" stroke-width="1"/>
+          </svg>
+        </div>
+
+        <!-- Center Content inside Pryaska Pouch -->
+        <div class="pryaska-card-body min-w-0">
           <!-- Room Icon -->
-          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl ${isLive ? 'bg-rose-500/20 text-rose-400 border border-rose-500/50' : 'bg-amber-400/15 text-amber-300 border border-amber-400/30'} flex items-center justify-center text-base sm:text-lg shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+          <div class="pryaska-card-icon flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
             <i class="fa-solid ${escapeHtml(c.icon || 'fa-school')}"></i>
           </div>
 
           <!-- Room Details -->
-          <div class="min-w-0 flex-1 leading-tight">
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <h3 class="font-black text-xs sm:text-sm text-white group-hover:text-amber-200 transition-colors truncate">
+          <div class="min-w-0 w-full leading-tight space-y-1">
+            <div class="flex items-center justify-center gap-1.5 flex-wrap">
+              <h3 class="font-black text-sm sm:text-base transition-colors">
                 ${escapeHtml(c.name)}
               </h3>
-              ${isDefault ? '<span class="text-[8px] sm:text-[9px] px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 font-bold shrink-0">سەرەکی</span>' : ''}
+              ${isDefault ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 font-bold shrink-0">سەرەکی</span>' : ''}
               ${hasUnread ? `<span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse shrink-0" title="نامەی نوێ"></span>` : ''}
-              ${isLive ? `<span class="px-1.5 py-0.2 rounded-md bg-rose-600/90 text-white text-[8px] sm:text-[9px] font-black shrink-0 animate-pulse flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-white"></span>لایڤ</span>` : ''}
+              ${isLive ? `<span class="px-1.5 py-0.2 rounded-md bg-rose-600/90 text-white text-[9px] font-black shrink-0 animate-pulse flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-white"></span>لایڤ</span>` : ''}
             </div>
 
-            <div class="flex items-center gap-2 mt-1 text-[10px] sm:text-[11px] text-slate-400 truncate">
+            <div class="flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] text-slate-400 flex-wrap">
               <span class="text-amber-300/80 font-bold flex items-center gap-1 shrink-0">
                 <i class="fa-solid fa-chalkboard-user text-[9px]"></i>
-                <span class="max-w-[100px] truncate">${escapeHtml(c.teacher_name || 'دەستەی بەڕێوەبەرایەتی')}</span>
+                <span class="max-w-[130px] truncate">${escapeHtml(c.teacher_name || 'دەستەی بەڕێوەبەرایەتی')}</span>
               </span>
-              <span class="text-slate-600 shrink-0">•</span>
-              <span class="truncate text-slate-400/80">${escapeHtml(c.description || 'ژووری گفتوگۆ')}</span>
+              <span class="text-slate-500 shrink-0">•</span>
+              <span class="truncate max-w-[160px] text-slate-400/80">${escapeHtml(c.description || 'ژووری گفتوگۆ')}</span>
             </div>
           </div>
         </div>
 
-        <!-- Left side (in RTL): Live CTA or Admin Actions or Enter Arrow -->
-        <div class="flex items-center gap-1.5 shrink-0">
+        <!-- Bottom Action Strip inside Pryaska Pouch -->
+        <div class="pryaska-card-actions shrink-0">
           ${isLive ? `
             <button type="button" onclick="enterClassroomAndOpenLive(${c.id})" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] rounded-xl transition shadow active:scale-95 cursor-pointer shrink-0 animate-pulse flex items-center gap-1">
               <i class="fa-solid fa-microphone-lines text-[9px]"></i>
-              <span class="hidden xs:inline">چوونەناو وانە</span>
+              <span>چوونەناو وانە</span>
             </button>
           ` : ''}
 
           ${isStaff && !isDefault ? `
-            <div class="flex items-center gap-0.5 opacity-70 group-hover:opacity-100 transition">
+            <div class="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition">
               <button type="button" onclick="openCreateClassroomModal(${c.id})" class="p-1.5 rounded-lg text-slate-400 hover:text-amber-300 hover:bg-slate-800 transition text-[11px] cursor-pointer" title="دەستکاری">
                 <i class="fa-solid fa-pen"></i>
               </button>
@@ -3132,7 +3153,7 @@ function renderClassrooms() {
           ` : ''}
 
           <!-- Enter Arrow Capsule -->
-          <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-amber-400/10 group-hover:bg-amber-400/25 border border-amber-400/30 text-amber-300 flex items-center justify-center transition-all group-hover:-translate-x-1 shrink-0">
+          <div class="pryaska-enter-arrow flex items-center justify-center transition-all group-hover:-translate-x-1 shrink-0">
             <i class="fa-solid fa-arrow-left text-[10px] sm:text-xs"></i>
           </div>
         </div>

@@ -197,21 +197,26 @@ html.dark .classroom-lobby-card,
 html.dark #classroomsLobbyView .grid > div,
 body.dark-theme #classroomsLobbyView .classroom-lobby-card,
 body.dark-theme .classroom-lobby-card {
-  background: linear-gradient(165deg, rgba(20, 34, 26, 0.98) 0%, rgba(13, 23, 17, 0.97) 100%) !important;
-  border: 1px solid rgba(245, 158, 11, 0.34) !important;
+  background:
+    radial-gradient(ellipse 75% 65% at 50% 40%, rgba(16, 185, 129, 0.10) 0%, transparent 72%),
+    linear-gradient(165deg, rgba(20, 34, 26, 0.98) 0%, rgba(11, 20, 15, 0.98) 100%) !important;
+  border: 2px solid rgba(245, 158, 11, 0.42) !important;
+  border-radius: 47% 47% 41% 41% / 33% 33% 39% 39% !important;
   box-shadow:
-    0 16px 34px -10px rgba(0, 0, 0, 0.65),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    0 18px 36px -10px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.35) !important;
   color: #cbd5e1 !important;
+  overflow: visible !important;
 }
 
 html.dark .classroom-lobby-card::before {
-  border-color: rgba(245, 158, 11, 0.16) !important;
+  border-color: rgba(251, 191, 36, 0.22) !important;
 }
 
 html.dark .classroom-lobby-card:hover {
-  border-color: rgba(245, 158, 11, 0.65) !important;
-  box-shadow: 0 22px 40px -12px rgba(0, 0, 0, 0.8), 0 0 22px rgba(245, 158, 11, 0.14) !important;
+  border-color: rgba(251, 191, 36, 0.72) !important;
+  box-shadow: 0 24px 42px -12px rgba(0, 0, 0, 0.82), 0 0 24px rgba(245, 158, 11, 0.18) !important;
 }
 
 html.dark .classroom-lobby-card h3 {
@@ -241,11 +246,11 @@ html.dark .classroom-lobby-card span.bg-amber-400\/20 {
   color: #6ee7b7 !important;
 }
 
-html.dark .classroom-lobby-card > div:last-child {
+html.dark .classroom-lobby-card .pryaska-card-actions {
   border-top-color: rgba(245, 158, 11, 0.2) !important;
 }
 
-html.dark .classroom-lobby-card > div:last-child > div:last-child,
+html.dark .classroom-lobby-card .pryaska-enter-arrow,
 html.dark .classroom-lobby-card button[onclick*="openCreateClassroomModal"],
 html.dark .classroom-lobby-card button[onclick*="deleteClassroom"] {
   background: rgba(26, 44, 34, 0.94) !important;
@@ -253,7 +258,7 @@ html.dark .classroom-lobby-card button[onclick*="deleteClassroom"] {
   color: #fde68a !important;
 }
 
-html.dark .classroom-lobby-card:hover > div:last-child > div:last-child {
+html.dark .classroom-lobby-card:hover .pryaska-enter-arrow {
   background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%) !important;
   color: #261204 !important;
 }

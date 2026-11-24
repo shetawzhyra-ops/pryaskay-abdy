@@ -313,55 +313,83 @@ body.light-mode #classroomsLobbyView > div:first-child {
     0 10px 22px -4px rgba(180, 83, 9, 0.45) !important;
 }
 
-/* Classrooms Cards Grid — Architectural Double-Frame Manuscript Folios */
+/* Classrooms Cards Grid — Pryaska Tied Pouch Folios */
 #classroomsGridContainer {
-  gap: 1.1rem !important;
+  gap: 2.35rem 1.35rem !important;
+  padding-top: 1.15rem !important;
 }
 
 #classroomsLobbyView .classroom-lobby-card,
 .classroom-lobby-card {
   display: flex !important;
   flex-direction: column !important;
-  align-items: stretch !important;
+  align-items: center !important;
   justify-content: space-between !important;
-  gap: 0.9rem !important;
-  padding: 1.25rem 1.35rem !important;
-  min-height: 152px !important;
-  border-radius: 1.5rem !important;
-  background: linear-gradient(166deg, rgba(244, 233, 216, 0.99) 0%, rgba(228, 211, 187, 0.97) 100%) !important;
-  border: 1px solid rgba(156, 120, 78, 0.40) !important;
+  text-align: center !important;
+  gap: 0.75rem !important;
+  padding: 2rem 1.75rem 1.35rem !important;
+  margin-top: 0.6rem !important;
+  min-height: 226px !important;
+  border-radius: 47% 47% 41% 41% / 33% 33% 39% 39% !important;
+  background:
+    radial-gradient(ellipse 75% 65% at 50% 40%, rgba(255, 252, 244, 0.72) 0%, transparent 72%),
+    linear-gradient(166deg, rgba(247, 237, 222, 0.99) 0%, rgba(226, 207, 181, 0.98) 100%) !important;
+  border: 2px solid rgba(180, 128, 52, 0.56) !important;
   box-shadow:
-    0 18px 38px -12px rgba(34, 22, 10, 0.24),
-    0 4px 10px -3px rgba(34, 22, 10, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease !important;
+    0 20px 40px -14px rgba(34, 22, 10, 0.25),
+    0 6px 14px -4px rgba(180, 128, 52, 0.16),
+    inset 0 2px 6px rgba(255, 255, 255, 0.85),
+    inset 0 -8px 18px rgba(156, 120, 78, 0.14) !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease !important;
   position: relative !important;
-  overflow: hidden !important;
+  overflow: visible !important;
 }
 
-/* Signature Inner Manuscript Hairline Border */
+/* Signature Inner Stitched Pouch Hairline */
 .classroom-lobby-card::before {
   content: "";
   position: absolute;
-  inset: 6px;
-  border-radius: 1.12rem;
-  border: 1px solid rgba(156, 120, 78, 0.20);
+  inset: 7px;
+  border-radius: 46% 46% 40% 40% / 32% 32% 38% 38%;
+  border: 1px dashed rgba(156, 120, 78, 0.34);
   pointer-events: none;
   z-index: 1;
   transition: border-color 0.28s ease;
 }
 
+/* Top Tied Pryaska Knot & Ribbon Loops (Matching the Brand Logo) */
+.classroom-lobby-card .pryaska-card-crest {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 112px;
+  height: 44px;
+  pointer-events: none;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 4px 8px rgba(140, 92, 24, 0.22));
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.classroom-lobby-card:hover .pryaska-card-crest {
+  transform: translateX(-50%) scale(1.06) translateY(-1px);
+}
+
 .classroom-lobby-card:hover {
-  transform: translateY(-4px) !important;
-  border-color: rgba(180, 83, 9, 0.56) !important;
+  transform: translateY(-5px) !important;
+  border-color: rgba(180, 83, 9, 0.72) !important;
   box-shadow:
-    0 24px 48px -12px rgba(34, 22, 10, 0.28),
-    0 8px 18px -4px rgba(180, 83, 9, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+    0 26px 50px -12px rgba(34, 22, 10, 0.28),
+    0 10px 22px -4px rgba(180, 83, 9, 0.22),
+    inset 0 2px 8px rgba(255, 255, 255, 0.92),
+    inset 0 -8px 20px rgba(180, 128, 52, 0.16) !important;
 }
 
 .classroom-lobby-card:hover::before {
-  border-color: rgba(217, 119, 6, 0.36);
+  border-color: rgba(217, 119, 6, 0.50);
 }
 
 .classroom-lobby-card > * {
@@ -369,46 +397,49 @@ body.light-mode #classroomsLobbyView > div:first-child {
   z-index: 2;
 }
 
-/* Top Section inside Classroom Card (Jewel Icon + Full Readable Title) */
-.classroom-lobby-card > div:first-child {
-  align-items: flex-start !important;
-  gap: 0.9rem !important;
+/* Top/Center Section inside Pryaska Pouch */
+.classroom-lobby-card .pryaska-card-body {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  gap: 0.55rem !important;
   width: 100% !important;
 }
 
 /* Jewel Golden Icon Tile */
-.classroom-lobby-card > div:first-child > div:first-child {
-  width: 3rem !important;
-  height: 3rem !important;
-  border-radius: 0.95rem !important;
+.classroom-lobby-card .pryaska-card-icon {
+  width: 2.85rem !important;
+  height: 2.85rem !important;
+  border-radius: 1rem !important;
   background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 55%, #d97706 100%) !important;
-  border: 1px solid rgba(254, 243, 199, 0.65) !important;
+  border: 1px solid rgba(254, 243, 199, 0.75) !important;
   color: #241206 !important;
   font-size: 1.15rem !important;
   box-shadow:
     0 8px 16px -4px rgba(180, 83, 9, 0.34),
-    inset 0 1px 1px rgba(255, 255, 255, 0.72) !important;
+    inset 0 1px 1px rgba(255, 255, 255, 0.75) !important;
 }
 
-.classroom-lobby-card > div:first-child > div:first-child i {
+.classroom-lobby-card .pryaska-card-icon i {
   color: #241206 !important;
 }
 
-.classroom-lobby-card.is-live > div:first-child > div:first-child {
+.classroom-lobby-card.is-live .pryaska-card-icon {
   background: linear-gradient(145deg, #f43f5e 0%, #e11d48 100%) !important;
   color: #ffffff !important;
   border-color: rgba(254, 205, 211, 0.65) !important;
 }
 
-.classroom-lobby-card.is-live > div:first-child > div:first-child i {
+.classroom-lobby-card.is-live .pryaska-card-icon i {
   color: #ffffff !important;
 }
 
 .classroom-lobby-card h3 {
   font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
-  font-size: 1.15rem !important;
+  font-size: 1.18rem !important;
   font-weight: 700 !important;
-  line-height: 1.45 !important;
+  line-height: 1.4 !important;
   color: #361c0c !important;
   white-space: normal !important;
   overflow: visible !important;
@@ -433,31 +464,30 @@ body.light-mode #classroomsLobbyView > div:first-child {
   padding: 0.1rem 0.55rem !important;
 }
 
-/* Bottom Editorial Action Strip inside Classroom Card */
-.classroom-lobby-card > div:last-child {
-  width: 100% !important;
+/* Bottom Pouch Action Strip */
+.classroom-lobby-card .pryaska-card-actions {
+  width: 82% !important;
   display: flex !important;
   align-items: center !important;
-  justify-content: flex-end !important;
-  gap: 0.5rem !important;
-  padding-top: 0.72rem !important;
+  justify-content: center !important;
+  gap: 0.55rem !important;
+  padding-top: 0.62rem !important;
   margin-top: auto !important;
   border-top: 1px solid rgba(156, 120, 78, 0.22) !important;
 }
 
-/* Circular Antique Gold Enter Arrow matching Outer Landing Cards */
-.classroom-lobby-card > div:last-child > div:last-child {
-  width: 2rem !important;
-  height: 2rem !important;
+/* Circular Antique Gold Enter Arrow */
+.classroom-lobby-card .pryaska-enter-arrow {
+  width: 2.1rem !important;
+  height: 2.1rem !important;
   border-radius: 9999px !important;
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.14) 100%) !important;
   border: 1px solid rgba(180, 83, 9, 0.36) !important;
   color: #78350f !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-  margin-right: auto !important;
 }
 
-.classroom-lobby-card:hover > div:last-child > div:last-child {
+.classroom-lobby-card:hover .pryaska-enter-arrow {
   background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 60%, #d97706 100%) !important;
   border-color: rgba(180, 83, 9, 0.58) !important;
   color: #2b1406 !important;
@@ -1289,21 +1319,26 @@ div[id$="Modal"] select:focus {
    7. MOBILE RESPONSIVE PROTECTION (<= 640px)
    ========================================================================== */
 @media (max-width: 640px) {
-  #classroomsLobbyView .classroom-lobby-card,
-  .classroom-lobby-card {
-    padding: 1rem 1.05rem !important;
-    min-height: 132px !important;
-    border-radius: 1.3rem !important;
+  #classroomsGridContainer {
+    gap: 2.1rem 1rem !important;
+    padding-top: 1rem !important;
   }
 
-  .classroom-lobby-card > div:first-child > div:first-child {
+  #classroomsLobbyView .classroom-lobby-card,
+  .classroom-lobby-card {
+    padding: 1.85rem 1.45rem 1.15rem !important;
+    min-height: 205px !important;
+    border-radius: 47% 47% 41% 41% / 32% 32% 38% 38% !important;
+  }
+
+  .classroom-lobby-card .pryaska-card-icon {
     width: 2.55rem !important;
     height: 2.55rem !important;
     font-size: 1rem !important;
   }
 
   .classroom-lobby-card h3 {
-    font-size: 1.05rem !important;
+    font-size: 1.06rem !important;
   }
 
   /* Keep Compact Mobile Icon Rail cleanly centered (matching style.css:12771) */
