@@ -1640,12 +1640,13 @@ function applyLandingCardPaletteToDoc(colorId, doc) {
     doc.head.appendChild(styleTag);
   }
   var isDark = palette.category === 'dark';
-  var css = '.glass-card, .hero-compact-card, .landing-hero-stage, .landing-ann-card, .landing-pillar-card, .fb-post-card, .reaction-bar, .dream-voice-player, .modal-content, #dreamsGatewaySection .glass-card, #dreamsGatewaySection .landing-dreams-banner, #landingFeaturedDualSection button, #landingFeaturedDualSection a, .landing-feature-tab, .classroom-lobby-card, #membersSidebar, #classroomMembersSidebar {' +
+  var css = '.glass-card, .hero-compact-card, .landing-hero-stage, .landing-ann-card, .landing-pillar-card, .fb-post-card, .reaction-bar, .dream-voice-player, .modal-content, #dreamsGatewaySection .glass-card, #dreamsGatewaySection .landing-dreams-banner, #landingFeaturedDualSection button, #landingFeaturedDualSection a, .landing-feature-tab, #membersSidebar, #classroomMembersSidebar {' +
     'background: ' + palette.bg + ' !important;' +
     'border: 1px solid ' + palette.border + ' !important;' +
     'box-shadow: ' + palette.shadow + ' !important;' +
     'color: ' + palette.textColor + ' !important;' +
   '}' +
+  '#classroomsLobbyView .classroom-lobby-card, .classroom-lobby-card { background: transparent !important; background-color: transparent !important; background-image: none !important; border: none !important; box-shadow: none !important; }' +
   '.fb-post-card { border-color: ' + palette.border + ' !important; }' +
   '.fb-post-title, .landing-pillar-title, #dreamsPageTitle, .landing-ann-card h4, #dreamGatewayTitle, #sectionsHeaderTitle, #postsHeaderTitle, .classroom-lobby-card h3, #membersSidebar h3, #drawerUserName { color: ' + palette.titleColor + ' !important; }' +
   '.landing-hero-subtitle, #dreamsPageSubtitle, #dreamGatewayDesc, #sectionsHeaderSubtitle, #postsHeaderSubtitle, .classroom-lobby-card p, #classroomsLobbyView p { color: ' + (palette.descColor || palette.textColor) + ' !important; }' +
