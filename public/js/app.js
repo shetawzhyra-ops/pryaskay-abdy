@@ -1359,6 +1359,18 @@ function updateUserUI() {
     if (libraryUploadSection) libraryUploadSection.classList.add('hidden');
   }
 
+  // Private Chat Button in Main Menu Drawer: Hidden for Managers (Hemn & Azad have it inside their Profile)
+  const drawerPrivateChatBtn = document.getElementById('drawerPrivateChatBtn');
+  if (drawerPrivateChatBtn) {
+    if (typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
+      drawerPrivateChatBtn.classList.add('hidden');
+      drawerPrivateChatBtn.classList.remove('flex');
+    } else {
+      drawerPrivateChatBtn.classList.remove('hidden');
+      drawerPrivateChatBtn.classList.add('flex');
+    }
+  }
+
   // Dream Submission Button: Hidden for staff (Admin, Teacher, Super Admin)
   const drawerDreamSubmitBtn = document.getElementById('drawerDreamSubmitBtn');
   if (drawerDreamSubmitBtn) {
@@ -7891,6 +7903,15 @@ async function openUserProfileModal(userId) {
         if (typeof checkPendingArticlesCount === 'function') checkPendingArticlesCount();
       } else {
         articlesAdminCard.classList.add('hidden');
+      }
+    }
+    const privateChatCard = document.getElementById('profPrivateChatCard');
+    if (privateChatCard) {
+      if (isMe && typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
+        privateChatCard.classList.remove('hidden');
+        if (typeof updatePrivateUnreadBadge === 'function') updatePrivateUnreadBadge();
+      } else {
+        privateChatCard.classList.add('hidden');
       }
     }
     const roleHistorySec = document.getElementById('profRoleHistorySection');
@@ -14510,6 +14531,7 @@ function closePrivateChatModal() {
   cancelPrivateVoiceRecording();
   const modal = document.getElementById('privateChatModal');
   if (modal) modal.classList.add('hidden');
+  if (typeof updatePrivateUnreadBadge === 'function') updatePrivateUnreadBadge();
 }
 
 function switchPrivateChatTab(tab) {
@@ -15185,25 +15207,32 @@ async function updatePrivateUnreadBadge() {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     const data = await res.json();
-    const count = (res.ok && data.unread_count) ? data.unread_count : 0;
+    const count = res.ok ? Number(data.unreadCount ?? data.unread_count ?? 0) : 0;
 
     const desktopBadge = document.getElementById('privateChatUnreadBadge');
     const mobileBadge = document.getElementById('mobilePrivateUnreadBadge');
     const drawerBadge = document.getElementById('drawerPrivateUnreadBadge');
+    const profBadge = document.getElementById('profPrivateUnreadBadge');
+    const headerProfBadge = document.getElementById('headerPrivateUnreadBadge');
+    const drawerProfBadge = document.getElementById('drawerProfilePrivateUnreadBadge');
     const mainMenuDot = document.getElementById('mainMenuBadgeDot');
+    const isMgr = typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser);
 
-    [desktopBadge, mobileBadge, drawerBadge].forEach(b => {
+    [desktopBadge, mobileBadge, drawerBadge, profBadge, headerProfBadge, drawerProfBadge].forEach(b => {
       if (!b) return;
+      const isFlexPill = b.id === 'profPrivateUnreadBadge' || b.id === 'headerPrivateUnreadBadge' || b.id === 'drawerProfilePrivateUnreadBadge';
       if (count > 0) {
         b.innerText = count > 99 ? '99+' : count;
         b.classList.remove('hidden');
+        if (isFlexPill) b.classList.add('inline-flex');
       } else {
         b.classList.add('hidden');
+        if (isFlexPill) b.classList.remove('inline-flex');
       }
     });
 
     if (mainMenuDot) {
-      if (count > 0) {
+      if (count > 0 && !isMgr) {
         mainMenuDot.classList.remove('hidden');
       } else {
         const pendingBadge = document.getElementById('drawerPendingBadgeCount');

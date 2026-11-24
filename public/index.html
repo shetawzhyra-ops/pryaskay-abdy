@@ -2815,7 +2815,8 @@ Change language here • تغيير لغة الموقع من هنا
 <span id="headerStarCount">0</span>
 </div>
 </div>
-<span id="headerArticlesPendingBadge" class="hidden px-1.5 py-0.5 bg-rose-600 text-white text-[10px] leading-none font-black rounded-full min-w-[18px] h-[18px] items-center justify-center shadow-md animate-pulse shrink-0" title="کورتە وتاری چاوەڕوانی پەسەندکردن">0</span>
+<span id="headerPrivateUnreadBadge" class="hidden px-1.5 py-0.5 bg-rose-600 text-white text-[10px] leading-none font-black rounded-full min-w-[18px] h-[18px] items-center justify-center shadow-md ring-2 ring-white/80 dark:ring-slate-900 animate-pulse shrink-0" title="نامەی تایبەتی نەخوێندراو">0</span>
+<span id="headerArticlesPendingBadge" class="hidden px-1.5 py-0.5 bg-amber-600 text-white text-[10px] leading-none font-black rounded-full min-w-[18px] h-[18px] items-center justify-center shadow-md animate-pulse shrink-0" title="کورتە وتاری چاوەڕوانی پەسەندکردن">0</span>
 </div>
 <!-- 3-Lines Main Menu Hamburger Button (سێ خەت) - ALWAYS VISIBLE ON FAR LEFT -->
 <button id="mainMenuBtn" onclick="toggleMainMenuDrawer()" class="relative p-2 sm:px-2.5 sm:py-1.5 hover:bg-amber-400/20 text-amber-400 hover:text-amber-200 font-black text-xs rounded-full transition flex items-center gap-1.5 active:scale-95 shrink-0 z-20 cursor-pointer" title="مێنیوی هەموو بەشەکان (سێ خەت)">
@@ -2882,7 +2883,8 @@ Change language here • تغيير لغة الموقع من هنا
 </div>
 </div>
 <div class="flex items-center gap-2 shrink-0">
-<span id="drawerProfileArticlesPendingBadge" class="hidden px-2 py-0.5 bg-rose-600 text-white text-[10px] leading-none font-black rounded-full min-w-[18px] h-[18px] items-center justify-center shadow-md animate-pulse" title="کورتە وتاری چاوەڕوانی پەسەندکردن">0</span>
+<span id="drawerProfilePrivateUnreadBadge" class="hidden px-2 py-0.5 bg-rose-600 text-white text-[10px] leading-none font-black rounded-full min-w-[18px] h-[18px] items-center justify-center shadow-md animate-pulse" title="نامەی تایبەتی نەخوێندراو">0</span>
+<span id="drawerProfileArticlesPendingBadge" class="hidden px-2 py-0.5 bg-amber-600 text-white text-[10px] leading-none font-black rounded-full min-w-[18px] h-[18px] items-center justify-center shadow-md animate-pulse" title="کورتە وتاری چاوەڕوانی پەسەندکردن">0</span>
 <span class="text-[10px] sm:text-xs md:text-sm text-amber-300 font-bold flex items-center gap-1.5 shrink-0 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-amber-400/10 border border-amber-400/25 hover:bg-amber-400/20 transition">
 <span id="drawerProfileText">پرۆفایل</span>
 <i class="fa-solid fa-chevron-left text-[9px] sm:text-xs"></i>
@@ -3755,6 +3757,25 @@ class="w-full bg-slate-800/90 border border-slate-700/70 rounded-xl pr-8 pl-8 py
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <span id="profArticlesPendingBadge" class="hidden px-2 py-0.5 bg-rose-600 text-white text-[11px] leading-none font-black rounded-full min-w-[22px] h-[22px] items-center justify-center shadow animate-pulse">0</span>
+      <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-600/30 text-[10px] font-black">کردنەوە</span>
+    </div>
+  </button>
+</div>
+
+<!-- Private Messages Card Inside Manager Profile (Hemn & Azad Only) -->
+<div id="profPrivateChatCard" class="hidden prof-section-card p-3.5 rounded-2xl shadow-sm">
+  <button id="profPrivateChatBtn" type="button" onclick="closeUserProfileModal(); openPrivateChatModal();" class="prof-inset-tile w-full p-3 rounded-xl flex items-center justify-between gap-3 transition hover:brightness-95 active:scale-[0.99] cursor-pointer text-right">
+    <div class="flex items-center gap-3 min-w-0">
+      <span class="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-600/30 flex items-center justify-center text-base shrink-0">
+        <i class="fa-solid fa-envelope"></i>
+      </span>
+      <div class="min-w-0">
+        <span class="block text-xs sm:text-sm font-black truncate">نامەی تایبەت</span>
+        <span class="block text-[11px] opacity-75 font-medium truncate">نامە و گفتوگۆ تایبەتەکان لەگەڵ ئەندامان</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <span id="profPrivateUnreadBadge" class="hidden px-2 py-0.5 bg-rose-600 text-white text-[11px] leading-none font-black rounded-full min-w-[22px] h-[22px] items-center justify-center shadow animate-pulse">0</span>
       <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-600/30 text-[10px] font-black">کردنەوە</span>
     </div>
   </button>
@@ -8354,7 +8375,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=98.0&t=1795770000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=123.0&t=1795840000"></script>
+<script src="/js/app.js?v=124.0&t=1795850000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->
