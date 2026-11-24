@@ -1559,7 +1559,7 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateG
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@600;700&family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=102.0&t=1795730000">
+<link rel="stylesheet" href="/css/style.css?v=103.0&t=1795740000">
 <style>
 /* Pre-render instant visibility rules: prevent landing page from flashing on refresh */
 html.in-app-mode #landingPage,
@@ -3690,419 +3690,311 @@ class="w-full bg-slate-800/90 border border-slate-700/70 rounded-xl pr-8 pl-8 py
 </div>
 </div>
 <!-- ================= MODAL: USER DETAILS & HISTORY ================= -->
-<div id="userProfileModal" onclick="if(event.target === this) closeUserProfileModal()" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-md">
-<div id="userProfileModalDialog" class="w-full max-w-lg max-h-[92vh] sm:max-h-[90vh] bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950 border-2 border-amber-400/35 rounded-3xl p-4 sm:p-6 shadow-2xl shadow-[#f59e0b]/15 flex flex-col overflow-hidden relative backdrop-blur-2xl">
-<!-- Ambient Luxury Glow Lights matching menu theme -->
-<div class="absolute -top-24 -right-24 w-56 h-56 bg-amber-400/15 rounded-full blur-3xl pointer-events-none"></div>
-<div class="absolute -bottom-24 -left-24 w-56 h-56 bg-[#0284c7]/10 rounded-full blur-3xl pointer-events-none"></div>
+<div id="userProfileModal" onclick="if(event.target === this) closeUserProfileModal()" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-md">
+<div id="userProfileModalDialog" class="w-full max-w-lg max-h-[90vh] border-2 rounded-3xl p-4 sm:p-6 shadow-2xl flex flex-col overflow-hidden relative backdrop-blur-2xl">
 <!-- Modal Header (Pinned at Top) -->
-<div class="flex items-center justify-between pb-3 sm:pb-4 border-b border-amber-400/25 mb-3 shrink-0 relative z-10">
-<div class="flex items-center gap-3">
+<div class="flex items-center justify-between gap-2 pb-3.5 border-b mb-3.5 shrink-0 relative z-10">
+<div class="flex items-center gap-3 min-w-0">
 <div class="relative shrink-0">
-<div id="profAvatar" class="w-14 h-14 sm:w-16 sm:h-16 shrink-0 aspect-square rounded-2xl bg-gradient-to-br from-[#f59e0b]/20 via-slate-900 to-[#0284c7]/20 text-amber-300 flex items-center justify-center text-xl font-bold border-2 border-amber-400/40 shadow-lg shadow-[#f59e0b]/15 ring-2 ring-[#f59e0b]/20 overflow-hidden select-none pointer-events-none no-zoom-avatar" style="width:56px;height:56px;min-width:56px;max-width:56px;max-height:56px;aspect-ratio:1/1;overflow:hidden;user-select:none;-webkit-user-drag:none;pointer-events:none;">
+<div id="profAvatar" class="w-14 h-14 shrink-0 aspect-square rounded-2xl flex items-center justify-center text-xl font-bold border-2 border-amber-500/45 shadow-md overflow-hidden select-none pointer-events-none no-zoom-avatar" style="width:56px;height:56px;min-width:56px;max-width:56px;max-height:56px;aspect-ratio:1/1;overflow:hidden;user-select:none;-webkit-user-drag:none;pointer-events:none;">
 <i class="fa-solid fa-user"></i>
 </div>
-<button id="profChangeAvatarBtn" type="button" onclick="document.getElementById('profAvatarFileInput').click()" class="hidden absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-amber-400 hover:bg-[#0284c7] text-slate-950 text-[10px] font-black flex items-center justify-center shadow-md border border-slate-900 pointer-events-auto transition active:scale-90 cursor-pointer" title="گۆڕینی وێنەی پرۆفایل">
+<button id="profChangeAvatarBtn" type="button" onclick="document.getElementById('profAvatarFileInput').click()" class="hidden absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-black flex items-center justify-center shadow-md border-2 border-[#f4e9d8] pointer-events-auto transition active:scale-90 cursor-pointer" title="گۆڕینی وێنەی پرۆفایل">
 <i class="fa-solid fa-camera"></i>
 </button>
 <input type="file" id="profAvatarFileInput" accept="image/*" class="hidden" onchange="uploadMyAvatar(this)">
 </div>
-<div>
-<div class="flex items-center gap-2 flex-wrap">
-<h3 id="profFullName" class="font-black text-base text-white">ناو</h3>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h3 id="profFullName" class="font-black text-base sm:text-lg truncate">ناو</h3>
 <span id="profGenderBadge" class="hidden"></span>
 <span id="profSpecialBadgeSlot" class="hidden"></span>
-<!-- Animated AI Advisor Morphing Badge Button -->
-<button id="profAdvisorBtn" type="button" onclick="closeUserProfileModal(); openAiAdvisorModal();" class="hidden advisor-morph-badge cursor-pointer" title="ڕاوێژکاری زیرەکی سیرین (AI)">
-<i class="fa-solid fa-wand-magic-sparkles advisor-morph-icon"></i>
-<span class="advisor-morph-text">ڕاوێژکار</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5 flex-wrap">
+<p id="profUsername" class="text-xs font-mono opacity-80">@username</p>
+<button id="profAdvisorBtn" type="button" onclick="closeUserProfileModal(); openAiAdvisorModal();" class="hidden items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/15 hover:bg-amber-500/25 border border-amber-600/35 text-[#78350f] text-[10px] font-black transition cursor-pointer" title="ڕاوێژکاری زیرەکی فێرگە (AI)">
+<i class="fa-solid fa-wand-magic-sparkles text-[#b45309] text-[10px]"></i>
+<span>ڕاوێژکار</span>
 </button>
 </div>
-<p id="profUsername" class="text-xs text-amber-300/80 font-mono">@username</p>
 </div>
 </div>
 <div class="flex items-center gap-1.5 shrink-0">
-<button type="button" onclick="returnToMainMenuFromModal('userProfileModal')" class="px-2.5 py-1.5 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/40 text-amber-300 hover:text-amber-200 text-xs font-bold transition flex items-center gap-1.5 active:scale-95 shadow-sm cursor-pointer" title="گەڕانەوە بۆ مێنیو ☰">
+<button id="profMenuShortcutBtn" type="button" onclick="returnToMainMenuFromModal('userProfileModal')" class="px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 active:scale-95 shadow-sm cursor-pointer" title="گەڕانەوە بۆ مێنیو ☰">
 <i class="fa-solid fa-bars-staggered text-xs"></i>
 <span class="text-[11px] font-black">مێنیو</span>
 </button>
-<button onclick="closeUserProfileModal()" class="w-8 h-8 rounded-xl bg-slate-950/70 hover:bg-slate-850 text-slate-400 hover:text-amber-300 border border-amber-400/25 flex items-center justify-center transition shadow-sm cursor-pointer" title="داخستن">
+<button id="profCloseBtn" type="button" onclick="closeUserProfileModal()" class="w-8 h-8 rounded-xl flex items-center justify-center transition shadow-sm cursor-pointer" title="داخستن">
 <i class="fa-solid fa-xmark text-sm"></i>
 </button>
 </div>
 </div>
-<!-- Scrollable Profile Content (Scrolls smoothly for all users & roles) -->
-<div id="profScrollableBody" class="flex-1 min-h-0 overflow-y-auto space-y-3.5 pr-1 pl-0.5 relative z-10" style="-webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
-<div id="profRegularStatsGrid" class="grid grid-cols-3 gap-2.5">
-<div class="bg-slate-950/70 p-3 rounded-2xl text-center border border-amber-400/25 hover:border-[#f59e0b]/45 transition shadow-sm">
-<span class="text-[10px] text-amber-300 font-bold block mb-0.5">پلەی ئێستا</span>
-<span id="profRoleBadge" class="text-xs font-black text-white">قوتابی</span>
+
+<!-- Scrollable Profile Content -->
+<div id="profScrollableBody" class="flex-1 min-h-0 overflow-y-auto space-y-3 pr-0.5 pl-0.5 relative z-10" style="-webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
+
+<!-- Regular User 3 Stat Tiles -->
+<div id="profRegularStatsGrid" class="grid grid-cols-3 gap-2">
+<div class="prof-stat-tile p-3 rounded-2xl text-center transition shadow-sm">
+<span class="prof-stat-label text-[10px] font-bold block mb-1">پلەی ئێستا</span>
+<span id="profRoleBadge" class="text-xs font-black">قوتابی</span>
 </div>
-<div id="profStarsBox" class="bg-slate-950/70 p-3 rounded-2xl text-center border border-amber-400/25 hover:border-[#f59e0b]/45 transition shadow-sm">
-<span class="text-[10px] text-amber-300 font-bold block mb-0.5">ئەستێرەکان</span>
-<span id="profStars" class="text-xs font-black text-amber-400">⭐ 0/10</span>
+<div id="profStarsBox" class="prof-stat-tile p-3 rounded-2xl text-center transition shadow-sm">
+<span class="prof-stat-label text-[10px] font-bold block mb-1">ئەستێرەکان</span>
+<span id="profStars" class="text-xs font-black">⭐ 0/10</span>
 </div>
-<div class="bg-slate-950/70 p-3 rounded-2xl text-center border border-amber-400/25 hover:border-[#f59e0b]/45 transition shadow-sm">
-<span class="text-[10px] text-amber-300 font-bold block mb-0.5">پلەپێدانەکان</span>
-<span id="profPromotionsCount" class="text-xs font-black text-emerald-400 font-mono">0 جار</span>
+<div class="prof-stat-tile p-3 rounded-2xl text-center transition shadow-sm">
+<span class="prof-stat-label text-[10px] font-bold block mb-1">پلەپێدانەکان</span>
+<span id="profPromotionsCount" class="text-xs font-black font-mono">0 جار</span>
 </div>
 </div>
-<div id="profPersonalInfoCard" class="hidden p-3.5 rounded-2xl bg-[#fbf7f0] border border-[#9c784e]/35 space-y-2 shadow-sm">
-<div class="flex items-center justify-between border-b border-[#9c784e]/20 pb-1.5">
-<span class="text-xs font-black text-[#361c0c] flex items-center gap-1.5">
-<i class="fa-solid fa-address-card text-amber-700"></i>
-<span>زانیاری تۆمارکردنی قوتابی</span>
+
+<!-- Student Registration Info (Only when available) -->
+<div id="profPersonalInfoCard" class="hidden prof-section-card p-3.5 rounded-2xl space-y-2 shadow-sm">
+<div class="flex items-center justify-between border-b pb-1.5">
+<span class="text-xs font-black flex items-center gap-1.5">
+<i class="fa-solid fa-address-card text-amber-600"></i>
+<span>زانیاری تۆمارکردنی فێرخواز</span>
 </span>
-<span class="text-[10px] text-[#78350f] font-bold">تایبەت بە بەڕێوەبردن</span>
+<span class="text-[10px] font-bold opacity-75">بەڕێوەبردن</span>
 </div>
 <div id="profPersonalInfoGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
 </div>
-<!-- Exclusive Super Admin Profile Card (بۆ سوپەر ئەدمین و دەستەی بەڕێوەبردن) -->
-<div id="profSuperAdminSpecialCard" class="hidden p-4 rounded-3xl bg-gradient-to-br from-[#f59e0b]/20 via-slate-950 to-[#0284c7]/20 border-2 border-amber-400/40 shadow-xl shadow-[#f59e0b]/15 space-y-3">
-<div class="flex items-center justify-between pb-2 border-b border-amber-400/25">
-<div class="flex items-center gap-2.5">
-<span class="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#f59e0b]/25 to-[#0284c7]/25 text-amber-300 border border-amber-400/40 flex items-center justify-center text-base font-black shadow-inner">
+
+<!-- Executive / Project Leadership Card -->
+<div id="profSuperAdminSpecialCard" class="hidden prof-section-card p-4 rounded-2xl space-y-3 shadow-sm">
+<div class="flex items-center justify-between gap-2 pb-2.5 border-b">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="w-9 h-9 rounded-xl bg-amber-500/15 text-[#b45309] border border-amber-600/35 flex items-center justify-center text-base font-black shrink-0">
 <i class="fa-solid fa-shield-halved"></i>
 </span>
-<div>
-<span id="profExecCardTitle" class="block text-xs font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-100 to-[#fcd34d]">بەڕێوەبەری سەرەکی پڕۆژە</span>
-<span id="profExecCardSubtitle" class="text-[10px] text-amber-300/80 font-medium">سەرپەرشتیاری پڕۆژە</span>
+<div class="min-w-0">
+<span id="profExecCardTitle" class="block text-xs sm:text-sm font-black truncate">بەڕێوەبەری سەرەکی پڕۆژە</span>
+<span id="profExecCardSubtitle" class="text-[11px] opacity-80 font-medium block truncate">سەرپەرشتیاری پڕۆژە</span>
 </div>
 </div>
-<span id="profExecCardRoleBadge" class="px-2.5 py-1 rounded-xl bg-gradient-to-r from-sky-600 via-sky-500 to-indigo-600 text-slate-950 text-[10px] font-black shadow flex items-center gap-1">
-<i class="fa-solid fa-shield-halved"></i> م. ئازاد
+<span id="profExecCardRoleBadge" class="px-2.5 py-1 rounded-xl bg-amber-500/20 border border-amber-600/35 text-[#78350f] text-[10px] font-black flex items-center gap-1 shrink-0">
+<i class="fa-solid fa-shield-halved"></i> ئەدمین
 </span>
 </div>
 <div class="grid grid-cols-2 gap-2 text-center text-xs">
-<div class="bg-slate-950/80 p-2.5 rounded-2xl border border-amber-400/20">
-<span class="text-[10px] text-slate-400 block mb-0.5">دەسەڵاتی ئەکاونت</span>
-<span id="profExecCardAuthority" class="text-xs font-black text-emerald-400 flex items-center justify-center gap-1">
+<div class="prof-inset-tile p-2.5 rounded-xl">
+<span class="text-[10px] opacity-75 block mb-0.5 font-semibold">دەسەڵاتی ئەکاونت</span>
+<span id="profExecCardAuthority" class="text-xs font-black text-emerald-700 flex items-center justify-center gap-1">
 <i class="fa-solid fa-bolt"></i> کۆنتڕۆڵی گشتی
 </span>
 </div>
-<div class="bg-slate-950/80 p-2.5 rounded-2xl border border-amber-400/20">
-<span class="text-[10px] text-slate-400 block mb-0.5">جۆری هەژمار</span>
-<span id="profExecCardAccountType" class="text-xs font-black text-amber-300 flex items-center justify-center gap-1">
+<div class="prof-inset-tile p-2.5 rounded-xl">
+<span class="text-[10px] opacity-75 block mb-0.5 font-semibold">جۆری هەژمار</span>
+<span id="profExecCardAccountType" class="text-xs font-black text-[#92400e] flex items-center justify-center gap-1">
 <i class="fa-solid fa-gem"></i> ئەندامی دامەزرێنەر
 </span>
 </div>
 </div>
 </div>
-<!-- Course Participation Display Card (Visible to Everyone if enrolled) -->
-<div id="profCoursesViewCard" class="hidden p-3.5 rounded-2xl bg-slate-950/80 border border-amber-400/30 space-y-2.5 shadow-sm">
+
+<!-- Course Participation Display Card -->
+<div id="profCoursesViewCard" class="hidden prof-section-card p-3.5 rounded-2xl space-y-2.5 shadow-sm">
 <div class="flex items-center justify-between">
-<label class="block text-xs font-black text-slate-200 flex items-center gap-1.5">
-<i class="fa-solid fa-graduation-cap text-amber-300"></i>
+<label class="block text-xs font-black flex items-center gap-1.5">
+<i class="fa-solid fa-graduation-cap text-amber-600"></i>
 <span>بەشداریکردنی خولەکان 🎓</span>
 </label>
-<span id="profCoursesCountBadge" class="text-[10px] text-amber-300 font-bold bg-amber-400/15 border border-amber-400/30 px-2 py-0.5 rounded-full">٢ خول</span>
+<span id="profCoursesCountBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-600/30">٢ خول</span>
 </div>
-<div id="profCoursesRowsList" class="space-y-1.5">
-<!-- Dynamically populated rows matching user's layout -->
-</div>
+<div id="profCoursesRowsList" class="space-y-1.5"></div>
 <div id="profCoursesBadgesList" class="hidden"></div>
 </div>
-<!-- Course Participation Edit Card (Eligible Users on Own Profile or Super Admin) -->
-<div id="profCoursesEditCard" class="hidden p-3 rounded-2xl bg-slate-950/75 border border-amber-400/25 space-y-2.5 shadow-sm">
+
+<!-- Course Participation Edit Card -->
+<div id="profCoursesEditCard" class="hidden prof-section-card p-3.5 rounded-2xl space-y-2.5 shadow-sm">
 <div class="flex items-center justify-between">
-<label class="block text-xs font-black text-slate-200 flex items-center gap-1.5">
-<i class="fa-solid fa-book-open-reader text-amber-300"></i>
+<label class="block text-xs font-black flex items-center gap-1.5">
+<i class="fa-solid fa-book-open-reader text-amber-600"></i>
 <span>بەشداریکردنی خولەکان 🎓</span>
 </label>
-<span class="text-[10px] text-slate-400">هەڵبژاردنی یەکێک یان هەردووک</span>
+<span class="text-[10px] opacity-75">هەڵبژاردنی یەکێک یان هەردووک</span>
 </div>
 <div class="space-y-1.5">
-<label class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 hover:bg-slate-900 border border-slate-700/60 cursor-pointer select-none transition">
+<label class="prof-inset-tile flex items-center justify-between p-2.5 rounded-xl cursor-pointer select-none transition">
 <div class="flex items-center gap-2">
-<input type="checkbox" id="courseCheckZana" value="خولی مامۆستا زانا" class="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-500 bg-slate-800 border-slate-600">
-<span class="text-xs font-black text-slate-200">خولی مامۆستا زانا</span>
+<input type="checkbox" id="courseCheckZana" value="خولی مامۆستا زانا" class="w-4 h-4 rounded accent-emerald-600">
+<span class="text-xs font-black">خولی مامۆستا زانا</span>
 </div>
-<span class="text-[10px] text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10">🎓 مامۆستا زانا</span>
+<span class="text-[10px] text-emerald-700 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10">🎓 مامۆستا زانا</span>
 </label>
-<label class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 hover:bg-slate-900 border border-slate-700/60 cursor-pointer select-none transition">
+<label class="prof-inset-tile flex items-center justify-between p-2.5 rounded-xl cursor-pointer select-none transition">
 <div class="flex items-center gap-2">
-<input type="checkbox" id="courseCheckIbnSirin" value="خولی ئیبن سیرین" class="w-4 h-4 rounded text-amber-300 focus:ring-[#f59e0b] bg-slate-800 border-slate-600">
-<span class="text-xs font-black text-slate-200">خولی ئیبن سیرین</span>
+<input type="checkbox" id="courseCheckIbnSirin" value="خولی ئیبن سیرین" class="w-4 h-4 rounded accent-amber-600">
+<span class="text-xs font-black">خولی ئیبن سیرین</span>
 </div>
-<span class="text-[10px] text-amber-300 font-bold px-1.5 py-0.5 rounded bg-amber-400/15 border border-amber-400/25">📖 ئیبن سیرین</span>
+<span class="text-[10px] text-[#92400e] font-bold px-1.5 py-0.5 rounded bg-amber-500/15">📖 ئیبن سیرین</span>
 </label>
 </div>
-<button type="button" onclick="saveMyCourseEnrollments()" id="saveCoursesBtn" class="w-full py-2 bg-gradient-to-r from-sky-600 via-sky-500 to-indigo-600 hover:brightness-110 text-slate-950 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5 active:scale-95 shadow-md shadow-[#f59e0b]/15">
+<button type="button" onclick="saveMyCourseEnrollments()" id="saveCoursesBtn" class="w-full py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-105 text-white rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5 active:scale-95 shadow-sm cursor-pointer">
 <i class="fa-solid fa-floppy-disk text-[11px]"></i>
 <span>پاشەکەوتکردنی خولەکان</span>
 </button>
 </div>
+
 <!-- Private Message Action Button -->
 <div id="profPrivateChatContainer" class="hidden">
-<button id="profPrivateChatBtn" type="button" class="w-full py-2.5 px-3 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-110 text-slate-950 font-black text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 border border-amber-300/60 active:scale-95 cursor-pointer">
+<button id="profPrivateChatBtn" type="button" class="w-full py-2.5 px-3 bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:brightness-105 text-white font-black text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-md active:scale-95 cursor-pointer">
 <i class="fa-solid fa-envelope"></i>
 <span id="profPrivateChatBtnText">ناردنی نامەی تایبەت</span>
 </button>
 </div>
+
 <!-- Star Adjustment Controls (Super Admin & Teacher) -->
-<div id="profStarsAdjustContainer" class="hidden p-3.5 bg-gradient-to-b from-slate-900/95 via-slate-950/90 to-slate-950 border border-amber-400/35 rounded-2xl shadow-lg shadow-black/40 space-y-2.5">
-<!-- Card Header -->
+<div id="profStarsAdjustContainer" class="hidden prof-section-card p-3.5 rounded-2xl shadow-sm space-y-2.5">
 <div class="flex items-center justify-between gap-2">
 <div class="flex items-center gap-2.5 min-w-0">
-<span class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400/20 to-amber-600/10 border border-amber-400/35 text-amber-400 flex items-center justify-center text-sm shrink-0 shadow-inner">
+<span class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-600/30 text-[#b45309] flex items-center justify-center text-sm shrink-0">
 <i class="fa-solid fa-star"></i>
 </span>
 <div class="min-w-0">
-<h4 class="text-xs font-black text-slate-100 flex items-center gap-1.5 truncate">
-<span>دەستکاریکردنی ئەستێرە</span>
-</h4>
-<p class="text-[10px] text-amber-300/75 truncate">پاداشتکردن یان کەمکردنەوەی ئەستێرەی فێرخواز</p>
+<h4 class="text-xs font-black truncate">دەستکاریکردنی ئەستێرە</h4>
+<p class="text-[10px] opacity-75 truncate">پاداشتکردن یان کەمکردنەوەی ئەستێرەی فێرخواز</p>
 </div>
 </div>
-<span class="text-[10px] font-bold text-amber-300 bg-amber-400/10 border border-amber-400/25 px-2 py-0.5 rounded-full shrink-0">
-ئیدارە و مامۆستا
-</span>
+<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-600/30 shrink-0">ئیدارە</span>
 </div>
-<!-- Action Buttons (Responsive 2-Column Grid) -->
-<div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/80">
-<!-- Add 1 Star Button -->
-<button type="button" onclick="adjustCurrentProfileStars(1)" class="py-2.5 px-3 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-110 text-slate-950 font-black text-xs rounded-xl shadow-md shadow-amber-500/20 border border-amber-300/60 flex items-center justify-center gap-1.5 active:scale-95 transition cursor-pointer select-none whitespace-nowrap" title="زیادکردنی یەک ئەستێرە">
+<div class="grid grid-cols-2 gap-2 pt-2 border-t">
+<button type="button" onclick="adjustCurrentProfileStars(1)" class="py-2 px-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-105 text-white font-black text-xs rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition cursor-pointer select-none whitespace-nowrap">
 <i class="fa-solid fa-plus text-xs"></i>
-<span>+١ ئەستێرە</span>
-<span class="text-xs">⭐</span>
+<span>+١ ئەستێرە ⭐</span>
 </button>
-<!-- Deduct 1 Star Button -->
-<button type="button" onclick="adjustCurrentProfileStars(-1)" class="py-2.5 px-3 bg-rose-600/15 hover:bg-rose-600/25 text-rose-300 hover:text-white border border-rose-500/35 hover:border-rose-500/50 font-black text-xs rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition cursor-pointer select-none whitespace-nowrap" title="کەمکردنەوەی یەک ئەستێرە">
-<i class="fa-solid fa-minus text-xs text-rose-400"></i>
+<button type="button" onclick="adjustCurrentProfileStars(-1)" class="py-2 px-3 bg-rose-500/10 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-600/35 font-black text-xs rounded-xl shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition cursor-pointer select-none whitespace-nowrap">
+<i class="fa-solid fa-minus text-xs"></i>
 <span>-١ ئەستێرە</span>
-<span class="text-[10px] text-rose-400">🔻</span>
 </button>
 </div>
 </div>
+
 <!-- Request Profile Change Button (User Own Profile) -->
 <div id="profRequestChangeContainer" class="hidden">
-<button type="button" onclick="openRequestProfileChangeModal()" class="w-full py-2.5 px-3 bg-slate-950/70 hover:bg-slate-900 border border-amber-400/35 text-amber-300 hover:text-amber-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-sm hover:border-amber-400/60 active:scale-95 cursor-pointer">
-<i class="fa-solid fa-user-pen"></i>
+<button type="button" onclick="openRequestProfileChangeModal()" class="prof-inset-tile w-full py-2.5 px-3 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-sm active:scale-95 cursor-pointer">
+<i class="fa-solid fa-user-pen text-amber-600"></i>
 <span>داواکاری گۆڕینی ناو یان پاسوۆرد 📝</span>
 </button>
 </div>
-<!-- Push Notification Settings for Own Profile -->
-<div id="profNotificationContainer" class="hidden p-3.5 bg-slate-950/75 border border-amber-400/25 rounded-2xl shadow-sm space-y-3">
-<!-- Item 1: Important Announcements -->
-<div class="space-y-2">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2.5">
-<span class="w-8 h-8 rounded-xl bg-amber-400/15 text-amber-300 border border-amber-400/30 flex items-center justify-center text-sm shrink-0">
-<i class="fa-solid fa-bell"></i>
-</span>
-<div>
-<p class="font-black text-white text-xs">ئاگادارییە گرنگەکان 🔔</p>
-</div>
-</div>
-<span id="profNotificationStatusBadge" class="text-[10px] bg-slate-800 text-amber-300 border border-amber-400/30 font-bold px-2 py-0.5 rounded-md shrink-0">پشکنین...</span>
-</div>
-<div class="flex items-center gap-2 pt-0.5">
-<button type="button" onclick="togglePushNotifications()" id="profNotificationToggleBtn" class="flex-1 py-2 px-3 bg-gradient-to-r from-sky-600 via-sky-500 to-indigo-600 hover:brightness-110 text-slate-950 font-black text-xs rounded-xl transition flex items-center justify-center gap-1.5 shadow active:scale-95 cursor-pointer">
-<i class="fa-solid fa-bell"></i>
-<span id="profNotificationToggleText">چالاککردن</span>
-</button>
-<button type="button" onclick="testPushNotification()" id="profNotificationTestBtn" class="py-2 px-3 bg-slate-900/90 hover:bg-slate-850 text-amber-300 hover:text-white font-bold text-xs rounded-xl border border-amber-400/30 transition flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer" title="تاقیکردنەوەی ناردنی ئاگاداری دەنگدار بۆ مۆبایلەکەت">
-<i class="fa-solid fa-paper-plane text-xs"></i>
-<span>تاقیکردنەوە 🔔</span>
-</button>
-</div>
-</div>
-<!-- Item 2: All Chat Messages (General Notifications) -->
-<div class="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
-<div class="flex items-center gap-2.5 min-w-0">
-<span class="w-8 h-8 rounded-xl bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center justify-center text-sm shrink-0">
-<i class="fa-brands fa-facebook-messenger"></i>
-</span>
-<div class="truncate">
-<p class="font-black text-white text-xs truncate">ئاگاداری گشتی</p>
-</div>
-</div>
-<button type="button" onclick="toggleAllChatNotifications()" id="profAllChatNotificationToggleBtn" class="py-1.5 px-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 active:scale-95 cursor-pointer shrink-0 border border-slate-700 bg-slate-800 text-slate-300">
-<span id="profAllChatNotificationBadge">ناچالاک</span>
-</button>
-</div>
-</div>
-<div id="profSuperAdminActions" class="hidden p-3 bg-slate-950/80 border border-amber-400/30 rounded-2xl flex items-center justify-between gap-2 flex-wrap shadow-inner">
-<span class="text-xs font-black text-amber-300">دەسەڵاتی سوپەر ئەدمین:</span>
+
+<!-- Super Admin Moderation Controls -->
+<div id="profSuperAdminActions" class="hidden prof-section-card p-3 rounded-2xl flex items-center justify-between gap-2 flex-wrap shadow-sm">
+<span class="text-xs font-black">دەسەڵاتی سوپەر ئەدمین:</span>
 <div class="flex items-center gap-2 flex-wrap" id="profActionButtonsSlot"></div>
 </div>
+
 <!-- Master Super Admin: Assign Special Badges Panel -->
-<div id="profSpecialBadgeAdminCard" class="hidden p-3.5 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 border-2 border-amber-400/35 rounded-3xl shadow-xl space-y-2.5">
-<div class="flex items-center justify-between border-b border-amber-400/20 pb-2">
-<span class="text-xs font-black text-amber-300 flex items-center gap-1.5">
-<i class="fa-solid fa-id-badge text-amber-300"></i>
-<span>بەخشین و بەڕێوەبردنی باجەکان (تەنها سوپەر ئەدمین)</span>
+<div id="profSpecialBadgeAdminCard" class="hidden prof-section-card p-3.5 rounded-2xl shadow-sm space-y-2.5">
+<div class="flex items-center justify-between border-b pb-2">
+<span class="text-xs font-black flex items-center gap-1.5">
+<i class="fa-solid fa-id-badge text-amber-600"></i>
+<span>بەخشین و بەڕێوەبردنی باجەکان</span>
 </span>
-<span id="profActiveBadgeTag" class="text-[10px] font-bold text-slate-400">بێ باج</span>
+<span id="profActiveBadgeTag" class="text-[10px] font-bold opacity-75">بێ باج</span>
 </div>
-<p class="text-[10px] text-slate-400 leading-relaxed">
-وەک سوپەر ئەدمین دەتوانیت هەر باجێک کلیک لێ بکەیت بۆ پێدان یان لێسەندنەوەی، هەرچەند باجت بوێت دەتوانیت پێکەوە بدەیت بەم ئەندامە:
-</p>
-<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
-<!-- White Badge (ڕاوێژکاری زیرەک) -->
-<button type="button" onclick="toggleSpecialBadge('white')" id="badgeBtnWhite" class="p-2.5 rounded-2xl bg-slate-800/90 hover:bg-slate-700/80 border border-slate-300/40 text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
-<div class="flex items-center justify-between mb-1.5">
-<span class="font-black text-white text-xs flex items-center gap-1">
-<span class="w-2 h-2 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]"></span> باجی سپی
-</span>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+<button type="button" onclick="toggleSpecialBadge('white')" id="badgeBtnWhite" class="p-2.5 rounded-xl border text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
+<div class="flex items-center justify-between mb-1">
+<span class="font-black text-xs flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-slate-400"></span> باجی سپی</span>
 <span id="badgeStatusWhite" class="text-[9px]"></span>
 </div>
-<div class="text-[9px] text-slate-300 group-hover:text-white space-y-0.5 leading-snug">
-• مۆڵەتی ڕاوێژکاری زیرەک<br>
-• بەشی ڕاوێژکار لە مێنیو<br>
-• هێمای ڕاوێژکار لە پرۆفایل
-</div>
+<div class="text-[9px] opacity-75 leading-snug">ڕاوێژکاری زیرەک</div>
 </button>
-<!-- Blue Badge (چاودێری چات) -->
-<button type="button" onclick="toggleSpecialBadge('blue')" id="badgeBtnBlue" class="p-2.5 rounded-2xl bg-sky-950/40 hover:bg-sky-900/60 border border-sky-500/40 text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
-<div class="flex items-center justify-between mb-1.5">
-<span class="font-black text-sky-300 text-xs flex items-center gap-1">
-<span class="w-2 h-2 rounded-full bg-sky-400"></span> باجی شین
-</span>
+<button type="button" onclick="toggleSpecialBadge('blue')" id="badgeBtnBlue" class="p-2.5 rounded-xl border text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
+<div class="flex items-center justify-between mb-1">
+<span class="font-black text-xs flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-sky-500"></span> باجی شین</span>
 <span id="badgeStatusBlue" class="text-[9px]"></span>
 </div>
-<div class="text-[9px] text-slate-400 group-hover:text-slate-300 space-y-0.5 leading-snug">
-• سڕینەوەی پەیامی نەشیاو<br>
-• میوتکردنی سەرپێچیکار<br>
-• چاودێری و پاراستنی چات
-</div>
+<div class="text-[9px] opacity-75 leading-snug">چاودێری چات</div>
 </button>
-<!-- Green Badge -->
-<button type="button" onclick="toggleSpecialBadge('green')" id="badgeBtnGreen" class="p-2.5 rounded-2xl bg-emerald-950/40 hover:bg-emerald-900/60 border border-emerald-500/40 text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
-<div class="flex items-center justify-between mb-1.5">
-<span class="font-black text-emerald-300 text-xs flex items-center gap-1">
-<span class="w-2 h-2 rounded-full bg-emerald-400"></span> باجی سەوز
-</span>
+<button type="button" onclick="toggleSpecialBadge('green')" id="badgeBtnGreen" class="p-2.5 rounded-xl border text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
+<div class="flex items-center justify-between mb-1">
+<span class="font-black text-xs flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> باجی سەوز</span>
 <span id="badgeStatusGreen" class="text-[9px]"></span>
 </div>
-<div class="text-[9px] text-slate-400 group-hover:text-slate-300 space-y-0.5 leading-snug">
-• قفڵ و کردنەوەی چات<br>
-• وەرگرتن و پلەپێدان تا مامۆستا<br>
-• گۆڕینی ناو و سیستم<br>
-• کردنەوە و داخستنی لایڤ
-</div>
+<div class="text-[9px] opacity-75 leading-snug">ڕێکخستن و لایڤ</div>
 </button>
-<!-- Black Badge -->
-<button type="button" onclick="toggleSpecialBadge('black')" id="badgeBtnBlack" class="p-2.5 rounded-2xl bg-slate-950 hover:bg-slate-900 border border-slate-700 text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
-<div class="flex items-center justify-between mb-1.5">
-<span class="font-black text-slate-200 text-xs flex items-center gap-1">
-<span class="w-2 h-2 rounded-full bg-slate-400"></span> باجی ڕەش
-</span>
+<button type="button" onclick="toggleSpecialBadge('black')" id="badgeBtnBlack" class="p-2.5 rounded-xl border text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
+<div class="flex items-center justify-between mb-1">
+<span class="font-black text-xs flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-slate-700"></span> باجی ڕەش</span>
 <span id="badgeStatusBlack" class="text-[9px]"></span>
 </div>
-<div class="text-[9px] text-slate-400 group-hover:text-slate-300 space-y-0.5 leading-snug">
-• هەموو تواناکانی سوپەر ئەدمین<br>
-• دەسەڵاتی تەواو بەسەر گرووپدا<br>
-• ژووری ئاسایش و بەکئەپ
-</div>
+<div class="text-[9px] opacity-75 leading-snug">سوپەر ئەدمین</div>
 </button>
-<!-- Red Badge -->
-<button type="button" onclick="toggleSpecialBadge('red')" id="badgeBtnRed" class="p-2.5 rounded-2xl bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/40 text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
-<div class="flex items-center justify-between mb-1.5">
-<span class="font-black text-rose-300 text-xs flex items-center gap-1">
-<span class="w-2 h-2 rounded-full bg-rose-400"></span> باجی سور
-</span>
+<button type="button" onclick="toggleSpecialBadge('red')" id="badgeBtnRed" class="p-2.5 rounded-xl border text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
+<div class="flex items-center justify-between mb-1">
+<span class="font-black text-xs flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500"></span> باجی سور</span>
 <span id="badgeStatusRed" class="text-[9px]"></span>
 </div>
-<div class="text-[9px] text-slate-400 group-hover:text-slate-300 space-y-0.5 leading-snug">
-• کردنەوە و داخستنەوەی لایڤ<br>
-• کۆنتڕۆڵی تەواوی ناو وانەی لایڤ<br>
-• مۆڵەتی مایک و شەیر و قورئان
-</div>
+<div class="text-[9px] opacity-75 leading-snug">کۆنتڕۆڵی لایڤ</div>
 </button>
-<!-- Purple Badge (مۆڵەتی لێکدانەوەی خەون) -->
-<button type="button" onclick="toggleSpecialBadge('purple')" id="badgeBtnPurple" class="p-2.5 rounded-2xl bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/40 text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
-<div class="flex items-center justify-between mb-1.5">
-<span class="font-black text-purple-300 text-xs flex items-center gap-1">
-<span class="w-2 h-2 rounded-full bg-purple-400"></span> باجی مۆر
-</span>
+<button type="button" onclick="toggleSpecialBadge('purple')" id="badgeBtnPurple" class="p-2.5 rounded-xl border text-right transition flex flex-col justify-between group active:scale-95 shadow-sm cursor-pointer">
+<div class="flex items-center justify-between mb-1">
+<span class="font-black text-xs flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-purple-500"></span> باجی مۆر</span>
 <span id="badgeStatusPurple" class="text-[9px]"></span>
 </div>
-<div class="text-[9px] text-slate-400 group-hover:text-slate-300 space-y-0.5 leading-snug">
-• مۆڵەتی لێکدانەوەی خەونەکان<br>
-• وەڵامدانەوەی خەونی فێرخوازان<br>
-• پانێڵی بەڕێوەبردنی خەونەکان
-</div>
+<div class="text-[9px] opacity-75 leading-snug">لێکدانەوەی خەون</div>
 </button>
 </div>
-<div class="pt-1.5 flex items-center justify-between gap-2 flex-wrap">
-<button type="button" onclick="assignAllSpecialBadges()" class="px-3 py-1.5 bg-gradient-to-r from-[#0284c7]/30 via-[#f59e0b]/30 to-[#0284c7]/30 hover:from-[#0284c7]/50 hover:to-[#f59e0b]/50 text-amber-300 hover:text-white border border-amber-400/40 rounded-xl text-[10px] font-black transition flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer">
-<i class="fa-solid fa-crown text-amber-300"></i>
-<span>پێدانی هەموو باجەکان (٦ باج) 🌟</span>
+<div class="pt-1 flex items-center justify-between gap-2 flex-wrap">
+<button type="button" onclick="assignAllSpecialBadges()" class="px-3 py-1.5 rounded-xl text-[10px] font-black transition flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer">
+<i class="fa-solid fa-crown text-amber-600"></i>
+<span>پێدانی هەموو باجەکان 🌟</span>
 </button>
-<button type="button" onclick="removeAllSpecialBadges()" class="px-3 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 hover:text-rose-100 border border-rose-500/40 rounded-xl text-[10px] font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer">
+<button type="button" onclick="removeAllSpecialBadges()" class="px-3 py-1.5 rounded-xl text-[10px] font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer">
 <i class="fa-solid fa-xmark text-xs"></i>
-<span>لابردنی هەموو باجەکان</span>
+<span>لابردنی هەمووی</span>
 </button>
 </div>
 </div>
-<!-- User Badges Showcase Card (خاوەنی چەند باجە و کام باجانە) -->
-<div id="profBadgesOverviewCard" class="hidden p-3.5 rounded-2xl bg-gradient-to-r from-slate-950/90 via-slate-900 to-slate-950/90 border border-amber-400/30 space-y-2.5 shadow-md">
-<div class="flex items-center justify-between pb-2 border-b border-amber-400/20">
+
+<!-- User Badges Showcase Card -->
+<div id="profBadgesOverviewCard" class="hidden prof-section-card p-3.5 rounded-2xl space-y-2.5 shadow-sm">
+<div class="flex items-center justify-between pb-2 border-b">
 <div class="flex items-center gap-2">
-<span class="w-7 h-7 rounded-xl bg-amber-400/15 text-amber-300 border border-amber-400/30 flex items-center justify-center text-xs">
+<span class="w-7 h-7 rounded-xl bg-amber-500/15 text-[#b45309] border border-amber-600/30 flex items-center justify-center text-xs">
 <i class="fa-solid fa-award"></i>
 </span>
 <div>
-<span class="text-xs font-black text-white">باجە تایبەتەکانی ئەم ئەکاونتە</span>
-<span id="profBadgesHeaderSubtext" class="block text-[10px] text-amber-300/90 font-bold"></span>
+<span class="text-xs font-black">باجە تایبەتەکانی ئەم ئەکاونتە</span>
+<span id="profBadgesHeaderSubtext" class="block text-[10px] opacity-80 font-bold"></span>
 </div>
 </div>
-<span id="profBadgesCountBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-400/15 text-amber-300 border border-amber-400/30">0 باج</span>
+<span id="profBadgesCountBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-500/15 border border-amber-600/30">0 باج</span>
 </div>
 <div id="profBadgesListContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
 </div>
-<!-- Role History Section -->
-<div id="profRoleHistorySection" class="space-y-2">
-<h4 class="text-xs font-black text-amber-300 mb-2 flex items-center gap-1.5">
-<i class="fa-solid fa-clock-rotate-left text-amber-300"></i>
-<span>مێژووی پلەپێدان (ڕۆژ و کاتی گۆڕینی پلە)</span>
+
+<!-- Role History Section (Shown only when non-empty) -->
+<div id="profRoleHistorySection" class="hidden prof-section-card p-3.5 rounded-2xl space-y-2 shadow-sm">
+<h4 class="text-xs font-black flex items-center gap-1.5">
+<i class="fa-solid fa-clock-rotate-left text-amber-600"></i>
+<span>مێژووی پلەپێدان</span>
 </h4>
 <div id="profRoleHistoryList" class="space-y-2 text-xs"></div>
 </div>
-<!-- Solved Questions Section -->
-<div id="profSolvedQuestionsSection" class="space-y-2">
-<h4 class="text-xs font-black text-amber-300 mb-2 flex items-center gap-1.5">
-<i class="fa-solid fa-award text-amber-300"></i>
-<span>پرسیارە زانراوەکان و ژمارەکانیان</span>
+
+<!-- Solved Questions Section (Shown only when non-empty) -->
+<div id="profSolvedQuestionsSection" class="hidden prof-section-card p-3.5 rounded-2xl space-y-2 shadow-sm">
+<h4 class="text-xs font-black flex items-center gap-1.5">
+<i class="fa-solid fa-award text-amber-600"></i>
+<span>پرسیارە زانراوەکان</span>
 </h4>
 <div id="profSolvedQuestionsList" class="space-y-2 text-xs"></div>
 </div>
-<!-- Student Articles Card (بەشی کورتە وتارەکانی قوتابی) -->
-        <div id="profArticlesCard" class="p-4 rounded-3xl bg-gradient-to-br from-emerald-500/15 via-slate-950 to-emerald-500/10 border border-emerald-500/30 shadow-lg space-y-3">
-          <div class="flex items-center justify-between border-b border-emerald-500/20 pb-2.5">
-            <div class="flex items-center gap-2">
-              <div class="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-sm">
-                <i class="fa-solid fa-pen-nib"></i>
-              </div>
-              <div>
-                <h4 class="text-xs sm:text-sm font-black text-emerald-300">کورتە وتارەکانی من</h4>
-                <p class="text-[10px] text-slate-400">نووسین و چاودێری وتارەکانت</p>
-              </div>
-            </div>
 
-          </div>
-<!-- Quick link to view all articles page -->
-          <div class="flex items-center justify-between text-[11px] text-slate-300 pt-1">
-            <span>سەرجەم کورتە وتارە پەسەندکراوەکان:</span>
-            <a href="/articles" class="text-emerald-400 hover:underline font-bold inline-flex items-center gap-1">
-              <span>پەڕەی کورتە وتار</span>
-              <i class="fa-solid fa-arrow-left text-[9px]"></i>
-            </a>
-          </div>
-<!-- User's Submitted Articles Container -->
-          <div id="profMyArticlesList" class="space-y-2 pt-1 max-h-48 overflow-y-auto">
-            <p class="text-[11px] text-slate-400 text-center py-2">بارکردنی وتارەکانت...</p>
-          </div>
-        </div>
-<!-- Profile Logout Button (Only for own profile) -->
-<div id="profLogoutContainer" class="hidden pt-3 mt-3 border-t border-slate-800">
-<button onclick="handleLogout()" class="w-full py-2.5 bg-rose-600/20 hover:bg-rose-600 border border-rose-500/40 text-rose-300 hover:text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 active:scale-95 shadow-sm">
+</div><!-- end scrollable body -->
+
+<!-- Pinned Clean Logout Footer (Only for own profile) -->
+<div id="profLogoutContainer" class="hidden pt-3 mt-3 border-t shrink-0 relative z-10">
+<button id="profLogoutBtn" type="button" onclick="handleLogout()" class="w-full py-2.5 rounded-xl text-xs sm:text-sm font-black transition flex items-center justify-center gap-2 active:scale-[0.99] shadow-sm cursor-pointer">
 <i class="fa-solid fa-arrow-right-from-bracket"></i>
 <span>چوونەدەرەوە لە ئەکاونت</span>
 </button>
 </div>
-</div>
+
 </div>
 </div>
 <!-- ================= MODAL: REACTION USERS LIST (سوپەر ئەدمین و مامۆستا) ================= -->
@@ -8494,7 +8386,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=97.0&t=1795710000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=110.0&t=1795730000"></script>
+<script src="/js/app.js?v=111.0&t=1795740000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->
@@ -8572,48 +8464,6 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
       <div id="adminArticlesList" class="flex-1 overflow-y-auto space-y-3.5 py-3 pr-1 relative z-10">
         <p class="text-xs text-slate-400 text-center py-6">بارکردنی وتارەکان...</p>
       </div>
-    </div>
-  </div>
-<div id="modalProfileArticle" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md">
-    <div class="w-full max-w-lg bg-slate-900 border-2 border-emerald-500/40 rounded-3xl p-5 sm:p-7 shadow-2xl relative overflow-hidden flex flex-col max-h-[92vh]">
-      <div class="flex items-center justify-between pb-3.5 border-b border-white/10 relative z-10">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-lg">
-            ✍️
-          </div>
-          <div>
-            <h3 class="font-black text-base text-white">نووسینی کورتە وتاری نوێ</h3>
-            <p class="text-xs text-emerald-300/80">ناردن بۆ ئەدمین و بەڕێوەبەر بۆ پەسەندکردن</p>
-          </div>
-        </div>
-        <button type="button" onclick="closeProfileNewArticleModal()" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer">
-          <i class="fa-solid fa-xmark text-sm"></i>
-        </button>
-      </div>
-<form onsubmit="handleProfileSubmitArticle(event)" class="space-y-4 pt-4 flex-1 overflow-y-auto pr-1 relative z-10">
-        <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1.5">ناونیشانی وتارەکە <span class="text-rose-400">*</span></label>
-          <input type="text" id="profArticleTitleInput" required placeholder="ناونیشانی کورتە وتار..." class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-white focus:outline-none focus:border-emerald-500">
-        </div>
-<div>
-          <label class="block text-xs font-bold text-slate-300 mb-1.5">دەقی کورتە وتارەکە <span class="text-rose-400">*</span></label>
-          <textarea id="profArticleContentInput" required rows="5" placeholder="دەقی کورتە وتارەکەت لێرە بنووسە..." class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-white focus:outline-none focus:border-emerald-500 resize-y leading-relaxed"></textarea>
-        </div>
-<div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-right">
-          <p class="text-xs text-amber-200/90 leading-relaxed font-medium">
-            ⚠️ <strong>مەرجی بڵاوبوونەوە:</strong> وتارەکەت ڕاستەوخۆ بڵاو نابێتەوە؛ سەرەتا دەچێتە بەردەستی ئەدمین و دەستەی بەڕێوەبەرایەتی، پاش ئەوەی بیبینن و قبوڵی بکەن، لە پەڕەی کورتە وتارەکان بڵاودەکرێتەوە.
-          </p>
-        </div>
-<div class="flex items-center gap-3 pt-2">
-          <button type="submit" id="profArticleSubmitBtn" class="flex-1 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm rounded-xl shadow-lg transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
-            <i class="fa-solid fa-paper-plane"></i>
-            <span>ناردن بۆ چاودێری</span>
-          </button>
-          <button type="button" onclick="closeProfileNewArticleModal()" class="px-4 py-3 bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs rounded-xl transition cursor-pointer">
-            پاشگەزبوونەوە
-          </button>
-        </div>
-      </form>
     </div>
   </div>
 <div id="dreamDirectPromptModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">

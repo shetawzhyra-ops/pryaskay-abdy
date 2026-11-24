@@ -7782,7 +7782,7 @@ async function openUserProfileModal(userId) {
             let rowsHtml = '';
             if (courses.includes('خولی مامۆستا زانا')) {
               rowsHtml += `
-                <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/80 border border-emerald-500/30 transition shadow-sm">
+                <div class="prof-inset-tile flex items-center justify-between p-2.5 rounded-xl transition shadow-sm">
                   <div class="flex items-center gap-2.5">
                     <span class="w-5 h-5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-xs font-black">✓</span>
                     <span class="text-xs font-black text-slate-100">خولی مامۆستا زانا</span>
@@ -7793,7 +7793,7 @@ async function openUserProfileModal(userId) {
             }
             if (courses.includes('خولی ئیبن سیرین')) {
               rowsHtml += `
-                <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/80 border border-amber-400/30 transition shadow-sm">
+                <div class="prof-inset-tile flex items-center justify-between p-2.5 rounded-xl transition shadow-sm">
                   <div class="flex items-center gap-2.5">
                     <span class="w-5 h-5 rounded-lg bg-amber-400/20 text-amber-300 border border-amber-400/30 flex items-center justify-center text-xs font-black">✓</span>
                     <span class="text-xs font-black text-slate-100">خولی ئیبن سیرین</span>
@@ -7828,7 +7828,7 @@ async function openUserProfileModal(userId) {
           const cfg = BADGE_CONFIG[b];
           if (!cfg) return '';
           return `
-            <div class="p-2.5 rounded-2xl bg-slate-950/70 border border-amber-400/25 flex items-center justify-between gap-2 shadow-sm">
+            <div class="prof-inset-tile p-2.5 rounded-xl flex items-center justify-between gap-2 shadow-sm">
               <div class="flex items-center gap-2.5 min-w-0">
                 <span class="w-7 h-7 rounded-xl ${cfg.chipClass} flex items-center justify-center text-xs shrink-0 shadow-inner">
                   <i class="fa-solid ${cfg.icon}"></i>
@@ -7858,38 +7858,6 @@ async function openUserProfileModal(userId) {
       if (saCard) saCard.classList.remove('hidden');
       if (roleHistorySec) roleHistorySec.classList.add('hidden');
       if (solvedSec) solvedSec.classList.add('hidden');
-
-      const execTitle = document.getElementById('profExecCardTitle');
-      const execSubtitle = document.getElementById('profExecCardSubtitle');
-      const execRoleBadge = document.getElementById('profExecCardRoleBadge');
-      const execAuthority = document.getElementById('profExecCardAuthority');
-      const execType = document.getElementById('profExecCardAccountType');
-
-      if (execTitle) {
-        execTitle.textContent = 'بەڕێوەبەری سەرەکی پڕۆژە';
-      }
-      if (execSubtitle) {
-        execSubtitle.textContent = 'سەرپەرشتیاری پڕۆژە';
-      }
-      if (execRoleBadge) {
-        execRoleBadge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ئەدمین';
-      }
-      if (execAuthority) {
-        execAuthority.innerHTML = '<i class="fa-solid fa-bolt"></i> کۆنتڕۆڵی گشتی';
-      }
-      if (execType) {
-        execType.innerHTML = '<i class="fa-solid fa-gem"></i> ئەندامی دامەزرێنەر';
-      }
-    } else {
-      if (regStatsGrid) regStatsGrid.classList.remove('hidden');
-      if (saCard) saCard.classList.add('hidden');
-      if (roleHistorySec) roleHistorySec.classList.remove('hidden');
-      if (solvedSec) {
-        if (prof.role === 'student' || prof.role === 'new_student') {
-          solvedSec.classList.remove('hidden');
-        } else {
-          solvedSec.classList.add('hidden');
-        }
       }
     }
 
@@ -7907,14 +7875,14 @@ async function openUserProfileModal(userId) {
     } else {
       prof.roleHistory.forEach((h, idx) => {
         const item = document.createElement('div');
-        item.className = 'p-2.5 rounded-2xl bg-slate-950/70 border border-amber-400/25 flex items-center justify-between shadow-sm';
+        item.className = 'prof-inset-tile p-2.5 rounded-xl flex items-center justify-between shadow-sm';
         const d = new Date(h.created_at).toLocaleDateString('ku-IQ') + ' ' + new Date(h.created_at).toLocaleTimeString('ku-IQ', { hour: '2-digit', minute: '2-digit' });
         const oldR = h.old_role === 'student' ? 'قوتابی' : 'ئەدمین';
         const newR = h.new_role === 'admin' ? 'ئەدمین 🛡️' : 'قوتابی 🎓';
 
         item.innerHTML = `
           <div>
-            <div class="font-bold text-white">پلەی گۆڕدرا بۆ: <span class="text-emerald-400">${newR}</span></div>
+            <div class="font-bold">پلەی گۆڕدرا بۆ: <span class="text-emerald-400">${newR}</span></div>
             <div class="text-[11px] text-slate-400">لەلایەن: <b>${escapeHtml(h.changed_by_name)}</b> (پێشتر: ${oldR})</div>
           </div>
           <span class="text-[10px] text-slate-500 font-mono">${d}</span>
@@ -7929,13 +7897,13 @@ async function openUserProfileModal(userId) {
     } else {
       prof.answeredQuestions.forEach((q, idx) => {
         const item = document.createElement('div');
-        item.className = 'p-2.5 rounded-2xl bg-slate-950/70 border border-amber-400/30 flex items-center justify-between shadow-sm';
+        item.className = 'prof-inset-tile p-2.5 rounded-xl flex items-center justify-between shadow-sm';
         const d = new Date(q.awarded_at).toLocaleDateString('ku-IQ') + ' ' + new Date(q.awarded_at).toLocaleTimeString('ku-IQ', { hour: '2-digit', minute: '2-digit' });
 
         item.innerHTML = `
           <div>
             <div class="font-bold text-amber-300">پرسیاری ژمارە #${q.question_id || (idx + 1)}</div>
-            <div class="text-xs text-white line-clamp-1">${escapeHtml(q.question_text || 'پرسیاری دەستی')}</div>
+            <div class="text-xs font-medium line-clamp-1">${escapeHtml(q.question_text || 'پرسیاری دەستی')}</div>
           </div>
           <span class="text-[10px] text-amber-300 font-mono shrink-0 mr-2">${d} ⭐</span>
         `;
@@ -7999,15 +7967,7 @@ async function openUserProfileModal(userId) {
       }
     }
 
-    // Push Notification Controls (Only shown on user's OWN profile)
-    const notifContainer = document.getElementById('profNotificationContainer');
-    if (notifContainer) {
-      if (isMe) {
-        notifContainer.classList.remove('hidden');
-        if (typeof updatePushNotificationUI === 'function') {
-          updatePushNotificationUI();
-        }
-      } else {
+     else {
         notifContainer.classList.add('hidden');
       }
     }
@@ -8022,23 +7982,7 @@ async function openUserProfileModal(userId) {
       }
     }
 
-    // Publish Dream Post Card (بەشی بڵاوکردنەوەی خەون و پۆست بۆ مامۆستا/بەڕێوەبەر و هێمن)
-    const pubDreamContainer = document.getElementById('profPublishDreamPostContainer');
-    if (pubDreamContainer) {
-      const isStaffOrExec = currentUser && (
-        currentUser.role === 'super_admin' || 
-        currentUser.role === 'teacher' || 
-        currentUser.role === 'admin' ||
-        (typeof isExecutiveUser === 'function' && isExecutiveUser(currentUser)) ||
-        (typeof isMasterSuperAdmin === 'function' && isMasterSuperAdmin(currentUser)) ||
-        (typeof hasSuperAdminPrivileges === 'function' && hasSuperAdminPrivileges(currentUser))
-      );
-      if (isStaffOrExec && (isMe || isExecutiveProfile)) {
-        pubDreamContainer.classList.remove('hidden');
-      } else {
-        pubDreamContainer.classList.add('hidden');
-      }
-    }
+    
 
     const canManageThisUser = canUserManageMembers(currentUser);
     const targetIsMaster = isMasterSuperAdmin(prof);
@@ -8152,10 +8096,7 @@ async function openUserProfileModal(userId) {
       superAdminActions.classList.add('hidden');
     }
 
-    // Load student's short articles in profile
-    if (typeof loadProfileArticles === 'function') {
-      loadProfileArticles(prof.id, isMe);
-    }
+    
   } catch (err) {
     fullNameEl.innerText = 'هەڵەیەک ڕوویدا';
   }

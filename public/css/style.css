@@ -13471,3 +13471,177 @@ main > section.glass-card h1::after {
 
 /* Strictly hide top header global search button inside #mainApp */
 #globalSearchTriggerBtnApp, #mainApp #globalSearchTriggerBtnApp { display: none !important; }
+
+
+/* ==========================================================================
+   CLEAN MANUSCRIPT USER PROFILE MODAL (LIGHT & DARK MODE)
+   ========================================================================== */
+html:not(.dark) #userProfileModalDialog {
+  background: linear-gradient(166deg, rgba(247, 240, 228, 0.99) 0%, rgba(235, 220, 198, 0.98) 100%) !important;
+  border: 1.5px solid rgba(156, 120, 78, 0.42) !important;
+  box-shadow: 0 24px 55px -12px rgba(42, 24, 10, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  color: #361c0c !important;
+}
+
+html:not(.dark) #userProfileModalDialog .border-b,
+html:not(.dark) #userProfileModalDialog .border-t {
+  border-color: rgba(156, 120, 78, 0.24) !important;
+}
+
+html:not(.dark) #profAvatar {
+  background: linear-gradient(145deg, #fdf6ec 0%, #e4d4bd 100%) !important;
+  color: #78350f !important;
+}
+
+html:not(.dark) #profMenuShortcutBtn {
+  background: rgba(235, 219, 198, 0.95) !important;
+  border: 1px solid rgba(156, 120, 78, 0.4) !important;
+  color: #361c0c !important;
+}
+html:not(.dark) #profMenuShortcutBtn:hover {
+  background: rgba(224, 204, 178, 0.98) !important;
+}
+
+html:not(.dark) #profCloseBtn {
+  background: rgba(235, 219, 198, 0.85) !important;
+  border: 1px solid rgba(156, 120, 78, 0.35) !important;
+  color: #54371f !important;
+}
+html:not(.dark) #profCloseBtn:hover {
+  background: rgba(225, 29, 72, 0.12) !important;
+  color: #9f1239 !important;
+}
+
+html:not(.dark) #userProfileModalDialog .prof-stat-tile,
+html:not(.dark) #userProfileModalDialog .prof-section-card {
+  background: rgba(251, 247, 240, 0.94) !important;
+  border: 1px solid rgba(156, 120, 78, 0.30) !important;
+  color: #361c0c !important;
+  box-shadow: 0 4px 14px -4px rgba(50, 35, 20, 0.08) !important;
+}
+
+html:not(.dark) #userProfileModalDialog .prof-inset-tile {
+  background: rgba(242, 232, 216, 0.85) !important;
+  border: 1px solid rgba(156, 120, 78, 0.25) !important;
+  color: #361c0c !important;
+}
+
+html:not(.dark) #userProfileModalDialog .prof-stat-label {
+  color: #92400e !important;
+}
+
+html:not(.dark) #profExecCardTitle {
+  color: #361c0c !important;
+  background: none !important;
+  -webkit-text-fill-color: #361c0c !important;
+}
+
+html:not(.dark) #profExecCardAuthority {
+  color: #166534 !important;
+}
+
+html:not(.dark) #profExecCardAccountType {
+  color: #92400e !important;
+}
+
+html:not(.dark) #profLogoutBtn {
+  background: rgba(225, 29, 72, 0.10) !important;
+  border: 1.5px solid rgba(190, 18, 60, 0.38) !important;
+  color: #9f1239 !important;
+}
+html:not(.dark) #profLogoutBtn:hover {
+  background: #be123c !important;
+  border-color: #9f1239 !important;
+  color: #ffffff !important;
+}
+
+/* Dark Mode User Profile Modal */
+html.dark #userProfileModalDialog,
+body.dark-theme #userProfileModalDialog,
+body.dark-mode #userProfileModalDialog {
+  background: linear-gradient(166deg, rgba(19, 32, 25, 0.99) 0%, rgba(12, 21, 16, 0.98) 100%) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.38) !important;
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #userProfileModalDialog .border-b,
+html.dark #userProfileModalDialog .border-t {
+  border-color: rgba(245, 158, 11, 0.20) !important;
+}
+
+html.dark #profFullName,
+html.dark #profExecCardTitle,
+html.dark #userProfileModalDialog h3,
+html.dark #userProfileModalDialog h4 {
+  color: #fff8eb !important;
+  -webkit-text-fill-color: #fff8eb !important;
+}
+
+html.dark #profUsername {
+  color: #fcd34d !important;
+}
+
+html.dark #profAvatar {
+  background: linear-gradient(145deg, #1c2e24 0%, #101c15 100%) !important;
+  color: #fbbf24 !important;
+}
+
+html.dark #profMenuShortcutBtn,
+html.dark #profCloseBtn {
+  background: rgba(24, 39, 30, 0.94) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  color: #fef3c7 !important;
+}
+html.dark #profCloseBtn:hover {
+  background: rgba(225, 29, 72, 0.25) !important;
+  color: #fecdd3 !important;
+}
+
+html.dark #profAdvisorBtn {
+  background: rgba(245, 158, 11, 0.16) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  color: #fde68a !important;
+}
+
+html.dark #userProfileModalDialog .prof-stat-tile,
+html.dark #userProfileModalDialog .prof-section-card {
+  background: rgba(22, 36, 28, 0.94) !important;
+  border: 1px solid rgba(245, 158, 11, 0.28) !important;
+  color: #fef3c7 !important;
+}
+
+html.dark #userProfileModalDialog .prof-inset-tile {
+  background: rgba(14, 24, 18, 0.92) !important;
+  border: 1px solid rgba(245, 158, 11, 0.22) !important;
+  color: #fef3c7 !important;
+}
+
+html.dark #userProfileModalDialog .prof-stat-label {
+  color: #fbbf24 !important;
+}
+
+html.dark #profExecCardRoleBadge {
+  background: rgba(245, 158, 11, 0.18) !important;
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  color: #fde68a !important;
+}
+
+html.dark #profExecCardAuthority {
+  color: #6ee7b7 !important;
+}
+
+html.dark #profExecCardAccountType {
+  color: #fcd34d !important;
+}
+
+html.dark #profLogoutBtn {
+  background: rgba(190, 18, 60, 0.20) !important;
+  border: 1.5px solid rgba(244, 63, 94, 0.45) !important;
+  color: #fecdd3 !important;
+}
+html.dark #profLogoutBtn:hover {
+  background: #e11d48 !important;
+  border-color: #f43f5e !important;
+  color: #ffffff !important;
+}
