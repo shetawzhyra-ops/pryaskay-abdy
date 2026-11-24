@@ -692,15 +692,6 @@ function isExecutiveUser(u) {
 }
 
 function updateExecutiveHubUI() {
-  const isExec = typeof isExecutiveUser === 'function' && isExecutiveUser(currentUser);
-  const drawerBtn = document.getElementById('drawerExecutiveHubBtn');
-  if (drawerBtn) {
-    if (isExec) {
-      drawerBtn.classList.remove('hidden');
-    } else {
-      drawerBtn.classList.add('hidden');
-    }
-  }
   const topBtn = document.getElementById('topExecutiveHubBtn');
   if (topBtn) {
     topBtn.classList.remove('hidden');
