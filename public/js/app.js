@@ -1245,15 +1245,10 @@ function updateUserUI() {
   }
 
   const dreamAdminNavBtn = document.getElementById('dreamAdminNavBtn');
-  const drawerDreamPostsManageBtn = document.getElementById('drawerDreamPostsManageBtn');
   if (canDream) {
     if (dreamAdminNavBtn) {
       dreamAdminNavBtn.classList.remove('hidden');
       dreamAdminNavBtn.classList.add('flex');
-    }
-    if (drawerDreamPostsManageBtn) {
-      drawerDreamPostsManageBtn.classList.remove('hidden');
-      drawerDreamPostsManageBtn.classList.add('flex');
     }
     const drawerArticlesAdminBtn = document.getElementById('drawerArticlesAdminBtn');
     if (drawerArticlesAdminBtn) {
@@ -1269,10 +1264,6 @@ function updateUserUI() {
     if (dreamAdminNavBtn) {
       dreamAdminNavBtn.classList.add('hidden');
       dreamAdminNavBtn.classList.remove('flex');
-    }
-    if (drawerDreamPostsManageBtn) {
-      drawerDreamPostsManageBtn.classList.add('hidden');
-      drawerDreamPostsManageBtn.classList.remove('flex');
     }
   }
 
