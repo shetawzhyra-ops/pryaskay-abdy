@@ -1037,6 +1037,77 @@ body.dark-mode #announcementsSection #annActiveDate {
   color: #fcd34d !important;
 }
 
+html.dark #announcementsSection .landing-section-header,
+body.dark-theme #announcementsSection .landing-section-header,
+body.dark-mode #announcementsSection .landing-section-header {
+  border-bottom-color: rgba(245, 158, 11, 0.22) !important;
+}
+
+html.dark #announcementsSection .landing-section-icon-badge,
+body.dark-theme #announcementsSection .landing-section-icon-badge,
+body.dark-mode #announcementsSection .landing-section-icon-badge {
+  background: linear-gradient(145deg, rgba(24, 39, 30, 0.96) 0%, rgba(15, 25, 20, 0.96) 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.36) !important;
+  color: #fbbf24 !important;
+  box-shadow: 0 8px 18px -6px rgba(0, 0, 0, 0.65) !important;
+}
+
+html.dark #announcementsSection #postsHeaderTitle,
+body.dark-theme #announcementsSection #postsHeaderTitle,
+body.dark-mode #announcementsSection #postsHeaderTitle {
+  color: #fff8eb !important;
+  -webkit-text-fill-color: #fff8eb !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7) !important;
+}
+
+html.dark #announcementsSection #postsHeaderSubtitle,
+body.dark-theme #announcementsSection #postsHeaderSubtitle,
+body.dark-mode #announcementsSection #postsHeaderSubtitle {
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+html.dark #announcementsSection #annCounter.landing-counter-pill,
+html.dark #announcementsSection .landing-carousel-arrow,
+body.dark-theme #announcementsSection #annCounter.landing-counter-pill,
+body.dark-theme #announcementsSection .landing-carousel-arrow,
+body.dark-mode #announcementsSection #annCounter.landing-counter-pill,
+body.dark-mode #announcementsSection .landing-carousel-arrow {
+  background: rgba(22, 36, 28, 0.95) !important;
+  border: 1px solid rgba(245, 158, 11, 0.36) !important;
+  color: #fef3c7 !important;
+  box-shadow: 0 6px 14px -4px rgba(0, 0, 0, 0.55) !important;
+}
+
+html.dark #announcementsSection .landing-carousel-arrow:hover,
+body.dark-theme #announcementsSection .landing-carousel-arrow:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%) !important;
+  color: #261204 !important;
+}
+
+html.dark #landingPage .glass-card,
+html.dark #landingPage .landing-pillar-card,
+html.dark #landingPage .fb-post-card,
+body.dark-theme #landingPage .glass-card,
+body.dark-theme #landingPage .landing-pillar-card,
+body.dark-theme #landingPage .fb-post-card {
+  background: linear-gradient(166deg, rgba(20, 34, 26, 0.98) 0%, rgba(13, 22, 17, 0.98) 100%) !important;
+  border-color: rgba(245, 158, 11, 0.32) !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark #landingPage .glass-card h3,
+html.dark #landingPage .landing-pillar-card h4,
+html.dark #landingPage .fb-post-card h3 {
+  color: #fff8eb !important;
+}
+
+html.dark #landingPage .glass-card p,
+html.dark #landingPage .landing-pillar-card p,
+html.dark #landingPage .fb-post-card p {
+  color: #cbd5e1 !important;
+}
+
 html.dark #announcementsSection .landing-ann-author,
 body.dark-theme #announcementsSection .landing-ann-author,
 body.dark-mode #announcementsSection .landing-ann-author {

@@ -219,28 +219,47 @@ html.dark .classroom-lobby-card:hover {
   box-shadow: 0 24px 42px -12px rgba(0, 0, 0, 0.82), 0 0 24px rgba(245, 158, 11, 0.18) !important;
 }
 
-html.dark .classroom-lobby-card h3 {
+html.dark .classroom-lobby-card h3,
+html.dark .classroom-lobby-card .font-black,
+body.dark-theme .classroom-lobby-card h3,
+body.dark-theme .classroom-lobby-card .font-black {
   color: #fff8eb !important;
   -webkit-text-fill-color: #fff8eb !important;
 }
 
-html.dark .classroom-lobby-card:hover h3 {
+html.dark .classroom-lobby-card:hover h3,
+body.dark-theme .classroom-lobby-card:hover h3 {
   color: #fde68a !important;
   -webkit-text-fill-color: #fde68a !important;
 }
 
+html.dark .classroom-lobby-card span,
+body.dark-theme .classroom-lobby-card span {
+  color: #e2e8f0 !important;
+}
+
 html.dark .classroom-lobby-card .text-amber-300,
-html.dark .classroom-lobby-card .text-amber-300\/80 {
+html.dark .classroom-lobby-card .text-amber-300\/80,
+html.dark .classroom-lobby-card .text-amber-300\/80 span,
+body.dark-theme .classroom-lobby-card .text-amber-300,
+body.dark-theme .classroom-lobby-card .text-amber-300\/80,
+body.dark-theme .classroom-lobby-card .text-amber-300\/80 span {
   color: #fcd34d !important;
 }
 
 html.dark .classroom-lobby-card .text-slate-400,
 html.dark .classroom-lobby-card .text-slate-400\/80,
-html.dark .classroom-lobby-card p {
+html.dark .classroom-lobby-card .text-slate-500,
+html.dark .classroom-lobby-card p,
+body.dark-theme .classroom-lobby-card .text-slate-400,
+body.dark-theme .classroom-lobby-card .text-slate-400\/80,
+body.dark-theme .classroom-lobby-card .text-slate-500,
+body.dark-theme .classroom-lobby-card p {
   color: #cbd5e1 !important;
 }
 
-html.dark .classroom-lobby-card span.bg-amber-400\/20 {
+html.dark .classroom-lobby-card span.bg-amber-400\/20,
+body.dark-theme .classroom-lobby-card span.bg-amber-400\/20 {
   background: rgba(16, 185, 129, 0.18) !important;
   border: 1px solid rgba(52, 211, 153, 0.36) !important;
   color: #6ee7b7 !important;
@@ -654,5 +673,253 @@ html.dark #aiSecurityModal .grid > div,
 html.dark #activityDatabaseModal [class*="rounded-2xl"] {
   background: rgba(22, 36, 28, 0.95) !important;
   border-color: rgba(245, 158, 11, 0.26) !important;
+  color: #fff8eb !important;
+}
+
+/* 8. COMPLETE HERITAGE-LIGHT-OVERRIDE COUNTERMEASURES FOR DARK MODE
+   Covers every modal subcard, list item, split-panel chat, profile card,
+   library, recorded lessons, leaderboard, questions bank & admin tabs! */
+html.dark div[id$="Modal"] :is(
+  [class*="from-purple-950"],
+  [class*="from-rose-950"],
+  [class*="from-amber-950"],
+  [class*="from-cyan-950"],
+  [class*="from-sky-950"],
+  [class*="from-teal-950"],
+  [class*="from-indigo-950"],
+  [class*="from-slate-9"],
+  [class*="via-slate-9"],
+  [class*="via-indigo-950"],
+  [class*="via-amber-950"],
+  [class*="via-rose-950"],
+  [class*="via-teal-950"],
+  [class*="bg-purple-950"],
+  [class*="bg-sky-950"],
+  [class*="bg-rose-950"],
+  [class*="bg-cyan-950"]
+):not(.fixed.inset-0):not(video):not([class*="bg-rose-6"]):not([class*="bg-emerald-6"]),
+body.dark-theme div[id$="Modal"] :is(
+  [class*="from-purple-950"],
+  [class*="from-rose-950"],
+  [class*="from-amber-950"],
+  [class*="from-cyan-950"],
+  [class*="from-sky-950"],
+  [class*="from-teal-950"],
+  [class*="from-indigo-950"],
+  [class*="from-slate-9"],
+  [class*="via-slate-9"],
+  [class*="via-indigo-950"],
+  [class*="via-amber-950"],
+  [class*="via-rose-950"],
+  [class*="via-teal-950"],
+  [class*="bg-purple-950"],
+  [class*="bg-sky-950"],
+  [class*="bg-rose-950"],
+  [class*="bg-cyan-950"]
+):not(.fixed.inset-0):not(video):not([class*="bg-rose-6"]):not([class*="bg-emerald-6"]) {
+  background-color: #13221a !important;
+  background-image: linear-gradient(166deg, rgba(22, 36, 28, 0.98) 0%, rgba(13, 22, 17, 0.98) 100%) !important;
+  border-color: rgba(245, 158, 11, 0.28) !important;
+  color: #fff8eb !important;
+}
+
+/* Profile Modal Inner Cards & Badges */
+html.dark #profRegularStatsGrid > div,
+html.dark #profStarsBox,
+html.dark #profPublishDreamPostContainer,
+html.dark #profPublishPoemContainer,
+html.dark #profStarsAdjustContainer,
+html.dark #profSpecialBadgeAdminCard,
+html.dark #profBadgesOverviewCard,
+html.dark #profCoursesViewCard,
+html.dark #profCoursesEditCard,
+html.dark #profNotificationContainer,
+html.dark #badgeBtnBlue,
+html.dark #badgeBtnRed,
+html.dark #badgeBtnPurple,
+body.dark-theme #profRegularStatsGrid > div,
+body.dark-theme #profStarsBox,
+body.dark-theme #profPublishDreamPostContainer,
+body.dark-theme #profPublishPoemContainer,
+body.dark-theme #profStarsAdjustContainer,
+body.dark-theme #profSpecialBadgeAdminCard,
+body.dark-theme #profBadgesOverviewCard,
+body.dark-theme #profCoursesViewCard,
+body.dark-theme #profCoursesEditCard,
+body.dark-theme #profNotificationContainer,
+body.dark-theme #badgeBtnBlue,
+body.dark-theme #badgeBtnRed,
+body.dark-theme #badgeBtnPurple {
+  background: linear-gradient(166deg, rgba(22, 36, 28, 0.96) 0%, rgba(14, 24, 18, 0.96) 100%) !important;
+  background-image: linear-gradient(166deg, rgba(22, 36, 28, 0.96) 0%, rgba(14, 24, 18, 0.96) 100%) !important;
+  border-color: rgba(245, 158, 11, 0.28) !important;
+  color: #fff8eb !important;
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.55) !important;
+}
+
+html.dark #userProfileModalDialog .prof-section-card span,
+html.dark #userProfileModalDialog .prof-inset-tile span,
+html.dark #userProfileModalDialog .prof-stat-tile span,
+html.dark #profCoursesRowsList > div {
+  color: #fef3c7 !important;
+}
+
+html.dark #userProfileModalDialog .prof-section-card .opacity-75,
+html.dark #userProfileModalDialog .prof-inset-tile .opacity-75 {
+  color: #cbd5e1 !important;
+  opacity: 0.9 !important;
+}
+
+/* Admin Panel Sub-Tabs & User Lists */
+html.dark .admin-subtab-tile,
+html.dark #adminModal .admin-subtab-tile,
+html.dark #pendingUsersList > div,
+html.dark #allUsersList > div,
+html.dark #profileChangesList > div,
+html.dark #passwordResetsList > div,
+html.dark #adminBackupsList > div,
+body.dark-theme .admin-subtab-tile,
+body.dark-theme #adminModal .admin-subtab-tile,
+body.dark-theme #pendingUsersList > div,
+body.dark-theme #allUsersList > div,
+body.dark-theme #profileChangesList > div,
+body.dark-theme #passwordResetsList > div,
+body.dark-theme #adminBackupsList > div {
+  background: linear-gradient(166deg, rgba(22, 36, 28, 0.96) 0%, rgba(14, 24, 18, 0.96) 100%) !important;
+  border-color: rgba(245, 158, 11, 0.28) !important;
+  color: #fff8eb !important;
+}
+
+html.dark .admin-subtab-tile:hover,
+html.dark #adminModal .admin-subtab-tile:hover {
+  background: rgba(30, 48, 38, 0.98) !important;
+  border-color: rgba(245, 158, 11, 0.52) !important;
+  color: #fde68a !important;
+}
+
+html.dark .admin-subtab-tile.active,
+html.dark #adminModal .admin-subtab-tile.active {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #261204 !important;
+}
+html.dark .admin-subtab-tile.active *,
+html.dark .admin-subtab-tile.active .admin-tile-label {
+  color: #261204 !important;
+  -webkit-text-fill-color: #261204 !important;
+}
+
+/* Library, Recorded Lessons, Leaderboard, Questions Archive */
+html.dark #libraryModal .library-book-card,
+html.dark #recordedLessonsModal .lesson-card,
+html.dark #recordedLessonsModal .folder-card,
+html.dark #leaderboardList > div,
+html.dark #questionsArchiveList > div,
+body.dark-theme #libraryModal .library-book-card,
+body.dark-theme #recordedLessonsModal .lesson-card,
+body.dark-theme #recordedLessonsModal .folder-card,
+body.dark-theme #leaderboardList > div,
+body.dark-theme #questionsArchiveList > div {
+  background: linear-gradient(166deg, rgba(22, 36, 28, 0.96) 0%, rgba(14, 24, 18, 0.96) 100%) !important;
+  border-color: rgba(245, 158, 11, 0.28) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #libraryModal .library-book-card *,
+html.dark #recordedLessonsModal .lesson-card *,
+html.dark #recordedLessonsModal .folder-card *,
+html.dark #leaderboardList > div *,
+html.dark #questionsArchiveList > div * {
+  border-color: rgba(245, 158, 11, 0.20);
+}
+
+/* Split-Panel Chats, Voice Bars & Live Lesson Stage */
+html.dark #customGroupMessagesContainer,
+html.dark #privateChatMessagesContainer,
+html.dark #dreamAdminMessagesContainer,
+html.dark #aiAdvisorMessagesContainer,
+body.dark-theme #customGroupMessagesContainer,
+body.dark-theme #privateChatMessagesContainer,
+body.dark-theme #dreamAdminMessagesContainer,
+body.dark-theme #aiAdvisorMessagesContainer {
+  background: #0e1713 !important;
+}
+
+html.dark #dreamSessionsList > div.bg-purple-950\/70,
+html.dark #dreamSessionsList > div.ring-1 {
+  background: linear-gradient(145deg, rgba(30, 50, 39, 0.98) 0%, rgba(20, 34, 26, 0.98) 100%) !important;
+  border-color: rgba(251, 191, 36, 0.6) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #customGroupVoiceRecordSection,
+html.dark #dreamAdminVoiceBar,
+html.dark #customGroupAdvisorTyping {
+  background: rgba(22, 36, 28, 0.96) !important;
+  border-top-color: rgba(245, 158, 11, 0.28) !important;
+  color: #fde68a !important;
+}
+
+html.dark #liveLessonModal #liveParticipantsList,
+html.dark #liveLessonModal .flex-1.bg-slate-950\/95 {
+  background-color: #0b1410 !important;
+  background-image: none !important;
+  color: #fff8eb !important;
+}
+
+/* Executive Hub, Complaints, Activity DB, Poems Modal */
+html.dark #executiveHubModal .bg-slate-800,
+html.dark #executiveHubModal .bg-slate-800\/50,
+html.dark #executiveHubModal .bg-slate-900\/80,
+html.dark #complaintsModal .bg-slate-800\/60,
+html.dark #activityDatabaseModal .bg-slate-800\/60 {
+  background: linear-gradient(166deg, rgba(22, 36, 28, 0.96) 0%, rgba(14, 24, 18, 0.96) 100%) !important;
+  border-color: rgba(245, 158, 11, 0.28) !important;
+  color: #fff8eb !important;
+}
+
+/* Members Sidebar Segmented Tab Bar & Controls in Dark Mode */
+html.dark #membersSidebar > div:nth-child(2) {
+  background: rgba(14, 23, 18, 0.92) !important;
+  border-color: rgba(245, 158, 11, 0.24) !important;
+}
+
+html.dark #membersSidebar > div:first-child {
+  background: rgba(14, 23, 18, 0.95) !important;
+  border-bottom-color: rgba(245, 158, 11, 0.22) !important;
+}
+
+html.dark #membersListContainer > div .w-9.h-9.rounded-xl {
+  background: linear-gradient(145deg, #1b2f24 0%, #111f17 100%) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  color: #fbbf24 !important;
+}
+
+/* Modal Close Buttons & Header Buttons in Dark Mode */
+html.dark div[id$="Modal"] button[onclick*="close"]:not([class*="from-amber-"]):not([class*="from-emerald-"]):not([class*="from-rose-"]) {
+  background: rgba(24, 39, 30, 0.92) !important;
+  border-color: rgba(245, 158, 11, 0.30) !important;
+  color: #fde68a !important;
+}
+
+/* Top Podium Ribbon in Dark Mode */
+html.dark #topPodiumWidget {
+  background: linear-gradient(180deg, rgba(16, 27, 21, 0.98) 0%, rgba(12, 21, 16, 0.98) 100%) !important;
+  border-bottom-color: rgba(245, 158, 11, 0.24) !important;
+  color: #fff8eb !important;
+}
+
+/* Ensure modals with hardcoded light bg-[#fbf7f0] / text-amber-950 stay readable in Dark Mode */
+html.dark div[id$="Modal"] .bg-\[\#fbf7f0\],
+html.dark div[id$="Modal"] .bg-\[\#f5ead9\],
+html.dark div[id$="Modal"] .bg-\[\#f4e9d8\] {
+  background: rgba(22, 36, 28, 0.96) !important;
+  color: #fff8eb !important;
+}
+
+html.dark div[id$="Modal"] .text-\[\#361c0c\],
+html.dark div[id$="Modal"] .text-\[\#54371f\],
+html.dark div[id$="Modal"] .text-amber-950,
+html.dark div[id$="Modal"] .text-slate-900,
+html.dark div[id$="Modal"] .text-slate-950 {
   color: #fff8eb !important;
 }
