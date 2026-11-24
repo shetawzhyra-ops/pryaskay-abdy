@@ -319,6 +319,7 @@ body.light-mode #classroomsLobbyView > div:first-child {
   padding-top: 0.75rem !important;
 }
 
+#classroomsLobbyView #classroomsGridContainer > div.classroom-lobby-card,
 #classroomsLobbyView .classroom-lobby-card,
 .classroom-lobby-card,
 body.light-theme .classroom-lobby-card,

@@ -192,6 +192,7 @@ html.dark #membersSearchInput::placeholder {
   color: #86a394 !important;
 }
 
+html.dark #classroomsLobbyView #classroomsGridContainer > div.classroom-lobby-card,
 html.dark #classroomsLobbyView .classroom-lobby-card,
 html.dark .classroom-lobby-card,
 html.dark #classroomsLobbyView .grid > div,
