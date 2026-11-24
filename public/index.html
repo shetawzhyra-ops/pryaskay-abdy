@@ -1559,7 +1559,7 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateG
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@600;700&family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=103.0&t=1795740000">
+<link rel="stylesheet" href="/css/style.css?v=104.0&t=1795750000">
 <style>
 /* Pre-render instant visibility rules: prevent landing page from flashing on refresh */
 html.in-app-mode #landingPage,
@@ -1820,7 +1820,9 @@ background: rgba(56, 189, 248, 0.85);
 <!-- Experimental Modern Heritage Landing Style (Non-color-changing, clean revertable) -->
   <link id="landingHeritageTestCss" rel="stylesheet" href="/css/landing-heritage-test.css?v=15.0&t=1795730000">
   <!-- Inside Application Modern Heritage / Manuscript Luxe Style -->
-  <link id="appHeritageCss" rel="stylesheet" href="/css/app-heritage.css?v=1.0&t=1795500000">
+  <link id="appHeritageCss" rel="stylesheet" href="/css/app-heritage.css?v=2.0&t=1795750000">
+  <!-- Inside Application Nocturnal Emerald-Obsidian Dark Mode -->
+  <link id="appDarkThemeCss" rel="stylesheet" href="/css/app-dark-theme.css?v=1.0&t=1795750000">
 </head>
 <body class="light-theme light-mode bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-amber-400 selection:text-slate-950 in-landing">
 <!-- ================= QURANIC AYAH INTRO SPLASH ================= -->
@@ -2791,6 +2793,11 @@ Change language here • تغيير لغة الموقع من هنا
 <span class="hidden md:inline font-bold text-xs">لێکدانەوەی خەون</span>
 <span id="dreamUnreadBadge" class="hidden px-1.5 py-0.2 bg-purple-600 text-white text-[9px] font-black rounded-full animate-pulse min-w-[16px] text-center">0</span>
 </button>
+<!-- Dark Mode Toggle Button Inside App -->
+<button type="button" id="btnThemeToggle" onclick="toggleThemeMode(event)" class="flex p-1.5 sm:px-2.5 sm:py-1.5 rounded-full transition items-center gap-1.5 active:scale-95 shrink-0 z-10 cursor-pointer" title="گۆڕینی دۆخی تاریک و ڕووناک">
+  <i id="themeToggleIcon" class="fa-solid fa-moon text-amber-600 text-xs sm:text-sm"></i>
+  <span id="themeToggleText" class="hidden lg:inline font-bold text-xs">دۆخی تاریک</span>
+</button>
 <!-- Main / Landing Page Button -->
 <button id="topExecutiveHubBtn" onclick="goToHomePage()" class="flex p-1.5 sm:px-2.5 sm:py-1.5 hover:bg-cyan-500/15 text-cyan-400 hover:text-cyan-200 font-bold text-xs rounded-full transition items-center gap-1.5 active:scale-95 shrink-0 z-10 cursor-pointer" title="پەڕەی سەرەکی">
 <i class="fa-solid fa-house text-cyan-400 text-xs sm:text-sm"></i>
@@ -3212,6 +3219,16 @@ English
 </button>
 </div>
 </div>
+<!-- 5. دۆخی تاریک و ڕووناک (Dark Mode) -->
+<button type="button" id="drawerThemeToggleBtn" onclick="toggleThemeMode(event)" class="drawer-tool-btn group" title="گۆڕین لە نێوان دۆخی تاریک و ڕووناک">
+  <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+    <div class="drawer-tool-icon-box">
+      <i id="drawerThemeIcon" class="fa-solid fa-moon text-amber-500 text-sm w-5 text-center"></i>
+    </div>
+    <span id="drawerThemeText" class="drawer-tool-title">گۆڕین بۆ دۆخی تاریک 🌙</span>
+  </div>
+  <span id="drawerThemeBadge" class="drawer-tool-badge">ڕووناک</span>
+</button>
 <!-- 4. قەبارەی پیت -->
 <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl overflow-hidden transition">
 <button type="button" onclick="toggleDrawerFontPicker()" class="w-full flex items-center justify-between p-3.5 sm:p-4 text-xs sm:text-sm font-black text-slate-200 hover:text-white hover:bg-slate-850 transition cursor-pointer group">
@@ -8386,7 +8403,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=97.0&t=1795710000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=111.0&t=1795740000"></script>
+<script src="/js/app.js?v=112.0&t=1795750000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->

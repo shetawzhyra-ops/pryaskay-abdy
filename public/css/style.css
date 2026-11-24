@@ -13043,8 +13043,8 @@ body.light-mode #topPodiumWidget {
   color: #54371f !important;
 }
 
-/* 6. Universal Sweep for Dark Slate / Obsidian / Dark-Emerald Utility Classes Inside App Panels & Modals */
-:is(
+/* 6. Universal Sweep for Dark Slate / Obsidian / Dark-Emerald Utility Classes Inside App Panels & Modals (LIGHT MODE ONLY) */
+html:not(.dark) :is(
   #mainApp,
   #poemsFeed,
   #articlesFeed,
@@ -13077,23 +13077,23 @@ body.light-mode #topPodiumWidget {
   color: #361c0c !important;
 }
 
-/* Protect select dropdowns & inputs inside converted modals/cards */
-div[id$="Modal"] select,
-div[id$="Modal"] option,
-.modal-card select,
-.modal-card option,
-div[id$="Modal"] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
-div[id$="Modal"] textarea,
-.modal-card input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
-.modal-card textarea {
+/* Protect select dropdowns & inputs inside converted modals/cards (LIGHT MODE ONLY) */
+html:not(.dark) div[id$="Modal"] select,
+html:not(.dark) div[id$="Modal"] option,
+html:not(.dark) .modal-card select,
+html:not(.dark) .modal-card option,
+html:not(.dark) div[id$="Modal"] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+html:not(.dark) div[id$="Modal"] textarea,
+html:not(.dark) .modal-card input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+html:not(.dark) .modal-card textarea {
   background: #fbf7f0 !important;
   background-color: #fbf7f0 !important;
   color: #361c0c !important;
   border-color: rgba(156, 120, 78, 0.36) !important;
 }
 
-/* Readable typography inside converted parchment boxes & subpage cards */
-:is(
+/* Readable typography inside converted parchment boxes & subpage cards (LIGHT MODE ONLY) */
+html:not(.dark) :is(
   .hero-banner,
   .glass-card,
   .fb-post-card,
@@ -13166,7 +13166,7 @@ div[id$="Modal"] textarea,
   background: #f9f4eb !important;
 }
 
-:is(
+html:not(.dark) :is(
   .hero-banner,
   .glass-card,
   .fb-post-card,
@@ -13644,4 +13644,19 @@ html.dark #profLogoutBtn:hover {
   background: #e11d48 !important;
   border-color: #f43f5e !important;
   color: #ffffff !important;
+}
+
+
+/* Fix .classroom-lobby-card title contrast in Light Mode */
+html:not(.dark) .classroom-lobby-card h3,
+body.light-theme .classroom-lobby-card h3,
+body.light-mode .classroom-lobby-card h3 {
+  color: #361c0c !important;
+  -webkit-text-fill-color: #361c0c !important;
+}
+html:not(.dark) .classroom-lobby-card:hover h3,
+body.light-theme .classroom-lobby-card:hover h3,
+body.light-mode .classroom-lobby-card:hover h3 {
+  color: #92400e !important;
+  -webkit-text-fill-color: #92400e !important;
 }

@@ -1,0 +1,643 @@
+/**
+ * ============================================================================
+ * PRYASKAY ABDY — INSIDE APP DARK MODE (NOCTURNAL EMERALD-OBSIDIAN & GOLD)
+ * Loaded AFTER app-heritage.css so every html.dark selector strictly wins
+ * over light parchment rules across the entire inside application.
+ * ============================================================================
+ */
+
+/* 1. GLOBAL APP VIEWPORT, LOBBY & CHAT CANVAS */
+html.dark #mainApp,
+html.dark #classroomChatStage,
+html.dark #messagesContainer,
+html.dark #chatMessagesArea,
+body.dark-theme #mainApp,
+body.dark-theme #classroomChatStage,
+body.dark-theme #messagesContainer,
+body.dark-theme #chatMessagesArea,
+body.dark-mode #mainApp,
+body.dark-mode #classroomChatStage,
+body.dark-mode #messagesContainer,
+body.dark-mode #chatMessagesArea {
+  background-color: #0e1713 !important;
+  background-image:
+    linear-gradient(to right, rgba(245, 158, 11, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 158, 11, 0.035) 1px, transparent 1px),
+    radial-gradient(ellipse 85% 55% at 50% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 60% at 50% 100%, rgba(4, 15, 10, 0.7) 0%, transparent 60%) !important;
+  background-size: 42px 42px, 42px 42px, 100% 100%, 100% 100% !important;
+  color: #fff8eb !important;
+}
+
+html.dark #classroomsLobbyView,
+html.dark #chatView,
+body.dark-theme #classroomsLobbyView,
+body.dark-theme #chatView,
+body.dark-mode #classroomsLobbyView,
+body.dark-mode #chatView {
+  background-color: transparent !important;
+  background: transparent !important;
+  color: #fff8eb !important;
+}
+
+/* 2. INSIDE APP TOP HEADER (#mainApp > header) */
+html.dark #mainApp > header,
+body.dark-theme #mainApp > header,
+body.dark-mode #mainApp > header {
+  background: rgba(14, 23, 18, 0.95) !important;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.24) !important;
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 26px -10px rgba(0, 0, 0, 0.72) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #mainApp > header img[alt*="پریاسکە"],
+body.dark-theme #mainApp > header img[alt*="پریاسکە"] {
+  background: #14221a !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.45) !important;
+}
+
+html.dark #mainApp > header h2,
+html.dark #mainApp > header #headerFullName,
+body.dark-theme #mainApp > header h2,
+body.dark-theme #mainApp > header #headerFullName {
+  color: #fff8eb !important;
+  -webkit-text-fill-color: #fff8eb !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+html.dark #mainApp > header #onlineCountText,
+body.dark-theme #mainApp > header #onlineCountText {
+  color: #6ee7b7 !important;
+}
+
+html.dark #mainApp > header #backToClassroomsLobbyBtn,
+html.dark #mainApp > header #headerActiveRoomBadge,
+html.dark #mainApp > header #dreamAdminNavBtn,
+html.dark #mainApp > header #topExecutiveHubBtn,
+html.dark #mainApp > header #btnThemeToggle,
+html.dark #mainApp > header #pushNotificationBtn,
+html.dark #mainApp > header #mainMenuBtn,
+html.dark #mainApp > header div[onclick="openMyProfile()"],
+body.dark-theme #mainApp > header #backToClassroomsLobbyBtn,
+body.dark-theme #mainApp > header #headerActiveRoomBadge,
+body.dark-theme #mainApp > header #dreamAdminNavBtn,
+body.dark-theme #mainApp > header #topExecutiveHubBtn,
+body.dark-theme #mainApp > header #btnThemeToggle,
+body.dark-theme #mainApp > header #pushNotificationBtn,
+body.dark-theme #mainApp > header #mainMenuBtn,
+body.dark-theme #mainApp > header div[onclick="openMyProfile()"] {
+  background: linear-gradient(145deg, rgba(24, 39, 31, 0.96) 0%, rgba(16, 27, 21, 0.96) 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.34) !important;
+  color: #fef3c7 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 3px 10px -2px rgba(0, 0, 0, 0.45) !important;
+}
+
+html.dark #mainApp > header #backToClassroomsLobbyBtn:hover,
+html.dark #mainApp > header #dreamAdminNavBtn:hover,
+html.dark #mainApp > header #topExecutiveHubBtn:hover,
+html.dark #mainApp > header #btnThemeToggle:hover,
+html.dark #mainApp > header #pushNotificationBtn:hover,
+html.dark #mainApp > header #mainMenuBtn:hover,
+html.dark #mainApp > header div[onclick="openMyProfile()"]:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%) !important;
+  border-color: rgba(254, 243, 199, 0.5) !important;
+  color: #261204 !important;
+}
+
+html.dark #mainApp > header #backToClassroomsLobbyBtn i,
+html.dark #mainApp > header #headerActiveRoomBadge i,
+html.dark #mainApp > header #dreamAdminNavBtn i,
+html.dark #mainApp > header #topExecutiveHubBtn i,
+html.dark #mainApp > header #btnThemeToggle i,
+html.dark #mainApp > header #pushNotificationBtn i,
+html.dark #mainApp > header #mainMenuBtn i {
+  color: #fbbf24 !important;
+}
+
+html.dark #mainApp > header #backToClassroomsLobbyBtn:hover i,
+html.dark #mainApp > header #dreamAdminNavBtn:hover i,
+html.dark #mainApp > header #topExecutiveHubBtn:hover i,
+html.dark #mainApp > header #btnThemeToggle:hover i,
+html.dark #mainApp > header #pushNotificationBtn:hover i,
+html.dark #mainApp > header #mainMenuBtn:hover i,
+html.dark #mainApp > header div[onclick="openMyProfile()"]:hover #headerFullName {
+  color: #261204 !important;
+  -webkit-text-fill-color: #261204 !important;
+}
+
+html.dark #mainApp > header #liveLessonNavBtn {
+  background: rgba(159, 18, 57, 0.25) !important;
+  border: 1px solid rgba(244, 63, 94, 0.45) !important;
+  color: #fecdd3 !important;
+}
+
+html.dark #mainApp > header #headerRoleBadge {
+  background: rgba(245, 158, 11, 0.16) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  color: #fde68a !important;
+}
+
+/* 3. CLASSROOMS LOBBY (#classroomsLobbyView & .classroom-lobby-card) */
+html.dark #classroomsLobbyView > div:first-child,
+body.dark-theme #classroomsLobbyView > div:first-child {
+  background: rgba(16, 27, 21, 0.94) !important;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.22) !important;
+}
+
+html.dark #classroomsLobbyView h2,
+html.dark #classroomsLobbyView h3,
+body.dark-theme #classroomsLobbyView h2,
+body.dark-theme #classroomsLobbyView h3 {
+  color: #fff8eb !important;
+  -webkit-text-fill-color: #fff8eb !important;
+}
+
+html.dark #classroomsLobbyView p,
+body.dark-theme #classroomsLobbyView p {
+  color: #cbd5e1 !important;
+}
+
+html.dark #classroomsTotalCountBadge,
+body.dark-theme #classroomsTotalCountBadge {
+  background: rgba(245, 158, 11, 0.16) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  color: #fde68a !important;
+}
+
+html.dark #classroomsSearchInput,
+html.dark #membersSearchInput,
+body.dark-theme #classroomsSearchInput,
+body.dark-theme #membersSearchInput {
+  background: #16241c !important;
+  border: 1px solid rgba(245, 158, 11, 0.32) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #classroomsSearchInput::placeholder,
+html.dark #membersSearchInput::placeholder {
+  color: #86a394 !important;
+}
+
+html.dark #classroomsLobbyView .classroom-lobby-card,
+html.dark .classroom-lobby-card,
+html.dark #classroomsLobbyView .grid > div,
+body.dark-theme #classroomsLobbyView .classroom-lobby-card,
+body.dark-theme .classroom-lobby-card {
+  background: linear-gradient(165deg, rgba(20, 34, 26, 0.98) 0%, rgba(13, 23, 17, 0.97) 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.34) !important;
+  box-shadow:
+    0 16px 34px -10px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark .classroom-lobby-card::before {
+  border-color: rgba(245, 158, 11, 0.16) !important;
+}
+
+html.dark .classroom-lobby-card:hover {
+  border-color: rgba(245, 158, 11, 0.65) !important;
+  box-shadow: 0 22px 40px -12px rgba(0, 0, 0, 0.8), 0 0 22px rgba(245, 158, 11, 0.14) !important;
+}
+
+html.dark .classroom-lobby-card h3 {
+  color: #fff8eb !important;
+  -webkit-text-fill-color: #fff8eb !important;
+}
+
+html.dark .classroom-lobby-card:hover h3 {
+  color: #fde68a !important;
+  -webkit-text-fill-color: #fde68a !important;
+}
+
+html.dark .classroom-lobby-card .text-amber-300,
+html.dark .classroom-lobby-card .text-amber-300\/80 {
+  color: #fcd34d !important;
+}
+
+html.dark .classroom-lobby-card .text-slate-400,
+html.dark .classroom-lobby-card .text-slate-400\/80,
+html.dark .classroom-lobby-card p {
+  color: #cbd5e1 !important;
+}
+
+html.dark .classroom-lobby-card span.bg-amber-400\/20 {
+  background: rgba(16, 185, 129, 0.18) !important;
+  border: 1px solid rgba(52, 211, 153, 0.36) !important;
+  color: #6ee7b7 !important;
+}
+
+html.dark .classroom-lobby-card > div:last-child {
+  border-top-color: rgba(245, 158, 11, 0.2) !important;
+}
+
+html.dark .classroom-lobby-card > div:last-child > div:last-child,
+html.dark .classroom-lobby-card button[onclick*="openCreateClassroomModal"],
+html.dark .classroom-lobby-card button[onclick*="deleteClassroom"] {
+  background: rgba(26, 44, 34, 0.94) !important;
+  border: 1px solid rgba(245, 158, 11, 0.32) !important;
+  color: #fde68a !important;
+}
+
+html.dark .classroom-lobby-card:hover > div:last-child > div:last-child {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%) !important;
+  color: #261204 !important;
+}
+
+/* 4. MEMBERS SIDEBAR (#membersSidebar & #classroomMembersSidebar) */
+html.dark #membersSidebar,
+html.dark #classroomMembersSidebar,
+body.dark-theme #membersSidebar,
+body.dark-theme #classroomMembersSidebar {
+  background: linear-gradient(180deg, rgba(16, 27, 21, 0.98) 0%, rgba(11, 19, 15, 0.98) 100%) !important;
+  border-color: rgba(245, 158, 11, 0.24) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #membersSidebar h3,
+html.dark #membersSidebar h4 {
+  color: #fff8eb !important;
+}
+
+html.dark #membersSidebarCount {
+  background: rgba(245, 158, 11, 0.16) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  color: #fde68a !important;
+}
+
+html.dark #membersSidebar .border-b {
+  border-color: rgba(245, 158, 11, 0.20) !important;
+}
+
+html.dark #membersSidebar #tabMemberAll,
+html.dark #membersSidebar #tabMemberStudents,
+html.dark #membersSidebar #tabMemberAdmins,
+html.dark #membersSidebar .bg-slate-950\/60,
+html.dark #membersSidebar .bg-slate-950\/40,
+html.dark #membersSidebar .bg-slate-800\/90 {
+  background: rgba(22, 36, 28, 0.94) !important;
+  border: 1px solid rgba(245, 158, 11, 0.25) !important;
+  color: #fef3c7 !important;
+}
+
+html.dark #membersSidebar #tabMemberAll.bg-indigo-600,
+html.dark #membersSidebar #tabMemberStudents.bg-indigo-600,
+html.dark #membersSidebar #tabMemberAdmins.bg-indigo-600 {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  border-color: rgba(254, 243, 199, 0.4) !important;
+  color: #261204 !important;
+}
+
+html.dark #membersListContainer > div {
+  background: rgba(22, 36, 28, 0.94) !important;
+  border: 1px solid rgba(245, 158, 11, 0.24) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #membersListContainer > div:hover {
+  background: rgba(28, 46, 36, 0.98) !important;
+  border-color: rgba(245, 158, 11, 0.48) !important;
+}
+
+html.dark #membersListContainer > div .font-bold,
+html.dark #membersListContainer > div .font-black {
+  color: #fff8eb !important;
+}
+
+html.dark #membersListContainer > div .text-slate-400,
+html.dark #membersListContainer > div .text-slate-500 {
+  color: #a7bfae !important;
+}
+
+html.dark .badge-student {
+  background: rgba(16, 185, 129, 0.16) !important;
+  border-color: rgba(52, 211, 153, 0.35) !important;
+  color: #6ee7b7 !important;
+}
+
+html.dark .badge-student-girl {
+  background: rgba(244, 63, 94, 0.16) !important;
+  border-color: rgba(251, 113, 133, 0.35) !important;
+  color: #fda4af !important;
+}
+
+html.dark .star-badge {
+  background: rgba(245, 158, 11, 0.16) !important;
+  border-color: rgba(245, 158, 11, 0.38) !important;
+  color: #fde68a !important;
+}
+
+/* 5. PODIUM, BANNERS, CHAT BUBBLES, POLLS & INPUT BAR */
+html.dark #topPodiumWidget,
+html.dark #notificationPermissionBanner,
+html.dark #nightCurfewBanner,
+html.dark #chatSearchBar,
+html.dark #chatSearchResultsDropdown,
+html.dark #recordingBar,
+html.dark #dreamVoiceRecordingBar,
+html.dark #privateRecordingBar,
+html.dark #imagePreviewBar,
+html.dark #chatLockBanner,
+html.dark #chatReplyPreviewBar {
+  background: rgba(16, 27, 21, 0.96) !important;
+  background-image: none !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #togglePodiumBtn,
+html.dark #topPodiumWidget button[onclick="openLeaderboardModal()"] {
+  background: rgba(24, 39, 31, 0.95) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  color: #fde68a !important;
+}
+
+html.dark #topPodiumWidget #podiumItems,
+html.dark #topPodiumWidget #podiumItems span,
+html.dark #notificationPermissionBanner p,
+html.dark #nightCurfewBanner span {
+  color: #e2e8f0 !important;
+}
+
+html.dark #chatSearchInput,
+html.dark #chatInputBar input,
+html.dark #chatInputBar textarea,
+html.dark #messageInput,
+html.dark #customGroupTextInput {
+  background: #16241c !important;
+  border-color: rgba(245, 158, 11, 0.34) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #messageInput::placeholder,
+html.dark #customGroupTextInput::placeholder,
+html.dark #chatSearchInput::placeholder {
+  color: #86a394 !important;
+}
+
+html.dark #chatInputBar,
+html.dark #customGroupInputBar,
+html.dark [id$="ChatInputBar"] {
+  background: rgba(14, 23, 18, 0.96) !important;
+  background-image: none !important;
+  border-top: 1px solid rgba(245, 158, 11, 0.24) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #chatInputBar form,
+html.dark #customGroupInputBar form {
+  background: rgba(22, 36, 28, 0.98) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.34) !important;
+}
+
+html.dark #chatInputBar #publicChatToolsBtn,
+html.dark #customGroupToolsBtn {
+  background: rgba(28, 46, 36, 0.95) !important;
+  border: 1px solid rgba(245, 158, 11, 0.38) !important;
+  color: #fbbf24 !important;
+}
+
+html.dark #publicChatToolsMenu,
+html.dark #customGroupToolsMenu,
+html.dark [id^="reaction-picker-"] {
+  background: rgba(18, 29, 23, 0.98) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  color: #fff8eb !important;
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.8) !important;
+}
+
+html.dark #publicChatToolsMenu button,
+html.dark #customGroupToolsMenu button {
+  color: #fef3c7 !important;
+}
+
+/* Others' & Teacher Chat Bubbles */
+html.dark .chat-msg-item [id^="msg-bubble-"]:not(.from-indigo-600),
+html.dark .chat-msg-item .bg-slate-800\/90,
+html.dark .chat-msg-item .bg-slate-800,
+html.dark .chat-msg-item .bg-slate-900\/95,
+html.dark .chat-msg-item .bg-slate-900,
+html.dark [id^="msg-"] .max-w-xl.rounded-3xl:not(.from-indigo-600) {
+  background: linear-gradient(166deg, rgba(22, 36, 28, 0.98) 0%, rgba(15, 25, 20, 0.97) 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.28) !important;
+  color: #f8fafc !important;
+  box-shadow: 0 8px 22px -8px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Poll, Alarm, Attendance, Question Cards */
+html.dark div.poll-card,
+html.dark div[id^="poll-card-"],
+html.dark div.alarm-card,
+html.dark div[id^="alarm-card-"],
+html.dark .question-glow,
+html.dark .revealed-answers-card,
+html.dark .attendance-card,
+html.dark [data-attendance-session] > div {
+  background: linear-gradient(165deg, rgba(20, 34, 26, 0.98) 0%, rgba(14, 23, 18, 0.97) 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.34) !important;
+  color: #fff8eb !important;
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.7) !important;
+}
+
+html.dark [id^="poll-card-"] h3,
+html.dark [id^="poll-card-"] h4,
+html.dark [id^="alarm-card-"] h3,
+html.dark [id^="alarm-card-"] h4,
+html.dark .question-glow h3,
+html.dark .question-glow h4,
+html.dark .revealed-answers-card h3 {
+  color: #fff8eb !important;
+}
+
+html.dark [id^="poll-card-"] span,
+html.dark [id^="poll-card-"] p,
+html.dark [id^="alarm-card-"] span,
+html.dark [id^="alarm-card-"] p,
+html.dark .question-glow p,
+html.dark .revealed-answers-card p {
+  color: #e2e8f0 !important;
+}
+
+html.dark [id^="poll-card-"] .relative.overflow-hidden.rounded-2xl,
+html.dark [id^="alarm-card-"] .bg-slate-950\/80,
+html.dark [id^="alarm-timer-box-"] > div {
+  background: rgba(14, 23, 18, 0.95) !important;
+  border: 1px solid rgba(245, 158, 11, 0.28) !important;
+  color: #fff8eb !important;
+}
+
+/* 6. MAIN MENU DRAWER PANEL (#mainMenuDrawerPanel) */
+html.dark #mainMenuDrawerPanel,
+body.dark-theme #mainMenuDrawerPanel,
+body.dark-mode #mainMenuDrawerPanel {
+  background: linear-gradient(180deg, rgba(16, 27, 21, 0.99) 0%, rgba(10, 18, 14, 0.99) 100%) !important;
+  border-left: 1px solid rgba(245, 158, 11, 0.28) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #mainMenuDrawerPanel > div:first-child {
+  background: rgba(12, 21, 16, 0.96) !important;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.22) !important;
+}
+
+html.dark #mainMenuDrawerPanel h3,
+html.dark #mainMenuDrawerPanel h4,
+html.dark #mainMenuDrawerPanel #drawerUserName {
+  color: #fff8eb !important;
+}
+
+html.dark #mainMenuDrawerPanel p {
+  color: #a7bfae !important;
+}
+
+html.dark #mainMenuDrawerPanel div[onclick*="openMyProfile"] {
+  background: rgba(22, 36, 28, 0.94) !important;
+  border: 1px solid rgba(245, 158, 11, 0.30) !important;
+}
+
+html.dark #mainMenuDrawerPanel button[onclick="closeMainMenuDrawer()"] {
+  background: rgba(24, 39, 30, 0.94) !important;
+  border: 1px solid rgba(245, 158, 11, 0.32) !important;
+  color: #fef3c7 !important;
+}
+
+html.dark #mainMenuDrawerPanel .drawer-tool-btn,
+html.dark #mainMenuDrawerPanel #drawerDreamAdminBtn,
+html.dark #mainMenuDrawerPanel #drawerDreamPostsManageBtn,
+html.dark #mainMenuDrawerPanel #drawerArticlesAdminBtn,
+html.dark #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateGroupBtn):not([onclick*="logout"]):not([onclick*="Logout"]) {
+  background: rgba(22, 36, 28, 0.94) !important;
+  background-image: none !important;
+  border: 1px solid rgba(245, 158, 11, 0.26) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #mainMenuDrawerPanel .drawer-tool-btn:hover,
+html.dark #mainMenuDrawerPanel #drawerDreamAdminBtn:hover,
+html.dark #mainMenuDrawerPanel #drawerDreamPostsManageBtn:hover,
+html.dark #mainMenuDrawerPanel #drawerArticlesAdminBtn:hover {
+  background: rgba(30, 48, 38, 0.98) !important;
+  background-image: none !important;
+  border-color: rgba(245, 158, 11, 0.55) !important;
+}
+
+html.dark #mainMenuDrawerPanel .drawer-tool-title {
+  color: #fff8eb !important;
+}
+
+html.dark #mainMenuDrawerPanel .drawer-tool-icon-box {
+  background: rgba(245, 158, 11, 0.14) !important;
+  border-color: rgba(245, 158, 11, 0.30) !important;
+  color: #fbbf24 !important;
+}
+
+html.dark #mainMenuDrawerPanel .drawer-tool-badge,
+html.dark #drawerNotificationStatusBadge,
+html.dark #drawerAllChatNotificationBadge {
+  background: rgba(245, 158, 11, 0.16) !important;
+  border: 1px solid rgba(245, 158, 11, 0.32) !important;
+  color: #fde68a !important;
+}
+
+html.dark #drawerSettingsSection,
+html.dark #drawerSettingsList,
+html.dark #drawerSettingsSection .bg-slate-900\/60,
+html.dark #drawerSettingsList .bg-slate-900\/60 {
+  background: rgba(16, 27, 21, 0.95) !important;
+  border-color: rgba(245, 158, 11, 0.24) !important;
+}
+
+html.dark #mainMenuDrawerPanel > div.border-t {
+  background: rgba(12, 21, 16, 0.96) !important;
+  border-top: 1px solid rgba(245, 158, 11, 0.22) !important;
+}
+
+html.dark #mainMenuDrawerPanel button[onclick*="handleLogout"] {
+  background: rgba(190, 18, 60, 0.22) !important;
+  border-color: rgba(244, 63, 94, 0.45) !important;
+  color: #fecdd3 !important;
+}
+html.dark #mainMenuDrawerPanel button[onclick*="handleLogout"]:hover {
+  background: #e11d48 !important;
+  color: #ffffff !important;
+}
+
+/* 7. ALL INSIDE MODALS & SPLIT-PANEL CHATS IN DARK MODE */
+html.dark div[id$="Modal"]:not(#authScreen):not(#imageZoomModal):not(#logoPopupModal) > div:not(.absolute.inset-0),
+html.dark #authScreen .auth-royal-card,
+html.dark #dreamDirectPromptModal > div,
+html.dark #dreamChatModal > div {
+  background: linear-gradient(166deg, rgba(19, 32, 25, 0.99) 0%, rgba(12, 21, 16, 0.98) 100%) !important;
+  background-image: linear-gradient(166deg, rgba(19, 32, 25, 0.99) 0%, rgba(12, 21, 16, 0.98) 100%) !important;
+  border-color: rgba(245, 158, 11, 0.34) !important;
+  color: #fff8eb !important;
+}
+
+html.dark div[id$="Modal"] > div > div:first-child,
+html.dark div[id$="Modal"] [class*="bg-gradient-to-r"][class*="border-b"],
+html.dark #dreamChatModal > div > div:first-child {
+  background: rgba(14, 23, 18, 0.96) !important;
+  border-color: rgba(245, 158, 11, 0.24) !important;
+  color: #fff8eb !important;
+}
+
+html.dark div[id$="Modal"] h2,
+html.dark div[id$="Modal"] h3,
+html.dark div[id$="Modal"] h4,
+html.dark #authScreen h1,
+html.dark #authScreen h2 {
+  color: #fff8eb !important;
+  -webkit-text-fill-color: #fff8eb !important;
+}
+
+html.dark div[id$="Modal"] p,
+html.dark div[id$="Modal"] label,
+html.dark #authScreen label,
+html.dark #authScreen p {
+  color: #cbd5e1 !important;
+}
+
+html.dark div[id$="Modal"] input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+html.dark div[id$="Modal"] textarea,
+html.dark div[id$="Modal"] select,
+html.dark #authScreen input,
+html.dark #dreamChatModal #dreamTextInput,
+html.dark #dreamDirectPromptModal #directDreamerName {
+  background: #16241c !important;
+  border-color: rgba(245, 158, 11, 0.32) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #dreamChatModal #dreamMessagesContainer {
+  background: #0e1713 !important;
+}
+
+html.dark #dreamAdminModal > div > div > aside,
+html.dark #dreamAdminModal #dreamAdminSessionsSidebar,
+html.dark #dreamSubmissionsSidebar,
+html.dark #dreamSubmissionsSidebar > div,
+html.dark #dreamAdminSessionsSidebar > div,
+html.dark #libraryModal > div,
+html.dark #recordedLessonsModal > div,
+html.dark #liveLessonModal .bg-slate-950\/95,
+html.dark #liveLessonModal #liveParticipantsList,
+html.dark #liveLessonModal .live-action-dock {
+  background: rgba(16, 27, 21, 0.98) !important;
+  background-image: none !important;
+  border-color: rgba(245, 158, 11, 0.26) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #dreamSessionsList > div,
+html.dark .dream-session-item,
+html.dark .dream-submission-card,
+html.dark #aiSecurityModal .grid > div,
+html.dark #activityDatabaseModal [class*="rounded-2xl"] {
+  background: rgba(22, 36, 28, 0.95) !important;
+  border-color: rgba(245, 158, 11, 0.26) !important;
+  color: #fff8eb !important;
+}

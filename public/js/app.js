@@ -10918,7 +10918,7 @@ function applyTheme(theme) {
   // Top navbar toggle button
   const icon = document.getElementById('themeToggleIcon');
   const text = document.getElementById('themeToggleText');
-  if (icon) icon.className = (theme === 'light') ? 'fa-solid fa-moon text-indigo-400 text-sm' : 'fa-solid fa-sun text-amber-400 text-sm';
+  if (icon) icon.className = (theme === 'light') ? 'fa-solid fa-moon text-amber-600 text-xs sm:text-sm' : 'fa-solid fa-sun text-amber-400 text-xs sm:text-sm';
   if (text) text.innerText = (theme === 'light') ? 'دۆخی تاریک' : 'دۆخی ڕووناک';
 
   // Landing page toggle button (Quran.com style 🌙 / ☀️)
@@ -10928,7 +10928,7 @@ function applyTheme(theme) {
   const drawerIcon = document.getElementById('drawerThemeIcon');
   const drawerText = document.getElementById('drawerThemeText');
   const drawerBadge = document.getElementById('drawerThemeBadge');
-  if (drawerIcon) drawerIcon.className = (theme === 'light') ? 'fa-solid fa-moon text-indigo-400 text-sm w-5 text-center' : 'fa-solid fa-sun text-amber-400 text-sm w-5 text-center';
+  if (drawerIcon) drawerIcon.className = (theme === 'light') ? 'fa-solid fa-moon text-amber-600 text-sm w-5 text-center' : 'fa-solid fa-sun text-amber-400 text-sm w-5 text-center';
   if (drawerText) drawerText.innerText = (theme === 'light') ? 'گۆڕین بۆ دۆخی تاریک 🌙' : 'گۆڕین بۆ دۆخی ڕووناک ☀️';
   if (drawerBadge) drawerBadge.innerText = (theme === 'light') ? 'ڕووناک' : 'تاریک';
 }
@@ -24740,7 +24740,8 @@ async function submitAnnouncementForm(event) {
 }
 
 function toggleThemeMode(e) {
-  const isCurrentlyLight = document.body.classList.contains('light-mode') || document.body.classList.contains('light-theme');
+  const isCurrentlyDark = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark-theme') || localStorage.getItem('seereen_theme') === 'dark';
+  const isCurrentlyLight = !isCurrentlyDark;
   const makeLight = !isCurrentlyLight;
 
   animateThemeChange(e || null, makeLight, () => {
