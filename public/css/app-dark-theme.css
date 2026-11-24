@@ -29,6 +29,8 @@ body.dark-mode #chatMessagesArea {
   color: #fff8eb !important;
 }
 
+html.dark #mainApp #classroomsLobbyView,
+html.dark #mainApp #chatView,
 html.dark #classroomsLobbyView,
 html.dark #chatView,
 body.dark-theme #classroomsLobbyView,

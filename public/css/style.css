@@ -13070,7 +13070,7 @@ html:not(.dark) :is(
   [class*="bg-teal-950"],
   [class*="bg-indigo-950"],
   [class*="bg-rose-950"]
-):not(.fixed.inset-0):not(.modal-overlay):not(.quran-intro-overlay):not(.quran-card):not(video):not([class*="from-amber-"]):not([class*="from-emerald-6"]):not([class*="from-rose-6"]):not([class*="bg-amber-"]):not([class*="bg-emerald-6"]):not([class*="bg-rose-6"]):not([class*="bg-indigo-6"]) {
+):not(#classroomsLobbyView):not(#chatView):not(.fixed.inset-0):not(.modal-overlay):not(.quran-intro-overlay):not(.quran-card):not(video):not([class*="from-amber-"]):not([class*="from-emerald-6"]):not([class*="from-rose-6"]):not([class*="bg-amber-"]):not([class*="bg-emerald-6"]):not([class*="bg-rose-6"]):not([class*="bg-indigo-6"]) {
   background-color: #f7f0e4 !important;
   background-image: linear-gradient(165deg, #f9f3e9 0%, #efe3d1 100%) !important;
   border-color: rgba(156, 120, 78, 0.28) !important;
