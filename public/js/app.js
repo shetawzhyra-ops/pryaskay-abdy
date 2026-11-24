@@ -25749,18 +25749,6 @@ function checkAzadPoemPrivilege() {
     }
   }
 
-  // Button on the landing page featured section (تەنها بۆ ئەکاونتی م. ئازاد)
-  const landingAddBtn = document.getElementById('btnLandingAddPoemAzad');
-  if (landingAddBtn) {
-    if (isAzad) {
-      landingAddBtn.classList.remove('hidden');
-      landingAddBtn.classList.add('flex');
-    } else {
-      landingAddBtn.classList.add('hidden');
-      landingAddBtn.classList.remove('flex');
-    }
-  }
-
   // Button in user profile modal (تەنها بۆ ئەکاونتی م. ئازاد)
   const profPoemBox = document.getElementById('profPublishPoemContainer');
   if (profPoemBox) {

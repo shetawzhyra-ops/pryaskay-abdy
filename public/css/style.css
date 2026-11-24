@@ -11137,11 +11137,11 @@ body.light-theme #drawerStaffHeader {
 /* 1. Global Viewports & In-App Backgrounds */
 body.light-theme,
 body.light-mode,
-body.in-app,
-body.in-landing,
-#mainApp,
-#classroomsLobbyView,
-#chatView {
+html:not(.dark) body.in-app,
+html:not(.dark) body.in-landing,
+html:not(.dark) #mainApp,
+html:not(.dark) #classroomsLobbyView,
+html:not(.dark) #chatView {
   background-color: #86b89c !important;
   background: #86b89c !important;
   background-image: none !important;
@@ -11453,7 +11453,7 @@ body.light-mode,
 #mainApp,
 #classroomsLobbyView,
 #chatView,
-main,
+html:not(.dark) main,
 body.light-theme #mainApp,
 body.light-theme #classroomsLobbyView,
 body.light-theme #chatView,
@@ -11828,8 +11828,8 @@ html:not(.dark) #btnDialectDropdown {
 /* 2. LANDING BACKGROUND & SIDES */
 body.light-mode.in-landing,
 body.light-theme.in-landing,
-body.in-landing,
-#landingPage {
+html:not(.dark) body.in-landing,
+html:not(.dark) #landingPage {
   background-color: #86b89c !important;
   background: #86b89c !important;
   background-image: none !important;
@@ -12802,15 +12802,15 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateG
    MATTE SAGE GREEN BACKGROUND ENFORCEMENT (خەونە لێکدراوەکان و هەموو پەڕەکان)
    Ensures uniform matte Sage Green (#86b89c) without any dual-tone shiny gradients
    ========================================================================== */
-html,
-body,
+html:not(.dark),
+html:not(.dark) body,
 body.light-mode,
 body.light-theme,
-body.in-landing,
-body.in-app,
-#mainApp,
-#landingPage,
-#dreamsGatewaySection {
+html:not(.dark) body.in-landing,
+html:not(.dark) body.in-app,
+html:not(.dark) #mainApp,
+html:not(.dark) #landingPage,
+html:not(.dark) #dreamsGatewaySection {
   background-color: #86b89c !important;
   background: #86b89c !important;
   background-image: none !important;
@@ -12901,13 +12901,13 @@ h1, h2, h3, h4, h5, h6,
    while preserving .quran-intro-overlay, modal backdrops, and <video>.
    ========================================================================== */
 
-html.dark,
-html.dark body {
+html:not(.dark),
+html:not(.dark) body {
   color-scheme: light !important;
 }
 
 /* 1. Page Canvases & Top Podium Bar */
-body.bg-slate-950,
+html:not(.dark) body.bg-slate-950,
 body.light-theme,
 body.light-mode {
   background-color: #86b89c !important;
@@ -13358,7 +13358,7 @@ div[id$="Modal"] textarea,
 }
 
 /* 3. Unify Modern Heritage Manuscript Craftsmanship on /articles & /poems */
-body.in-landing {
+html:not(.dark) body.in-landing {
   background-color: #86b89c !important;
   background-image:
     radial-gradient(ellipse 85% 55% at 50% 14%, rgba(255, 252, 240, 0.09) 0%, transparent 65%),

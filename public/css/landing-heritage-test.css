@@ -1206,3 +1206,28 @@ body.dark-theme #landingHeader #btnDialectDropdown i.fa-chevron-down,
 body.dark-mode #landingHeader #btnDialectDropdown i.fa-chevron-down {
   color: #fde68a !important;
 }
+
+
+/* 9. ENSURE TRANSPARENT <main> & FULL NOCTURNAL CANVAS IN DARK MODE */
+html.dark,
+html.dark body,
+html.dark body.in-landing,
+body.dark-theme,
+body.dark-theme.in-landing,
+body.dark-mode,
+body.dark-mode.in-landing {
+  color-scheme: dark !important;
+  background-color: #0e1713 !important;
+  background: #0e1713 !important;
+}
+
+html.dark #landingPage main,
+body.dark-theme #landingPage main,
+body.dark-mode #landingPage main,
+html.dark #landingPage #landingQuranHero,
+body.dark-theme #landingPage #landingQuranHero,
+body.dark-mode #landingPage #landingQuranHero {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}

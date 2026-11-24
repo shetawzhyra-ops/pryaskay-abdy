@@ -604,8 +604,8 @@ opacity: 0.7 !important;
     }
 body.light-mode.in-landing,
     body.light-theme.in-landing,
-    body.in-landing,
-    #landingPage {
+    html:not(.dark) body.in-landing,
+    html:not(.dark) #landingPage {
       background-color: #86b89c !important;
       background: #86b89c !important;
       background-image: none !important;
@@ -1559,7 +1559,7 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateG
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@600;700&family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=101.0&t=1795720000">
+<link rel="stylesheet" href="/css/style.css?v=102.0&t=1795730000">
 <style>
 /* Pre-render instant visibility rules: prevent landing page from flashing on refresh */
 html.in-app-mode #landingPage,
@@ -1818,7 +1818,7 @@ background: rgba(56, 189, 248, 0.85);
 }
 </style>
 <!-- Experimental Modern Heritage Landing Style (Non-color-changing, clean revertable) -->
-  <link id="landingHeritageTestCss" rel="stylesheet" href="/css/landing-heritage-test.css?v=14.0&t=1795710000">
+  <link id="landingHeritageTestCss" rel="stylesheet" href="/css/landing-heritage-test.css?v=15.0&t=1795730000">
   <!-- Inside Application Modern Heritage / Manuscript Luxe Style -->
   <link id="appHeritageCss" rel="stylesheet" href="/css/app-heritage.css?v=1.0&t=1795500000">
 </head>
@@ -2190,16 +2190,6 @@ class="quran-hero-pill-outline px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs 
 <i class="fa-solid fa-pen-nib text-xs"></i>
 <span>پریاسکەی وتار</span>
 </a>
-<button 
-id="btnLandingAddPoemAzad" 
-type="button" 
-onclick="openAddPoemModal()" 
-class="hidden quran-hero-pill-primary px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-black items-center gap-2 cursor-pointer transition-all active:scale-95"
-title="دانانی شیعری نوێ لەلایەن مامۆستا ئازاد"
->
-<i class="fa-solid fa-feather-pointed text-xs"></i>
-<span>+ نووسینی شیعری نوێ</span>
-</button>
 </div>
 </section>
 <!-- Reserved Space for Posts, Publications & Announcements (بۆشایی بڵاوکراوە و ئاگادارییەکان) -->
@@ -8570,7 +8560,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=97.0&t=1795710000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=109.0&t=1795700000"></script>
+<script src="/js/app.js?v=110.0&t=1795730000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->
