@@ -1108,3 +1108,101 @@ body.dark-mode #landingPage footer.landing-footer p {
 .quran-hero-pill-outline {
   transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease !important;
 }
+
+
+/* ============================================================================
+ * 8. TOP NAVBAR ICON ALIGNMENT & UNIFORM DARK/LIGHT STYLING FIX
+ * Ensures Login pill, Theme toggle, and Dialect globe sit on one exact line
+ * with identical height and matching Dark Mode colors.
+ * ============================================================================ */
+#landingHeader #dialectDropdownContainer {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+#landingHeader #btnLoginPublic,
+#landingHeader #btnLandingThemeToggle,
+#landingHeader #btnDialectDropdown {
+  height: 2.35rem !important;
+  min-height: 2.35rem !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+}
+
+#landingHeader #btnLandingThemeToggle,
+#landingHeader #btnDialectDropdown {
+  min-width: 2.35rem !important;
+  padding: 0 0.75rem !important;
+}
+
+@media (max-width: 767px) {
+  #landingHeader #btnLandingThemeToggle,
+  #landingHeader #btnDialectDropdown {
+    width: 2.35rem !important;
+    min-width: 2.35rem !important;
+    padding: 0 !important;
+  }
+}
+
+/* Light mode unified look for both icon buttons */
+html:not(.dark) #landingHeader #btnLandingThemeToggle.landing-nav-icon-btn,
+html:not(.dark) #landingHeader #btnDialectDropdown.landing-nav-icon-btn {
+  background: rgba(235, 219, 198, 0.92) !important;
+  border: 1px solid rgba(156, 120, 78, 0.38) !important;
+  color: #361c0c !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 3px 8px -2px rgba(42, 24, 10, 0.14) !important;
+}
+
+/* Dark mode high-specificity styling for BOTH #btnDialectDropdown & #btnLandingThemeToggle */
+html.dark #landingHeader #btnDialectDropdown.landing-nav-icon-btn,
+html.dark #landingHeader #btnDialectDropdown,
+html.dark #landingHeader #btnLandingThemeToggle.landing-nav-icon-btn,
+html.dark #landingHeader #btnLandingThemeToggle,
+body.dark-theme #landingHeader #btnDialectDropdown.landing-nav-icon-btn,
+body.dark-theme #landingHeader #btnDialectDropdown,
+body.dark-theme #landingHeader #btnLandingThemeToggle.landing-nav-icon-btn,
+body.dark-theme #landingHeader #btnLandingThemeToggle,
+body.dark-mode #landingHeader #btnDialectDropdown.landing-nav-icon-btn,
+body.dark-mode #landingHeader #btnDialectDropdown,
+body.dark-mode #landingHeader #btnLandingThemeToggle.landing-nav-icon-btn,
+body.dark-mode #landingHeader #btnLandingThemeToggle {
+  background: rgba(22, 36, 28, 0.94) !important;
+  border: 1px solid rgba(245, 158, 11, 0.36) !important;
+  color: #fef3c7 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 3px 8px rgba(0, 0, 0, 0.42) !important;
+}
+
+html.dark #landingHeader #btnDialectDropdown:hover,
+html.dark #landingHeader #btnLandingThemeToggle:hover,
+body.dark-theme #landingHeader #btnDialectDropdown:hover,
+body.dark-theme #landingHeader #btnLandingThemeToggle:hover,
+body.dark-mode #landingHeader #btnDialectDropdown:hover,
+body.dark-mode #landingHeader #btnLandingThemeToggle:hover {
+  background: rgba(30, 48, 38, 0.98) !important;
+  border-color: rgba(245, 158, 11, 0.68) !important;
+  color: #ffffff !important;
+}
+
+html.dark #landingHeader #btnDialectDropdown i.fa-globe,
+body.dark-theme #landingHeader #btnDialectDropdown i.fa-globe,
+body.dark-mode #landingHeader #btnDialectDropdown i.fa-globe {
+  color: #fbbf24 !important;
+}
+
+html.dark #landingHeader #btnDialectDropdown i.fa-chevron-down,
+body.dark-theme #landingHeader #btnDialectDropdown i.fa-chevron-down,
+body.dark-mode #landingHeader #btnDialectDropdown i.fa-chevron-down {
+  color: #fde68a !important;
+}

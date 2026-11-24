@@ -249,14 +249,14 @@ box-shadow: 0 8px 30px -8px rgba(180, 83, 9, 0.08) !important;
       color: #361c0c !important;
       filter: none !important;
     }
-    #btnBackToHome,
-    #btnDialectDropdown {
+    html:not(.dark) #btnBackToHome,
+    html:not(.dark) #btnDialectDropdown {
       background: rgba(239, 227, 209, 0.95) !important;
       border: 1px solid rgba(156, 120, 78, 0.35) !important;
       color: #361c0c !important;
     }
-    #btnBackToHome i,
-    #btnDialectDropdown i {
+    html:not(.dark) #btnBackToHome i,
+    html:not(.dark) #btnDialectDropdown i {
       color: #85430e !important;
     }
 /* 3. AUTH SCREEN & LOGIN MODAL (Sufi Sage & Warm Sand Theme) */
@@ -596,8 +596,8 @@ opacity: 0.7 !important;
     #articlesPageTitle {
       color: #361c0c !important;
     }
-    #btnDialectDropdown.landing-dialect-pill,
-    #btnDialectDropdown {
+    html:not(.dark) #btnDialectDropdown.landing-dialect-pill,
+    html:not(.dark) #btnDialectDropdown {
       background: rgba(228, 212, 189, 0.96) !important;
       border: 1px solid rgba(156, 120, 78, 0.35) !important;
       color: #361c0c !important;
@@ -1559,7 +1559,7 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateG
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@600;700&family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=99.0&t=1795630000">
+<link rel="stylesheet" href="/css/style.css?v=100.0&t=1795710000">
 <style>
 /* Pre-render instant visibility rules: prevent landing page from flashing on refresh */
 html.in-app-mode #landingPage,
@@ -1818,7 +1818,7 @@ background: rgba(56, 189, 248, 0.85);
 }
 </style>
 <!-- Experimental Modern Heritage Landing Style (Non-color-changing, clean revertable) -->
-  <link id="landingHeritageTestCss" rel="stylesheet" href="/css/landing-heritage-test.css?v=13.0&t=1795700000">
+  <link id="landingHeritageTestCss" rel="stylesheet" href="/css/landing-heritage-test.css?v=14.0&t=1795710000">
   <!-- Inside Application Modern Heritage / Manuscript Luxe Style -->
   <link id="appHeritageCss" rel="stylesheet" href="/css/app-heritage.css?v=1.0&t=1795500000">
 </head>
@@ -2031,7 +2031,7 @@ background: rgba(56, 189, 248, 0.85);
 type="button" 
 id="btnLoginPublic"
 onclick="openAuthScreen()" 
-class="landing-nav-login-btn px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-black rounded-full inline-flex items-center gap-1.5 cursor-pointer shadow-sm"
+class="landing-nav-login-btn h-9 sm:h-10 px-3.5 sm:px-4 text-xs sm:text-sm font-black rounded-full inline-flex items-center justify-center gap-1.5 cursor-pointer shadow-sm leading-none shrink-0"
 >
 <span>چوونەژوورەوە</span>
 <i class="fa-solid fa-arrow-right-to-bracket text-[11px] opacity-90"></i>
@@ -2041,7 +2041,7 @@ class="landing-nav-login-btn px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm fo
   id="btnLandingThemeToggle" 
   type="button" 
   onclick="toggleLandingTheme(event)" 
-  class="landing-nav-icon-btn inline-flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer group" 
+  class="landing-nav-icon-btn h-9 sm:h-10 min-w-[2.25rem] sm:min-w-[2.5rem] px-2.5 sm:px-3 rounded-full text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer group leading-none shrink-0" 
   title="گۆڕین بۆ دۆخی تاریک (دارک مۆد)" 
   aria-label="گۆڕینی دۆخی تاریکی و ڕووناکی"
 >
@@ -2049,12 +2049,12 @@ class="landing-nav-login-btn px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm fo
   <span id="landingThemeToggleLabel" class="hidden md:inline text-[11px]">دارک مۆد</span>
 </button>
 <!-- Dialect Globe Icon Dropdown (Quran.com 🌐 style) -->
-<div class="relative inline-block text-right z-40" id="dialectDropdownContainer">
+<div class="relative inline-flex items-center text-right z-40 !m-0 shrink-0" id="dialectDropdownContainer">
 <button 
 id="btnDialectDropdown" 
 type="button" 
 onclick="toggleLandingDialect(event)"
-class="landing-nav-icon-btn inline-flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer group"
+class="landing-nav-icon-btn h-9 sm:h-10 min-w-[2.25rem] sm:min-w-[2.5rem] px-2.5 sm:px-3 rounded-full text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer group leading-none shrink-0"
 title="گۆڕینی شێوەزار"
 aria-haspopup="true"
 aria-expanded="false"
@@ -8568,7 +8568,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script>if (typeof io === 'undefined') { document.write('<script src="/socket.io/socket.io.js"><\\/script>'); }</script>
 <!-- Shared Palettes & Themes -->
-<script src="/js/palettes.js?v=96.0&t=1795700000"></script>
+<script src="/js/palettes.js?v=97.0&t=1795710000"></script>
 <!-- Main Application Logic -->
 <script src="/js/app.js?v=109.0&t=1795700000"></script>
   <!-- PWA & Android App Installation Controller -->

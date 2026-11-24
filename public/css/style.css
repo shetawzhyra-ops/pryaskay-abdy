@@ -6750,7 +6750,7 @@ body.light-theme .brand-title,
 
 body.light-mode #btnDialectDropdown,
 body.light-theme #btnDialectDropdown,
-#btnDialectDropdown {
+html:not(.dark) #btnDialectDropdown {
   background: rgba(239, 227, 209, 0.95) !important;
   border: 1px solid rgba(156, 120, 78, 0.35) !important;
   color: #361c0c !important;
@@ -6759,7 +6759,7 @@ body.light-theme #btnDialectDropdown,
 
 body.light-mode #btnDialectDropdown:hover,
 body.light-theme #btnDialectDropdown:hover,
-#btnDialectDropdown:hover {
+html:not(.dark) #btnDialectDropdown:hover {
   background: rgba(228, 212, 189, 0.98) !important;
   color: #241206 !important;
 }
@@ -9524,9 +9524,7 @@ body.light-theme .landing-footer-brand {
 
 
 #dialectDropdownContainer {
-
-  margin-bottom: 0.5rem;
-
+  margin-bottom: 0;
 }
 
 
@@ -11381,7 +11379,7 @@ body.light-theme #btnBackToHome i,
 
 body.light-mode #btnDialectDropdown,
 body.light-theme #btnDialectDropdown,
-#btnDialectDropdown {
+html:not(.dark) #btnDialectDropdown {
   background: rgba(222, 204, 180, 0.95) !important;
   border: 1px solid rgba(156, 120, 78, 0.35) !important;
   color: #361c0c !important;
@@ -11389,7 +11387,7 @@ body.light-theme #btnDialectDropdown,
 
 body.light-mode #btnDialectDropdown i,
 body.light-theme #btnDialectDropdown i,
-#btnDialectDropdown i {
+html:not(.dark) #btnDialectDropdown i {
   color: #85430e !important;
 }
 
@@ -11616,8 +11614,8 @@ a:hover .brand-title {
 
 #btnBackToHome,
 body.light-theme #btnBackToHome,
-body.light-mode #btnBackToHome,
-#btnDialectDropdown,
+body.light-mode html:not(.dark) #btnBackToHome,
+html:not(.dark) #btnDialectDropdown,
 body.light-theme #btnDialectDropdown,
 body.light-mode #btnDialectDropdown {
   background: rgba(239, 227, 209, 0.95) !important;
@@ -11626,14 +11624,14 @@ body.light-mode #btnDialectDropdown {
   box-shadow: 0 2px 10px rgba(50, 35, 20, 0.08) !important;
 }
 
-#btnBackToHome:hover,
-#btnDialectDropdown:hover {
+html:not(.dark) #btnBackToHome:hover,
+html:not(.dark) #btnDialectDropdown:hover {
   background: rgba(228, 212, 189, 0.98) !important;
   color: #241206 !important;
 }
 
-#btnBackToHome i,
-#btnDialectDropdown i {
+html:not(.dark) #btnBackToHome i,
+html:not(.dark) #btnDialectDropdown i {
   color: #85430e !important;
 }
 
@@ -11820,8 +11818,8 @@ header.landing-navbar-premium,
 #articlesPageTitle {
   color: #361c0c !important;
 }
-#btnDialectDropdown.landing-dialect-pill,
-#btnDialectDropdown {
+html:not(.dark) #btnDialectDropdown.landing-dialect-pill,
+html:not(.dark) #btnDialectDropdown {
   background: rgba(228, 212, 189, 0.96) !important;
   border: 1px solid rgba(156, 120, 78, 0.35) !important;
   color: #361c0c !important;
