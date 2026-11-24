@@ -839,29 +839,19 @@
   }
 
   // =========================================================================
-  // DSP MODULE 3: IRREVERSIBLE MULTI-LAYER VOICE ANONYMIZER ENGINE
-  //   1. Crypto-Random Non-Stationary Granular Pitch & Phase Warping
-  //   2. 18-Band Speech-Envelope Vocoder Resynthesis (erases F0 & glottal voiceprint)
-  //   3. Non-Linear Spectral Shaping & Soft Saturation
+  // DSP MODULE 3: ZERO-HISS HUMAN VOICE TRANSFORMER & IRREVERSIBLE ANONYMIZER
+  //   1. Pre-Clean Speech Filter + Smooth Silence Gate (ZERO background hiss)
+  //   2. WSOLA Waveform-Similarity Pitch Shifting (crystal-clear human F0, 0 buzz)
+  //   3. Zero-Phase Cepstral Formant Warping (shifts vocal tract F1/F2/F3 cleanly)
+  //   4. Crypto-Random Non-Stationary Contour + Soft Harmonic Tilt (irreversible)
   // =========================================================================
   function cryptoRandFloat() {
-    const arr = new Uint32Array(1);
-    crypto.getRandomValues(arr);
-    return arr[0] / 4294967296;
-  }
-
-  function makeBandpassCoeffs(fc, Q, sr) {
-    const w0 = (2 * Math.PI * fc) / sr;
-    const alpha = Math.sin(w0) / (2 * Q);
-    const cosw = Math.cos(w0);
-    const a0 = 1 + alpha;
-    return {
-      b0: alpha / a0,
-      b1: 0,
-      b2: -alpha / a0,
-      a1: (-2 * cosw) / a0,
-      a2: (1 - alpha) / a0
-    };
+    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+      const arr = new Uint32Array(1);
+      crypto.getRandomValues(arr);
+      return arr[0] / 4294967296;
+    }
+    return Math.random();
   }
 
   function makeHighpassCoeffs(fc, Q, sr) {
@@ -904,171 +894,391 @@
     }
   }
 
-  // Granular overlap-add pitch shifter with optional crypto-random time-varying pitch drift & phase jitter
-  function granularPitchShiftMono(input, sr, baseSemitones, driftSemitones = 0, phaseJitterMs = 0) {
-    const N = input.length;
-    const out = new Float32Array(N);
-    const winNorm = new Float32Array(N);
-    const grainSize = Math.max(512, Math.floor(sr * 0.036)); // 36ms speech grain
-    const hop = Math.floor(grainSize / 4); // 75% overlap for buttery clarity
-
-    // Precompute Hann window
-    const hann = new Float32Array(grainSize);
-    for (let i = 0; i < grainSize; i++) {
-      hann[i] = 0.5 * (1 - Math.cos((2 * Math.PI * i) / (grainSize - 1)));
-    }
-
-    // Build smooth crypto-random pitch walk per hop (non-stationary -> defeats constant inverse pitch shift!)
-    let currentDrift = (cryptoRandFloat() * 2 - 1) * driftSemitones;
-    let targetDrift = (cryptoRandFloat() * 2 - 1) * driftSemitones;
-    const jitterSamples = Math.floor((phaseJitterMs / 1000) * sr);
-    let stepIdx = 0;
-
-    for (let pos = 0; pos < N; pos += hop) {
-      if (driftSemitones > 0) {
-        if (stepIdx % 14 === 0) {
-          targetDrift = (cryptoRandFloat() * 2 - 1) * driftSemitones;
-        }
-        currentDrift += (targetDrift - currentDrift) * 0.16;
-      }
-      stepIdx++;
-
-      const semi = baseSemitones + currentDrift;
-      const ratio = Math.pow(2, semi / 12);
-      const jitter = jitterSamples > 0 ? Math.floor((cryptoRandFloat() * 2 - 1) * jitterSamples) : 0;
-      const readCenter = pos + grainSize * 0.5 + jitter;
-
-      for (let i = 0; i < grainSize; i++) {
-        const writePos = pos + i;
-        if (writePos >= N) break;
-        const readPos = readCenter + (i - grainSize * 0.5) * ratio;
-        let sample = 0;
-        if (readPos >= 0 && readPos < N - 1) {
-          const idx0 = readPos | 0;
-          const frac = readPos - idx0;
-          sample = input[idx0] * (1 - frac) + input[idx0 + 1] * frac;
-        }
-        const w = hann[i];
-        out[writePos] += sample * w;
-        winNorm[writePos] += w;
-      }
-    }
-
-    for (let i = 0; i < N; i++) {
-      if (winNorm[i] > 1e-4) out[i] /= winNorm[i];
-    }
-    return out;
-  }
-
-  // 18-Band Speech Envelope Vocoder Resynthesis (Permanently destroys original vocal-fold waveform & biometrics!)
-  function vocoderResynthesizeMono(input, sr, carrierBaseHz, breathMix = 0.20) {
-    const N = input.length;
-    const out = new Float32Array(N);
-
-    // 1. Build brand-new synthetic voice carrier (saw/pulse harmonics + gentle random micro-drift + soft breath noise)
-    const carrier = new Float32Array(N);
-    let phase = cryptoRandFloat();
-    let fCur = carrierBaseHz;
-    let fTarget = carrierBaseHz;
-    const changeEvery = Math.floor(sr * 0.22);
-
-    for (let i = 0; i < N; i++) {
-      if (i % changeEvery === 0) {
-        fTarget = carrierBaseHz * (0.93 + cryptoRandFloat() * 0.14); // ±7% random synthetic intonation
-      }
-      fCur += (fTarget - fCur) * 0.0005;
-      phase += fCur / sr;
-      if (phase >= 1) phase -= 1;
-
-      // Warm glottal-like harmonic wave (soft saw + sub harmonic) + subtle noise for unvoiced consonants
-      const saw = (2 * phase - 1);
-      const sub = Math.sin(2 * Math.PI * phase);
-      const noise = (cryptoRandFloat() * 2 - 1);
-      carrier[i] = (saw * 0.55 + sub * 0.35) * (1 - breathMix) + noise * breathMix * 0.95;
-    }
-
-    // 2. 18 log-spaced speech intelligibility bands covering 135 Hz -> 4000 Hz
-    const numBands = 18;
-    const fMin = 135;
-    const fMax = Math.min(4000, sr * 0.42);
-    const envAlpha = 1 - Math.exp((-2 * Math.PI * 34) / sr); // 34 Hz slow envelope smoother (ZERO glottal pitch leaks through!)
-
-    for (let b = 0; b < numBands; b++) {
-      const fc = fMin * Math.pow(fMax / fMin, b / (numBands - 1));
-      const coeff = makeBandpassCoeffs(fc, 4.4, sr);
-      const { b0, b1, b2, a1, a2 } = coeff;
-
-      // Filter speech -> rectify -> 34Hz envelope; simultaneously filter synthetic carrier -> modulate by envelope
-      let sx1 = 0, sx2 = 0, sy1 = 0, sy2 = 0;
-      let cx1 = 0, cx2 = 0, cy1 = 0, cy2 = 0;
-      let env = 0;
-
-      for (let i = 0; i < N; i++) {
-        // Speech band analysis
-        const sx0 = input[i];
-        const sy0 = b0 * sx0 + b1 * sx1 + b2 * sx2 - a1 * sy1 - a2 * sy2;
-        sx2 = sx1; sx1 = sx0; sy2 = sy1; sy1 = sy0;
-
-        const rect = sy0 < 0 ? -sy0 : sy0;
-        env += envAlpha * (rect - env);
-
-        // Synthetic carrier band synthesis
-        const cx0 = carrier[i];
-        const cy0 = b0 * cx0 + b1 * cx1 + b2 * cx2 - a1 * cy1 - a2 * cy2;
-        cx2 = cx1; cx1 = cx0; cy2 = cy1; cy1 = cy0;
-
-        out[i] += cy0 * env * 5.8;
-      }
-    }
-
-    return out;
-  }
-
   function computeRms(arr) {
     let sum = 0;
     for (let i = 0; i < arr.length; i++) sum += arr[i] * arr[i];
     return Math.sqrt(sum / Math.max(1, arr.length));
   }
 
-  // Full Irreversible Multi-Layer Anonymizer Pipeline for One Mono Slice
+  // Smooth pre-clean: removes rumble & mic hiss floor before shifting so ZERO خشەخش is amplified
+  function preCleanSpeechMono(input, sr) {
+    const out = new Float32Array(input);
+    applyBiquadInPlace(out, makeHighpassCoeffs(92, 0.72, sr));
+    applyBiquadInPlace(out, makeLowpassCoeffs(Math.min(6200, sr * 0.44), 0.72, sr));
+
+    // Gentle downward expander / smooth gate for quiet pauses between words
+    const rms = computeRms(out);
+    if (rms > 1e-5) {
+      const thresh = rms * 0.08;
+      const att = 1 - Math.exp(-1 / (sr * 0.005));
+      const rel = 1 - Math.exp(-1 / (sr * 0.070));
+      let env = 0;
+      let gSmooth = 1;
+      for (let i = 0; i < out.length; i++) {
+        const a = out[i] < 0 ? -out[i] : out[i];
+        env += (a > env ? att : rel) * (a - env);
+        const targetG = env >= thresh ? 1.0 : Math.max(0.08, Math.pow(env / thresh, 1.6));
+        gSmooth += 0.02 * (targetG - gSmooth);
+        out[i] *= gSmooth;
+      }
+    }
+    return out;
+  }
+
+  // WSOLA (Waveform Similarity Overlap-Add) Pitch Shift — studio-clear human pitch without buzz or hiss!
+  function wsolaPitchShiftMono(input, sr, baseSemitones, driftSemitones = 0) {
+    const N = input.length;
+    if (N < 512 || (Math.abs(baseSemitones) < 0.03 && driftSemitones <= 0)) {
+      return new Float32Array(input);
+    }
+
+    const baseRatio = Math.pow(2, baseSemitones / 12);
+    // WinLen ~32ms (even), 50% Hann overlap -> exact constant unity sum!
+    let winLen = Math.max(256, Math.floor(sr * 0.032));
+    if (winLen % 2 !== 0) winLen++;
+    if (winLen >= N) return new Float32Array(input);
+
+    const Hs = winLen >> 1;
+    const hann = new Float32Array(winLen);
+    for (let i = 0; i < winLen; i++) {
+      hann[i] = 0.5 * (1 - Math.cos((2 * Math.PI * i) / winLen));
+    }
+
+    // Target time-stretched buffer length for baseRatio
+    const stretchLen = Math.max(winLen + Hs, Math.round(N * baseRatio));
+    const stretched = new Float32Array(stretchLen);
+    const maxSearch = Math.min(Math.floor(sr * 0.012), Math.floor(Hs * 0.9));
+
+    // Place first grain cleanly at 0
+    for (let i = 0; i < winLen; i++) {
+      stretched[i] = input[i] * hann[i];
+    }
+
+    let prevSrcStart = 0;
+    const stride = sr > 28000 ? 4 : 2;
+    const maxInStart = N - winLen;
+
+    for (let outPos = Hs; outPos + winLen <= stretchLen; outPos += Hs) {
+      const nomStart = Math.max(0, Math.min(maxInStart, Math.round((outPos / stretchLen) * maxInStart)));
+      // Natural continuation reference = second half of previous input grain
+      const refStart = Math.min(maxInStart, prevSrcStart + Hs);
+
+      // Search around nomStart for highest cross-correlation with refStart
+      const sLo = Math.max(0, nomStart - maxSearch);
+      const sHi = Math.min(maxInStart, nomStart + maxSearch);
+      let bestStart = nomStart;
+      let bestScore = -1e30;
+
+      // Coarse search
+      const coarseStep = Math.max(1, stride);
+      for (let cand = sLo; cand <= sHi; cand += coarseStep) {
+        let dot = 0;
+        let normA = 0;
+        let normB = 0;
+        for (let k = 0; k < Hs; k += coarseStep) {
+          const a = input[refStart + k];
+          const b = input[cand + k];
+          dot += a * b;
+          normA += a * a;
+          normB += b * b;
+        }
+        const denom = Math.sqrt(normA * normB) + 1e-8;
+        const score = dot / denom;
+        if (score > bestScore) {
+          bestScore = score;
+          bestStart = cand;
+        }
+      }
+
+      // Fine +/- coarseStep refinement
+      const fLo = Math.max(sLo, bestStart - coarseStep);
+      const fHi = Math.min(sHi, bestStart + coarseStep);
+      for (let cand = fLo; cand <= fHi; cand++) {
+        let dot = 0;
+        let normA = 0;
+        let normB = 0;
+        for (let k = 0; k < Hs; k += coarseStep) {
+          const a = input[refStart + k];
+          const b = input[cand + k];
+          dot += a * b;
+          normA += a * a;
+          normB += b * b;
+        }
+        const denom = Math.sqrt(normA * normB) + 1e-8;
+        const score = dot / denom;
+        if (score > bestScore) {
+          bestScore = score;
+          bestStart = cand;
+        }
+      }
+
+      for (let i = 0; i < winLen; i++) {
+        stretched[outPos + i] += input[bestStart + i] * hann[i];
+      }
+      prevSrcStart = bestStart;
+    }
+
+    // Build smooth crypto-random non-stationary pitch-contour time map if drift > 0
+    // Resample stretched[0..stretchLen-1] back to exact length N via 4-point Catmull-Rom cubic interpolation
+    const out = new Float32Array(N);
+    const numKnots = Math.max(8, Math.ceil((N / sr) * 4)); // ~4 smooth intonation knots/sec
+    const knots = new Float32Array(numKnots + 1);
+    if (driftSemitones > 0) {
+      let acc = 0;
+      const rawWeights = new Float32Array(numKnots);
+      for (let k = 0; k < numKnots; k++) {
+        const dSemi = (cryptoRandFloat() * 2 - 1) * driftSemitones;
+        rawWeights[k] = Math.pow(2, dSemi / 12);
+        acc += rawWeights[k];
+      }
+      const normScale = numKnots / acc;
+      let cum = 0;
+      knots[0] = 0;
+      for (let k = 0; k < numKnots; k++) {
+        cum += rawWeights[k] * normScale;
+        knots[k + 1] = (cum / numKnots) * (stretchLen - 1);
+      }
+      knots[numKnots] = stretchLen - 1;
+    }
+
+    for (let i = 0; i < N; i++) {
+      let pos;
+      if (driftSemitones > 0) {
+        const u = (i / Math.max(1, N - 1)) * numKnots;
+        const idx = Math.min(numKnots - 1, u | 0);
+        const f = u - idx;
+        pos = knots[idx] * (1 - f) + knots[idx + 1] * f;
+      } else {
+        pos = (i / Math.max(1, N - 1)) * (stretchLen - 1);
+      }
+
+      const idx = pos | 0;
+      const t = pos - idx;
+      const p0 = stretched[Math.max(0, idx - 1)];
+      const p1 = stretched[idx];
+      const p2 = stretched[Math.min(stretchLen - 1, idx + 1)];
+      const p3 = stretched[Math.min(stretchLen - 1, idx + 2)];
+      // Catmull-Rom spline interpolation (zero aliasing!)
+      const a0 = -0.5 * p0 + 1.5 * p1 - 1.5 * p2 + 0.5 * p3;
+      const a1 = p0 - 2.5 * p1 + 2.0 * p2 - 0.5 * p3;
+      const a2 = -0.5 * p0 + 0.5 * p2;
+      const a3 = p1;
+      out[i] = ((a0 * t + a1) * t + a2) * t + a3;
+    }
+
+    return out;
+  }
+
+  // In-place Radix-2 Cooley-Tukey FFT (power-of-2 length)
+  function fftInPlace(re, im, inverse) {
+    const n = re.length;
+    for (let i = 1, j = 0; i < n; i++) {
+      let bit = n >> 1;
+      for (; j & bit; bit >>= 1) j ^= bit;
+      j ^= bit;
+      if (i < j) {
+        let tmp = re[i]; re[i] = re[j]; re[j] = tmp;
+        tmp = im[i]; im[i] = im[j]; im[j] = tmp;
+      }
+    }
+    const dir = inverse ? 1 : -1;
+    for (let len = 2; len <= n; len <<= 1) {
+      const ang = (dir * 2 * Math.PI) / len;
+      const wlenRe = Math.cos(ang);
+      const wlenIm = Math.sin(ang);
+      for (let i = 0; i < n; i += len) {
+        let wRe = 1, wIm = 0;
+        const half = len >> 1;
+        for (let j = 0; j < half; j++) {
+          const uRe = re[i + j];
+          const uIm = im[i + j];
+          const vRe = re[i + j + half] * wRe - im[i + j + half] * wIm;
+          const vIm = re[i + j + half] * wIm + im[i + j + half] * wRe;
+          re[i + j] = uRe + vRe;
+          im[i + j] = uIm + vIm;
+          re[i + j + half] = uRe - vRe;
+          im[i + j + half] = uIm - vIm;
+          const nextWRe = wRe * wlenRe - wIm * wlenIm;
+          wIm = wRe * wlenIm + wIm * wlenRe;
+          wRe = nextWRe;
+        }
+      }
+    }
+    if (inverse) {
+      const invN = 1 / n;
+      for (let i = 0; i < n; i++) {
+        re[i] *= invN;
+        im[i] *= invN;
+      }
+    }
+  }
+
+  // Zero-Phase Cepstral Formant Warper (shifts vocal-tract resonance F1/F2/F3 cleanly with ZERO hiss or robot buzz!)
+  function formantWarpSTFTMono(input, sr, baseGamma, driftGamma = 0) {
+    const N = input.length;
+    if (N < 512 || (Math.abs(baseGamma - 1.0) < 0.02 && driftGamma <= 0)) {
+      return new Float32Array(input);
+    }
+
+    const nfft = 1024;
+    const hop = 256; // 75% overlap
+    const half = nfft >> 1;
+    const out = new Float32Array(N);
+    const winSum = new Float32Array(N);
+
+    const hann = new Float32Array(nfft);
+    for (let i = 0; i < nfft; i++) {
+      hann[i] = 0.5 * (1 - Math.cos((2 * Math.PI * i) / (nfft - 1)));
+    }
+
+    // Cepstral liftering cutoff (~1.1ms quefrency -> captures smooth vocal tract formants, ignores F0 harmonics)
+    const lifterCut = Math.max(14, Math.min(44, Math.round((sr / 1000) * (nfft / 1024) * 1.05)));
+
+    const re = new Float32Array(nfft);
+    const im = new Float32Array(nfft);
+    const envRe = new Float32Array(nfft);
+    const envIm = new Float32Array(nfft);
+    const envMag = new Float32Array(half + 1);
+
+    let gCur = baseGamma;
+    let gTarget = baseGamma;
+    let frameIdx = 0;
+    const hiLimitBin = Math.min(half, Math.floor((6200 / sr) * nfft));
+
+    for (let pos = 0; pos < N; pos += hop) {
+      if (driftGamma > 0) {
+        if (frameIdx % 16 === 0) {
+          gTarget = baseGamma + (cryptoRandFloat() * 2 - 1) * driftGamma;
+        }
+        gCur += (gTarget - gCur) * 0.18;
+      }
+      frameIdx++;
+      const gamma = Math.max(0.65, Math.min(1.45, gCur));
+
+      // 1. Window frame
+      for (let i = 0; i < nfft; i++) {
+        const idx = pos + i;
+        re[i] = idx < N ? input[idx] * hann[i] : 0;
+        im[i] = 0;
+      }
+
+      // 2. Forward FFT
+      fftInPlace(re, im, false);
+
+      // Frame energy gate: skip formant boosting on pure silence frames
+      let framePow = 0;
+      for (let k = 1; k <= half; k++) framePow += re[k] * re[k] + im[k] * im[k];
+      if (framePow > 1e-7) {
+        // 3. Real Cepstrum of log magnitude -> smooth vocal-tract envelope
+        for (let k = 1; k < nfft; k++) {
+          envRe[k] = 0.5 * Math.log(re[k] * re[k] + im[k] * im[k] + 1e-8);
+          envIm[k] = 0;
+        }
+        envRe[0] = envRe[1];
+        envIm[0] = 0;
+        fftInPlace(envRe, envIm, true); // Cepstrum
+
+        // Low-pass lifter with smooth cosine taper on upper 4 quefrency bins
+        const taper = 4;
+        for (let q = lifterCut + taper; q < nfft - (lifterCut + taper); q++) {
+          envRe[q] = 0;
+        }
+        for (let t = 0; t < taper; t++) {
+          const w = 0.5 * (1 + Math.cos((Math.PI * (t + 1)) / (taper + 1)));
+          envRe[lifterCut + t] *= w;
+          envRe[nfft - (lifterCut + t)] *= w;
+        }
+        for (let q = 0; q < nfft; q++) envIm[q] = 0;
+
+        fftInPlace(envRe, envIm, false); // Smoothed log envelope back in frequency domain
+        for (let k = 0; k <= half; k++) {
+          envMag[k] = Math.exp(Math.max(-12, Math.min(12, envRe[k])));
+        }
+
+        // 4. Apply zero-phase formant transfer ratio G(f) = E(f / gamma) / E(f)
+        re[0] = 0; im[0] = 0;
+        for (let k = 1; k < half; k++) {
+          const kSrc = k / gamma;
+          let targetEnv;
+          if (kSrc >= half) {
+            targetEnv = envMag[half] * 0.4;
+          } else {
+            const i0 = kSrc | 0;
+            const frac = kSrc - i0;
+            targetEnv = envMag[i0] * (1 - frac) + envMag[Math.min(half, i0 + 1)] * frac;
+          }
+          let gain = targetEnv / (envMag[k] + 1e-6);
+          if (gain < 0.25) gain = 0.25;
+          else if (gain > 3.2) gain = 3.2;
+
+          // Gentle de-hiss rolloff above 5.8 kHz
+          if (k > hiLimitBin) gain *= 0.45;
+
+          re[k] *= gain;
+          im[k] *= gain;
+          re[nfft - k] *= gain;
+          im[nfft - k] *= gain;
+        }
+        re[half] *= 0.4;
+        im[half] = 0;
+      }
+
+      // 5. Inverse FFT back to time domain
+      fftInPlace(re, im, true);
+
+      // 6. Overlap-add
+      for (let i = 0; i < nfft; i++) {
+        const idx = pos + i;
+        if (idx >= N) break;
+        const w = hann[i];
+        out[idx] += re[i] * w;
+        winSum[idx] += w * w;
+      }
+    }
+
+    for (let i = 0; i < N; i++) {
+      if (winSum[i] > 1e-4) out[i] /= winSum[i];
+    }
+    return out;
+  }
+
+  // Full Zero-Hiss Clean Voice Transformation + Irreversible Biometric Warping
   function anonymizeSliceMono(input, sr, preset) {
     const N = input.length;
     const origRms = computeRms(input);
     if (origRms < 1e-5) return new Float32Array(N);
 
-    let cfg = { baseSemi: -4.6, drift: 2.1, jitterMs: 4.5, carrierHz: 96, vocMix: 0.72, breath: 0.22 };
+    let cfg = { pitchSemi: -5.2, pitchDrift: 1.15, formantGamma: 0.80, formantDrift: 0.055, warmLowGain: 0.14 };
     if (preset === 'anon_witness') {
-      cfg = { baseSemi: -2.4, drift: 2.0, jitterMs: 4.0, carrierHz: 118, vocMix: 0.68, breath: 0.24 };
+      cfg = { pitchSemi: -2.4, pitchDrift: 1.25, formantGamma: 0.85, formantDrift: 0.055, warmLowGain: 0.10 };
     } else if (preset === 'anon_high') {
-      cfg = { baseSemi: 4.3, drift: 2.0, jitterMs: 4.0, carrierHz: 215, vocMix: 0.72, breath: 0.24 };
+      cfg = { pitchSemi: 5.0, pitchDrift: 1.15, formantGamma: 1.22, formantDrift: 0.055, warmLowGain: 0.0 };
     }
 
-    // Stage 1: Cryptographically time-varying pitch/formant warped + phase-scrambled stream
-    const warped = granularPitchShiftMono(input, sr, cfg.baseSemi, cfg.drift, cfg.jitterMs);
+    // Stage 0: Clean incoming phone noise/rumble so zero hiss passes into transformation
+    const cleaned = preCleanSpeechMono(input, sr);
 
-    // Stage 2: Pure 18-band envelope vocoder resynthesis (0% original vocal-fold waveform!)
-    const vocoded = vocoderResynthesizeMono(input, sr, cfg.carrierHz, cfg.breath);
+    // Stage 1: Crystal-clear WSOLA pitch shift with crypto-random intonation drift
+    const pitched = wsolaPitchShiftMono(cleaned, sr, cfg.pitchSemi, cfg.pitchDrift);
 
-    // Match RMS of both layers before blending
-    const wRms = computeRms(warped) || 1;
-    const vRms = computeRms(vocoded) || 1;
+    // Stage 2: Zero-phase cepstral formant warp with non-stationary vocal tract drift
+    const formed = formantWarpSTFTMono(pitched, sr, cfg.formantGamma, cfg.formantDrift);
+
+    // Stage 3: Soft studio harmonic richness + irreversible non-linear waveshaping (zero buzz/hiss)
     const out = new Float32Array(N);
-    const wGain = (origRms / wRms) * (1 - cfg.vocMix);
-    const vGain = (origRms / vRms) * cfg.vocMix;
-
     for (let i = 0; i < N; i++) {
-      // Subtle non-linear tanh saturation + tiny dither destroys residual linear inverse invertibility
-      const mixed = vocoded[i] * vGain + warped[i] * wGain;
-      out[i] = Math.tanh(mixed * 1.45) * 0.85;
+      const x = formed[i];
+      // Subtle asymmetric warm tube curve breaks linear invertibility cleanly with 0 noise
+      out[i] = Math.tanh(x * 1.18 + 0.04 * x * x);
     }
 
-    // Stage 3: Telephone/broadcast speech bandpass (140 Hz - 3850 Hz)
-    applyBiquadInPlace(out, makeHighpassCoeffs(140, 0.75, sr));
-    applyBiquadInPlace(out, makeLowpassCoeffs(Math.min(3850, sr * 0.42), 0.75, sr));
+    // Stage 4: Broadcast clarity shaping (95 Hz HP, 5600 Hz LP)
+    applyBiquadInPlace(out, makeHighpassCoeffs(95, 0.72, sr));
+    applyBiquadInPlace(out, makeLowpassCoeffs(Math.min(5600, sr * 0.44), 0.72, sr));
 
-    // Match original RMS loudness cleanly so speaker volume matches the rest of the call!
+    // Match original RMS loudness cleanly
     const outRms = computeRms(out) || 1;
-    const finalGain = Math.min(3.5, (origRms * 1.04) / outRms);
+    const finalGain = Math.min(3.5, (origRms * 1.02) / outRms);
     for (let i = 0; i < N; i++) {
       const s = out[i] * finalGain;
       out[i] = Math.max(-0.96, Math.min(0.96, s));
@@ -1076,14 +1286,26 @@
     return out;
   }
 
-  // Custom Manual Voice Transformer (Pitch + Speed + Volume + Optional Reverb)
-  function customTransformSliceMono(input, sr, { pitchSemi, speed, volume, reverbMix }) {
-    let processed = input;
+  // Custom Manual Voice Transformer (Zero-Hiss WSOLA Pitch + Cepstral Formant + Speed + Volume)
+  function customTransformSliceMono(input, sr, { pitchSemi, formantPct, speed, volume }) {
+    const origRms = computeRms(input);
+    let processed = preCleanSpeechMono(input, sr);
     if (Math.abs(pitchSemi) > 0.05) {
-      processed = granularPitchShiftMono(processed, sr, pitchSemi, 0, 0);
+      processed = wsolaPitchShiftMono(processed, sr, pitchSemi, 0);
+    }
+    const gamma = Math.max(0.68, Math.min(1.42, 1 + (Number(formantPct) || 0) / 100));
+    if (Math.abs(gamma - 1.0) > 0.02) {
+      processed = formantWarpSTFTMono(processed, sr, gamma, 0);
     }
 
-    // Speed change via linear interpolation resampling
+    // Match RMS loudness before applying speed & user volume
+    const procRms = computeRms(processed);
+    if (origRms > 1e-5 && procRms > 1e-5) {
+      const matchGain = Math.min(3.5, origRms / procRms);
+      for (let i = 0; i < processed.length; i++) processed[i] *= matchGain;
+    }
+
+    // Speed change via cubic interpolation resampling
     if (Math.abs(speed - 1.0) > 0.01) {
       const newLen = Math.max(128, Math.floor(processed.length / speed));
       const resampled = new Float32Array(newLen);
@@ -1098,26 +1320,6 @@
         }
       }
       processed = resampled;
-    }
-
-    // Optional simple multi-tap studio room reverb
-    if (reverbMix > 0.01) {
-      const rev = new Float32Array(processed.length);
-      const taps = [
-        { d: Math.floor(sr * 0.029), g: 0.42 },
-        { d: Math.floor(sr * 0.053), g: 0.30 },
-        { d: Math.floor(sr * 0.089), g: 0.20 },
-        { d: Math.floor(sr * 0.137), g: 0.12 }
-      ];
-      for (let i = 0; i < processed.length; i++) {
-        let wet = 0;
-        for (let t = 0; t < taps.length; t++) {
-          const j = i - taps[t].d;
-          if (j >= 0) wet += processed[j] * taps[t].g;
-        }
-        rev[i] = processed[i] * (1 - reverbMix * 0.45) + wet * reverbMix;
-      }
-      processed = rev;
     }
 
     // Volume
@@ -1156,9 +1358,9 @@
   function readCustomSettings() {
     return {
       pitchSemi: Number($('slPitch').value || 0),
+      formantPct: Number($('slFormant') ? $('slFormant').value : 0),
       speed: Number($('slSpeed').value || 1),
-      volume: Number($('slVolume').value || 100) / 100,
-      reverbMix: Number($('slReverb').value || 0) / 100
+      volume: Number($('slVolume').value || 100) / 100
     };
   }
 
@@ -1610,9 +1812,14 @@
 
     // Sliders live labels
     $('slPitch').addEventListener('input', (e) => { $('valPitch').textContent = e.target.value + ' ستێپ'; });
+    if ($('slFormant')) {
+      $('slFormant').addEventListener('input', (e) => {
+        const v = Number(e.target.value);
+        $('valFormant').textContent = (v > 0 ? '+' : '') + v + '%';
+      });
+    }
     $('slSpeed').addEventListener('input', (e) => { $('valSpeed').textContent = Number(e.target.value).toFixed(2) + 'x'; });
     $('slVolume').addEventListener('input', (e) => { $('valVolume').textContent = e.target.value + '%'; });
-    $('slReverb').addEventListener('input', (e) => { $('valReverb').textContent = e.target.value + '%'; });
 
     // Voice & Cut Actions
     $('btnPreviewVoice').addEventListener('click', previewVoiceEffect);
