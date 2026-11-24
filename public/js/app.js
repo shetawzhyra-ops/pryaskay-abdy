@@ -7433,7 +7433,7 @@ function renderMembersList() {
   const canMod = canUserModerateChat(currentUser);
   const isPrivileged = currentUser && (currentUser.role === 'admin' || currentUser.role === 'super_admin' || currentUser.role === 'teacher' || canManageMbrs || canMod);
 
-  let filtered = allMembersCache.filter(u => u.status === 'approved');
+  let filtered = allMembersCache.filter(u => u.status === 'approved' && (!currentUser || Number(u.id) !== Number(currentUser.id)));
   if (memberFilter === 'student') filtered = filtered.filter(u => u.role === 'student');
   if (memberFilter === 'admin') filtered = filtered.filter(u => u.role === 'admin' || u.role === 'super_admin' || u.role === 'teacher');
 
