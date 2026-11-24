@@ -502,8 +502,8 @@ app.get('/api/admin/articles', (req, res) => {
         authedUser = users.findById(decoded.id);
       } catch (e) {}
     }
-    const _r = (authedUser?.role || '').toLowerCase(); const _u = (authedUser?.username || '').toLowerCase().trim(); const _isArtStaff = authedUser && (_r === 'admin' || _r === 'super_admin' || _r === 'teacher' || _u === 'azad' || Number(authedUser.id) === 6 || (authedUser.full_name || '').includes('ئازاد')); if (!_isArtStaff) {
-      return res.status(403).json({ success: false, error: 'دەسەڵاتی ئەدمین یان مامۆستات نییە' });
+    if (!isHemnOrAzadUser(authedUser)) {
+      return res.status(403).json({ success: false, error: 'تەنها بەڕێوەبەر (هێمن و م. ئازاد) دەسەڵاتی پەسەندکردنی وتاری هەیە' });
     }
 
     const list = articlesDb.getAll();
@@ -524,18 +524,65 @@ app.put('/api/admin/articles/:id/status', (req, res) => {
         authedUser = users.findById(decoded.id);
       } catch (e) {}
     }
-    const _r = (authedUser?.role || '').toLowerCase(); const _u = (authedUser?.username || '').toLowerCase().trim(); const _isArtStaff = authedUser && (_r === 'admin' || _r === 'super_admin' || _r === 'teacher' || _u === 'azad' || Number(authedUser.id) === 6 || (authedUser.full_name || '').includes('ئازاد')); if (!_isArtStaff) {
-      return res.status(403).json({ success: false, error: 'دەسەڵاتی ئەدمین یان مامۆستات نییە' });
+    if (!isHemnOrAzadUser(authedUser)) {
+      return res.status(403).json({ success: false, error: 'تەنها بەڕێوەبەر (هێمن و م. ئازاد) دەسەڵاتی پەسەندکردنی وتاری هەیە' });
     }
 
-    const { status } = req.body;
+    const { status, rejectionReason, reason } = req.body || {};
     if (!['approved', 'rejected', 'pending'].includes(status)) {
       return res.status(400).json({ success: false, error: 'دۆخی نادروستە' });
+    }
+
+    const article = articlesDb.getById(req.params.id);
+    if (!article) {
+      return res.status(404).json({ success: false, error: 'وتارەکە نەدۆزرایەوە' });
+    }
+
+    const cleanReason = String(rejectionReason || reason || '').trim();
+    if (status === 'rejected' && !cleanReason) {
+      return res.status(400).json({ success: false, error: 'تکایە هۆکاری ڕەتکردنەوەی وتارەکە بنووسە' });
     }
 
     const ok = articlesDb.updateStatus(req.params.id, status, authedUser.full_name || authedUser.username);
     scheduleSearchReindex();
     if (ok) {
+      if (status === 'rejected' && article.author_id && Number(article.author_id) !== Number(authedUser.id)) {
+        try {
+          const senderName = authedUser.full_name || authedUser.username;
+          const pmContent =
+            `📌 ئاگاداری سەبارەت بە کورتە وتاری «${article.title}»\n\n` +
+            `بەداخەوە وتارەکەت ڕەتکرایەوە.\n` +
+            `هۆکاری ڕەتکردنەوە:\n${cleanReason}`;
+          const pmMsg = privateMessages.create(
+            authedUser.id,
+            article.author_id,
+            senderName,
+            authedUser.role || 'admin',
+            pmContent,
+            'text'
+          );
+          if (typeof io !== 'undefined' && io) {
+            const notifiedSockets = new Set();
+            for (const [sockId, u] of onlineUsers.entries()) {
+              if (Number(u.id) === Number(article.author_id) && !notifiedSockets.has(sockId)) {
+                notifiedSockets.add(sockId);
+                io.to(sockId).emit('new_private_message', pmMsg);
+              }
+            }
+            if (io.sockets && io.sockets.sockets) {
+              for (const [sockId, s] of io.sockets.sockets) {
+                if (s.user && Number(s.user.id) === Number(article.author_id) && !notifiedSockets.has(sockId)) {
+                  notifiedSockets.add(sockId);
+                  io.to(sockId).emit('new_private_message', pmMsg);
+                }
+              }
+            }
+          }
+        } catch (pmErr) {
+          console.error('Failed to send article rejection private message:', pmErr);
+        }
+      }
+
       if (typeof io !== 'undefined' && io) {
         io.emit('article_status_updated', {
           id: Number(req.params.id),
@@ -1109,6 +1156,24 @@ function isMasterSuperAdmin(user) {
   if (user.role === 'super_admin') return true;
   const uname = (user.username || '').toLowerCase();
   return uname === 'hemntjabar' || uname === 'hemn' || uname === 'admin' || user.id === 1;
+}
+
+function isHemnOrAzadUser(user) {
+  if (!user) return false;
+  const r = (user.role || '').toLowerCase();
+  const uname = (user.username || '').toLowerCase().trim();
+  const fname = (user.full_name || '').trim();
+  return (
+    r === 'super_admin' ||
+    uname === 'hemntjabar' ||
+    uname === 'hemn' ||
+    uname === 'admin' ||
+    Number(user.id) === 1 ||
+    Number(user.id) === 3 ||
+    uname === 'azad' ||
+    Number(user.id) === 6 ||
+    fname.includes('ئازاد')
+  );
 }
 
 const ALL_SPECIAL_BADGES = ['white', 'blue', 'green', 'black', 'red', 'purple'];
@@ -8154,8 +8219,8 @@ app.get('/api/chat/private/messages/:otherUserId', authMiddleware, (req, res) =>
     const otherUser = users.findById(otherId);
     if (!otherUser) return res.status(404).json({ error: 'بەکارهێنەر نەدۆزرایەوە' });
 
-    const isStaff = req.user.role === 'super_admin' || req.user.role === 'teacher';
-    const otherIsStaff = otherUser.role === 'super_admin' || otherUser.role === 'teacher';
+    const isStaff = req.user.role === 'super_admin' || req.user.role === 'teacher' || isHemnOrAzadUser(req.user);
+    const otherIsStaff = otherUser.role === 'super_admin' || otherUser.role === 'teacher' || isHemnOrAzadUser(otherUser);
 
     // Restriction: Normal users can only message Super Admin & Teacher
     if (!isStaff && !otherIsStaff) {
@@ -8198,8 +8263,8 @@ app.post('/api/chat/private/send', authMiddleware, (req, res) => {
     const recipient = users.findById(recId);
     if (!recipient) return res.status(404).json({ error: 'وەرگر نەدۆزرایەوە' });
 
-    const isStaff = req.user.role === 'super_admin' || req.user.role === 'teacher';
-    const recIsStaff = recipient.role === 'super_admin' || recipient.role === 'teacher';
+    const isStaff = req.user.role === 'super_admin' || req.user.role === 'teacher' || isHemnOrAzadUser(req.user);
+    const recIsStaff = recipient.role === 'super_admin' || recipient.role === 'teacher' || isHemnOrAzadUser(recipient);
 
     // Strict Rule: Normal accounts can ONLY message super_admin and teacher
     if (!isStaff && !recIsStaff) {

@@ -2804,7 +2804,7 @@ Change language here • تغيير لغة الموقع من هنا
 <span class="hidden lg:inline font-bold text-xs">پەڕەی سەرەکی</span>
 </button>
 <!-- Current User Pill (Responsive & Compact on Mobile) -->
-<div onclick="openMyProfile()" class="flex items-center gap-1 bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-full cursor-pointer transition shrink min-w-0 max-w-[115px] xs:max-w-[145px] sm:max-w-[180px]" title="بینینی پرۆفایلی خۆم">
+<div onclick="openMyProfile()" class="relative flex items-center gap-1.5 bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-full cursor-pointer transition shrink min-w-0 max-w-[140px] xs:max-w-[170px] sm:max-w-[210px]" title="بینینی پرۆفایلی خۆم">
 <div class="text-right min-w-0 flex-1">
 <div class="flex items-center gap-1 min-w-0">
 <span id="headerFullName" class="text-[11px] sm:text-xs font-black truncate block">ناو</span>
@@ -2815,6 +2815,7 @@ Change language here • تغيير لغة الموقع من هنا
 <span id="headerStarCount">0</span>
 </div>
 </div>
+<span id="headerArticlesPendingBadge" class="hidden px-1.5 py-0.5 bg-rose-600 text-white text-[10px] leading-none font-black rounded-full min-w-[18px] h-[18px] items-center justify-center shadow-md animate-pulse shrink-0" title="کورتە وتاری چاوەڕوانی پەسەندکردن">0</span>
 </div>
 <!-- 3-Lines Main Menu Hamburger Button (سێ خەت) - ALWAYS VISIBLE ON FAR LEFT -->
 <button id="mainMenuBtn" onclick="toggleMainMenuDrawer()" class="relative p-2 sm:px-2.5 sm:py-1.5 hover:bg-amber-400/20 text-amber-400 hover:text-amber-200 font-black text-xs rounded-full transition flex items-center gap-1.5 active:scale-95 shrink-0 z-20 cursor-pointer" title="مێنیوی هەموو بەشەکان (سێ خەت)">
@@ -2880,10 +2881,13 @@ Change language here • تغيير لغة الموقع من هنا
 </div>
 </div>
 </div>
+<div class="flex items-center gap-2 shrink-0">
+<span id="drawerProfileArticlesPendingBadge" class="hidden px-2 py-0.5 bg-rose-600 text-white text-[10px] leading-none font-black rounded-full min-w-[18px] h-[18px] items-center justify-center shadow-md animate-pulse" title="کورتە وتاری چاوەڕوانی پەسەندکردن">0</span>
 <span class="text-[10px] sm:text-xs md:text-sm text-amber-300 font-bold flex items-center gap-1.5 shrink-0 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-amber-400/10 border border-amber-400/25 hover:bg-amber-400/20 transition">
 <span id="drawerProfileText">پرۆفایل</span>
 <i class="fa-solid fa-chevron-left text-[9px] sm:text-xs"></i>
 </span>
+</div>
 </div>
 <!-- Drawer Scrollable Content -->
 <div class="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6 text-xs sm:text-sm font-bold">
@@ -3009,19 +3013,6 @@ Change language here • تغيير لغة الموقع من هنا
 <span>ئامرازەکانی ستاف و ئەدمین</span>
 </div>
 <div class="drawer-tools-grid">
-<!-- Article Moderation Button (پەسەندکردنی کورتە وتارەکان) -->
-            <button id="drawerArticlesAdminBtn" onclick="closeMainMenuDrawer(); openArticlesAdminModal();" class="hidden drawer-tool-btn group !border-emerald-500/40 !bg-gradient-to-r !from-emerald-950/40 !via-slate-900 !to-teal-950/40 hover:!border-emerald-400">
-              <div class="flex items-center gap-3 sm:gap-4 min-w-0">
-                <div class="drawer-tool-icon-box !bg-emerald-500/20 !border-emerald-400/40 !text-emerald-300">
-                  <i class="fa-solid fa-pen-nib"></i>
-                </div>
-                <span class="drawer-tool-title !text-emerald-200">پەسەندکردنی کورتە وتار</span>
-              </div>
-              <div class="flex items-center gap-1.5">
-                <span id="drawerArticlesPendingBadge" class="hidden px-2 py-0.5 bg-amber-500 text-slate-950 text-[10px] font-black rounded-full shadow animate-pulse">0</span>
-                <span class="drawer-tool-badge !bg-emerald-500/20 !text-emerald-300 !border-emerald-400/30">ئەدمین</span>
-              </div>
-            </button>
 <!-- Live Recordings Archive (تۆماری وانەکانی لایڤ - مامۆستا و سوپەر ئەدمین) -->
 <button id="drawerLiveRecordingsBtn" onclick="closeMainMenuDrawer(); openLiveRecordingsModal();" class="drawer-tool-btn group">
 <div class="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -3748,6 +3739,25 @@ class="w-full bg-slate-800/90 border border-slate-700/70 rounded-xl pr-8 pl-8 py
 </span>
 </div>
 </div>
+</div>
+
+<!-- Articles Moderation Card Inside Manager Profile (Hemn & Azad Only) -->
+<div id="profArticlesAdminCard" class="hidden prof-section-card p-3.5 rounded-2xl shadow-sm">
+  <button id="profArticlesAdminBtn" type="button" onclick="closeUserProfileModal(); openArticlesAdminModal();" class="prof-inset-tile w-full p-3 rounded-xl flex items-center justify-between gap-3 transition hover:brightness-95 active:scale-[0.99] cursor-pointer text-right">
+    <div class="flex items-center gap-3 min-w-0">
+      <span class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-600/30 flex items-center justify-center text-base shrink-0">
+        <i class="fa-solid fa-pen-nib"></i>
+      </span>
+      <div class="min-w-0">
+        <span class="block text-xs sm:text-sm font-black truncate">پەسەندکردنی کورتە وتار</span>
+        <span class="block text-[11px] opacity-75 font-medium truncate">بینین، وەرگرتن یان ڕەتکردنەوەی وتارە نێردراوەکان</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <span id="profArticlesPendingBadge" class="hidden px-2 py-0.5 bg-rose-600 text-white text-[11px] leading-none font-black rounded-full min-w-[22px] h-[22px] items-center justify-center shadow animate-pulse">0</span>
+      <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-600/30 text-[10px] font-black">کردنەوە</span>
+    </div>
+  </button>
 </div>
 
 <!-- Course Participation Display Card -->
@@ -8344,7 +8354,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=98.0&t=1795770000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=121.0&t=1795825000"></script>
+<script src="/js/app.js?v=122.0&t=1795830000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->
@@ -8422,6 +8432,44 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
       <div id="adminArticlesList" class="flex-1 overflow-y-auto space-y-3.5 py-3 pr-1 relative z-10">
         <p class="text-xs text-slate-400 text-center py-6">بارکردنی وتارەکان...</p>
       </div>
+    </div>
+  </div>
+
+  <!-- Modal: Article Rejection Reason (هۆکاری ڕەتکردنەوەی وتار + ناردن بۆ نامەی تایبەت) -->
+  <div id="articleRejectReasonModal" onclick="if(event.target === this) closeArticleRejectModal()" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md">
+    <div class="w-full max-w-md bg-slate-900 border-2 border-rose-500/40 rounded-3xl p-5 sm:p-6 shadow-2xl relative space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-rose-500/20 border border-rose-400/40 text-rose-400 flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-comment-slash"></i>
+          </div>
+          <div class="min-w-0">
+            <h4 class="font-black text-sm sm:text-base text-white truncate">ڕەتکردنەوەی کورتە وتار</h4>
+            <p id="rejectArticleMeta" class="text-[11px] text-amber-300/90 font-semibold truncate"></p>
+          </div>
+        </div>
+        <button type="button" onclick="closeArticleRejectModal()" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+      <form onsubmit="submitArticleRejection(event)" class="space-y-3.5">
+        <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-400/25 text-[11px] text-amber-200 leading-relaxed font-semibold">
+          هۆکاری ڕەتکردنەوەکە لێرە بنووسە؛ ڕاستەوخۆ وەک نامەیەک دەگاتە ناو بەشی «نامەی تایبەت»ی قوتابییەکە.
+        </div>
+        <div>
+          <label for="articleRejectReasonInput" class="block text-xs font-bold text-slate-200 mb-1.5">هۆکاری ڕەتکردنەوە:</label>
+          <textarea id="articleRejectReasonInput" rows="4" required placeholder="بۆ نموونە: تکایە ناوەڕۆکی وتارەکە کەمێک ڕوونتر بکەرەوە یان سەرچاوەی گونجاوی بۆ دابنێ..." class="w-full rounded-2xl bg-slate-800/90 border border-slate-700 focus:border-rose-400 focus:ring-1 focus:ring-rose-400/40 p-3 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none resize-none leading-relaxed"></textarea>
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-1">
+          <button type="button" onclick="closeArticleRejectModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition cursor-pointer">
+            پاشگەزبوونەوە
+          </button>
+          <button type="submit" id="articleRejectSubmitBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow-md transition flex items-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>ڕەتکردنەوە و ناردنی نامە</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 <div id="dreamDirectPromptModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">

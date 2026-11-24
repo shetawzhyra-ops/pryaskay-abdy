@@ -691,6 +691,23 @@ function isExecutiveUser(u) {
          (typeof isMasterSuperAdmin === 'function' && isMasterSuperAdmin(u));
 }
 
+function isHemnOrAzadManager(u) {
+  if (!u) return false;
+  const uname = (u.username || '').toLowerCase().trim();
+  const fname = (u.full_name || '').trim();
+  return (
+    u.role === 'super_admin' ||
+    uname === 'hemntjabar' ||
+    uname === 'hemn' ||
+    uname === 'admin' ||
+    Number(u.id) === 1 ||
+    Number(u.id) === 3 ||
+    uname === 'azad' ||
+    Number(u.id) === 6 ||
+    fname.includes('ئازاد')
+  );
+}
+
 function updateExecutiveHubUI() {
   const topBtn = document.getElementById('topExecutiveHubBtn');
   if (topBtn) {
@@ -1250,21 +1267,26 @@ function updateUserUI() {
       dreamAdminNavBtn.classList.remove('hidden');
       dreamAdminNavBtn.classList.add('flex');
     }
-    const drawerArticlesAdminBtn = document.getElementById('drawerArticlesAdminBtn');
-    if (drawerArticlesAdminBtn) {
-      drawerArticlesAdminBtn.classList.remove('hidden');
-      drawerArticlesAdminBtn.classList.add('flex');
-    }
-    if (typeof checkPendingArticlesCount === 'function') {
-      checkPendingArticlesCount();
-    }
-
     loadDreamSessionsCount();
   } else {
     if (dreamAdminNavBtn) {
       dreamAdminNavBtn.classList.add('hidden');
       dreamAdminNavBtn.classList.remove('flex');
     }
+  }
+
+  if (typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
+    if (typeof checkPendingArticlesCount === 'function') {
+      checkPendingArticlesCount();
+    }
+  } else {
+    ['headerArticlesPendingBadge', 'drawerProfileArticlesPendingBadge', 'profArticlesPendingBadge'].forEach(id => {
+      const b = document.getElementById(id);
+      if (b) {
+        b.classList.add('hidden');
+        b.classList.remove('inline-flex', 'flex');
+      }
+    });
   }
 
   // Member Management & Members List visibility (Admin, Super Admin, Teacher, Black Badge, Green Badge)
@@ -2611,6 +2633,27 @@ function initSocket() {
             statusElem.innerHTML = `وەڵامدراوەتەوە لەلایەن: <strong class="text-emerald-400 font-bold">${escapeHtml(data.answered_by_name)}</strong>`;
           }
         }
+      }
+    }
+  });
+
+  socket.on('new_article_submitted', () => {
+    if (typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
+      if (typeof checkPendingArticlesCount === 'function') checkPendingArticlesCount();
+      if (typeof playSound === 'function') playSound('message');
+      const modalEl = document.getElementById('modalAdminArticles');
+      if (modalEl && !modalEl.classList.contains('hidden') && typeof loadAdminArticles === 'function') {
+        loadAdminArticles();
+      }
+    }
+  });
+
+  socket.on('article_status_updated', () => {
+    if (typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
+      if (typeof checkPendingArticlesCount === 'function') checkPendingArticlesCount();
+      const modalEl = document.getElementById('modalAdminArticles');
+      if (modalEl && !modalEl.classList.contains('hidden') && typeof loadAdminArticles === 'function') {
+        loadAdminArticles();
       }
     }
   });
@@ -7841,6 +7884,15 @@ async function openUserProfileModal(userId) {
     const isSuperAdminAccount = isExecutiveProfile;
     const regStatsGrid = document.getElementById('profRegularStatsGrid');
     const saCard = document.getElementById('profSuperAdminSpecialCard');
+    const articlesAdminCard = document.getElementById('profArticlesAdminCard');
+    if (articlesAdminCard) {
+      if (isMe && typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
+        articlesAdminCard.classList.remove('hidden');
+        if (typeof checkPendingArticlesCount === 'function') checkPendingArticlesCount();
+      } else {
+        articlesAdminCard.classList.add('hidden');
+      }
+    }
     const roleHistorySec = document.getElementById('profRoleHistorySection');
     const solvedSec = document.getElementById('profSolvedQuestionsSection');
 
@@ -8280,23 +8332,29 @@ async function loadAdminArticles() {
 }
 
 function updateAdminArticlesPendingBadge() {
-  const pendingCount = (window._adminAllArticles || []).filter(a => a.status === 'pending').length;
+  const isAllowed = typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser);
+  const pendingCount = isAllowed
+    ? (window._adminAllArticles || []).filter(a => a.status === 'pending').length
+    : 0;
   const countBadge = document.getElementById('adminArtPendingCountBadge');
   if (countBadge) countBadge.innerText = pendingCount;
-  
-  const drawerBadge = document.getElementById('drawerArticlesPendingBadge');
-  if (drawerBadge) {
-    drawerBadge.innerText = pendingCount;
+
+  ['profArticlesPendingBadge', 'headerArticlesPendingBadge', 'drawerProfileArticlesPendingBadge'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerText = pendingCount;
     if (pendingCount > 0) {
-      drawerBadge.classList.remove('hidden');
+      el.classList.remove('hidden');
+      el.classList.add('inline-flex');
     } else {
-      drawerBadge.classList.add('hidden');
+      el.classList.add('hidden');
+      el.classList.remove('inline-flex');
     }
-  }
+  });
 }
 
 async function checkPendingArticlesCount() {
-  if (!token) return;
+  if (!token || !(typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser))) return;
   try {
     const res = await fetch('/api/admin/articles', {
       headers: { 'Authorization': `Bearer ${token}` }
@@ -8389,7 +8447,7 @@ function renderAdminArticlesList() {
               </button>
             ` : ''}
             ${art.status === 'pending' || art.status === 'approved' ? `
-              <button type="button" onclick="handleAdminArticleStatus(${art.id}, 'rejected')" class="px-3 py-1.5 rounded-xl bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 border border-amber-500/40 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer">
+              <button type="button" onclick="openArticleRejectModal(${art.id})" class="px-3 py-1.5 rounded-xl bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 border border-amber-500/40 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer">
                 <i class="fa-solid fa-xmark"></i>
                 <span>ڕەتکردنەوە</span>
               </button>
@@ -8406,7 +8464,49 @@ function renderAdminArticlesList() {
   listEl.innerHTML = html;
 }
 
-async function handleAdminArticleStatus(articleId, status) {
+window._pendingRejectArticleId = null;
+
+function openArticleRejectModal(articleId) {
+  window._pendingRejectArticleId = articleId;
+  const art = (window._adminAllArticles || []).find(a => a.id === articleId);
+  const metaEl = document.getElementById('rejectArticleMeta');
+  if (metaEl) {
+    metaEl.innerText = art ? `«${art.title}» — ${art.author_name}` : '';
+  }
+  const input = document.getElementById('articleRejectReasonInput');
+  if (input) input.value = '';
+  const modal = document.getElementById('articleRejectReasonModal');
+  if (modal) modal.classList.remove('hidden');
+  if (input) setTimeout(() => input.focus(), 50);
+}
+
+function closeArticleRejectModal() {
+  window._pendingRejectArticleId = null;
+  const modal = document.getElementById('articleRejectReasonModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+async function submitArticleRejection(e) {
+  e.preventDefault();
+  const articleId = window._pendingRejectArticleId;
+  if (!articleId) return;
+  const input = document.getElementById('articleRejectReasonInput');
+  const reason = (input ? input.value : '').trim();
+  if (!reason) {
+    alert('تکایە هۆکاری ڕەتکردنەوەی وتارەکە بنووسە');
+    return;
+  }
+  const btn = document.getElementById('articleRejectSubmitBtn');
+  if (btn) btn.disabled = true;
+  try {
+    const ok = await handleAdminArticleStatus(articleId, 'rejected', reason);
+    if (ok) closeArticleRejectModal();
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+async function handleAdminArticleStatus(articleId, status, rejectionReason = '') {
   try {
     const res = await fetch(`/api/admin/articles/${articleId}/status`, {
       method: 'PUT',
@@ -8414,7 +8514,7 @@ async function handleAdminArticleStatus(articleId, status) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ status })
+      body: JSON.stringify({ status, rejectionReason })
     });
     const data = await res.json();
     if (data.success) {
@@ -8422,12 +8522,19 @@ async function handleAdminArticleStatus(articleId, status) {
       if (art) art.status = status;
       updateAdminArticlesPendingBadge();
       renderAdminArticlesList();
-      alert(status === 'approved' ? 'وتارەکە پەسەندکرا و بە سەرکەوتوویی بڵاوبووەوە!' : 'وتارەکە ڕەتکرایەوە.');
+      if (status === 'approved') {
+        alert('وتارەکە پەسەندکرا و بە سەرکەوتوویی بڵاوبووەوە!');
+      } else if (status === 'rejected') {
+        alert('وتارەکە ڕەتکرایەوە و هۆکارەکە بۆ نامەی تایبەتی قوتابییەکە نێردرا.');
+      }
+      return true;
     } else {
       alert(data.error || 'هەڵە لە گۆڕینی دۆخی وتار');
+      return false;
     }
   } catch (e) {
     alert('هەڵە لە پەیوەندی بە سێرڤەر');
+    return false;
   }
 }
 
