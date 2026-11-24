@@ -1338,7 +1338,7 @@ function updateUserUI() {
     }
     if (libraryUploadSection) libraryUploadSection.classList.remove('hidden');
 
-    const canPoll = currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher');
+    const canPoll = currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher' || currentUser.role === 'admin');
     const canAlarm = currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher' || currentUser.role === 'admin');
 
     const pubPollBtn = document.getElementById('publicChatPollBtn');
@@ -1348,7 +1348,7 @@ function updateUserUI() {
     if (pubAlarmBtn) pubAlarmBtn.classList.toggle('hidden', !canAlarm);
 
     const cgPollBtn = document.getElementById('customGroupPollBtn');
-    if (cgPollBtn) cgPollBtn.classList.toggle('hidden', !canPoll);
+    if (cgPollBtn) cgPollBtn.classList.remove('hidden');
 
     const cgAlarmBtn = document.getElementById('customGroupAlarmBtn');
     if (cgAlarmBtn) cgAlarmBtn.classList.toggle('hidden', !canAlarm);
@@ -21345,10 +21345,9 @@ async function openCustomGroupChatModal(groupId) {
   }
 
   // Poll & Alarm buttons in group chat
-  const canGroupPoll = currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher');
   const canGroupAlarm = currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher' || currentUser.role === 'admin');
   const cgPollBtn = document.getElementById('customGroupPollBtn');
-  if (cgPollBtn) cgPollBtn.classList.toggle('hidden', !canGroupPoll);
+  if (cgPollBtn) cgPollBtn.classList.remove('hidden');
   const cgAlarmBtn = document.getElementById('customGroupAlarmBtn');
   if (cgAlarmBtn) cgAlarmBtn.classList.toggle('hidden', !canGroupAlarm);
 
@@ -22458,17 +22457,23 @@ function playBellChime() {
 let currentPollTargetChatType = 'public';
 let pollCacheMap = new Map();
 
-function openPollsHubOrModal() {
+function openPollsHubOrModal(chatType = 'public') {
+  const targetType = chatType === 'custom_group' ? 'custom_group' : 'public';
   if (currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher' || currentUser.role === 'admin')) {
-    openCreatePollModal('public');
+    openCreatePollModal(targetType);
   } else {
-    const pollCard = document.querySelector('[id^="poll-card-"]') || document.querySelector('.poll-card');
+    const scope = targetType === 'custom_group'
+      ? (document.getElementById('customGroupMessagesList') || document)
+      : (document.getElementById('messagesContainer') || document);
+    const pollCard = scope.querySelector('[id^="poll-card-"]') || scope.querySelector('.poll-card');
     if (pollCard) {
       pollCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
       pollCard.classList.add('ring-4', 'ring-amber-400');
       setTimeout(() => pollCard.classList.remove('ring-4', 'ring-amber-400'), 2500);
     } else {
-      alert('لە چاتی گشتیدا سەیری ڕاپرسییە چالاکەکان بکە یان چاوەڕێی ڕاپرسی نوێ بە');
+      alert(targetType === 'custom_group'
+        ? 'لە چاتی ئەم گروپەدا سەیری ڕاپرسییە چالاکەکان بکە یان چاوەڕێی ڕاپرسی نوێ بە'
+        : 'لە چاتی گشتیدا سەیری ڕاپرسییە چالاکەکان بکە یان چاوەڕێی ڕاپرسی نوێ بە');
     }
   }
 }

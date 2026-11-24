@@ -7188,12 +7188,12 @@ app.delete('/api/custom-groups/:id/messages/:messageId', authMiddleware, (req, r
 // POLLS SYSTEM (ڕاپرسی لە چاتی گشتی و گروپ چاتە تایبەتەکان)
 // =========================================================================
 
-// Create Poll (Super Admin & Teachers)
+// Create Poll (Super Admin, Teachers & Admin)
 app.post('/api/polls', authMiddleware, (req, res) => {
   try {
-    const isStaff = req.user.role === 'super_admin' || req.user.role === 'teacher';
+    const isStaff = req.user.role === 'super_admin' || req.user.role === 'teacher' || req.user.role === 'admin';
     if (!isStaff) {
-      return res.status(403).json({ error: 'تەنها مامۆستایان و سەرپەرشتیار دەتوانن ڕاپرسی دروست بکەن' });
+      return res.status(403).json({ error: 'تەنها سەرپەرشتیار، مامۆستا و ئەدمین دەتوانن ڕاپرسی دروست بکەن' });
     }
 
     const chatType = req.body.chatType === 'custom_group' ? 'custom_group' : 'public';

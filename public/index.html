@@ -2920,16 +2920,6 @@ Change language here • تغيير لغة الموقع من هنا
 </div>
 <span id="drawerRecordedLessonsBadge" class="drawer-tool-badge">گوێگرتن</span>
 </button>
-<!-- Polls Section (بەشی ڕاپرسی) -->
-            <button id="drawerPollBtn" onclick="closeMainMenuDrawer(); openPollsHubOrModal();" class="drawer-tool-btn group" title="بەشی ڕاپرسی و دەنگدان">
-              <div class="flex items-center gap-3 sm:gap-4 min-w-0">
-                <div class="drawer-tool-icon-box">
-                  <i class="fa-solid fa-square-poll-vertical"></i>
-                </div>
-                <span id="drawerPollText" class="drawer-tool-title">بەشی ڕاپرسی</span>
-              </div>
-              <span id="drawerPollBadge" class="drawer-tool-badge">دەنگدان</span>
-            </button>
 <!-- Library -->
 <button id="drawerLibraryBtn" onclick="closeMainMenuDrawer(); openLibraryModal();" class="drawer-tool-btn group">
 <div class="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -3544,11 +3534,12 @@ title="دروستکردنی پریاسکەی نوێ"
 <span>تۆمارکردنی دەنگ</span>
 </button>
 <!-- 3. Poll -->
-<button type="button" id="publicChatPollBtn" onclick="openCreatePollModal('public'); closePublicChatToolsMenu();" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-200 hover:text-white hover:bg-slate-800 transition active:scale-95 text-right w-full group">
+<button type="button" id="publicChatPollBtn" onclick="openPollsHubOrModal('public'); closePublicChatToolsMenu();" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-200 hover:text-white hover:bg-slate-800 transition active:scale-95 text-right w-full group" title="بەشی ڕاپرسی و دەنگدان">
 <div class="w-7 h-7 rounded-lg bg-amber-400/15 border border-amber-400/30 text-amber-300 flex items-center justify-center shrink-0">
 <i class="fa-solid fa-square-poll-vertical text-xs"></i>
 </div>
-<span>دروستکردنی ڕاپرسی</span>
+<span>بەشی ڕاپرسی</span>
+<span class="mr-auto text-[10px] px-1.5 py-0.5 rounded-md bg-amber-400/15 border border-amber-400/30 text-amber-300 font-bold">دەنگدان</span>
 </button>
 <!-- 4. Alarm / Lesson Bell -->
 <button type="button" id="publicChatAlarmBtn" onclick="openCreateAlarmModal('public'); closePublicChatToolsMenu();" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-200 hover:text-white hover:bg-slate-800 transition active:scale-95 text-right w-full group">
@@ -5006,11 +4997,12 @@ class="w-full pr-9 pl-8 py-2 bg-slate-800/90 border border-slate-700/80 rounded-
 <span>تۆمارکردنی دەنگ</span>
 </button>
 <!-- 3. Poll -->
-<button type="button" id="customGroupPollBtn" onclick="openCreatePollModal('custom_group'); closeCustomGroupToolsMenu();" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-200 hover:text-white hover:bg-slate-800 transition active:scale-95 text-right w-full">
+<button type="button" id="customGroupPollBtn" onclick="openPollsHubOrModal('custom_group'); closeCustomGroupToolsMenu();" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-200 hover:text-white hover:bg-slate-800 transition active:scale-95 text-right w-full" title="بەشی ڕاپرسی و دەنگدان">
 <div class="w-7 h-7 rounded-lg bg-amber-600/20 border border-amber-500/40 text-amber-400 flex items-center justify-center shrink-0">
 <i class="fa-solid fa-square-poll-vertical text-xs"></i>
 </div>
-<span>دروستکردنی ڕاپرسی</span>
+<span>بەشی ڕاپرسی</span>
+<span class="mr-auto text-[10px] px-1.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold">دەنگدان</span>
 </button>
 <!-- 4. Alarm -->
 <button type="button" id="customGroupAlarmBtn" onclick="openCreateAlarmModal('custom_group'); closeCustomGroupToolsMenu();" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-200 hover:text-white hover:bg-slate-800 transition active:scale-95 text-right w-full">
@@ -8403,7 +8395,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=98.0&t=1795770000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=112.0&t=1795750000"></script>
+<script src="/js/app.js?v=113.0&t=1795760000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->
