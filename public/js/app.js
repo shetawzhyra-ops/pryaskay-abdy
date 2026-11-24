@@ -225,7 +225,7 @@ function calculateStars(correctCount) {
 function getUserNameClass(user) {
   if (!user) return 'user-name-boy';
   const uname = (user.username || '').toLowerCase().trim();
-  const isSuper = user.role === 'super_admin' || uname === 'admin' || uname === 'hemntjabar';
+  const isSuper = user.role === 'super_admin' || uname === 'admin' || uname === 'hemntjabar' || uname === 'azad';
   if (isSuper) {
     return 'user-name-super-admin';
   }
@@ -250,7 +250,7 @@ function canSeeRealFullName(viewer) {
   if (typeof isMasterSuperAdmin === 'function' && isMasterSuperAdmin(viewer)) return true;
   if (viewer.role === 'super_admin' || viewer.role === 'admin' || viewer.role === 'teacher') return true;
   const uname = (viewer.username || '').toLowerCase().trim();
-  return uname === 'hemntjabar' || uname === 'admin' || uname === 'hemn' || viewer.id === 1;
+  return uname === 'hemntjabar' || uname === 'azad' || uname === 'admin' || uname === 'hemn' || Number(viewer.id) === 1 || Number(viewer.id) === 3 || Number(viewer.id) === 6;
 }
 
 // Universal name display: Everyone sees nickname; Admin / Teacher sees real full name faintly underneath
@@ -298,7 +298,7 @@ function formatUserDisplayName(user) {
   let prefix = '';
   let suffix = '';
   const uname = (user.username || '').toLowerCase().trim();
-  const isSuper = user.role === 'super_admin' || uname === 'admin' || uname === 'hemntjabar';
+  const isSuper = user.role === 'super_admin' || uname === 'admin' || uname === 'hemntjabar' || uname === 'azad';
 
   if (uname === 'azad' || user.id === 6 || (user.full_name || '').includes('ئازاد')) {
     return 'ئازادی موعەبیر 🛡️';
@@ -4363,7 +4363,7 @@ function appendMessage(msg, scroll = true) {
   }
 
   // 3. REGULAR MESSAGES (TEXT, VOICE, IMAGE)
-  const isMsgSuperAdmin = msg.role === 'super_admin' || (msg.username && (msg.username.toLowerCase() === 'hemntjabar' || msg.username.toLowerCase() === 'admin'));
+  const isMsgSuperAdmin = msg.role === 'super_admin' || (msg.username && (msg.username.toLowerCase() === 'hemntjabar' || msg.username.toLowerCase() === 'azad' || msg.username.toLowerCase() === 'admin'));
   const roleBadge = isMsgSuperAdmin ? renderRoleBadge('super_admin', msg.gender) : renderRoleBadge(msg.role, msg.gender);
   const starBadge = (msg.role === 'student' || msg.role === 'new_student') ? renderStarBadge(msg.correct_answers_count || 0) : '';
   const nameColorClass = getUserNameClass(msg);
@@ -22690,7 +22690,7 @@ function canManagePoll(poll) {
   if (currentUser.role === 'super_admin' || currentUser.role === 'teacher' || currentUser.role === 'admin') return true;
   if (typeof isMasterSuperAdmin === 'function' && isMasterSuperAdmin(currentUser)) return true;
   if (typeof hasSuperAdminPrivileges === 'function' && hasSuperAdminPrivileges(currentUser)) return true;
-  if (currentUser.username === 'hemntjabar' || currentUser.username === 'hemn' || currentUser.id === 1) return true;
+  if (currentUser.username === 'hemntjabar' || currentUser.username === 'hemn' || currentUser.username === 'azad' || Number(currentUser.id) === 1 || Number(currentUser.id) === 3 || Number(currentUser.id) === 6) return true;
   const creatorId = poll && (poll.creator_id || poll.creatorId);
   if (creatorId && Number(currentUser.id) === Number(creatorId)) return true;
   return false;
@@ -22701,7 +22701,7 @@ function canManageAlarm(alarm) {
   if (currentUser.role === 'super_admin' || currentUser.role === 'teacher' || currentUser.role === 'admin') return true;
   if (typeof isMasterSuperAdmin === 'function' && isMasterSuperAdmin(currentUser)) return true;
   if (typeof hasSuperAdminPrivileges === 'function' && hasSuperAdminPrivileges(currentUser)) return true;
-  if (currentUser.username === 'hemntjabar' || currentUser.username === 'hemn' || currentUser.id === 1) return true;
+  if (currentUser.username === 'hemntjabar' || currentUser.username === 'hemn' || currentUser.username === 'azad' || Number(currentUser.id) === 1 || Number(currentUser.id) === 3 || Number(currentUser.id) === 6) return true;
   const creatorId = alarm && (alarm.creator_id || alarm.creatorId);
   if (creatorId && Number(currentUser.id) === Number(creatorId)) return true;
   return false;
@@ -22712,7 +22712,7 @@ function renderPollCardHtml(poll, { canClose = false } = {}) {
   const totalVotes = poll.total_votes || 0;
   const isClosed = Boolean(poll.is_closed);
   const myVote = poll.my_vote;
-  const isSuper = currentUser && (currentUser.role === 'super_admin' || (typeof isMasterSuperAdmin === 'function' && isMasterSuperAdmin(currentUser)) || currentUser.username === 'hemntjabar' || currentUser.id === 1);
+  const isSuper = currentUser && (currentUser.role === 'super_admin' || (typeof isMasterSuperAdmin === 'function' && isMasterSuperAdmin(currentUser)) || currentUser.username === 'hemntjabar' || currentUser.username === 'azad' || Number(currentUser.id) === 1 || Number(currentUser.id) === 3 || Number(currentUser.id) === 6);
   const canManage = canClose || canManagePoll(poll);
 
   const optionsHtml = (poll.options || []).map((opt, idx) => {

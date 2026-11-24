@@ -762,9 +762,8 @@ function initDb() {
     );
   }
   try {
-    db.prepare("UPDATE users SET full_name = 'هێمن طه' WHERE username = 'hemntjabar'").run();
-    db.prepare("UPDATE users SET full_name = 'ئازادی موعەبیر', role = 'super_admin', status = 'active' WHERE username = 'azad'").run();
-    db.prepare("UPDATE users SET full_name = 'ئازادی موعەبیر' WHERE username = 'admin' AND (full_name LIKE '%ئازاد%' OR full_name = 'م. ئازاد')").run();
+    db.prepare("UPDATE users SET full_name = 'هێمن طه', role = 'super_admin', status = 'approved' WHERE username = 'hemntjabar'").run();
+    db.prepare("UPDATE users SET full_name = 'ئازادی موعەبیر', role = 'super_admin', status = 'approved' WHERE username = 'azad'").run();
   } catch (e) {}
 
   try {
@@ -936,6 +935,7 @@ const users = {
         WHERE role != 'super_admin'
           AND username != 'admin'
           AND username != 'hemntjabar'
+          AND username != 'azad'
           AND id != 1
           AND COALESCE(last_active_at, created_at) < ?
       `).all(cutoff);

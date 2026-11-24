@@ -1150,12 +1150,12 @@ function authMiddleware(req, res, next) {
   }
 }
 
-// Helper: Master Super Admin check (Hemn Taha)
+// Helper: Master Super Admin check (Hemn Taha & Mamosta Azad)
 function isMasterSuperAdmin(user) {
   if (!user) return false;
   if (user.role === 'super_admin') return true;
-  const uname = (user.username || '').toLowerCase();
-  return uname === 'hemntjabar' || uname === 'hemn' || uname === 'admin' || user.id === 1;
+  const uname = (user.username || '').toLowerCase().trim();
+  return uname === 'hemntjabar' || uname === 'hemn' || uname === 'azad' || uname === 'admin' || Number(user.id) === 1 || Number(user.id) === 3 || Number(user.id) === 6;
 }
 
 function isHemnOrAzadUser(user) {
@@ -1559,7 +1559,7 @@ function cleanupInactiveUsers() {
     if (inactiveUsers && inactiveUsers.length > 0) {
       console.log(`[Auto-Cleanup] Found ${inactiveUsers.length} inactive account(s) (> 1 month). Processing deletion...`);
       for (const u of inactiveUsers) {
-        if (isMasterSuperAdmin(u) || u.role === 'super_admin' || u.username === 'admin' || u.username === 'hemntjabar' || u.id === 1) {
+        if (isMasterSuperAdmin(u) || u.role === 'super_admin' || u.username === 'admin' || u.username === 'hemntjabar' || u.username === 'azad' || u.id === 1 || u.id === 3 || u.id === 6) {
           continue;
         }
         users.delete(u.id);
