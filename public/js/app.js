@@ -7858,6 +7858,27 @@ async function openUserProfileModal(userId) {
       if (saCard) saCard.classList.remove('hidden');
       if (roleHistorySec) roleHistorySec.classList.add('hidden');
       if (solvedSec) solvedSec.classList.add('hidden');
+
+      const execTitle = document.getElementById('profExecCardTitle');
+      const execSubtitle = document.getElementById('profExecCardSubtitle');
+      const execRoleBadge = document.getElementById('profExecCardRoleBadge');
+      const execAuthority = document.getElementById('profExecCardAuthority');
+      const execType = document.getElementById('profExecCardAccountType');
+
+      if (execTitle) execTitle.textContent = 'بەڕێوەبەری سەرەکی پڕۆژە';
+      if (execSubtitle) execSubtitle.textContent = 'سەرپەرشتیاری پڕۆژە';
+      if (execRoleBadge) execRoleBadge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ئەدمین';
+      if (execAuthority) execAuthority.innerHTML = '<i class="fa-solid fa-bolt"></i> کۆنتڕۆڵی گشتی';
+      if (execType) execType.innerHTML = '<i class="fa-solid fa-gem"></i> ئەندامی دامەزرێنەر';
+    } else {
+      if (regStatsGrid) regStatsGrid.classList.remove('hidden');
+      if (saCard) saCard.classList.add('hidden');
+      if (roleHistorySec) {
+        roleHistorySec.classList.toggle('hidden', !prof.roleHistory || prof.roleHistory.length === 0);
+      }
+      if (solvedSec) {
+        const hasSolved = (prof.role === 'student' || prof.role === 'new_student') && prof.answeredQuestions && prof.answeredQuestions.length > 0;
+        solvedSec.classList.toggle('hidden', !hasSolved);
       }
     }
 
@@ -7964,11 +7985,6 @@ async function openUserProfileModal(userId) {
         reqChangeContainer.classList.remove('hidden');
       } else {
         reqChangeContainer.classList.add('hidden');
-      }
-    }
-
-     else {
-        notifContainer.classList.add('hidden');
       }
     }
 
