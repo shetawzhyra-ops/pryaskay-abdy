@@ -177,7 +177,7 @@
             class="px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs font-bold gap-2 shadow-md inline-flex items-center rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white transition active:scale-95 cursor-pointer"
           >
             <i class="fa-solid fa-plus text-xs"></i>
-            <span class="hidden sm:inline">دانانی شیعری نوێ</span>
+            <span>بڵاوکردنەوە</span><span class="hidden sm:inline">ی شیعری نوێ</span>
           </button>
         </div>
 
@@ -216,6 +216,18 @@
             <i class="fa-solid fa-feather text-[#b45309] text-[11px]"></i>
             <span id="poemsCountText">یەک بابەت بڵاوکراوەتەوە</span>
           </span>
+        </div>
+
+        <!-- Direct Publish Action Inside Poems Section (Shown only for Mamosta Azad) -->
+        <div id="heroPoemPublishContainer" class="hidden pt-2">
+          <button
+            type="button"
+            onclick="openNewPoemModal()"
+            class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:brightness-110 text-white font-black text-xs sm:text-sm shadow-lg shadow-amber-600/25 border border-amber-300/50 transition-all active:scale-95 cursor-pointer"
+          >
+            <i class="fa-solid fa-plus-circle text-sm"></i>
+            <span>بڵاوکردنەوەی شیعری نوێ</span>
+          </button>
         </div>
 
         <!-- Search Poems Bar -->
@@ -361,7 +373,7 @@
   <!-- Socket.io -->
   <script src="/socket.io/socket.io.js"></script>
   <!-- Dedicated Poems Script -->
-  <script src="/js/poems.js?v=9.0&t=1795420000"></script>
+  <script src="/js/poems.js?v=10.0&t=1795730000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
   <script src="/js/post-comments.js?v=1.0" defer></script>

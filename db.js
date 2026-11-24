@@ -3633,12 +3633,13 @@ const articlesDb = {
       return null;
     }
   },
-  create({ title, content, author_id, author_name, author_avatar = '', author_role = 'student' }) {
+  create({ title, content, author_id, author_name, author_avatar = '', author_role = 'student', status = 'pending', approved_by = '' }) {
     const now = Date.now();
+    const approvedAt = status === 'approved' ? now : null;
     const res = db.prepare(`
-      INSERT INTO articles (title, content, author_id, author_name, author_avatar, author_role, status, likes, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, 'pending', 0, ?)
-    `).run(title, content, author_id, author_name, author_avatar, author_role, now);
+      INSERT INTO articles (title, content, author_id, author_name, author_avatar, author_role, status, approved_by, approved_at, likes, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)
+    `).run(title, content, author_id, author_name, author_avatar, author_role, status, approved_by, approvedAt, now);
     return {
       id: Number(res.lastInsertRowid),
       title,
@@ -3647,7 +3648,9 @@ const articlesDb = {
       author_name,
       author_avatar,
       author_role,
-      status: 'pending',
+      status,
+      approved_by,
+      approved_at: approvedAt,
       likes: 0,
       created_at: now
     };

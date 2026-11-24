@@ -108,10 +108,10 @@
         <button 
           id="btnOpenWriteArticle" 
           type="button" 
-          class="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-bold text-xs sm:text-sm shadow-md transition active:scale-95 cursor-pointer border border-amber-800/20"
+          class="hidden items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-bold text-xs sm:text-sm shadow-md transition active:scale-95 cursor-pointer border border-amber-800/20"
         >
           <i class="fa-solid fa-pen-to-square text-xs"></i>
-          <span>نووسینی وتار</span>
+          <span>بڵاوکردنەوە</span><span class="hidden sm:inline">ی وتار</span>
         </button>
 
         <!-- Dialect Switcher -->
@@ -185,6 +185,18 @@
             <span>تایبەت بە بەشداربوانی پێشکەوتوو</span>
           </span>
         </div>
+
+        <!-- Direct Publish Action Inside Articles Section (Shown when logged in) -->
+        <div id="heroArticlePublishContainer" class="hidden pt-2">
+          <button
+            type="button"
+            onclick="openPageWriteArticleModal()"
+            class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:brightness-110 text-white font-black text-xs sm:text-sm shadow-lg shadow-amber-600/25 border border-amber-300/50 transition-all active:scale-95 cursor-pointer"
+          >
+            <i class="fa-solid fa-plus-circle text-sm"></i>
+            <span>بڵاوکردنەوەی وتاری نوێ</span>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -229,7 +241,7 @@
         <p class="text-xs sm:text-sm text-[#54371f] max-w-md mx-auto leading-relaxed">
           تۆ دەتوانیت یەکەم کەس بیت وتار بنووسیت! دوای پێداچوونەوە و پەسەندکردنی لەلایەن ئەدمین، لێرە بە ناوی خۆتەوە بڵاودەکرێتەوە.
         </p>
-        <button type="button" onclick="openPageWriteArticleModal()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-xs shadow-md transition active:scale-95 cursor-pointer">
+        <button id="btnEmptyWriteArticle" type="button" onclick="openPageWriteArticleModal()" class="hidden px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-xs shadow-md transition active:scale-95 cursor-pointer">
           نووسینی یەکەم وتار
         </button>
       </div>
@@ -255,7 +267,7 @@
           </div>
           <div>
             <h3 class="font-bold text-base sm:text-lg text-[#361c0c]">نووسینی وتاری نوێ</h3>
-            <p class="text-xs text-[#78350f]">ناردن بۆ ئەدمین بۆ پێداچوونەوە و بڵاوکردنەوە</p>
+            <p id="pageArticleModalSubtitle" class="text-xs text-[#78350f]">ناردن بۆ ئەدمین بۆ پێداچوونەوە و بڵاوکردنەوە</p>
           </div>
         </div>
         <button type="button" onclick="closePageWriteArticleModal()" class="w-8 h-8 rounded-xl bg-[#e4d4bd] hover:bg-[#d9c4a6] text-[#361c0c] flex items-center justify-center transition cursor-pointer">
@@ -274,7 +286,7 @@
           <textarea id="pageArticleContentInput" required rows="6" placeholder="دەقی وتارەکەت لێرە بنووسە..." class="w-full px-4 py-3 bg-[#fbf7f0] border border-[#9c784e]/35 rounded-xl text-xs sm:text-sm text-[#361c0c] placeholder-[#8c6846] focus:outline-none focus:border-amber-600 resize-y leading-relaxed"></textarea>
         </div>
 
-        <div class="p-3 rounded-2xl bg-amber-500/15 border border-amber-600/30 text-right">
+        <div id="articlePendingNotice" class="p-3 rounded-2xl bg-amber-500/15 border border-amber-600/30 text-right">
           <p class="text-xs text-[#54371f] leading-relaxed font-medium">
             ⚠️ <strong>مەرجی بڵاوبوونەوە:</strong> وتارەکەت ڕاستەوخۆ بڵاو نابێتەوە؛ سەرەتا دەچێتە بەردەستی ئەدمین، پاش پێداچوونەوە و قبوڵکردنی، بە ناوی خۆتەوە لەم پەڕەیە بڵاودەکرێتەوە.
           </p>
@@ -315,7 +327,7 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <!-- Articles JavaScript -->
-  <script src="/js/articles.js?v=8.0&t=1795470000"></script>
+  <script src="/js/articles.js?v=9.0&t=1795730000"></script>
   <script src="/js/post-comments.js?v=1.0" defer></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>

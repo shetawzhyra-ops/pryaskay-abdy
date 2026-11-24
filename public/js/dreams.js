@@ -130,6 +130,7 @@
       if (data && data.user) {
         state.currentUser = data.user;
         try { localStorage.setItem('ferga_user', JSON.stringify(data.user)); } catch (e) {}
+        updateDreamPublisherUI();
         renderDreamPosts(); // re-render with admin privileges if needed
       }
     })
@@ -454,7 +455,7 @@
     }
 
     el.dreamPostsFeed.innerHTML = posts.map(post => {
-      const isAdmin = state.currentUser?.role === 'admin' || state.currentUser?.role === 'super_admin' || state.currentUser?.role === 'teacher';
+      const isAdmin = isDreamPublisher(state.currentUser);
 
       // Author Details
       const authorName = post.author_name || d.teacherName || 'مامۆستای لێکدانەوە';
@@ -980,17 +981,162 @@
     if (el.formEditDreamPost) el.formEditDreamPost.reset();
   }
 
+  // --- PUBLISHER PERMISSION & UI HELPERS ---
+  function isDreamPublisher(user) {
+    if (!user) return false;
+    const role = (user.role || '').toLowerCase().trim();
+    const uname = (user.username || '').toLowerCase().trim();
+    const fname = (user.full_name || '').trim();
+    return (
+      role === 'admin' ||
+      role === 'super_admin' ||
+      role === 'teacher' ||
+      uname === 'azad' ||
+      Number(user.id) === 6 ||
+      fname.includes('ئازاد')
+    );
+  }
+
+  function updateDreamPublisherUI() {
+    const allowed = isDreamPublisher(state.currentUser);
+    if (el.adminDreamActionContainer) {
+      el.adminDreamActionContainer.classList.toggle('hidden', !allowed);
+    }
+    const heroPub = document.getElementById('heroDreamPublishContainer');
+    if (heroPub) {
+      heroPub.classList.toggle('hidden', !allowed);
+    }
+  }
+
+  // --- RICH MEDIA STATE FOR DREAM PUBLISHING ---
+  let dreamMediaType = 'audio';
+  let dreamMediaRecorder = null;
+  let dreamAudioChunks = [];
+  let dreamRecordedAudioBlob = null;
+  let dreamRecordTimer = null;
+  let dreamRecordSeconds = 0;
+
+  function setDreamMediaType(type) {
+    dreamMediaType = type || 'audio';
+    const tabs = {
+      audio: document.getElementById('dreamTabAudio'),
+      image: document.getElementById('dreamTabImage'),
+      video: document.getElementById('dreamTabVideo'),
+      text: document.getElementById('dreamTabText')
+    };
+    const sections = {
+      audio: document.getElementById('dreamSectionAudio'),
+      image: document.getElementById('dreamSectionImage'),
+      video: document.getElementById('dreamSectionVideo')
+    };
+
+    Object.keys(tabs).forEach(k => {
+      const btn = tabs[k];
+      if (!btn) return;
+      if (k === dreamMediaType) {
+        btn.className = 'dream-media-tab py-2 px-2 rounded-xl border-2 border-amber-600 bg-amber-500/15 text-[#361c0c] text-xs font-bold flex flex-col items-center gap-1 transition cursor-pointer';
+      } else {
+        btn.className = 'dream-media-tab py-2 px-2 rounded-xl border border-[#9c784e]/35 bg-[#fbf7f0]/80 text-[#54371f] text-xs font-bold flex flex-col items-center gap-1 transition cursor-pointer';
+      }
+    });
+
+    Object.keys(sections).forEach(k => {
+      const sec = sections[k];
+      if (sec) sec.classList.toggle('hidden', k !== dreamMediaType);
+    });
+  }
+
+  function stopDreamRecording(cancel) {
+    try {
+      if (dreamRecordTimer) { clearInterval(dreamRecordTimer); dreamRecordTimer = null; }
+      if (dreamMediaRecorder && dreamMediaRecorder.state === 'recording') {
+        dreamMediaRecorder.stop();
+      }
+      if (cancel) {
+        dreamRecordedAudioBlob = null;
+        dreamRecordSeconds = 0;
+        const box = document.getElementById('dreamAudioPreviewBox');
+        if (box) box.classList.add('hidden');
+      }
+    } catch (e) {}
+    const wave = document.getElementById('dreamVoiceWave');
+    const txt = document.getElementById('dreamRecordBtnText');
+    const timerEl = document.getElementById('dreamRecordTimer');
+    if (wave) wave.classList.add('hidden');
+    if (txt) txt.textContent = 'دەستپێکردنی تۆمارکردن';
+    if (timerEl) timerEl.classList.add('hidden');
+  }
+
+  async function toggleDreamRecording() {
+    if (dreamMediaRecorder && dreamMediaRecorder.state === 'recording') {
+      stopDreamRecording(false);
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      dreamAudioChunks = [];
+      dreamRecordedAudioBlob = null;
+      dreamRecordSeconds = 0;
+      dreamMediaRecorder = new MediaRecorder(stream);
+      dreamMediaRecorder.ondataavailable = (ev) => {
+        if (ev.data && ev.data.size > 0) dreamAudioChunks.push(ev.data);
+      };
+      dreamMediaRecorder.onstop = () => {
+        try { stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+        if (dreamAudioChunks.length > 0) {
+          dreamRecordedAudioBlob = new Blob(dreamAudioChunks, { type: 'audio/webm' });
+          const prev = document.getElementById('dreamAudioPreview');
+          const box = document.getElementById('dreamAudioPreviewBox');
+          if (prev) prev.src = URL.createObjectURL(dreamRecordedAudioBlob);
+          if (box) box.classList.remove('hidden');
+        }
+      };
+      dreamMediaRecorder.start();
+      const wave = document.getElementById('dreamVoiceWave');
+      const txt = document.getElementById('dreamRecordBtnText');
+      const timerEl = document.getElementById('dreamRecordTimer');
+      if (wave) wave.classList.remove('hidden');
+      if (txt) txt.textContent = 'وەستاندنی تۆمارکردن';
+      if (timerEl) { timerEl.textContent = '00:00'; timerEl.classList.remove('hidden'); }
+      dreamRecordTimer = setInterval(() => {
+        dreamRecordSeconds++;
+        const mins = String(Math.floor(dreamRecordSeconds / 60)).padStart(2, '0');
+        const secs = String(dreamRecordSeconds % 60).padStart(2, '0');
+        if (timerEl) timerEl.textContent = mins + ':' + secs;
+      }, 1000);
+    } catch (err) {
+      showToast('ڕێگەپێدانی مایکرۆفۆن وەرنەگیرا', 'error');
+    }
+  }
+
   // --- ADMIN MODAL CONTROLS ---
   function openNewDreamModal() {
     if (!el.modalNewDreamPost) return;
+    const nameEl = document.getElementById('dreamAuthorNameInput');
+    const badgeEl = document.getElementById('dreamAuthorBadgeInput');
+    if (nameEl && state.currentUser) {
+      nameEl.value = state.currentUser.full_name || state.currentUser.username || 'مامۆستا ئازاد';
+    }
+    if (badgeEl && state.currentUser) {
+      const r = (state.currentUser.role || '').toLowerCase();
+      if (r === 'teacher') badgeEl.value = 'مامۆستای فێرگە';
+      else if (r === 'super_admin') badgeEl.value = 'موعەبیر و بەڕێوەبەر';
+      else badgeEl.value = 'دەستەی لێکدانەوەی خەون';
+    }
+    setDreamMediaType('audio');
     el.modalNewDreamPost.classList.remove('hidden');
     if (el.dreamInputTitle) el.dreamInputTitle.focus();
   }
 
   function closeNewDreamModal() {
     if (!el.modalNewDreamPost) return;
+    stopDreamRecording(true);
     el.modalNewDreamPost.classList.add('hidden');
     if (el.formNewDreamPost) el.formNewDreamPost.reset();
+    ['dreamAudioPreviewBox', 'dreamImagePreviewBox', 'dreamVideoPreviewBox'].forEach(id => {
+      const box = document.getElementById(id);
+      if (box) box.classList.add('hidden');
+    });
   }
 
   // --- SETUP EVENT LISTENERS ---
@@ -1100,34 +1246,151 @@
       });
     });
 
-    // Admin Form Submit: New Dream Post
+    // Rich Media Tabs & File Preview Listeners
+    document.querySelectorAll('.dream-media-tab').forEach(tabBtn => {
+      tabBtn.addEventListener('click', () => {
+        setDreamMediaType(tabBtn.getAttribute('data-media-tab') || 'audio');
+      });
+    });
+
+    const btnDreamRecord = document.getElementById('btnDreamRecord');
+    if (btnDreamRecord) {
+      btnDreamRecord.addEventListener('click', toggleDreamRecording);
+    }
+
+    const dreamAudioFileInput = document.getElementById('dreamAudioFileInput');
+    if (dreamAudioFileInput) {
+      dreamAudioFileInput.addEventListener('change', () => {
+        if (dreamAudioFileInput.files && dreamAudioFileInput.files[0]) {
+          dreamRecordedAudioBlob = null;
+          const prev = document.getElementById('dreamAudioPreview');
+          const box = document.getElementById('dreamAudioPreviewBox');
+          if (prev) prev.src = URL.createObjectURL(dreamAudioFileInput.files[0]);
+          if (box) box.classList.remove('hidden');
+        }
+      });
+    }
+
+    const dreamImageFileInput = document.getElementById('dreamImageFileInput');
+    if (dreamImageFileInput) {
+      dreamImageFileInput.addEventListener('change', () => {
+        const box = document.getElementById('dreamImagePreviewBox');
+        const prev = document.getElementById('dreamImagePreview');
+        if (dreamImageFileInput.files && dreamImageFileInput.files[0]) {
+          if (prev) prev.src = URL.createObjectURL(dreamImageFileInput.files[0]);
+          if (box) box.classList.remove('hidden');
+        } else if (box) {
+          box.classList.add('hidden');
+        }
+      });
+    }
+
+    const dreamVideoFileInput = document.getElementById('dreamVideoFileInput');
+    if (dreamVideoFileInput) {
+      dreamVideoFileInput.addEventListener('change', () => {
+        const box = document.getElementById('dreamVideoPreviewBox');
+        const prev = document.getElementById('dreamVideoPreview');
+        if (dreamVideoFileInput.files && dreamVideoFileInput.files[0]) {
+          if (prev) prev.src = URL.createObjectURL(dreamVideoFileInput.files[0]);
+          if (box) box.classList.remove('hidden');
+        } else if (box) {
+          box.classList.add('hidden');
+        }
+      });
+    }
+
+    // Admin Form Submit: New Dream Post (supports Voice/Audio, Image, Video, Text)
     if (el.formNewDreamPost) {
       el.formNewDreamPost.addEventListener('submit', async (e) => {
         e.preventDefault();
         const d = DIALECTS[state.currentDialect] || DIALECTS.sorani;
 
+        const submitBtn = document.getElementById('btnSubmitDreamPost');
+        const submitBtnText = document.getElementById('btnSubmitDreamPostText');
+        if (submitBtn) submitBtn.disabled = true;
+        if (submitBtnText) submitBtnText.textContent = 'بڵاوکردنەوە...';
+
         const rawTitle = el.dreamInputTitle?.value.trim();
         const rawDreamText = el.dreamInputText?.value.trim();
         const rawInterpretation = el.dreamInputInterpretation?.value.trim();
-        const image_url = el.dreamInputImage?.value.trim() || '';
+        const imageUrlTyped = el.dreamInputImage?.value.trim() || '';
+        const authorName = document.getElementById('dreamAuthorNameInput')?.value.trim() || state.currentUser?.full_name || 'دەستەی لێکدانەوەی خەون';
+        const authorBadge = document.getElementById('dreamAuthorBadgeInput')?.value.trim() || 'مامۆستای فێرگە';
 
-        const title = rawTitle || 'لێکدانەوەی نوێ';
-        const interpretation = rawInterpretation || rawDreamText || (image_url ? 'وێنەی خەون' : 'لێکدانەوە و ئامۆژگاری');
-        const dream_text = rawDreamText || interpretation;
+        let mediaType = dreamMediaType || 'text';
+        let uploadedMediaUrl = '';
+        let audioDuration = dreamRecordSeconds || 0;
 
         try {
+          if (mediaType === 'audio') {
+            const audioInput = document.getElementById('dreamAudioFileInput');
+            const hasAudioFile = audioInput && audioInput.files && audioInput.files[0];
+            if (dreamRecordedAudioBlob || hasAudioFile) {
+              const fd = new FormData();
+              if (dreamRecordedAudioBlob) fd.append('media', dreamRecordedAudioBlob, 'voice-' + Date.now() + '.webm');
+              else fd.append('media', audioInput.files[0]);
+              const upRes = await fetch('/api/dreams/upload-media', { method: 'POST', body: fd });
+              const upData = await upRes.json();
+              if (!upData.success) throw new Error(upData.error || 'هەڵە لە بارکردنی دەنگ');
+              uploadedMediaUrl = upData.url;
+            } else {
+              mediaType = 'text';
+            }
+          } else if (mediaType === 'image') {
+            const imgInput = document.getElementById('dreamImageFileInput');
+            if (imgInput && imgInput.files && imgInput.files[0]) {
+              const fd = new FormData();
+              fd.append('media', imgInput.files[0]);
+              const upRes = await fetch('/api/dreams/upload-media', { method: 'POST', body: fd });
+              const upData = await upRes.json();
+              if (!upData.success) throw new Error(upData.error || 'هەڵە لە بارکردنی وێنە');
+              uploadedMediaUrl = upData.url;
+            } else if (imageUrlTyped) {
+              uploadedMediaUrl = imageUrlTyped;
+            } else {
+              mediaType = 'text';
+            }
+          } else if (mediaType === 'video') {
+            const vidInput = document.getElementById('dreamVideoFileInput');
+            if (vidInput && vidInput.files && vidInput.files[0]) {
+              const fd = new FormData();
+              fd.append('media', vidInput.files[0]);
+              const upRes = await fetch('/api/dreams/upload-media', { method: 'POST', body: fd });
+              const upData = await upRes.json();
+              if (!upData.success) throw new Error(upData.error || 'هەڵە لە بارکردنی ڤیدیۆ');
+              uploadedMediaUrl = upData.url;
+            } else {
+              mediaType = 'text';
+            }
+          }
+
+          let defaultTitle = 'لێکدانەوەی نوێ';
+          if (mediaType === 'audio') defaultTitle = 'تۆماری دەنگی و ئامۆژگاری';
+          else if (mediaType === 'video') defaultTitle = 'ڤیدیۆی تایبەت';
+          else if (mediaType === 'image') defaultTitle = 'وێنە و لێکدانەوە';
+
+          const title = rawTitle || defaultTitle;
+          const interpretation = rawInterpretation || rawDreamText || (mediaType === 'audio' ? 'تۆماری دەنگی' : (mediaType === 'video' ? 'ڤیدیۆ' : (mediaType === 'image' ? 'وێنەی خەون' : 'لێکدانەوە و ئامۆژگاری')));
+          const dream_text = rawDreamText || interpretation;
+
           const token = localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
           const res = await fetch('/api/dreams/posts', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
+              'Authorization': 'Bearer ' + token
             },
             body: JSON.stringify({
               title,
               dream_text,
               interpretation,
-              image_url
+              author_name: authorName,
+              author_badge: authorBadge,
+              media_type: mediaType,
+              image_url: mediaType === 'image' ? uploadedMediaUrl : (imageUrlTyped || ''),
+              video_url: mediaType === 'video' ? uploadedMediaUrl : '',
+              audio_url: mediaType === 'audio' ? uploadedMediaUrl : '',
+              audio_duration: audioDuration
             })
           });
 
@@ -1141,7 +1404,10 @@
             showToast(data.error || 'بڵاوکردنەوە سەرکەوتوو نەبوو', 'error');
           }
         } catch (err) {
-          showToast('هەڵەیەک لە پەیوەندی بە سێرڤەر ڕوویدا', 'error');
+          showToast(err.message || 'هەڵەیەک لە پەیوەندی بە سێرڤەر ڕوویدا', 'error');
+        } finally {
+          if (submitBtn) submitBtn.disabled = false;
+          if (submitBtnText) submitBtnText.textContent = 'بڵاوکردنەوەی پۆست';
         }
       });
     }
@@ -1215,12 +1481,8 @@
     applyTheme(state.currentTheme);
     applyDialect(state.currentDialect);
 
-    // Check if user is logged in as admin
-    if (state.currentUser && state.currentUser.role === 'admin') {
-      if (el.adminDreamActionContainer) {
-        el.adminDreamActionContainer.classList.remove('hidden');
-      }
-    }
+    // Show publish UI if logged in with publisher permissions
+    updateDreamPublisherUI();
 
     setupEvents();
     loadDreamPosts();

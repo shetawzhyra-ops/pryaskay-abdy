@@ -60,8 +60,33 @@
     }, 3200);
   }
 
+  // Helper: Check if logged-in user is Mamosta Azad
+  function isAzadUser(u) {
+    if (!u) return false;
+    const uname = (u.username || '').toLowerCase().trim();
+    const fname = (u.full_name || '').trim();
+    return uname === 'azad' || Number(u.id) === 6 || fname.includes('ئازاد');
+  }
+
+  function updatePoemPublisherUI() {
+    const allowed = isAzadUser(currentUser);
+    const adminBtn = document.getElementById('adminPoemActionContainer');
+    const heroBtn = document.getElementById('heroPoemPublishContainer');
+    if (adminBtn) adminBtn.classList.toggle('hidden', !allowed);
+    if (heroBtn) heroBtn.classList.toggle('hidden', !allowed);
+  }
+
+  // Restore cached user immediately
+  try {
+    const cached = localStorage.getItem('ferga_user');
+    if (cached) {
+      currentUser = JSON.parse(cached);
+    }
+  } catch (e) {}
+
   // Auth check
   async function checkUserAuth() {
+    updatePoemPublisherUI();
     const token = localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
     if (!token) return;
     try {
@@ -69,15 +94,10 @@
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
-        currentUser = await res.json();
-        const role = (currentUser.role || '').toLowerCase();
-        const username = (currentUser.username || '').toLowerCase();
-        const isAzad = username === 'azad' || currentUser.id === 6 || (role === 'super_admin' && (username === 'azad' || (currentUser.full_name || '').includes('ئازاد')));
-        
-        const adminBtn = document.getElementById('adminPoemActionContainer');
-        if (adminBtn && isAzad) {
-          adminBtn.classList.remove('hidden');
-        }
+        const data = await res.json();
+        currentUser = (data && data.user) ? data.user : data;
+        try { localStorage.setItem('ferga_user', JSON.stringify(currentUser)); } catch (e) {}
+        updatePoemPublisherUI();
         renderPoems(allPoems);
       }
     } catch (e) {
@@ -135,9 +155,7 @@
       return;
     }
 
-    const role = currentUser ? (currentUser.role || '').toLowerCase() : '';
-    const username = currentUser ? (currentUser.username || '').toLowerCase() : '';
-    const isAzad = role === 'azad' || role === 'owner' || role === 'super_admin' || role === 'admin' || username.includes('azad');
+    const isAzad = isAzadUser(currentUser);
 
     container.innerHTML = list.map(poem => {
       const d = new Date(poem.created_at || Date.now());
@@ -399,7 +417,7 @@ ${escapeHtml(poem.content)}
           if (poem) poem.likes = data.likes;
         }
       });
-      socket.on('poem_added', () => {
+      socket.on('new_poem_published', () => {
         loadPoems();
       });
       socket.on('poem_deleted', (data) => {

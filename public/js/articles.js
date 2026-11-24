@@ -72,8 +72,49 @@
     }
   }
 
+  function isArticleStaff(u) {
+    if (!u) return false;
+    const role = (u.role || '').toLowerCase().trim();
+    const uname = (u.username || '').toLowerCase().trim();
+    const fname = (u.full_name || '').trim();
+    return (
+      role === 'admin' ||
+      role === 'super_admin' ||
+      role === 'teacher' ||
+      uname === 'azad' ||
+      Number(u.id) === 6 ||
+      fname.includes('ئازاد')
+    );
+  }
+
+  function updateArticlePublishUI() {
+    const token = localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
+    const isLoggedIn = Boolean(currentUser && token);
+    const headerBtn = document.getElementById('btnOpenWriteArticle');
+    const heroPub = document.getElementById('heroArticlePublishContainer');
+    const emptyBtn = document.getElementById('btnEmptyWriteArticle');
+
+    if (headerBtn) {
+      headerBtn.classList.toggle('hidden', !isLoggedIn);
+      headerBtn.classList.toggle('inline-flex', isLoggedIn);
+    }
+    if (heroPub) {
+      heroPub.classList.toggle('hidden', !isLoggedIn);
+    }
+    if (emptyBtn) {
+      emptyBtn.classList.toggle('hidden', !isLoggedIn);
+    }
+  }
+
+  // Restore cached user immediately
+  try {
+    const cached = localStorage.getItem('ferga_user');
+    if (cached) currentUser = JSON.parse(cached);
+  } catch (e) {}
+
   // Auth check
   async function checkUserAuth() {
+    updateArticlePublishUI();
     const token = localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
     if (!token) return;
     try {
@@ -81,8 +122,14 @@
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
-        currentUser = await res.json();
+        const data = await res.json();
+        currentUser = (data && data.user) ? data.user : data;
+        try { localStorage.setItem('ferga_user', JSON.stringify(currentUser)); } catch (e) {}
+        updateArticlePublishUI();
         renderArticles(allArticles);
+      } else if (res.status === 401) {
+        currentUser = null;
+        updateArticlePublishUI();
       }
     } catch (e) {
       console.warn('Auth check failed:', e);
@@ -138,8 +185,7 @@
 
     if (emptyState) emptyState.classList.add('hidden');
 
-    const role = (currentUser && currentUser.role ? currentUser.role : '').toLowerCase();
-    const isAdmin = role === 'admin' || role === 'super_admin' || role === 'teacher';
+    const isAdmin = isArticleStaff(currentUser);
 
     const cardsHtml = articles.map(art => {
       const authorInitial = (art.author_name || 'ق')[0];
@@ -315,6 +361,23 @@
       window.location.href = '/';
       return;
     }
+    const isDirect = isArticleStaff(currentUser);
+    const notice = document.getElementById('articlePendingNotice');
+    const subtitle = document.getElementById('pageArticleModalSubtitle');
+    const submitBtn = document.getElementById('pageArticleSubmitBtn');
+
+    if (notice) notice.classList.toggle('hidden', isDirect);
+    if (subtitle) {
+      subtitle.innerText = isDirect
+        ? 'بڵاوکردنەوەی ڕاستەوخۆ لە بەشی پریاسکەی وتار'
+        : 'ناردن بۆ ئەدمین بۆ پێداچوونەوە و بڵاوکردنەوە';
+    }
+    if (submitBtn) {
+      submitBtn.innerHTML = isDirect
+        ? '<i class="fa-solid fa-paper-plane"></i><span>بڵاوکردنەوەی وتار</span>'
+        : '<i class="fa-solid fa-paper-plane"></i><span>ناردن بۆ چاودێری</span>';
+    }
+
     const modal = document.getElementById('modalArticlePageWrite');
     if (modal) modal.classList.remove('hidden');
   };
@@ -345,6 +408,8 @@
       return;
     }
 
+    const isDirect = isArticleStaff(currentUser);
+
     try {
       if (btn) {
         btn.disabled = true;
@@ -365,7 +430,14 @@
         closePageWriteArticleModal();
         if (titleInput) titleInput.value = '';
         if (contentInput) contentInput.value = '';
-        alert('دەستخۆش! وتارەکەت بە سەرکەوتوویی نێردرا.\n\nتێبینی: وتارەکەت پاش پێداچوونەوە لەلایەن ئەدمین، بە ناوی خۆتەوە لە پەڕەی پریاسکەی وتار بڵاودەکرێتەوە.');
+        if (data.article && data.article.status === 'approved') {
+          allArticles.unshift(data.article);
+          updateArticlesCount(allArticles.length);
+          renderArticles(allArticles);
+          showToast('وتارەکەت بە سەرکەوتوویی بڵاوکرایەوە ✨');
+        } else {
+          alert('دەستخۆش! وتارەکەت بە سەرکەوتوویی نێردرا.\n\nتێبینی: وتارەکەت پاش پێداچوونەوە لەلایەن ئەدمین، بە ناوی خۆتەوە لە پەڕەی پریاسکەی وتار بڵاودەکرێتەوە.');
+        }
       } else {
         alert(data.error || 'هەڵە لە ناردنی وتار');
       }
@@ -374,10 +446,28 @@
     } finally {
       if (btn) {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i><span>ناردن بۆ چاودێری</span>';
+        btn.innerHTML = isDirect
+          ? '<i class="fa-solid fa-paper-plane"></i><span>بڵاوکردنەوەی وتار</span>'
+          : '<i class="fa-solid fa-paper-plane"></i><span>ناردن بۆ چاودێری</span>';
       }
     }
   };
+
+  // Real-time Socket Updates
+  try {
+    if (typeof io !== 'undefined') {
+      const socket = io();
+      socket.on('new_article_published', () => loadArticles());
+      socket.on('article_status_updated', () => loadArticles());
+      socket.on('article_deleted', (data) => {
+        if (data && data.id) {
+          allArticles = allArticles.filter(a => a.id !== Number(data.id));
+          updateArticlesCount(allArticles.length);
+          renderArticles(allArticles);
+        }
+      });
+    }
+  } catch (e) {}
 
   // Search Filter
   function initSearch() {
