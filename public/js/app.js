@@ -26247,3 +26247,77 @@ function closePoemsModal() {
 
 }
 
+
+
+// =========================================================================
+// APP BACK BUTTON / EXIT CONFIRMATION GUARD
+// =========================================================================
+window._pryaskaAllowExit = false;
+
+function armAppExitBackGuard() {
+  if (window._pryaskaAllowExit) return;
+  try {
+    if (!window.history.state || !window.history.state.pryaskaGuard) {
+      window.history.pushState({ pryaskaGuard: true }, document.title, window.location.href);
+    }
+  } catch (e) {}
+}
+
+function openAppExitConfirmModal() {
+  const modal = document.getElementById('appExitConfirmModal');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function cancelAppExit() {
+  const modal = document.getElementById('appExitConfirmModal');
+  if (modal) modal.classList.add('hidden');
+  window._pryaskaAllowExit = false;
+  armAppExitBackGuard();
+}
+
+function confirmAppExit() {
+  const modal = document.getElementById('appExitConfirmModal');
+  if (modal) modal.classList.add('hidden');
+  window._pryaskaAllowExit = true;
+  try {
+    if (window.Android && typeof window.Android.exitApp === 'function') {
+      window.Android.exitApp();
+      return;
+    }
+    if (navigator.app && typeof navigator.app.exitApp === 'function') {
+      navigator.app.exitApp();
+      return;
+    }
+  } catch (e) {}
+  try {
+    const steps = (window.history.state && window.history.state.pryaskaGuard) ? -2 : -1;
+    window.history.go(steps);
+  } catch (e) {}
+  setTimeout(() => {
+    try { window.close(); } catch (e) {}
+    setTimeout(() => { window._pryaskaAllowExit = false; }, 1200);
+  }, 200);
+}
+
+(function initAppExitBackGuard() {
+  try {
+    if (!window.history.state || !window.history.state.pryaskaGuard) {
+      window.history.replaceState({ pryaskaBase: true }, document.title, window.location.href);
+      window.history.pushState({ pryaskaGuard: true }, document.title, window.location.href);
+    }
+  } catch (e) {}
+
+  const rearmOnInteraction = () => {
+    if (!window._pryaskaAllowExit) {
+      armAppExitBackGuard();
+    }
+  };
+  document.addEventListener('pointerdown', rearmOnInteraction, { passive: true });
+  document.addEventListener('keydown', rearmOnInteraction, { passive: true });
+
+  window.addEventListener('popstate', () => {
+    if (window._pryaskaAllowExit) return;
+    armAppExitBackGuard();
+    openAppExitConfirmModal();
+  });
+})();
