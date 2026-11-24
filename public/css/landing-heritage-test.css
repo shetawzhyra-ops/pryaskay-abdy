@@ -731,3 +731,380 @@ html body #landingPage #landingQuranHero #heroSubtitle.quran-hero-subtitle {
   border: 1px solid rgba(180, 83, 9, 0.48) !important;
   box-shadow: 0 6px 16px -4px rgba(180, 83, 9, 0.35) !important;
 }
+
+
+/* ============================================================================
+ * 7. DARK MODE (QURAN.COM NOCTURNAL EMERALD-OBSIDIAN & WARM GOLD THEME)
+ * Activated when html has class 'dark' or body has 'dark-theme' / 'dark-mode'
+ * ============================================================================ */
+html.dark #landingPage,
+body.dark-theme #landingPage,
+body.dark-mode #landingPage {
+  background-color: #0e1713 !important;
+  background-image:
+    radial-gradient(ellipse 85% 55% at 50% 18%, rgba(16, 185, 129, 0.09) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 70% at 50% 100%, rgba(4, 15, 10, 0.7) 0%, transparent 60%) !important;
+  background-attachment: fixed !important;
+  color: #fff8eb !important;
+}
+
+html.dark #landingPage .landing-grid-pattern,
+body.dark-theme #landingPage .landing-grid-pattern,
+body.dark-mode #landingPage .landing-grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(245, 158, 11, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 158, 11, 0.035) 1px, transparent 1px) !important;
+  background-size: 42px 42px !important;
+  mask-image: radial-gradient(ellipse at 50% 35%, rgba(0, 0, 0, 0.9) 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 35%, rgba(0, 0, 0, 0.9) 20%, transparent 80%);
+}
+
+/* TOP NAVBAR DARK */
+html.dark #landingHeader.landing-navbar-premium,
+body.dark-theme #landingHeader.landing-navbar-premium,
+body.dark-mode #landingHeader.landing-navbar-premium {
+  background: rgba(14, 23, 18, 0.94) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.22) !important;
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 28px -10px rgba(0, 0, 0, 0.65) !important;
+}
+
+html.dark #landingHeader .landing-emblem-box,
+body.dark-theme #landingHeader .landing-emblem-box,
+body.dark-mode #landingHeader .landing-emblem-box {
+  background: linear-gradient(145deg, #1c2e24 0%, #101c15 100%) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.45) !important;
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+}
+
+html.dark #landingHeader .logo-text-animated,
+html.dark #landingHeader .landing-brand-word,
+body.dark-theme #landingHeader .logo-text-animated,
+body.dark-theme #landingHeader .landing-brand-word,
+body.dark-mode #landingHeader .logo-text-animated,
+body.dark-mode #landingHeader .landing-brand-word {
+  color: #fff8eb !important;
+  -webkit-text-fill-color: #fff8eb !important;
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.9),
+    0 2px 10px rgba(245, 158, 11, 0.4),
+    0 0 20px rgba(16, 185, 129, 0.25) !important;
+}
+
+html.dark #landingHeader .landing-nav-icon-btn,
+body.dark-theme #landingHeader .landing-nav-icon-btn,
+body.dark-mode #landingHeader .landing-nav-icon-btn {
+  background: rgba(22, 36, 28, 0.92) !important;
+  border: 1px solid rgba(245, 158, 11, 0.32) !important;
+  color: #fef3c7 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 3px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark #landingHeader .landing-nav-icon-btn:hover,
+body.dark-theme #landingHeader .landing-nav-icon-btn:hover,
+body.dark-mode #landingHeader .landing-nav-icon-btn:hover {
+  background: rgba(30, 48, 38, 0.98) !important;
+  border-color: rgba(245, 158, 11, 0.6) !important;
+  color: #ffffff !important;
+}
+
+html.dark #dialectDropdownMenu,
+body.dark-theme #dialectDropdownMenu,
+body.dark-mode #dialectDropdownMenu {
+  background: rgba(18, 29, 23, 0.98) !important;
+  border: 1px solid rgba(245, 158, 11, 0.38) !important;
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.8) !important;
+  color: #fef3c7 !important;
+}
+
+html.dark #dialectDropdownMenu .dialect-option,
+body.dark-theme #dialectDropdownMenu .dialect-option,
+body.dark-mode #dialectDropdownMenu .dialect-option {
+  color: #fef3c7 !important;
+}
+
+html.dark #dialectDropdownMenu .dialect-option:hover,
+body.dark-theme #dialectDropdownMenu .dialect-option:hover,
+body.dark-mode #dialectDropdownMenu .dialect-option:hover {
+  background: rgba(245, 158, 11, 0.15) !important;
+  color: #ffffff !important;
+}
+
+/* HERO TITLE & SUBTITLE DARK */
+html.dark #landingPage #landingQuranHero #heroTitle.quran-hero-main-title,
+body.dark-theme #landingPage #landingQuranHero #heroTitle.quran-hero-main-title,
+body.dark-mode #landingPage #landingQuranHero #heroTitle.quran-hero-main-title {
+  color: #fff8eb !important;
+  -webkit-text-fill-color: #fff8eb !important;
+  text-shadow:
+    0 2px 0 #050d08,
+    0 6px 18px rgba(0, 0, 0, 0.8),
+    0 0 25px rgba(245, 158, 11, 0.35) !important;
+}
+
+html.dark #landingPage #landingQuranHero #heroSubtitle.quran-hero-subtitle,
+body.dark-theme #landingPage #landingQuranHero #heroSubtitle.quran-hero-subtitle,
+body.dark-mode #landingPage #landingQuranHero #heroSubtitle.quran-hero-subtitle {
+  color: #fde68a !important;
+  -webkit-text-fill-color: #fde68a !important;
+  text-shadow:
+    0 1.5px 6px rgba(0, 0, 0, 0.8),
+    0 1px 2px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* HERO SEARCH BAR DARK */
+html.dark #landingPage .quran-hero-search-bar,
+body.dark-theme #landingPage .quran-hero-search-bar,
+body.dark-mode #landingPage .quran-hero-search-bar {
+  background: linear-gradient(166deg, rgba(22, 36, 28, 0.98) 0%, rgba(15, 25, 20, 0.98) 100%) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.42) !important;
+  box-shadow:
+    0 20px 45px -10px rgba(0, 0, 0, 0.65),
+    0 4px 12px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  color: #fff8eb !important;
+}
+
+html.dark #landingPage .quran-hero-search-bar:hover,
+html.dark #landingPage .quran-hero-search-bar:focus-within,
+body.dark-theme #landingPage .quran-hero-search-bar:hover,
+body.dark-theme #landingPage .quran-hero-search-bar:focus-within,
+body.dark-mode #landingPage .quran-hero-search-bar:hover,
+body.dark-mode #landingPage .quran-hero-search-bar:focus-within {
+  border-color: rgba(245, 158, 11, 0.75) !important;
+  box-shadow:
+    0 22px 48px -12px rgba(0, 0, 0, 0.75),
+    0 0 0 3px rgba(245, 158, 11, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+html.dark #landingPage .quran-hero-search-icon,
+body.dark-theme #landingPage .quran-hero-search-icon,
+body.dark-mode #landingPage .quran-hero-search-icon {
+  color: #f59e0b !important;
+}
+
+html.dark #landingPage #heroInlineSearchInput.quran-hero-search-input,
+body.dark-theme #landingPage #heroInlineSearchInput.quran-hero-search-input,
+body.dark-mode #landingPage #heroInlineSearchInput.quran-hero-search-input {
+  color: #fff8eb !important;
+  -webkit-text-fill-color: #fff8eb !important;
+}
+
+html.dark #landingPage #heroInlineSearchInput.quran-hero-search-input::placeholder,
+body.dark-theme #landingPage #heroInlineSearchInput.quran-hero-search-input::placeholder,
+body.dark-mode #landingPage #heroInlineSearchInput.quran-hero-search-input::placeholder {
+  color: #a7bfae !important;
+  -webkit-text-fill-color: #a7bfae !important;
+}
+
+html.dark #landingPage #heroInlineSearchResults.quran-hero-search-dropdown,
+body.dark-theme #landingPage #heroInlineSearchResults.quran-hero-search-dropdown,
+body.dark-mode #landingPage #heroInlineSearchResults.quran-hero-search-dropdown {
+  background: linear-gradient(166deg, rgba(20, 32, 25, 0.99) 0%, rgba(13, 22, 17, 0.98) 100%) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.45) !important;
+  box-shadow:
+    0 24px 50px -10px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  color: #fef3c7 !important;
+}
+
+html.dark #landingPage #heroInlineSearchResults .search-result-item:hover,
+body.dark-theme #landingPage #heroInlineSearchResults .search-result-item:hover,
+body.dark-mode #landingPage #heroInlineSearchResults .search-result-item:hover {
+  background: rgba(245, 158, 11, 0.12) !important;
+}
+
+/* QUICK ACTION PILL BUTTONS DARK */
+html.dark #landingPage .quran-hero-pill-outline,
+body.dark-theme #landingPage .quran-hero-pill-outline,
+body.dark-mode #landingPage .quran-hero-pill-outline {
+  background: rgba(20, 34, 26, 0.88) !important;
+  color: #fef3c7 !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.38) !important;
+  box-shadow:
+    0 8px 20px -6px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark #landingPage .quran-hero-pill-outline:hover,
+body.dark-theme #landingPage .quran-hero-pill-outline:hover,
+body.dark-mode #landingPage .quran-hero-pill-outline:hover {
+  background: rgba(26, 44, 34, 0.98) !important;
+  border-color: rgba(245, 158, 11, 0.65) !important;
+  color: #ffffff !important;
+  transform: translateY(-1.5px) !important;
+}
+
+/* THE 4 FEATURED ACTION CARDS DARK */
+html.dark #landingFeaturedDualSection > div > button,
+html.dark #landingFeaturedDualSection > div > div > a,
+html.dark #landingFeaturedDualSection > div > a,
+body.dark-theme #landingFeaturedDualSection > div > button,
+body.dark-theme #landingFeaturedDualSection > div > div > a,
+body.dark-theme #landingFeaturedDualSection > div > a,
+body.dark-mode #landingFeaturedDualSection > div > button,
+body.dark-mode #landingFeaturedDualSection > div > div > a,
+body.dark-mode #landingFeaturedDualSection > div > a {
+  background: linear-gradient(165deg, rgba(20, 33, 26, 0.98) 0%, rgba(14, 23, 18, 0.97) 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.32) !important;
+  box-shadow:
+    0 18px 38px -12px rgba(0, 0, 0, 0.65),
+    0 4px 10px -3px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark #landingFeaturedDualSection > div > button::before,
+html.dark #landingFeaturedDualSection > div > div > a::before,
+html.dark #landingFeaturedDualSection > div > a::before,
+body.dark-theme #landingFeaturedDualSection > div > button::before,
+body.dark-theme #landingFeaturedDualSection > div > div > a::before,
+body.dark-theme #landingFeaturedDualSection > div > a::before,
+body.dark-mode #landingFeaturedDualSection > div > button::before,
+body.dark-mode #landingFeaturedDualSection > div > div > a::before,
+body.dark-mode #landingFeaturedDualSection > div > a::before {
+  border: 1px solid rgba(245, 158, 11, 0.18) !important;
+}
+
+html.dark #landingFeaturedDualSection > div > button:hover,
+html.dark #landingFeaturedDualSection > div > div > a:hover,
+html.dark #landingFeaturedDualSection > div > a:hover,
+body.dark-theme #landingFeaturedDualSection > div > button:hover,
+body.dark-theme #landingFeaturedDualSection > div > div > a:hover,
+body.dark-theme #landingFeaturedDualSection > div > a:hover,
+body.dark-mode #landingFeaturedDualSection > div > button:hover,
+body.dark-mode #landingFeaturedDualSection > div > div > a:hover,
+body.dark-mode #landingFeaturedDualSection > div > a:hover {
+  border-color: rgba(245, 158, 11, 0.65) !important;
+  box-shadow:
+    0 24px 44px -12px rgba(0, 0, 0, 0.8),
+    0 0 25px rgba(245, 158, 11, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+html.dark #landingFeaturedDualSection h3,
+body.dark-theme #landingFeaturedDualSection h3,
+body.dark-mode #landingFeaturedDualSection h3 {
+  color: #fff8eb !important;
+}
+
+html.dark #landingFeaturedDualSection p,
+body.dark-theme #landingFeaturedDualSection p,
+body.dark-mode #landingFeaturedDualSection p {
+  color: #cbd5e1 !important;
+}
+
+/* ANNOUNCEMENTS CARD DARK */
+html.dark #announcementsSection #announcementActiveCard.landing-ann-card,
+body.dark-theme #announcementsSection #announcementActiveCard.landing-ann-card,
+body.dark-mode #announcementsSection #announcementActiveCard.landing-ann-card {
+  background: linear-gradient(166deg, rgba(20, 34, 26, 0.99) 0%, rgba(13, 23, 17, 0.98) 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.36) !important;
+  border-right: 4px solid #f59e0b !important;
+  box-shadow:
+    0 20px 46px -14px rgba(0, 0, 0, 0.75),
+    0 6px 14px -4px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark #announcementsSection #announcementActiveCard.landing-ann-card::before,
+body.dark-theme #announcementsSection #announcementActiveCard.landing-ann-card::before,
+body.dark-mode #announcementsSection #announcementActiveCard.landing-ann-card::before {
+  border: 1px solid rgba(245, 158, 11, 0.18) !important;
+}
+
+html.dark #announcementsSection #annActiveTitle,
+body.dark-theme #announcementsSection #annActiveTitle,
+body.dark-mode #announcementsSection #annActiveTitle {
+  color: #fff8eb !important;
+}
+
+html.dark #announcementsSection #annActiveContent,
+body.dark-theme #announcementsSection #annActiveContent,
+body.dark-mode #announcementsSection #annActiveContent {
+  color: #e2e8f0 !important;
+}
+
+html.dark #announcementsSection #annActiveDate,
+body.dark-theme #announcementsSection #annActiveDate,
+body.dark-mode #announcementsSection #annActiveDate {
+  color: #fcd34d !important;
+}
+
+html.dark #announcementsSection .landing-ann-author,
+body.dark-theme #announcementsSection .landing-ann-author,
+body.dark-mode #announcementsSection .landing-ann-author {
+  color: #fbbf24 !important;
+}
+
+html.dark #announcementsSection #announcementActiveCard .border-t,
+body.dark-theme #announcementsSection #announcementActiveCard .border-t,
+body.dark-mode #announcementsSection #announcementActiveCard .border-t {
+  border-top-color: rgba(245, 158, 11, 0.20) !important;
+}
+
+/* DREAMS GATEWAY SECTION DARK */
+html.dark #dreamsGatewaySection .landing-dreams-banner,
+html.dark #dreamsGatewaySection .glass-card,
+body.dark-theme #dreamsGatewaySection .landing-dreams-banner,
+body.dark-theme #dreamsGatewaySection .glass-card,
+body.dark-mode #dreamsGatewaySection .landing-dreams-banner,
+body.dark-mode #dreamsGatewaySection .glass-card {
+  background: linear-gradient(165deg, rgba(20, 33, 26, 0.98) 0%, rgba(14, 23, 18, 0.97) 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.32) !important;
+  box-shadow: 0 16px 38px -10px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark #dreamsGatewaySection #dreamGatewayTitle,
+body.dark-theme #dreamsGatewaySection #dreamGatewayTitle,
+body.dark-mode #dreamsGatewaySection #dreamGatewayTitle {
+  color: #fff8eb !important;
+}
+
+html.dark #dreamsGatewaySection #dreamGatewayDesc,
+body.dark-theme #dreamsGatewaySection #dreamGatewayDesc,
+body.dark-mode #dreamsGatewaySection #dreamGatewayDesc {
+  color: #cbd5e1 !important;
+}
+
+/* FOOTER DARK */
+html.dark #landingPage footer.landing-footer,
+body.dark-theme #landingPage footer.landing-footer,
+body.dark-mode #landingPage footer.landing-footer {
+  background: rgba(13, 22, 17, 0.96) !important;
+  border-top: 1px solid rgba(245, 158, 11, 0.25) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark #landingPage footer.landing-footer span,
+html.dark #landingPage footer.landing-footer a,
+html.dark #landingPage footer.landing-footer p,
+body.dark-theme #landingPage footer.landing-footer span,
+body.dark-theme #landingPage footer.landing-footer a,
+body.dark-theme #landingPage footer.landing-footer p,
+body.dark-mode #landingPage footer.landing-footer span,
+body.dark-mode #landingPage footer.landing-footer a,
+body.dark-mode #landingPage footer.landing-footer p {
+  color: #cbd5e1 !important;
+}
+
+/* SMOOTH TRANSITION */
+#landingPage,
+#landingHeader,
+.quran-hero-search-bar,
+.landing-ann-card,
+.landing-footer,
+.landing-nav-icon-btn,
+.quran-hero-pill-outline {
+  transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease !important;
+}

@@ -1670,16 +1670,40 @@ function applyLandingCardPaletteToDoc(colorId, doc) {
 
 function applyActiveSavedTheme(doc) {
   doc = doc || document;
+  var savedTheme = 'light';
   try {
     localStorage.removeItem('ferga_landing_duo_color');
     localStorage.removeItem('ferga_landing_duo_mode');
-    localStorage.setItem('ferga_landing_bg_color', 'sufi-sage');
-    localStorage.setItem('ferga_landing_card_color', 'card-warm-sand');
-    localStorage.setItem('seereen_theme', 'light');
-    localStorage.setItem('ferga_light_mode', '1');
+    savedTheme = localStorage.getItem('seereen_theme') || (localStorage.getItem('ferga_light_mode') === '0' ? 'dark' : 'light');
   } catch(e) {}
-  applyLandingBgPaletteToDoc('sufi-sage', doc);
-  applyLandingCardPaletteToDoc('card-warm-sand', doc);
+
+  if (savedTheme === 'dark') {
+    try {
+      if (doc.documentElement) {
+        doc.documentElement.classList.add('dark', 'dark-theme', 'dark-mode');
+        doc.documentElement.classList.remove('light-theme', 'light-mode');
+      }
+      if (doc.body) {
+        doc.body.classList.add('dark', 'dark-theme', 'dark-mode');
+        doc.body.classList.remove('light-theme', 'light-mode');
+      }
+    } catch(e) {}
+    applyLandingBgPaletteToDoc('bg-sufi-emerald-dark', doc);
+    applyLandingCardPaletteToDoc('card-sufi-emerald', doc);
+  } else {
+    try {
+      if (doc.documentElement) {
+        doc.documentElement.classList.remove('dark', 'dark-theme', 'dark-mode');
+        doc.documentElement.classList.add('light-theme', 'light-mode');
+      }
+      if (doc.body) {
+        doc.body.classList.remove('dark', 'dark-theme', 'dark-mode');
+        doc.body.classList.add('light-theme', 'light-mode');
+      }
+    } catch(e) {}
+    applyLandingBgPaletteToDoc('sufi-sage', doc);
+    applyLandingCardPaletteToDoc('card-warm-sand', doc);
+  }
 }
 
 if (typeof document !== 'undefined') {

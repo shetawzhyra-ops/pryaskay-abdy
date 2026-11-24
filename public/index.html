@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl" class="h-full overflow-hidden light-theme light-mode">
+<html lang="ku" dir="rtl" class="h-full overflow-hidden">
 <head>
 <meta charset="UTF-8">
 <script>
@@ -66,63 +66,17 @@
 
 
 
-        localStorage.setItem('seereen_theme', 'light');
-
-
-
-
-
-
-
-        localStorage.setItem('ferga_light_mode', '1');
-
-
-
-
-
-
-
-        localStorage.setItem('ferga_landing_bg_color', 'sufi-sage'); document.documentElement.classList.remove('dark');
-
-
-
-
-
-
-
-        localStorage.setItem('ferga_landing_card_color', 'card-warm-sand');
-
-
-
-
-
-
-
-        localStorage.removeItem('ferga_landing_duo_color');
-
-
-
-
-
-
-
-        localStorage.removeItem('ferga_landing_duo_mode');
-
-
-
-
-
-
-
-        document.documentElement.classList.add('light-theme', 'light-mode');
-
-
-
-
-
-
-
-        document.documentElement.classList.remove('dark', 'dark-theme', 'dark-mode');
+        var savedTheme = 'light';
+        try {
+          savedTheme = localStorage.getItem('seereen_theme') || (localStorage.getItem('ferga_light_mode') === '0' ? 'dark' : 'light');
+        } catch(e) {}
+        if (savedTheme === 'dark') {
+          document.documentElement.classList.add('dark', 'dark-theme', 'dark-mode');
+          document.documentElement.classList.remove('light-theme', 'light-mode');
+        } else {
+          document.documentElement.classList.add('light-theme', 'light-mode');
+          document.documentElement.classList.remove('dark', 'dark-theme', 'dark-mode');
+        }
 
 
 
@@ -153,7 +107,7 @@
 --card-warm-sand: rgba(235, 218, 196, 0.97);
 }
 /* 1. Global Page Backgrounds (Landing & Inside App) */
-html, body, body.in-landing, body.in-app, body.light-mode, body.light-theme, #mainApp, #classroomsLobbyView, #chatView, main {
+html.light-theme, html.light-mode, html:not(.dark) body, body.light-theme, body.light-mode, body.in-landing.light-theme, body.in-landing.light-mode, body.in-app.light-theme, body.in-app.light-mode, body.light-theme #mainApp, body.light-theme #classroomsLobbyView, body.light-theme #chatView, body.light-theme main {
 background-color: #86b89c !important;
 background: #86b89c !important;
       background-image: none !important;
@@ -1864,7 +1818,7 @@ background: rgba(56, 189, 248, 0.85);
 }
 </style>
 <!-- Experimental Modern Heritage Landing Style (Non-color-changing, clean revertable) -->
-  <link id="landingHeritageTestCss" rel="stylesheet" href="/css/landing-heritage-test.css?v=12.0&t=1795620000">
+  <link id="landingHeritageTestCss" rel="stylesheet" href="/css/landing-heritage-test.css?v=13.0&t=1795700000">
   <!-- Inside Application Modern Heritage / Manuscript Luxe Style -->
   <link id="appHeritageCss" rel="stylesheet" href="/css/app-heritage.css?v=1.0&t=1795500000">
 </head>
@@ -2081,6 +2035,18 @@ class="landing-nav-login-btn px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm fo
 >
 <span>چوونەژوورەوە</span>
 <i class="fa-solid fa-arrow-right-to-bracket text-[11px] opacity-90"></i>
+</button>
+<!-- Dark Mode Toggle Button (Quran.com 🌙 / ☀️ Style) -->
+<button 
+  id="btnLandingThemeToggle" 
+  type="button" 
+  onclick="toggleLandingTheme(event)" 
+  class="landing-nav-icon-btn inline-flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer group" 
+  title="گۆڕین بۆ دۆخی تاریک (دارک مۆد)" 
+  aria-label="گۆڕینی دۆخی تاریکی و ڕووناکی"
+>
+  <i id="landingThemeToggleIcon" class="fa-solid fa-moon text-sm sm:text-base text-amber-500 transition-transform group-hover:scale-110"></i>
+  <span id="landingThemeToggleLabel" class="hidden md:inline text-[11px]">دارک مۆد</span>
 </button>
 <!-- Dialect Globe Icon Dropdown (Quran.com 🌐 style) -->
 <div class="relative inline-block text-right z-40" id="dialectDropdownContainer">
@@ -8602,9 +8568,9 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 <script>if (typeof io === 'undefined') { document.write('<script src="/socket.io/socket.io.js"><\\/script>'); }</script>
 <!-- Shared Palettes & Themes -->
-<script src="/js/palettes.js?v=95.0&t=1795610000"></script>
+<script src="/js/palettes.js?v=96.0&t=1795700000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=108.0&t=1795600000"></script>
+<script src="/js/app.js?v=109.0&t=1795700000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->

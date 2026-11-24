@@ -10928,12 +10928,33 @@ function getCurrentTheme() {
 function applyTheme(theme) {
   if (theme !== 'dark' && theme !== 'light') theme = 'light';
 
-  document.body.classList.remove('light-theme', 'light-mode', 'sepia-theme', 'emerald-theme', 'oled-theme', 'matte-theme');
+  document.body.classList.remove('light-theme', 'light-mode', 'sepia-theme', 'emerald-theme', 'oled-theme', 'matte-theme', 'dark', 'dark-theme', 'dark-mode');
+  document.documentElement.classList.remove('light-theme', 'light-mode', 'dark', 'dark-theme', 'dark-mode');
+
   if (theme === 'light') {
     document.body.classList.add('light-theme', 'light-mode');
+    document.documentElement.classList.add('light-theme', 'light-mode');
     localStorage.setItem('ferga_light_mode', '1');
+    localStorage.setItem('ferga_landing_bg_color', 'sufi-sage');
+    localStorage.setItem('ferga_landing_card_color', 'card-warm-sand');
+    if (typeof applyLandingBgPaletteToDoc === 'function') {
+      applyLandingBgPaletteToDoc('sufi-sage', document);
+    }
+    if (typeof applyLandingCardPaletteToDoc === 'function') {
+      applyLandingCardPaletteToDoc('card-warm-sand', document);
+    }
   } else {
+    document.body.classList.add('dark', 'dark-theme', 'dark-mode');
+    document.documentElement.classList.add('dark', 'dark-theme', 'dark-mode');
     localStorage.setItem('ferga_light_mode', '0');
+    localStorage.setItem('ferga_landing_bg_color', 'bg-sufi-emerald-dark');
+    localStorage.setItem('ferga_landing_card_color', 'card-sufi-emerald');
+    if (typeof applyLandingBgPaletteToDoc === 'function') {
+      applyLandingBgPaletteToDoc('bg-sufi-emerald-dark', document);
+    }
+    if (typeof applyLandingCardPaletteToDoc === 'function') {
+      applyLandingCardPaletteToDoc('card-sufi-emerald', document);
+    }
   }
   localStorage.setItem('seereen_theme', theme);
 
@@ -10943,11 +10964,8 @@ function applyTheme(theme) {
   if (icon) icon.className = (theme === 'light') ? 'fa-solid fa-moon text-indigo-400 text-sm' : 'fa-solid fa-sun text-amber-400 text-sm';
   if (text) text.innerText = (theme === 'light') ? 'دۆخی تاریک' : 'دۆخی ڕووناک';
 
-  // Landing page toggle button
-  const lIcon = document.getElementById('landingThemeToggleIcon');
-  const lText = document.getElementById('landingThemeToggleText');
-  if (lIcon) lIcon.className = (theme === 'light') ? 'fa-solid fa-moon text-indigo-400 text-sm' : 'fa-solid fa-sun text-amber-400 text-sm';
-  if (lText) lText.innerText = (theme === 'light') ? 'دۆخی تاریک' : 'دۆخی ڕووناک';
+  // Landing page toggle button (Quran.com style 🌙 / ☀️)
+  updateLandingThemeToggleUI(theme);
 
   // Mobile drawer toggle
   const drawerIcon = document.getElementById('drawerThemeIcon');
@@ -10957,6 +10975,66 @@ function applyTheme(theme) {
   if (drawerText) drawerText.innerText = (theme === 'light') ? 'گۆڕین بۆ دۆخی تاریک 🌙' : 'گۆڕین بۆ دۆخی ڕووناک ☀️';
   if (drawerBadge) drawerBadge.innerText = (theme === 'light') ? 'ڕووناک' : 'تاریک';
 }
+
+function updateLandingThemeToggleUI(theme) {
+  const isDark = (theme === 'dark');
+  const btn = document.getElementById('btnLandingThemeToggle');
+  const icon = document.getElementById('landingThemeToggleIcon');
+  const label = document.getElementById('landingThemeToggleLabel') || document.getElementById('landingThemeToggleText');
+  
+  if (icon) {
+    icon.className = isDark 
+      ? 'fa-solid fa-sun text-sm sm:text-base text-amber-400 transition-transform group-hover:scale-110 group-hover:rotate-45' 
+      : 'fa-solid fa-moon text-sm sm:text-base text-amber-500 transition-transform group-hover:scale-110 group-hover:-rotate-12';
+  }
+  if (label) {
+    label.innerText = isDark ? 'ڕووناک مۆد' : 'دارک مۆد';
+  }
+  if (btn) {
+    btn.setAttribute('title', isDark ? 'گۆڕین بۆ دۆخی ڕووناک (وایت مۆد)' : 'گۆڕین بۆ دۆخی تاریک (دارک مۆد)');
+    btn.setAttribute('aria-label', isDark ? 'گۆڕین بۆ دۆخی ڕووناک' : 'گۆڕین بۆ دۆخی تاریک');
+  }
+}
+window.updateLandingThemeToggleUI = updateLandingThemeToggleUI;
+
+function toggleLandingTheme(e) {
+  if (e) {
+    try {
+      e.preventDefault();
+      e.stopPropagation();
+    } catch(err) {}
+  }
+  const isDark = document.documentElement.classList.contains('dark') || 
+                 document.body.classList.contains('dark') || 
+                 document.body.classList.contains('dark-theme') || 
+                 (localStorage.getItem('seereen_theme') === 'dark');
+  const targetTheme = isDark ? 'light' : 'dark';
+  
+  if (typeof animateThemeChange === 'function') {
+    animateThemeChange(e || null, targetTheme === 'light', function() {
+      applyTheme(targetTheme);
+      if (typeof showLiveToastNotification === 'function') {
+        showLiveToastNotification(
+          targetTheme === 'dark' 
+            ? 'دۆخی تاریک (دارک مۆد) چالاک کرا 🌙' 
+            : 'دۆخی ڕووناک (وایت مۆد) چالاک کرا ☀️',
+          'indigo'
+        );
+      }
+    });
+  } else {
+    applyTheme(targetTheme);
+    if (typeof showLiveToastNotification === 'function') {
+      showLiveToastNotification(
+        targetTheme === 'dark' 
+          ? 'دۆخی تاریک (دارک مۆد) چالاک کرا 🌙' 
+          : 'دۆخی ڕووناک (وایت مۆد) چالاک کرا ☀️',
+        'indigo'
+      );
+    }
+  }
+}
+window.toggleLandingTheme = toggleLandingTheme;
 
 function openThemeModal() {
   const modal = document.getElementById('themeModal');
