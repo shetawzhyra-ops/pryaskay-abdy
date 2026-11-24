@@ -1559,7 +1559,7 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateG
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@600;700&family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=105.0&t=1795770000">
+<link rel="stylesheet" href="/css/style.css?v=106.0&t=1795795000">
 <style>
 /* Pre-render instant visibility rules: prevent landing page from flashing on refresh */
 html.in-app-mode #landingPage,
@@ -2787,11 +2787,11 @@ Change language here • تغيير لغة الموقع من هنا
 <i id="pushNotificationIcon" class="fa-regular fa-bell text-cyan-400 text-sm"></i>
 <span class="hidden lg:inline" id="pushNotificationText">ئاگاداری</span>
 </button>
-<!-- Dream Interpretation Quick Nav Button (Desktop/Tablet: sm:flex) -->
-<button id="dreamAdminNavBtn" onclick="openDreamAdminModal()" class="hidden md:flex relative p-1.5 sm:px-2.5 sm:py-1.5 hover:bg-purple-500/20 text-purple-300 hover:text-purple-100 font-black text-xs rounded-full transition items-center gap-1.5 shrink-0 active:scale-95 cursor-pointer" title="بەشی لێکدانەوەی خەونەکان (چات لەگەڵ خەون بینەکان)">
-<i class="fa-solid fa-moon text-purple-400 text-xs sm:text-sm"></i>
-<span class="hidden md:inline font-bold text-xs">لێکدانەوەی خەون</span>
-<span id="dreamUnreadBadge" class="hidden px-1.5 py-0.2 bg-purple-600 text-white text-[9px] font-black rounded-full animate-pulse min-w-[16px] text-center">0</span>
+<!-- Dream Interpretation Quick Nav Button (Right Next to Dark Mode) -->
+<button id="dreamAdminNavBtn" onclick="openDreamAdminModal()" class="hidden relative p-1.5 sm:px-2.5 sm:py-1.5 rounded-full transition items-center gap-1.5 shrink-0 z-10 active:scale-95 cursor-pointer" title="بەشی لێکدانەوەی خەونەکان">
+  <i class="fa-solid fa-moon text-amber-600 text-xs sm:text-sm"></i>
+  <span class="hidden lg:inline font-bold text-xs">لێکدانەوەی خەونەکان</span>
+  <span id="dreamUnreadBadge" class="hidden px-1.5 py-0.2 bg-amber-600 text-white text-[9px] font-black rounded-full animate-pulse min-w-[16px] text-center">0</span>
 </button>
 <!-- Dark Mode Toggle Button Inside App -->
 <button type="button" id="btnThemeToggle" onclick="toggleThemeMode(event)" class="flex p-1.5 sm:px-2.5 sm:py-1.5 rounded-full transition items-center gap-1.5 active:scale-95 shrink-0 z-10 cursor-pointer" title="گۆڕینی دۆخی تاریک و ڕووناک">
@@ -3009,17 +3009,6 @@ Change language here • تغيير لغة الموقع من هنا
 <span>ئامرازەکانی ستاف و ئەدمین</span>
 </div>
 <div class="drawer-tools-grid">
-<!-- Dream Interpretation Dashboard Button (بەشی لێکدانەوەی خەونەکان) -->
-<button id="drawerDreamAdminBtn" onclick="closeMainMenuDrawer(); openDreamAdminModal();" class="hidden drawer-tool-btn group !border-purple-500/40 !bg-gradient-to-r !from-purple-950/40 !via-slate-900 !to-indigo-950/40 hover:!border-purple-400">
-<div class="flex items-center gap-3 sm:gap-4 min-w-0">
-<div class="drawer-tool-icon-box !bg-purple-500/20 !border-purple-400/40 !text-purple-300">
-<i class="fa-solid fa-moon"></i>
-</div>
-<span id="drawerDreamAdminText" class="drawer-tool-title !text-purple-200">بەشی لێکدانەوەی خەونەکان</span>
-</div>
-<span id="drawerDreamUnreadBadge" class="hidden px-2.5 py-1 bg-purple-500 text-white text-xs font-black rounded-full min-w-[22px] text-center shadow-md animate-pulse">0</span>
-<span id="drawerDreamAdminBadge" class="drawer-tool-badge !bg-purple-500/20 !text-purple-300 !border-purple-400/30">ستاف</span>
-</button>
 <!-- Published Dream Posts Management Button (خەونە بڵاوکراوەکان) -->
 <a id="drawerDreamPostsManageBtn" href="/dreams" target="_blank" onclick="closeMainMenuDrawer();" class="hidden drawer-tool-btn group !border-cyan-500/40 !bg-gradient-to-r !from-cyan-950/40 !via-slate-900 !to-slate-950 hover:!border-cyan-400">
 <div class="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -8365,7 +8354,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=98.0&t=1795770000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=116.0&t=1795790000"></script>
+<script src="/js/app.js?v=117.0&t=1795795000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->

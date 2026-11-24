@@ -1193,7 +1193,6 @@ function updateUserUI() {
   const drawerAdminPanelBtn = document.getElementById('drawerAdminPanelBtn');
   const drawerAiAdvisorBtn = document.getElementById('drawerAiAdvisorBtn');
   const drawerAiSecurityBtn = document.getElementById('drawerAiSecurityBtn');
-  const drawerDreamAdminBtn = document.getElementById('drawerDreamAdminBtn');
   const drawerMembersBtn = document.getElementById('drawerMembersBtn');
   const drawerLibraryBtn = document.getElementById('drawerLibraryBtn');
 
@@ -1250,11 +1249,7 @@ function updateUserUI() {
   if (canDream) {
     if (dreamAdminNavBtn) {
       dreamAdminNavBtn.classList.remove('hidden');
-      dreamAdminNavBtn.classList.add('hidden', 'sm:flex');
-    }
-    if (drawerDreamAdminBtn) {
-      drawerDreamAdminBtn.classList.remove('hidden');
-      drawerDreamAdminBtn.classList.add('flex');
+      dreamAdminNavBtn.classList.add('flex');
     }
     if (drawerDreamPostsManageBtn) {
       drawerDreamPostsManageBtn.classList.remove('hidden');
@@ -1273,11 +1268,7 @@ function updateUserUI() {
   } else {
     if (dreamAdminNavBtn) {
       dreamAdminNavBtn.classList.add('hidden');
-      dreamAdminNavBtn.classList.remove('sm:flex');
-    }
-    if (drawerDreamAdminBtn) {
-      drawerDreamAdminBtn.classList.add('hidden');
-      drawerDreamAdminBtn.classList.remove('flex');
+      dreamAdminNavBtn.classList.remove('flex');
     }
     if (drawerDreamPostsManageBtn) {
       drawerDreamPostsManageBtn.classList.add('hidden');
@@ -12477,7 +12468,6 @@ async function loadDreamSessionsCount() {
 
     const badge = document.getElementById('dreamUnreadBadge');
     const mobileBadge = document.getElementById('mobileDreamUnreadBadge');
-    const drawerBadge = document.getElementById('drawerDreamUnreadBadge');
 
     if (unreadCount > 0 && !isModalOpen) {
       if (badge) {
@@ -12488,14 +12478,9 @@ async function loadDreamSessionsCount() {
         mobileBadge.innerText = unreadCount;
         mobileBadge.classList.remove('hidden');
       }
-      if (drawerBadge) {
-        drawerBadge.innerText = unreadCount;
-        drawerBadge.classList.remove('hidden');
-      }
     } else {
       if (badge) badge.classList.add('hidden');
       if (mobileBadge) mobileBadge.classList.add('hidden');
-      if (drawerBadge) drawerBadge.classList.add('hidden');
     }
   } catch (e) {}
 }
@@ -12504,10 +12489,8 @@ function openDreamAdminModal() {
   localStorage.setItem('seereen_last_dream_visit', Date.now().toString());
   const badge = document.getElementById('dreamUnreadBadge');
   const mobileBadge = document.getElementById('mobileDreamUnreadBadge');
-  const drawerBadge = document.getElementById('drawerDreamUnreadBadge');
   if (badge) badge.classList.add('hidden');
   if (mobileBadge) mobileBadge.classList.add('hidden');
-  if (drawerBadge) drawerBadge.classList.add('hidden');
 
   const modal = document.getElementById('dreamAdminModal');
   if (!modal) return;

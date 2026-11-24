@@ -9375,12 +9375,8 @@ body.light-theme .landing-footer-brand {
 
 
 
-  /* Hide auxiliary buttons (Dream, Theme Toggle, Push Notification) on mobile navbar to eliminate clutter */
-
-  #dreamAdminNavBtn,
-
+  /* Hide auxiliary buttons (Theme Toggle, Push Notification) on mobile navbar to eliminate clutter */
   #pushNotificationBtn,
-
   #themeToggleBtn {
 
     display: none !important;
