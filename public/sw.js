@@ -2,7 +2,7 @@
  * Service Worker for پریاسکەی عەبدی (PWA, Offline Fallback & Background Push Notifications)
  */
 
-const CACHE_NAME = 'pryaska-cache-v2';
+const CACHE_NAME = 'pryaska-cache-v3';
 const STATIC_ASSETS = [
   '/',
   '/offline.html',

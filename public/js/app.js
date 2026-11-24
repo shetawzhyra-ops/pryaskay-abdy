@@ -1276,10 +1276,20 @@ function updateUserUI() {
   }
 
   if (typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
+    const drawerAudioBtn = document.getElementById('drawerAudioStudioBtn');
+    if (drawerAudioBtn) {
+      drawerAudioBtn.classList.remove('hidden');
+      drawerAudioBtn.classList.add('flex');
+    }
     if (typeof checkPendingArticlesCount === 'function') {
       checkPendingArticlesCount();
     }
   } else {
+    const drawerAudioBtn = document.getElementById('drawerAudioStudioBtn');
+    if (drawerAudioBtn) {
+      drawerAudioBtn.classList.add('hidden');
+      drawerAudioBtn.classList.remove('flex');
+    }
     ['headerArticlesPendingBadge', 'drawerProfileArticlesPendingBadge', 'profArticlesPendingBadge'].forEach(id => {
       const b = document.getElementById(id);
       if (b) {
