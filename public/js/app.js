@@ -7991,6 +7991,14 @@ async function openUserProfileModal(userId) {
         examsManagerCard.classList.add('hidden');
       }
     }
+    const audioStudioCard = document.getElementById('profAudioStudioCard');
+    if (audioStudioCard) {
+      if (isMe && typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
+        audioStudioCard.classList.remove('hidden');
+      } else {
+        audioStudioCard.classList.add('hidden');
+      }
+    }
     const studentExamsCard = document.getElementById('profStudentExamsCard');
     if (studentExamsCard) {
       if (isMe && !(typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser))) {

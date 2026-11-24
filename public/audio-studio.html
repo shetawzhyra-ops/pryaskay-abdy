@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>ستۆدیۆی دەنگی بەڕێوەبەر — پریاسکەی عەبدی</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png?v=5">
+  <meta name="theme-color" content="#1b432e">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <script>
+    try {
+      var _t = localStorage.getItem('seereen_theme');
+      if (_t === 'dark') {
+        document.documentElement.classList.add('dark', 'dark-theme');
+      } else {
+        document.documentElement.classList.remove('dark', 'dark-theme');
+      }
+    } catch (e) {}
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/css/audio-studio.css?v=1.0">
+</head>
+<body>
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="as-topbar">
+    <div class="as-topbar-inner">
+      <div class="as-brand-wrap">
+        <a href="/" class="as-btn as-btn-soft as-btn-sm">
+          <i class="fa-solid fa-arrow-right"></i>
+          <span>سەرەکی</span>
+        </a>
+        <div class="as-brand-icon">
+          <i class="fa-solid fa-sliders"></i>
+        </div>
+        <div style="min-width:0;">
+          <h1 class="as-brand-title">ستۆدیۆی دەنگی بەڕێوەبەر</h1>
+          <p class="as-brand-sub">بڕین، پاککردنەوە و شاردنەوەی تەواوی دەنگ (نەگەڕاوە)</p>
+        </div>
+      </div>
+
+      <div class="as-top-actions">
+        <button id="btnUndo" type="button" class="as-icon-btn" title="گەڕانەوە بۆ هەنگاوی پێشوو (Undo)" disabled>
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+        <button id="btnRedo" type="button" class="as-icon-btn" title="پێشخستن (Redo)" disabled>
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+        <button id="asThemeToggle" type="button" class="as-icon-btn" title="گۆڕینی دۆخی ڕووناک / تاریک">
+          <i id="asThemeIcon" class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="as-main">
+
+    <!-- LOADING / ACCESS GUARD -->
+    <section id="asLoadingView" class="as-panel" style="text-align:center; padding:3rem 1.2rem;">
+      <i class="fa-solid fa-circle-notch fa-spin" style="font-size:2.2rem; color:var(--as-gold); margin-bottom:0.75rem;"></i>
+      <h2 style="margin:0 0 0.35rem; font-size:1.15rem;">پشکنینی دەسەڵاتی بەڕێوەبەر...</h2>
+    </section>
+
+    <section id="asDeniedView" class="as-panel hidden" style="text-align:center; padding:3rem 1.2rem;">
+      <i class="fa-solid fa-shield-halved" style="font-size:2.6rem; color:var(--as-crimson); margin-bottom:0.75rem;"></i>
+      <h2 style="margin:0 0 0.45rem; font-size:1.25rem;">ئەم بەشە تەنها تایبەتە بە بەڕێوەبەرەکان</h2>
+      <p id="asDeniedMsg" style="margin:0 0 1.2rem; font-size:0.9rem; color:var(--as-ink-muted);">تکایە بە ئەکاونتی بەڕێوەبەر (هێمن طه یان ئازادی موعەبیر) بچۆ ژوورەوە.</p>
+      <a href="/" class="as-btn as-btn-primary"><i class="fa-solid fa-house"></i> گەڕانەوە بۆ پەڕەی سەرەکی</a>
+    </section>
+
+    <!-- STUDIO WORKSPACE (MANAGERS ONLY) -->
+    <div id="asWorkspace" class="hidden">
+
+      <!-- PRIVACY GUARANTEE NOTICE -->
+      <div class="as-privacy-ribbon">
+        <i class="fa-solid fa-user-shield"></i>
+        <span>پاراستنی نهێنی ١٠٠٪: هەموو بڕین و شاردنەوەی دەنگەکان ڕاستەوخۆ لە ناو ئامێرەکەی خۆتدا دەکرێن — تۆمارە ڕەسەنەکە هەرگیز ناچێتە سەر سێرڤەر!</span>
+      </div>
+
+      <!-- STEP 1: LOAD OR RECORD AUDIO -->
+      <section class="as-panel">
+        <div class="as-upload-grid">
+          <div id="asDropzone" class="as-dropzone">
+            <input id="asFileInput" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg,.webm,.aac,.amr,.mp4" class="hidden">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size:2rem; color:var(--as-gold); margin-bottom:0.5rem;"></i>
+            <div style="font-size:0.98rem; font-weight:800; margin-bottom:0.25rem;">هەڵبژاردنی فایلی دەنگی یان تۆماری تەلەفۆن</div>
+            <div style="font-size:0.78rem; color:var(--as-ink-muted);">کلیک بکە یان فایلەکە ڕاکێشە ئێرە (MP3, M4A, WAV, OGG, WebM)</div>
+          </div>
+
+          <div class="as-rec-box">
+            <i class="fa-solid fa-microphone-lines" style="font-size:1.7rem; color:var(--as-crimson);"></i>
+            <div style="font-size:0.9rem; font-weight:800;">تۆمارکردنی دەنگی ڕاستەوخۆ</div>
+            <button id="btnRecordMic" type="button" class="as-btn as-btn-danger as-btn-rec">
+              <i class="fa-solid fa-circle"></i>
+              <span id="btnRecordLabel">دەستپێکردنی تۆمارکردن</span>
+            </button>
+            <div id="recTimerText" style="font-size:0.78rem; color:var(--as-ink-muted); font-family:'Plus Jakarta Sans',monospace; direction:ltr;">00:00</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2: WAVEFORM EDITOR (HIDDEN UNTIL AUDIO LOADED) -->
+      <section id="asEditorPanel" class="as-panel hidden">
+        <div class="as-file-meta-bar">
+          <div class="as-meta-pills">
+            <span class="as-pill is-gold"><i class="fa-solid fa-waveform-lines"></i> <span id="asFileName">دەنگ</span></span>
+            <span class="as-pill"><i class="fa-regular fa-clock" style="color:var(--as-gold);"></i> ماوە: <strong id="asDurationLabel" style="direction:ltr;">00:00</strong></span>
+            <span class="as-pill"><i class="fa-solid fa-wave-square" style="color:var(--as-gold);"></i> <span id="asChannelInfo">Mono</span></span>
+            <span id="asAnonCountBadge" class="as-pill is-shield hidden"><i class="fa-solid fa-shield-halved"></i> <span id="asAnonCountText">0 بەش شاردراوەتەوە</span></span>
+          </div>
+
+          <div id="asStereoTools" class="hidden" style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+            <button type="button" id="btnKeepLeftCh" class="as-btn as-btn-soft as-btn-sm" title="تەنها کەناڵی چەپ بهێڵەرەوە">تەنها کەناڵی چەپ (L)</button>
+            <button type="button" id="btnKeepRightCh" class="as-btn as-btn-soft as-btn-sm" title="تەنها کەناڵی ڕاست بهێڵەرەوە">تەنها کەناڵی ڕاست (R)</button>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE WAVEFORM CANVAS -->
+        <div id="asWaveScroll" class="as-wave-scroll">
+          <canvas id="asWaveCanvas" class="as-wave-canvas"></canvas>
+        </div>
+        <div style="font-size:0.75rem; color:var(--as-ink-muted); margin-top:0.4rem;">
+          <i class="fa-solid fa-hand-pointer" style="color:var(--as-gold);"></i>
+          کلیک بکە بۆ گواستنەوەی شوێنی لێدان، یان دەستی لەسەر ڕابکێشە بۆ دیاریکردنی ئەو بەشەی کەسی بەرامبەر قسەی تێدا دەکات (یان دوگمەکانی «سەرەتا A» و «کۆتایی B» بەکاربهێنە).
+        </div>
+
+        <!-- TRANSPORT & ZOOM BAR -->
+        <div class="as-transport-row">
+          <div class="as-transport-group">
+            <button id="btnPlayPause" type="button" class="as-btn as-btn-primary">
+              <i id="playIcon" class="fa-solid fa-play"></i>
+              <span id="playText">لێدان</span>
+            </button>
+            <button id="btnPlaySelection" type="button" class="as-btn as-btn-gold as-btn-sm" title="گوێگرتن لە تەنها بەشە دیاریکراوەکە">
+              <i class="fa-solid fa-repeat"></i>
+              <span>لێدانی بەشی دیاریکراو</span>
+            </button>
+            <button id="btnSkipBack" type="button" class="as-btn as-btn-soft as-btn-sm" title="٥ چرکە بۆ دواوە">-5s</button>
+            <button id="btnSkipFwd" type="button" class="as-btn as-btn-soft as-btn-sm" title="٥ چرکە بۆ پێشەوە">+5s</button>
+          </div>
+
+          <div class="as-transport-group">
+            <span id="asTimeReadout" class="as-time-readout">00:00.0 / 00:00.0</span>
+            <button type="button" class="as-btn as-btn-soft as-btn-sm" data-zoom="1">1x</button>
+            <button type="button" class="as-btn as-btn-soft as-btn-sm" data-zoom="2">2x</button>
+            <button type="button" class="as-btn as-btn-soft as-btn-sm" data-zoom="4">4x</button>
+            <button type="button" class="as-btn as-btn-soft as-btn-sm" data-zoom="8">8x</button>
+          </div>
+        </div>
+
+        <!-- PRECISION SELECTION & CALLER SEGMENT QUEUE BAR -->
+        <div class="as-selection-bar">
+          <div class="as-transport-group">
+            <button id="btnMarkStart" type="button" class="as-btn as-btn-soft as-btn-sm">
+              <i class="fa-solid fa-flag" style="color:var(--as-emerald);"></i>
+              سەرەتا (A) لێرە دابنێ
+            </button>
+            <button id="btnMarkEnd" type="button" class="as-btn as-btn-soft as-btn-sm">
+              <i class="fa-solid fa-flag-checkered" style="color:var(--as-crimson);"></i>
+              کۆتایی (B) لێرە دابنێ
+            </button>
+            <button id="btnClearSel" type="button" class="as-btn as-btn-soft as-btn-sm">
+              <i class="fa-solid fa-xmark"></i> هەڵوەشاندنەوە
+            </button>
+          </div>
+
+          <div class="as-transport-group">
+            <span id="asSelReadout" class="as-pill is-gold" style="direction:ltr;">A: -- | B: --</span>
+            <button id="btnQueueSegment" type="button" class="as-btn as-btn-shield as-btn-sm" title="زیادکردنی ئەم بەشە بۆ لیستی قسەکانی کەسی بەرامبەر تا هەموویان بەیەکەوە بشاردرێنەوە">
+              <i class="fa-solid fa-plus"></i>
+              زیادکردن بۆ لیستی شاردنەوە
+            </button>
+          </div>
+        </div>
+
+        <!-- QUEUED CALLER SEGMENTS LIST -->
+        <div id="asSegmentsWrap" class="hidden" style="margin-top:0.75rem;">
+          <div style="font-size:0.78rem; font-weight:800; color:var(--as-crimson); margin-bottom:0.35rem;">
+            <i class="fa-solid fa-layer-group"></i>
+            بەشە هەڵبژێردراوەکانی کەسی بەرامبەر (تەنها ئەمانە دەگۆڕێن و دەنگی تۆ وەک خۆی دەمێنێتەوە):
+          </div>
+          <div id="asSegmentsList" class="as-segments-list"></div>
+        </div>
+      </section>
+
+      <!-- STEP 3: VOICE ANONYMIZER & CUTTING TOOLS -->
+      <section id="asToolsPanel" class="as-panel hidden">
+        <div class="as-tabs">
+          <button type="button" class="as-tab-btn is-active" data-tab="disguise">
+            <i class="fa-solid fa-user-secret"></i>
+            گۆڕین و شاردنەوەی دەنگ (نەگەڕاوە)
+          </button>
+          <button type="button" class="as-tab-btn" data-tab="cut">
+            <i class="fa-solid fa-scissors"></i>
+            بڕین، بێدەنگکردن و خاوێنکردنەوە
+          </button>
+          <button type="button" class="as-tab-btn" data-tab="export">
+            <i class="fa-solid fa-file-export"></i>
+            داگرتن و بڵاوکردنەوە
+          </button>
+        </div>
+
+        <!-- TAB 1: VOICE ANONYMIZATION & CHANGING -->
+        <div id="tabPanelDisguise">
+          <div style="font-size:0.82rem; font-weight:800; margin-bottom:0.45rem;">لەسەر کام بەش جێبەجێ بکرێت؟</div>
+          <div class="as-scope-row">
+            <button type="button" class="as-scope-chip is-active" data-scope="selection">
+              <i class="fa-solid fa-highlighter"></i> تەنها بەشی دیاریکراو [A تا B]
+            </button>
+            <button type="button" class="as-scope-chip" data-scope="queue">
+              <i class="fa-solid fa-layer-group"></i> هەموو لیستی بەشەکان (<span id="scopeQueueCount">0</span>)
+            </button>
+            <button type="button" class="as-scope-chip" data-scope="all">
+              <i class="fa-solid fa-globe"></i> هەموو دەنگەکە
+            </button>
+          </div>
+
+          <div class="as-presets-grid">
+            <button type="button" class="as-preset-card is-selected" data-preset="anon_deep">
+              <span class="as-preset-title">
+                <span>🛡️ شاردنەوەی تەواو — قورس</span>
+                <i class="fa-solid fa-shield-halved" style="color:var(--as-crimson);"></i>
+              </span>
+              <span class="as-secure-tag"><i class="fa-solid fa-lock"></i> ١٠٠٪ نەگەڕاوە</span>
+              <span class="as-preset-desc">تێکشکاندنی تەواوی پەنجەمۆری دەنگ بە Vocoderـی ١٨-باند + گۆڕینی ناجێگیری تۆن. وشەکان ڕوونن و هەرگیز ناگەڕێتەوە بۆ دەنگە ڕەسەنەکە.</span>
+            </button>
+
+            <button type="button" class="as-preset-card" data-preset="anon_witness">
+              <span class="as-preset-title">
+                <span>🛡️ شاردنەوەی دۆکیومێنتاری — ناوەند</span>
+                <i class="fa-solid fa-user-shield" style="color:var(--as-crimson);"></i>
+              </span>
+              <span class="as-secure-tag"><i class="fa-solid fa-lock"></i> ١٠٠٪ نەگەڕاوە</span>
+              <span class="as-preset-desc">شێوازی پاراستنی شاهێد و چاوپێکەوتنی نهێنی؛ تێگەیشتن لێی زۆر ئاسانە و ناسنامەی قسەکەر بە تەواوی دەسڕێتەوە.</span>
+            </button>
+
+            <button type="button" class="as-preset-card" data-preset="anon_high">
+              <span class="as-preset-title">
+                <span>🛡️ شاردنەوەی تەواو — تۆنی جیاواز</span>
+                <i class="fa-solid fa-mask" style="color:var(--as-crimson);"></i>
+              </span>
+              <span class="as-secure-tag"><i class="fa-solid fa-lock"></i> ١٠٠٪ نەگەڕاوە</span>
+              <span class="as-preset-desc">گۆڕینی فۆرمانت و لەرەلەر بۆ تۆنێکی بەرز و بێلایەن بە Vocoderـی نەگەڕاوە تا تەنانەت ڕەگەز و تەمەنیش نەناسرێتەوە.</span>
+            </button>
+
+            <button type="button" class="as-preset-card" data-preset="custom">
+              <span class="as-preset-title">
+                <span>🎚️ گۆڕینی دەستیی تۆن و خێرایی</span>
+                <i class="fa-solid fa-sliders" style="color:var(--as-gold);"></i>
+              </span>
+              <span class="as-warn-tag"><i class="fa-solid fa-circle-info"></i> گۆڕینی ئاسایی (دەستکاریکراو)</span>
+              <span class="as-preset-desc">بە ویستی خۆت پلەی قورسایی (Pitch)، خێرایی (Speed) و دەنگدانەوە دیاری بکە (بۆ نهێنی تەواو ٣ شێوازەکەی سەرەوە هەڵبژێرە).</span>
+            </button>
+          </div>
+
+          <!-- CUSTOM SLIDERS (VISIBLE WHEN PRESET === 'custom') -->
+          <div id="asCustomSliders" class="as-sliders-grid hidden">
+            <div class="as-slider-item">
+              <label><span>تۆنی دەنگ (Pitch)</span><strong id="valPitch">0 ستێپ</strong></label>
+              <input id="slPitch" type="range" min="-10" max="10" step="0.5" value="-3">
+            </div>
+            <div class="as-slider-item">
+              <label><span>خێرایی (Speed)</span><strong id="valSpeed">1.00x</strong></label>
+              <input id="slSpeed" type="range" min="0.75" max="1.45" step="0.05" value="1">
+            </div>
+            <div class="as-slider-item">
+              <label><span>بەرزی سەوت (Volume)</span><strong id="valVolume">100%</strong></label>
+              <input id="slVolume" type="range" min="50" max="200" step="5" value="100">
+            </div>
+            <div class="as-slider-item">
+              <label><span>دەنگدانەوە (Reverb)</span><strong id="valReverb">0%</strong></label>
+              <input id="slReverb" type="range" min="0" max="45" step="5" value="0">
+            </div>
+          </div>
+
+          <div style="display:flex; flex-wrap:wrap; gap:0.6rem; align-items:center;">
+            <button id="btnPreviewVoice" type="button" class="as-btn as-btn-soft">
+              <i class="fa-solid fa-headphones"></i>
+              گوێگرتنی پێشوەختە (تاقیکردنەوە)
+            </button>
+            <button id="btnApplyVoice" type="button" class="as-btn as-btn-shield">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              جێبەجێکردنی گۆڕین / شاردنەوەی دەنگ
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 2: CUT, TRIM, MUTE, BEEP & STUDIO CLEANUP -->
+        <div id="tabPanelCut" class="hidden">
+          <div class="as-cut-grid" style="margin-bottom:1rem;">
+            <button id="btnCutSelection" type="button" class="as-btn as-btn-danger">
+              <i class="fa-solid fa-scissors"></i>
+              بڕینی بەشی دیاریکراو [A تا B] و لکاندنەوە
+            </button>
+            <button id="btnTrimKeepSelection" type="button" class="as-btn as-btn-gold">
+              <i class="fa-solid fa-crop-simple"></i>
+              تەنها هێشتنەوەی [A تا B] (بڕینی دەرەوە)
+            </button>
+            <button id="btnMuteSelection" type="button" class="as-btn as-btn-soft">
+              <i class="fa-solid fa-volume-xmark"></i>
+              بێدەنگکردنی بەشی دیاریکراو (سڕینەوەی ناو)
+            </button>
+            <button id="btnBeepSelection" type="button" class="as-btn as-btn-soft">
+              <i class="fa-solid fa-bell"></i>
+              دانانی دەنگی «بیپ» لەسەر بەشی دیاریکراو
+            </button>
+          </div>
+
+          <div style="padding:1rem; border-radius:1rem; background:var(--as-paper-soft); border:1px solid var(--as-border);">
+            <div style="font-size:0.9rem; font-weight:800; margin-bottom:0.35rem;">
+              <i class="fa-solid fa-sparkles" style="color:var(--as-gold);"></i>
+              پاککردنەوە و ڕازاندنەوەی دەنگی ستۆدیۆ (بۆ وانە و دەنگی خۆت)
+            </div>
+            <p style="margin:0 0 0.85rem; font-size:0.78rem; color:var(--as-ink-muted);">
+              لابردنی ژاوەژاوی نزم (Low Rumble)، ڕوونکردنەوەی پیتەکان، ڕێکخستنی یەکسانی بەرزی دەنگ (Normalize) و نەرمکردنی سەرەتا و کۆتایی.
+            </p>
+            <div style="display:flex; flex-wrap:wrap; gap:0.55rem;">
+              <button id="btnEnhanceStudio" type="button" class="as-btn as-btn-primary as-btn-sm">
+                <i class="fa-solid fa-wand-sparkles"></i>
+                خاوێنکردنەوە و ڕوونکردنەوەی دەنگ
+              </button>
+              <button id="btnFadeEdges" type="button" class="as-btn as-btn-soft as-btn-sm">
+                <i class="fa-solid fa-wave-square"></i>
+                نەرمکردنی سەرەتا و کۆتایی (Fade In/Out)
+              </button>
+              <button id="btnNormalizeAudio" type="button" class="as-btn as-btn-soft as-btn-sm">
+                <i class="fa-solid fa-volume-high"></i>
+                ڕێکخستنی بەرزی سەوت (Normalize)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: EXPORT & PUBLISH -->
+        <div id="tabPanelExport" class="hidden">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1rem;">
+
+            <!-- DOWNLOAD LOCAL -->
+            <div style="padding:1.05rem; border-radius:1rem; background:var(--as-card); border:1.5px solid var(--as-border);">
+              <h3 style="margin:0 0 0.4rem; font-size:1rem;">
+                <i class="fa-solid fa-download" style="color:var(--as-gold);"></i>
+                داگرتنی فایلە ئامادەکراوەکە بۆ ئامێرەکەت
+              </h3>
+              <p style="margin:0 0 0.85rem; font-size:0.78rem; color:var(--as-ink-muted); line-height:1.6;">
+                تەنها دەنگە کۆتاییەکە (دوای بڕین و شاردنەوەی دەنگ) وەک فایلی WAVـی پاک دادەبەزێت و لە هەموو مۆبایل و واتسئەپ و تێلیگرامێک کار دەکات.
+              </p>
+              <div style="margin-bottom:0.75rem;">
+                <label style="display:block; font-size:0.78rem; font-weight:800; margin-bottom:0.3rem;">کوالیتی و قەبارە:</label>
+                <select id="asExportRate" class="as-select">
+                  <option value="22050">قەبارەی گونجاو بۆ مۆبایل (22kHz Mono — ڕوون و سووک)</option>
+                  <option value="44100">کوالیتی ستۆدیۆی بەرز (44.1kHz)</option>
+                </select>
+              </div>
+              <button id="btnDownloadWav" type="button" class="as-btn as-btn-primary" style="width:100%;">
+                <i class="fa-solid fa-file-audio"></i>
+                داگرتنی فایلە نوێیەکە (WAV)
+              </button>
+            </div>
+
+            <!-- PUBLISH DIRECTLY TO RECORDED LESSONS -->
+            <div style="padding:1.05rem; border-radius:1rem; background:var(--as-card); border:1.5px solid var(--as-border);">
+              <h3 style="margin:0 0 0.4rem; font-size:1rem;">
+                <i class="fa-solid fa-cloud-arrow-up" style="color:var(--as-emerald);"></i>
+                ناردنی ڕاستەوخۆ بۆ «پریاسکەی وانەکان»
+              </h3>
+              <p style="margin:0 0 0.7rem; font-size:0.78rem; color:var(--as-ink-muted);">
+                تەنها فایلە پاک و شاردراوەکە دەنێردرێت بۆ ناو وانە تۆمارکراوەکان.
+              </p>
+              <div style="display:flex; flex-direction:column; gap:0.55rem;">
+                <input id="pubLessonTitle" type="text" class="as-input" placeholder="ناونیشانی وانە یان تۆمارەکە...">
+                <select id="pubLessonTeacher" class="as-select">
+                  <option value="">هەڵبژاردنی مامۆستا...</option>
+                </select>
+                <select id="pubLessonFolder" class="as-select">
+                  <option value="0">بەبێ فۆڵدەر (سەرەکی)</option>
+                </select>
+                <button id="btnPublishLesson" type="button" class="as-btn as-btn-gold" style="width:100%;">
+                  <i class="fa-solid fa-paper-plane"></i>
+                  بڵاوکردنەوە لە پریاسکەی وانەکان
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- PROCESSING OVERLAY -->
+  <div id="asBusyOverlay" class="as-busy-overlay hidden">
+    <div class="as-busy-card">
+      <i class="fa-solid fa-wave-square fa-beat" style="font-size:2.1rem; color:var(--as-gold); margin-bottom:0.65rem;"></i>
+      <h3 id="asBusyTitle" style="margin:0 0 0.35rem; font-size:1.08rem;">خەریکی پرۆسێسکردنی دەنگەکەیە...</h3>
+      <p id="asBusySub" style="margin:0; font-size:0.82rem; color:var(--as-ink-muted);">تکایە چەند چرکەیەک چاوەڕێ بە</p>
+    </div>
+  </div>
+
+  <!-- TOAST STACK -->
+  <div id="asToastStack" class="as-toast-stack"></div>
+
+  <script src="/js/audio-studio.js?v=1.0"></script>
+</body>
+</html>

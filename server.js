@@ -9,6 +9,7 @@ const { validateRegistrationPayload } = require('./lib/registration');
 const { registerPublicPlatformRoutes } = require('./routes/publicContent');
 const { registerPublicCommentsRoutes } = require('./routes/publicComments');
 const { registerExamRoutes } = require('./routes/exams');
+const { registerAudioStudioRoutes } = require('./routes/audioStudio');
 let compression;
 try { compression = require('compression'); } catch(e) {}
 const http = require('http');
@@ -1187,6 +1188,13 @@ registerExamRoutes(app, {
   optimizeSingleFile,
   io,
   onlineUsers,
+  publicDir: path.join(__dirname, 'public')
+});
+
+// Manager-Only Audio Studio Routes (Voice Cutting & Irreversible Anonymization)
+registerAudioStudioRoutes(app, {
+  authMiddleware,
+  isHemnOrAzadUser,
   publicDir: path.join(__dirname, 'public')
 });
 
