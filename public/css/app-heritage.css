@@ -974,6 +974,12 @@ div[id^="alarm-card-"] > *,
 
 #mainMenuDrawerPanel .drawer-tool-icon-box i {
   color: #241206 !important;
+  transition: color 0.18s ease !important;
+}
+
+#mainMenuDrawerPanel .drawer-tool-btn:hover .drawer-tool-icon-box i,
+html:not(.dark) #mainMenuDrawerPanel .overflow-y-auto button:not([onclick*="handleLogout"]):hover i {
+  color: #1b432e !important;
 }
 
 #mainMenuDrawerPanel .drawer-tool-title {

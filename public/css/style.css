@@ -2330,9 +2330,7 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button i {
 }
 
 body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:hover i {
-
-  color: #1d4ed8 !important;
-
+  color: #1b432e !important;
 }
 
 body.light-theme #mainMenuDrawerPanel .overflow-y-auto button span.border,
@@ -7206,15 +7204,10 @@ body.light-mode .drawer-tool-btn {
 
 
 body.light-theme .drawer-tool-btn:hover,
-
 body.light-mode .drawer-tool-btn:hover {
-
   background: #f8fafc !important;
-
-  border-color: #0284c7 !important;
-
-  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.15) !important;
-
+  border-color: #1b432e !important;
+  box-shadow: 0 6px 20px rgba(27, 67, 46, 0.16) !important;
 }
 
 
