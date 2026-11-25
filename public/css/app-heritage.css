@@ -1496,3 +1496,16 @@ div[id$="Modal"] select:focus {
   border-color: rgba(220, 38, 38, 0.35) !important;
   color: #b91c1c !important;
 }
+
+/* Native Mobile / Capacitor iOS & Android Safe-Area Insets */
+@supports (padding-top: env(safe-area-inset-top)) {
+  #mainApp > header,
+  #landingHeader,
+  #mainMenuDrawerPanel > div:first-child {
+    padding-top: max(0.5rem, env(safe-area-inset-top)) !important;
+  }
+  #chatInputBar,
+  #mainMenuDrawerPanel > div.border-t {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom)) !important;
+  }
+}

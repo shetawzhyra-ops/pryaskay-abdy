@@ -327,6 +327,22 @@
         transition: all 0.15s ease;
       }
       .pc-del-btn:hover { background: rgba(225, 29, 72, 0.22); }
+      .pc-report-btn {
+        border: none;
+        background: rgba(180, 83, 9, 0.10);
+        color: #92400e;
+        height: 1.55rem;
+        padding: 0 0.42rem;
+        border-radius: 0.5rem;
+        font-size: 0.66rem;
+        font-weight: 800;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.22rem;
+        transition: all 0.15s ease;
+      }
+      .pc-report-btn:hover { background: rgba(225, 29, 72, 0.14); color: #be123c; }
       .pc-body {
         font-size: 0.83rem;
         line-height: 1.75;
@@ -382,16 +398,77 @@
     return `${type}:${id}`;
   }
 
+  function getHiddenCommentIds() {
+    try {
+      const raw = localStorage.getItem('pryaska_hidden_comments');
+      return new Set(raw ? JSON.parse(raw) : []);
+    } catch (e) {
+      return new Set();
+    }
+  }
+
+  function hideCommentLocally(commentId) {
+    try {
+      const set = getHiddenCommentIds();
+      set.add(Number(commentId));
+      localStorage.setItem('pryaska_hidden_comments', JSON.stringify(Array.from(set)));
+    } catch (e) {}
+  }
+
+  async function handleReportComment(type, id, commentId, authorName, content) {
+    const choice = prompt(
+      `ڕاپۆرتکردنی کۆمێنتی «${authorName}»:\nژمارەی هۆکار بنووسە:\n1 - ناوەڕۆکی نەشیاو\n2 - بێڕێزی یان هەراسانکردن\n3 - سپام و ڕیکلام\n4 - پێشێلکردنی تایبەتمەندی\n5 - هۆکاری تر`,
+      '1'
+    );
+    if (choice === null) return;
+    const reasonMap = { '1': 'inappropriate', '2': 'harassment', '3': 'spam', '4': 'privacy', '5': 'other' };
+    const reason = reasonMap[String(choice).trim()] || 'inappropriate';
+
+    const headers = { 'Content-Type': 'application/json', 'x-client-id': getClientId() };
+    const token = getAuthToken();
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    try {
+      const res = await fetch('/api/reports', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          target_type: 'comment',
+          target_id: Number(commentId),
+          reported_name: authorName,
+          reason,
+          content_snapshot: String(content || '').slice(0, 300),
+          client_id: getClientId()
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        hideCommentLocally(commentId);
+        const key = keyOf(type, id);
+        document.querySelectorAll(`.pc-drawer[data-comment-key="${key}"]`).forEach((drawer) => {
+          renderCommentsIntoDrawer(drawer, type, id);
+        });
+        alert(data.message || 'ڕاپۆرتەکەت تۆمارکرا و ئەم کۆمێنتە لات شاردرایەوە.');
+      } else {
+        alert((data && data.error) || 'نەتوانرا ڕاپۆرت بنێردرێت.');
+      }
+    } catch (e) {
+      alert('هەڵە لە پەیوەندی بە سێرڤەرەوە.');
+    }
+  }
+
   function renderCommentsIntoDrawer(drawer, type, id) {
     const listEl = drawer.querySelector('.pc-list');
     if (!listEl) return;
     const key = keyOf(type, id);
-    const items = commentsCache.get(key);
+    const rawItems = commentsCache.get(key);
 
-    if (!items) {
+    if (!rawItems) {
       listEl.innerHTML = '<div class="pc-empty">بارکردنی کۆمێنتەکان...</div>';
       return;
     }
+    const hiddenSet = getHiddenCommentIds();
+    const items = rawItems.filter((c) => !hiddenSet.has(Number(c.id)));
     if (items.length === 0) {
       listEl.innerHTML = '<div class="pc-empty">هێشتا هیچ کۆمێنتێک نییە — یەکەم کەس بە بۆ نووسینی کۆمێنت!</div>';
       return;
@@ -409,6 +486,7 @@
             </div>
             <div class="pc-meta-right">
               <span class="pc-time">${escapeHtml(formatCommentTime(c.created_at))}</span>
+              ${!c.can_delete ? `<button type="button" class="pc-report-btn" data-report-comment="${c.id}" data-report-author="${escapeHtml(c.author_name)}" data-report-content="${escapeHtml(String(c.content || '').slice(0, 200))}" title="ڕاپۆرتکردن و شاردنەوەی کۆمێنت"><i class="fa-regular fa-flag"></i><span>ڕاپۆرت</span></button>` : ''}
               ${c.can_delete ? `<button type="button" class="pc-del-btn" data-del-comment="${c.id}" title="سڕینەوەی کۆمێنت"><i class="fa-solid fa-trash-can"></i></button>` : ''}
             </div>
           </div>
@@ -419,6 +497,15 @@
 
     listEl.querySelectorAll('[data-del-comment]').forEach((delBtn) => {
       delBtn.addEventListener('click', () => handleDeleteComment(type, id, Number(delBtn.getAttribute('data-del-comment'))));
+    });
+    listEl.querySelectorAll('[data-report-comment]').forEach((repBtn) => {
+      repBtn.addEventListener('click', () => handleReportComment(
+        type,
+        id,
+        Number(repBtn.getAttribute('data-report-comment')),
+        repBtn.getAttribute('data-report-author') || '',
+        repBtn.getAttribute('data-report-content') || ''
+      ));
     });
   }
 

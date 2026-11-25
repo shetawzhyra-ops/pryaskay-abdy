@@ -89,7 +89,7 @@ function registerPublicPlatformRoutes(app, { db, dbPath, jwtSecret, searchEngine
   app.get('/robots.txt', (req, res) => {
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     res.type('text/plain').send(
-      `User-agent: *\nAllow: /\nAllow: /dreams\nAllow: /articles\nAllow: /poems\nDisallow: /api/\n\nSitemap: ${baseUrl}/sitemap.xml\n`
+      `User-agent: *\nAllow: /\nAllow: /dreams\nAllow: /articles\nAllow: /poems\nAllow: /privacy\nAllow: /terms\nDisallow: /api/\n\nSitemap: ${baseUrl}/sitemap.xml\n`
     );
   });
 
@@ -101,7 +101,9 @@ function registerPublicPlatformRoutes(app, { db, dbPath, jwtSecret, searchEngine
         { loc: `${baseUrl}/`, priority: '1.0', changefreq: 'daily' },
         { loc: `${baseUrl}/dreams`, priority: '0.9', changefreq: 'daily' },
         { loc: `${baseUrl}/articles`, priority: '0.9', changefreq: 'weekly' },
-        { loc: `${baseUrl}/poems`, priority: '0.9', changefreq: 'weekly' }
+        { loc: `${baseUrl}/poems`, priority: '0.9', changefreq: 'weekly' },
+        { loc: `${baseUrl}/privacy`, priority: '0.6', changefreq: 'monthly' },
+        { loc: `${baseUrl}/terms`, priority: '0.6', changefreq: 'monthly' }
       ];
 
       try {

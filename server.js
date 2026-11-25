@@ -10,6 +10,7 @@ const { registerPublicPlatformRoutes } = require('./routes/publicContent');
 const { registerPublicCommentsRoutes } = require('./routes/publicComments');
 const { registerExamRoutes } = require('./routes/exams');
 const { registerAudioStudioRoutes } = require('./routes/audioStudio');
+const { registerComplianceRoutes } = require('./routes/compliance');
 let compression;
 try { compression = require('compression'); } catch(e) {}
 const http = require('http');
@@ -24,7 +25,7 @@ let archiver;
 try { archiver = require('archiver'); } catch (e) {}
 let DatabaseSync;
 try { DatabaseSync = require('node:sqlite').DatabaseSync; } catch (e) {}
-const { db, dbPath, classrooms, initDb, users, poemsDb, articlesDb, messages, questions, library, dreamSessions, dreamMessages, settings, passwordResets, privateMessages, messageReactions, profileChangeRequests, pushSubscriptions, calculateStars, liveRecordings, recordedLessons, lessonTeachers, lessonFolders, lessonProgress, getDreamTeacherAlias, aiSecurity, advisorDb, buttonClicks, customGroups, pollsDb, alarmsDb, complaints, attendanceDb, examsDb, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, getDreamPosts, reactToDreamPost, createDreamPost, deleteDreamPost, updateDreamPost } = require('./db');
+const { db, dbPath, classrooms, initDb, users, poemsDb, articlesDb, messages, questions, library, dreamSessions, dreamMessages, settings, passwordResets, privateMessages, messageReactions, profileChangeRequests, pushSubscriptions, calculateStars, liveRecordings, recordedLessons, lessonTeachers, lessonFolders, lessonProgress, getDreamTeacherAlias, aiSecurity, advisorDb, buttonClicks, customGroups, pollsDb, alarmsDb, complaints, attendanceDb, examsDb, complianceDb, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, getDreamPosts, reactToDreamPost, createDreamPost, deleteDreamPost, updateDreamPost } = require('./db');
 
 const DEFAULT_DEV_JWT = 'seereen_group_chat_super_secret_key_2026';
 if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || process.env.JWT_SECRET === DEFAULT_DEV_JWT)) {
@@ -1202,6 +1203,20 @@ registerAudioStudioRoutes(app, {
   publicDir: path.join(__dirname, 'public')
 });
 
+// Store Compliance Routes (/privacy, /terms, Self-Service Account Deletion, UGC Reports & User Blocking)
+registerComplianceRoutes(app, {
+  db,
+  users,
+  complianceDb,
+  authMiddleware,
+  publicWriteLimiter,
+  requireAdminOrBlackBadge: (req, res, next) => requireSuperAdminPrivileges(req, res, next),
+  isMasterSuperAdmin,
+  jwtSecret: JWT_SECRET,
+  io,
+  publicDir: path.join(__dirname, 'public')
+});
+
 const ALL_SPECIAL_BADGES = ['white', 'blue', 'green', 'black', 'red', 'purple'];
 
 function parseUserBadges(userOrVal) {
@@ -1609,6 +1624,12 @@ setInterval(cleanupInactiveUsers, 6 * 60 * 60 * 1000);
 // 1. Register
 app.post('/api/auth/register', (req, res) => {
   try {
+    if (req.body && req.body.accepted_terms === false) {
+      return res.status(400).json({
+        error: 'تکایە سەرەتا ڕەزامەندی لەسەر سیاسەتی تایبەتمەندی و مەرجەکانی بەکارهێنان (EULA) بدە',
+        field: 'accepted_terms'
+      });
+    }
     const check = validateRegistrationPayload(req.body);
     if (!check.valid) {
       return res.status(400).json({ error: check.error, field: check.field });
@@ -9196,12 +9217,21 @@ app.post('/api/dream/upload-voice', upload.single('voice'), (req, res) => {
   }
 });
 
-// 5. Upload Secret Call Recording (Two-way audio recorded during phone call)
+// 5. Upload Transparent Call Recording (Only with explicit mutual consent — NEVER hidden/secret)
 const recentCallUploads = new Map();
 
 app.post('/api/dream/upload-call-recording', upload.single('call_recording'), (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'هیچ تۆمارێک بارنەکراوە' });
+    const hasConsent = String(req.body?.recording_consent || '').toLowerCase() === 'true';
+    if (!hasConsent) {
+      if (req.file && fs.existsSync(req.file.path)) {
+        try { fs.unlinkSync(req.file.path); } catch (e) {}
+      }
+      return res.status(403).json({
+        error: 'تۆمارکردنی پەیوەندی بێ ڕەزامەندیی ئاشکرای بەکارهێنەر ڕێگەپێدراو نییە'
+      });
+    }
     const sessionId = parseInt(req.body.sessionId);
     const durationText = req.body.duration || '';
     const session = dreamSessions.findById(sessionId);
@@ -9219,34 +9249,23 @@ app.post('/api/dream/upload-call-recording', upload.single('call_recording'), (r
     recentCallUploads.set(sessionId, Date.now());
 
     const callRecordUrl = `/uploads/${req.file.filename}`;
-    const desc = durationText ? `تۆماری تەواوی پەیوەندی تەلەفۆنی (${durationText})` : 'تۆماری تەواوی پەیوەندی تەلەفۆنی';
+    const desc = durationText
+      ? `📞 تۆماری پەیوەندیی دەنگی بە ڕەزامەندیی هەردوولا (${durationText})`
+      : '📞 تۆماری پەیوەندیی دەنگی بە ڕەزامەندیی هەردوولا';
 
-    // SECRET RECORDING: is_secret_recording = 1 (Hidden from dreamer)
-    const secretMsg = dreamMessages.create(
+    // TRANSPARENT RECORDING: is_secret_recording = 0 (Visible to BOTH dreamer and staff)
+    const callMsg = dreamMessages.create(
       sessionId,
       'system',
-      'سیستەم (تۆماری تەلەفۆن)',
+      'تۆماری پەیوەندیی دەنگی',
       desc,
       'call_record',
       callRecordUrl,
-      1 // is_secret_recording = 1
+      0
     );
 
-    // Also create a summary message for the dreamer
-    const summaryMsg = dreamMessages.create(
-      sessionId,
-      'system',
-      'ستافی سیرین',
-      `📞 پەیوەندی تەلەفۆنی ئەنجامدرا ${durationText ? `(ماوە: ${durationText})` : ''}`,
-      'system',
-      null,
-      0 // is_secret_recording = 0 (Visible to dreamer)
-    );
-
-    // Send summaryMsg to dreamer in room
-    io.to(`dream_${sessionId}`).emit('dream_new_message', summaryMsg);
-    // Send secretMsg with recording audio ONLY to admins reliably
-    emitToDreamAdmins('dream_new_secret_recording', { sessionId, message: secretMsg });
+    io.to(`dream_${sessionId}`).emit('dream_new_message', callMsg);
+    emitToDreamAdmins('dream_new_secret_recording', { sessionId, message: callMsg });
 
     res.json({ success: true, recordingUrl: callRecordUrl });
   } catch (err) {

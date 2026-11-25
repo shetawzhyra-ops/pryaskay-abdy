@@ -2,16 +2,23 @@
  * Service Worker for پریاسکەی عەبدی (PWA, Offline Fallback & Background Push Notifications)
  */
 
-const CACHE_NAME = 'pryaska-cache-v5';
+const CACHE_NAME = 'pryaska-cache-v7';
 const STATIC_ASSETS = [
   '/',
   '/offline.html',
+  '/privacy.html',
+  '/terms.html',
   '/manifest.json',
   '/css/tailwind.built.css',
   '/css/style.css',
   '/css/landing-heritage-test.css',
   '/css/app-heritage.css',
+  '/css/app-dark-theme.css',
   '/css/dreams-heritage.css',
+  '/exams.html',
+  '/css/exams.css',
+  '/js/exams.js',
+  '/js/compliance.js',
   '/js/global-search.js',
   '/js/post-comments.js',
   '/images/logo.jpg?v=1796050000',

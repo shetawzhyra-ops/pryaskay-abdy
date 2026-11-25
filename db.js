@@ -783,6 +783,36 @@ function initDb() {
     initCommentsTable(db);
   } catch (e) {}
 
+  // Store Compliance Tables (App Store Guideline 1.2 & Google Play UGC: Reports & User Blocks)
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS content_reports (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      reporter_user_id INTEGER,
+      reporter_client_id TEXT,
+      target_type TEXT NOT NULL,
+      target_id INTEGER NOT NULL,
+      reported_user_id INTEGER,
+      reported_name TEXT DEFAULT '',
+      reason TEXT NOT NULL DEFAULT 'inappropriate',
+      details TEXT DEFAULT '',
+      content_snapshot TEXT DEFAULT '',
+      status TEXT NOT NULL DEFAULT 'pending',
+      reviewed_by INTEGER,
+      reviewed_at INTEGER,
+      created_at INTEGER NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS idx_content_reports_status_created ON content_reports(status, created_at DESC);
+
+    CREATE TABLE IF NOT EXISTS user_blocks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      blocker_user_id INTEGER NOT NULL,
+      blocked_user_id INTEGER NOT NULL,
+      created_at INTEGER NOT NULL,
+      UNIQUE(blocker_user_id, blocked_user_id)
+    );
+    CREATE INDEX IF NOT EXISTS idx_user_blocks_blocker ON user_blocks(blocker_user_id);
+  `);
+
   try {
     const perfIndexes = [
       'CREATE INDEX IF NOT EXISTS idx_messages_classroom_created ON messages(classroom_id, created_at DESC)',
@@ -4260,6 +4290,129 @@ const examsDb = {
   }
 };
 
+// ================= STORE COMPLIANCE HELPERS (REPORTS, USER BLOCKS & SELF-DELETION) =================
+const complianceDb = {
+  createReport({
+    reporter_user_id = null,
+    reporter_client_id = null,
+    target_type,
+    target_id,
+    reported_user_id = null,
+    reported_name = '',
+    reason = 'inappropriate',
+    details = '',
+    content_snapshot = ''
+  }) {
+    const now = Date.now();
+    const res = db.prepare(`
+      INSERT INTO content_reports (
+        reporter_user_id, reporter_client_id, target_type, target_id,
+        reported_user_id, reported_name, reason, details, content_snapshot,
+        status, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)
+    `).run(
+      reporter_user_id,
+      reporter_client_id,
+      target_type,
+      target_id,
+      reported_user_id,
+      reported_name,
+      reason,
+      details,
+      content_snapshot,
+      now
+    );
+    return this.findReportById(Number(res.lastInsertRowid));
+  },
+
+  findReportById(id) {
+    return db.prepare('SELECT * FROM content_reports WHERE id = ?').get(id) || null;
+  },
+
+  getReports(status = 'all', limit = 100) {
+    if (status && status !== 'all') {
+      return db.prepare(`
+        SELECT r.*, u.username as reporter_username, u.full_name as reporter_full_name
+        FROM content_reports r
+        LEFT JOIN users u ON r.reporter_user_id = u.id
+        WHERE r.status = ?
+        ORDER BY r.created_at DESC
+        LIMIT ?
+      `).all(status, limit);
+    }
+    return db.prepare(`
+      SELECT r.*, u.username as reporter_username, u.full_name as reporter_full_name
+      FROM content_reports r
+      LEFT JOIN users u ON r.reporter_user_id = u.id
+      ORDER BY CASE WHEN r.status = 'pending' THEN 0 ELSE 1 END, r.created_at DESC
+      LIMIT ?
+    `).all(limit);
+  },
+
+  getPendingReportCount() {
+    const row = db.prepare("SELECT COUNT(*) as c FROM content_reports WHERE status = 'pending'").get();
+    return row ? Number(row.c || 0) : 0;
+  },
+
+  updateReportStatus(id, status, reviewerId) {
+    return db.prepare(`
+      UPDATE content_reports SET status = ?, reviewed_by = ?, reviewed_at = ? WHERE id = ?
+    `).run(status, reviewerId || null, Date.now(), id);
+  },
+
+  blockUser(blockerUserId, blockedUserId) {
+    return db.prepare(`
+      INSERT OR IGNORE INTO user_blocks (blocker_user_id, blocked_user_id, created_at)
+      VALUES (?, ?, ?)
+    `).run(blockerUserId, blockedUserId, Date.now());
+  },
+
+  unblockUser(blockerUserId, blockedUserId) {
+    return db.prepare(`
+      DELETE FROM user_blocks WHERE blocker_user_id = ? AND blocked_user_id = ?
+    `).run(blockerUserId, blockedUserId);
+  },
+
+  getBlockedUsers(blockerUserId) {
+    return db.prepare(`
+      SELECT ub.blocked_user_id, ub.created_at, u.username, u.full_name, u.gender, u.role
+      FROM user_blocks ub
+      LEFT JOIN users u ON ub.blocked_user_id = u.id
+      WHERE ub.blocker_user_id = ?
+      ORDER BY ub.created_at DESC
+    `).all(blockerUserId);
+  },
+
+  purgeUserPersonalData(userId) {
+    const uid = Number(userId);
+    if (!uid) return;
+    const cleanupStatements = [
+      ['DELETE FROM push_subscriptions WHERE user_id = ?', [uid]],
+      ['DELETE FROM user_blocks WHERE blocker_user_id = ? OR blocked_user_id = ?', [uid, uid]],
+      ['DELETE FROM private_messages WHERE sender_id = ? OR recipient_id = ?', [uid, uid]],
+      ['DELETE FROM message_reactions WHERE user_id = ?', [uid]],
+      ['DELETE FROM public_comments WHERE user_id = ?', [uid]],
+      ['DELETE FROM profile_change_requests WHERE user_id = ?', [uid]],
+      ['DELETE FROM password_resets WHERE user_id = ?', [uid]],
+      ['DELETE FROM lesson_progress WHERE user_id = ?', [uid]],
+      ['DELETE FROM exam_answers WHERE submission_id IN (SELECT id FROM exam_submissions WHERE student_id = ?)', [uid]],
+      ['DELETE FROM exam_submissions WHERE student_id = ?', [uid]],
+      ['DELETE FROM custom_group_members WHERE user_id = ?', [uid]],
+      ['DELETE FROM complaints WHERE user_id = ?', [uid]],
+      ['DELETE FROM poll_votes WHERE user_id = ?', [uid]],
+      ['DELETE FROM attendance_records WHERE user_id = ?', [uid]],
+      ['DELETE FROM button_clicks WHERE user_id = ?', [uid]],
+      ['DELETE FROM star_awards WHERE user_id = ?', [uid]],
+      ['UPDATE messages SET is_deleted = 1, content = \'\', attachment_url = NULL WHERE user_id = ?', [uid]]
+    ];
+    for (const [sql, params] of cleanupStatements) {
+      try {
+        db.prepare(sql).run(...params);
+      } catch (e) {}
+    }
+  }
+};
+
 module.exports = {
   articlesDb,
   articles: articlesDb,
@@ -4308,5 +4461,6 @@ module.exports = {
   alarmsDb,
   complaints,
   attendanceDb,
-  examsDb
+  examsDb,
+  complianceDb
 };

@@ -1523,7 +1523,7 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateG
   }
 }
 </style>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>پریاسکەی عەبدی | پێگەی زانست و لێکدانەوەی خەون</title>
 <link rel="icon" type="image/jpeg" href="/images/logo.jpg?v=1796050000">
 <link rel="apple-touch-icon" href="/images/icon-192.png?v=6">
@@ -1535,9 +1535,6 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateG
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="پریاسکەی عەبدی">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="پریاسکەی عەبدی">
 <!-- Tailwind CSS CDN -->
 <link rel="stylesheet" href="/css/tailwind.built.css?v=2.0">
 <!-- FontAwesome Icons -->
@@ -2113,7 +2110,7 @@ data-dialect="hawrami"
 <!-- Ornate Calligraphic Centerpiece (Directly on canvas, no box) -->
 <div class="quran-hero-calligraphy-wrap select-none space-y-0.5 mb-3.5 sm:mb-4">
 <h2 id="heroTitle" class="quran-hero-main-title">
-پریاسکەی عەبدی
+پریاسکەی ئازادی موعەبیر
 </h2>
 <p id="heroSubtitle" class="quran-hero-subtitle">
 ناوەندێک بۆ فێربوونی زانستی تەعبیر و لێکدانەوەی خەونەکانتان
@@ -2331,12 +2328,16 @@ title="کلیک بکە بۆ دانانی بڵاوکراوەی نوێ"
 <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
 <p class="font-semibold text-slate-300 flex items-center gap-2">
 <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-<span class="landing-footer-brand font-black">پریاسکەی عەبدی</span>
-<span>— ژینگەی زانست، پەروەردە و تەئویلی خەون</span>
+<span class="landing-footer-brand font-black">پریاسکەی ئازادی موعەبیر</span>
+<span>— تەعبیری خەون</span>
 </p>
-<p class="text-[11px] text-slate-500 font-latin">
-هەموو مافەکان پارێزراون © 2026
-</p>
+<div class="flex flex-wrap items-center justify-center gap-3 text-[11px]">
+<a href="/privacy" class="font-bold hover:underline">سیاسەتی تایبەتمەندی</a>
+<span class="opacity-40">•</span>
+<a href="/terms" class="font-bold hover:underline">مەرجەکانی بەکارهێنان</a>
+<span class="opacity-40">•</span>
+<span class="font-latin opacity-80">هەموو مافەکان پارێزراون © 2026</span>
+</div>
 </div>
 </footer>
 <!-- Admin Announcement Editor Modal (#modalAnnouncementEditor) -->
@@ -2674,6 +2675,11 @@ Change language here • تغيير لغة الموقع من هنا
 </button>
 </div>
 </div>
+
+<label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-amber-500/10 border border-amber-600/25 cursor-pointer text-[11px] leading-relaxed">
+<input type="checkbox" id="regAgreeTerms" required class="mt-0.5 w-4 h-4 accent-amber-600 shrink-0 cursor-pointer">
+<span>ڕازیم بە <a href="/privacy" target="_blank" class="underline font-black text-amber-700 dark:text-amber-300">سیاسەتی تایبەتمەندی</a> و <a href="/terms" target="_blank" class="underline font-black text-amber-700 dark:text-amber-300">مەرجەکانی بەکارهێنان (EULA)</a> و پابەندم بە یاساکانی کۆمەڵگا.</span>
+</label>
 
 <button type="submit" id="regSubmitBtn" class="w-full py-3 bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-black rounded-xl shadow-lg shadow-amber-600/30 border border-amber-400/50 transition flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]">
 <span>ناردنی داواکاری خۆتۆمارکردن</span>
@@ -3094,6 +3100,16 @@ Change language here • تغيير لغة الموقع من هنا
 </div>
 <span id="drawerAiSecurityBadge" class="px-2.5 py-1 bg-rose-500/80 text-white text-xs font-black rounded-full animate-pulse shadow-md">چاودێری</span>
 </button>
+<!-- UGC Content Reports Moderation Queue (ڕاپۆرتی بەکارهێنەران) -->
+<button id="drawerAdminReportsBtn" onclick="closeMainMenuDrawer(); openAdminReportsModal();" class="hidden drawer-tool-btn group">
+<div class="flex items-center gap-3 sm:gap-4 min-w-0">
+<div class="drawer-tool-icon-box">
+<i class="fa-solid fa-flag"></i>
+</div>
+<span class="drawer-tool-title">ڕاپۆرتەکانی ناوەڕۆک</span>
+</div>
+<span class="drawer-tool-badge">چاودێری</span>
+</button>
 </div><!-- end staff drawer-tools-grid -->
 </div>
 <!-- ================= SECTION: SETTINGS (ڕێکخستن - هەموو چوار بژاردەکە لە یەک شوێن) ================= -->
@@ -3205,6 +3221,32 @@ English
 </button>
 </div>
 </div>
+<!-- 5. لیستی بلۆککراوەکان -->
+<button type="button" id="drawerBlockedUsersBtn" onclick="closeMainMenuDrawer(); openBlockedUsersModal();" class="drawer-tool-btn group">
+<div class="flex items-center gap-3 sm:gap-4 min-w-0">
+<div class="drawer-tool-icon-box">
+<i class="fa-solid fa-user-slash"></i>
+</div>
+<span class="drawer-tool-title">بەکارهێنەرە بلۆککراوەکان</span>
+</div>
+<i class="fa-solid fa-chevron-left text-xs opacity-60"></i>
+</button>
+<!-- 6. سیاسەتی تایبەتمەندی و مەرجەکان -->
+<div class="grid grid-cols-2 gap-2">
+<a href="/privacy" target="_blank" class="drawer-tool-btn group !justify-center !py-2.5 text-center text-xs font-black gap-1.5">
+<i class="fa-solid fa-user-shield text-amber-600"></i>
+<span>تایبەتمەندی</span>
+</a>
+<a href="/terms" target="_blank" class="drawer-tool-btn group !justify-center !py-2.5 text-center text-xs font-black gap-1.5">
+<i class="fa-solid fa-scale-balanced text-amber-600"></i>
+<span>مەرجەکان</span>
+</a>
+</div>
+<!-- 7. سڕینەوەی هەژمار (بەپێی یاسای Apple & Google Play) -->
+<button type="button" id="drawerDeleteMyAccountBtn" onclick="closeMainMenuDrawer(); openSelfDeleteAccountModal();" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-rose-600/12 hover:bg-rose-600 hover:text-white border border-rose-500/35 text-rose-700 dark:text-rose-300 text-xs font-black transition cursor-pointer">
+<i class="fa-solid fa-user-xmark"></i>
+<span>سڕینەوەی هەژمار و داتاکانم</span>
+</button>
 </div>
 </div>
 </div>
@@ -3925,6 +3967,22 @@ class="w-full bg-slate-800/90 border border-slate-700/70 rounded-xl pr-8 pl-8 py
 <button type="button" onclick="openRequestProfileChangeModal()" class="prof-inset-tile w-full py-2.5 px-3 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-sm active:scale-95 cursor-pointer">
 <i class="fa-solid fa-user-pen text-amber-600"></i>
 <span>داواکاری گۆڕینی ناو یان پاسوۆرد 📝</span>
+</button>
+<button type="button" id="profDeleteMyAccountBtn" onclick="closeUserProfileModal(); openSelfDeleteAccountModal();" class="w-full mt-2 py-2.5 px-3 font-black text-xs rounded-xl bg-rose-600/12 hover:bg-rose-600 text-rose-700 dark:text-rose-300 hover:text-white border border-rose-500/35 transition flex items-center justify-center gap-2 shadow-sm active:scale-95 cursor-pointer">
+<i class="fa-solid fa-user-xmark"></i>
+<span>سڕینەوەی هەژمار و داتاکانم بە یەکجاری</span>
+</button>
+</div>
+
+<!-- User Safety Controls (Block / Report Other User — Apple Guideline 1.2) -->
+<div id="profSafetyActionsContainer" class="hidden prof-section-card p-3 rounded-2xl flex items-center gap-2 shadow-sm">
+<button type="button" id="profBlockUserBtn" class="flex-1 py-2 px-3 rounded-xl bg-amber-500/15 hover:bg-amber-600 text-amber-900 dark:text-amber-200 hover:text-white border border-amber-600/30 font-black text-xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer">
+<i class="fa-solid fa-user-slash"></i>
+<span>بلۆککردنی بەکارهێنەر</span>
+</button>
+<button type="button" id="profReportUserBtn" class="flex-1 py-2 px-3 rounded-xl bg-rose-600/12 hover:bg-rose-600 text-rose-700 dark:text-rose-300 hover:text-white border border-rose-500/35 font-black text-xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer">
+<i class="fa-regular fa-flag"></i>
+<span>ڕاپۆرتکردن</span>
 </button>
 </div>
 
@@ -5742,9 +5800,13 @@ onkeydown="if(event.key === 'Enter') sendDreamTextMessage(true)"
 <span id="callAudioModeText" class="text-xs font-bold text-emerald-300">سەوت: بڵندگۆ (دەرەوە) 🔊</span>
 </div>
 </div>
-<p class="text-[10px] text-amber-400 mt-3 font-bold flex items-center justify-center gap-1">
+<p id="callRecordingActiveBadge" class="hidden text-[11px] text-rose-300 bg-rose-950/70 border border-rose-500/40 rounded-full px-3 py-1 mt-3 font-black inline-flex items-center justify-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+<span>پەیوەندی تۆمار دەکرێت (بە ڕەزامەندیی ئاشکرا)</span>
+</p>
+<p id="callNotRecordingBadge" class="text-[10px] text-emerald-300/90 mt-3 font-bold flex items-center justify-center gap-1">
 <i class="fa-solid fa-shield-halved"></i>
-<span>دەنگی هەردوولا بە هۆکاری کوالتی و ئەمنییەت تۆمار دەکرێت</span>
+<span>پەیوەندیی دەنگیی ڕاستەوخۆ — بێ تۆمارکردن</span>
 </p>
 </div>
 <!-- Action Buttons -->
@@ -8361,7 +8423,9 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=99.0&t=1795930000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=134.0&t=1796050000"></script>
+<script src="/js/app.js?v=136.0&t=1796100000"></script>
+<!-- Store Compliance (Account Deletion, UGC Report & User Blocking) -->
+<script src="/js/compliance.js?v=1.0&t=1796090000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=6.0&t=1796050000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->

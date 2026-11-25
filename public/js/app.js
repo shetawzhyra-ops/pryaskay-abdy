@@ -948,6 +948,13 @@ async function handleRegister(e) {
     return '';
   })) return;
 
+  const agreeTermsEl = document.getElementById('regAgreeTerms');
+  if (agreeTermsEl && !agreeTermsEl.checked) {
+    showAuthAlert('تکایە سەرەتا ڕەزامەندی لەسەر سیاسەتی تایبەتمەندی و مەرجەکانی بەکارهێنان (EULA) بدە.', 'error');
+    agreeTermsEl.focus();
+    return;
+  }
+
   btn.disabled = true;
   btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> چاوەڕێبە...`;
 
@@ -964,7 +971,8 @@ async function handleRegister(e) {
         residence,
         certificate,
         username,
-        password
+        password,
+        accepted_terms: true
       })
     });
     const data = await res.json();
@@ -1242,17 +1250,38 @@ function updateUserUI() {
     }
   }
 
-  // AI Security Operations Center (Super Admin or Black Badge)
+  // AI Security Operations Center & UGC Reports Queue (Super Admin or Black Badge)
+  const drawerAdminReportsBtn = document.getElementById('drawerAdminReportsBtn');
   if (isSuperAdmin || hasBlackBadge) {
     if (drawerAiSecurityBtn) {
       drawerAiSecurityBtn.classList.remove('hidden');
       drawerAiSecurityBtn.classList.add('flex');
+    }
+    if (drawerAdminReportsBtn) {
+      drawerAdminReportsBtn.classList.remove('hidden');
+      drawerAdminReportsBtn.classList.add('flex');
     }
   } else {
     if (drawerAiSecurityBtn) {
       drawerAiSecurityBtn.classList.add('hidden');
       drawerAiSecurityBtn.classList.remove('flex');
     }
+    if (drawerAdminReportsBtn) {
+      drawerAdminReportsBtn.classList.add('hidden');
+      drawerAdminReportsBtn.classList.remove('flex');
+    }
+  }
+
+  const drawerDeleteAccountBtn = document.getElementById('drawerDeleteMyAccountBtn');
+  if (drawerDeleteAccountBtn) {
+    if (isSuperAdmin || isMasterSuperAdmin(currentUser)) {
+      drawerDeleteAccountBtn.classList.add('hidden');
+    } else {
+      drawerDeleteAccountBtn.classList.remove('hidden');
+    }
+  }
+  if (typeof window.loadMyBlockedUsers === 'function') {
+    window.loadMyBlockedUsers();
   }
 
   // AI Proactive Advisor Button in Drawer (Master Super Admin, Super Admin, Black Badge, or White Badge)
@@ -3680,6 +3709,9 @@ function appendMessage(msg, scroll = true) {
   if (emptyPlaceholder) emptyPlaceholder.remove();
 
   const isMe = currentUser && msg.user_id === currentUser.id;
+  if (!isMe && msg.type !== 'system' && typeof window.isUserBlockedByMe === 'function' && window.isUserBlockedByMe(msg.user_id)) {
+    return;
+  }
   const isAdmin = currentUser && (currentUser.role === 'admin' || currentUser.role === 'super_admin');
   const isSuperAdmin = currentUser && currentUser.role === 'super_admin';
   const isStaff = currentUser && (currentUser.role === 'super_admin' || currentUser.role === 'teacher');
@@ -3690,6 +3722,7 @@ function appendMessage(msg, scroll = true) {
   const isAlreadyInDom = !!document.getElementById(`msg-${msg.id}`);
   let msgElem = document.getElementById(`msg-${msg.id}`) || document.createElement('div');
   msgElem.id = `msg-${msg.id}`;
+  if (msg.user_id) msgElem.setAttribute('data-sender-id', String(msg.user_id));
   msgElem.className = 'transition-all duration-200 chat-msg-item';
 
   // 1. SYSTEM MESSAGES (welcome messages disabled)
@@ -4674,9 +4707,18 @@ function appendMessage(msg, scroll = true) {
       </div>
     `;
   } else {
+    const safeSenderName = escapeHtml(msg.username || msg.full_name || '').replace(/'/g, "\\'");
+    const safeSnippet = escapeHtml((msg.content || '').substring(0, 120)).replace(/'/g, "\\'");
+    const reportActionBtn = !isMe && !isMsgSuperAdmin ? `
+      <button onclick="openContentReportModal({ targetType: 'message', targetId: ${msg.id}, reportedUserId: ${msg.user_id || 0}, reportedName: '${safeSenderName}', preview: '${safeSnippet}' })" class="text-rose-400 hover:text-rose-300 text-xs px-1.5 py-0.5 rounded hover:bg-slate-700 flex items-center gap-1 font-bold" title="ڕاپۆرتکردنی پەیام">
+        <i class="fa-regular fa-flag"></i>
+        <span class="text-[10px]">ڕاپۆرت</span>
+      </button>
+    ` : '';
     messageActionsHtml = `
       <div id="msg-actions-${msg.id}" class="msg-actions-bar hidden md:flex md:opacity-0 md:group-hover:opacity-100 transition duration-150 items-center gap-1 mt-1 bg-slate-800/95 border border-slate-700/80 px-2 py-0.5 rounded-xl shadow-lg z-10">
         ${replyActionBtn}
+        ${reportActionBtn}
       </div>
     `;
   }
@@ -8184,6 +8226,42 @@ async function openUserProfileModal(userId) {
 
     const canManageThisUser = canUserManageMembers(currentUser);
     const targetIsMaster = isMasterSuperAdmin(prof);
+
+    // User Safety Actions (Block / Report Other Non-Super-Admin Users — Apple Guideline 1.2)
+    const safetyWrap = document.getElementById('profSafetyActionsContainer');
+    const blockBtn = document.getElementById('profBlockUserBtn');
+    const reportBtn = document.getElementById('profReportUserBtn');
+    if (safetyWrap) {
+      if (!isMe && !targetIsMaster && prof.role !== 'super_admin') {
+        safetyWrap.classList.remove('hidden');
+        const targetLabel = prof.username || prof.full_name || '';
+        const alreadyBlocked = typeof window.isUserBlockedByMe === 'function' && window.isUserBlockedByMe(prof.id);
+        if (blockBtn) {
+          blockBtn.dataset.userId = String(prof.id);
+          blockBtn.innerHTML = alreadyBlocked
+            ? '<i class="fa-solid fa-user-check"></i><span>هەڵوەشاندنەوەی بلۆک</span>'
+            : '<i class="fa-solid fa-user-slash"></i><span>بلۆککردنی بەکارهێنەر</span>';
+          blockBtn.onclick = () => {
+            if (typeof window.toggleBlockUser === 'function') window.toggleBlockUser(prof.id, targetLabel);
+          };
+        }
+        if (reportBtn) {
+          reportBtn.onclick = () => {
+            if (typeof window.openContentReportModal === 'function') {
+              window.openContentReportModal({
+                targetType: 'user',
+                targetId: prof.id,
+                reportedUserId: prof.id,
+                reportedName: targetLabel,
+                preview: `ڕاپۆرت لەسەر هەژماری ${targetLabel}`
+              });
+            }
+          };
+        }
+      } else {
+        safetyWrap.classList.add('hidden');
+      }
+    }
 
     // Master Super Admin: Special Badges Panel (باجە تایبەتەکان)
     const badgeAdminCard = document.getElementById('profSpecialBadgeAdminCard');
@@ -13370,7 +13448,15 @@ function appendDreamAdminMessage(msg) {
   appendDreamMessage(msg, true);
 }
 
-// --- REAL-TIME LIVE AUDIO CALL ENGINE WITH AUTOMATIC TWO-WAY RECORDING ---
+// --- REAL-TIME LIVE AUDIO CALL ENGINE WITH EXPLICIT TRANSPARENT RECORDING CONSENT ---
+let callRecordingConsentGranted = false;
+
+function updateCallRecordingBadgesUI() {
+  const activeBadge = document.getElementById('callRecordingActiveBadge');
+  const inactiveBadge = document.getElementById('callNotRecordingBadge');
+  if (activeBadge) activeBadge.classList.toggle('hidden', !callRecordingConsentGranted);
+  if (inactiveBadge) inactiveBadge.classList.toggle('hidden', Boolean(callRecordingConsentGranted));
+}
 
 function startDreamCallFromDreamer() {
   if (currentDreamAvailability !== 'online') {
@@ -13378,6 +13464,10 @@ function startDreamCallFromDreamer() {
     return;
   }
   if (!currentDreamSession) return;
+  callRecordingConsentGranted = confirm(
+    'ئاگاداریی تایبەتمەندی:\nئایا ڕازیت ئەم پەیوەندییە دەنگییە بە شێوەیەکی ئاشکرا تۆمار بکرێت (تۆش دەتوانیت لە چاتدا گوێی لێ بگریت)؟\n\n• OK = بەڵێ، بە تۆمارکردنی ئاشکرا\n• Cancel = پەیوەندی بەردەوام بێت بێ تۆمارکردن'
+  );
+  updateCallRecordingBadgesUI();
   initiateDreamAudioCall(currentDreamSession.id, currentDreamSession.dreamer_name, 'dreamer');
 }
 
@@ -13387,6 +13477,8 @@ function startDreamCallFromAdmin() {
     return;
   }
   if (!activeDreamAdminSessionId) return;
+  callRecordingConsentGranted = false;
+  updateCallRecordingBadgesUI();
   const session = dreamAdminSessionsCache.find(s => s.id === activeDreamAdminSessionId);
   const targetName = session ? session.dreamer_name : 'خەون بین';
   initiateDreamAudioCall(activeDreamAdminSessionId, targetName, 'admin');
@@ -13417,7 +13509,8 @@ async function initiateDreamAudioCall(sessionId, peerName, callerRole) {
     sock.emit('dream_call_start', {
       sessionId,
       callerName: callerRole === 'dreamer' ? peerName : (currentUser ? currentUser.full_name : 'لێکدەرەوەی خەون'),
-      callerRole
+      callerRole,
+      recordingConsent: Boolean(callRecordingConsentGranted)
     });
   }
 }
@@ -13428,6 +13521,8 @@ function handleIncomingDreamCall(data, isAdmin) {
 
   callActiveSessionId = data.sessionId;
   callRecordingUploaded = false;
+  callRecordingConsentGranted = Boolean(data && data.recordingConsent);
+  updateCallRecordingBadgesUI();
   callPendingData = data;
   isCallInitiator = false;
   isCallMuted = false;
@@ -13451,14 +13546,24 @@ async function acceptIncomingDreamCall() {
   callRecordingUploaded = false;
   isCallMuted = false;
   isSpeakerMode = true;
+  const isStaffAcceptor = Boolean(currentUser && canUserManageDreams(currentUser));
+  if (!isStaffAcceptor) {
+    callRecordingConsentGranted = confirm(
+      'ئاگاداریی تایبەتمەندی:\nئایا ڕازیت ئەم پەیوەندییە دەنگییە بە شێوەیەکی ئاشکرا تۆمار بکرێت (تۆش دەتوانیت لە چاتدا گوێی لێ بگریت)؟\n\n• OK = بەڵێ، بە تۆمارکردنی ئاشکرا\n• Cancel = وەڵامدانەوە بێ تۆمارکردن'
+    );
+  }
+  updateCallRecordingBadgesUI();
   document.getElementById('callIncomingActions').classList.add('hidden');
   document.getElementById('callActiveActions').classList.remove('hidden');
   document.getElementById('callStatusText').innerText = 'پەیوەندی بەسترا';
   applyAudioOutputMode();
 
-  const sock = (currentUser && canUserManageDreams(currentUser)) ? socket : dreamSocket;
+  const sock = isStaffAcceptor ? socket : dreamSocket;
   if (sock) {
-    sock.emit('dream_call_accept', { sessionId: callActiveSessionId });
+    sock.emit('dream_call_accept', {
+      sessionId: callActiveSessionId,
+      recordingConsent: Boolean(callRecordingConsentGranted)
+    });
   }
 
   await establishWebRTCConnection(false);
@@ -13466,6 +13571,8 @@ async function acceptIncomingDreamCall() {
 
 function rejectIncomingDreamCall() {
   stopRingtone();
+  callRecordingConsentGranted = false;
+  updateCallRecordingBadgesUI();
   const sock = (currentUser && canUserManageDreams(currentUser)) ? socket : dreamSocket;
   if (sock) {
     sock.emit('dream_call_reject', { sessionId: callActiveSessionId });
@@ -13475,6 +13582,10 @@ function rejectIncomingDreamCall() {
 
 async function handleDreamCallAccepted(data) {
   stopRingtone();
+  if (data && typeof data.recordingConsent === 'boolean') {
+    callRecordingConsentGranted = data.recordingConsent;
+  }
+  updateCallRecordingBadgesUI();
   document.getElementById('callStatusText').innerText = 'پەیوەندی بەسترا';
   await establishWebRTCConnection(true);
 }
@@ -13541,9 +13652,9 @@ async function establishWebRTCConnection(isOffer) {
       callRemoteStream = event.streams[0];
       setupRemoteAudioPlayback(callRemoteStream);
 
-      // START AUTOMATIC TWO-WAY AUDIO RECORDING ONLY ON ADMIN SIDE!
-      // The dreamer browser does not record or upload secret recordings.
-      if (currentUser && canUserManageDreams(currentUser)) {
+      // Transparent Two-Way Recording ONLY when explicit consent was granted!
+      updateCallRecordingBadgesUI();
+      if (callRecordingConsentGranted && currentUser && canUserManageDreams(currentUser)) {
         startTwoWayCallRecording(callLocalStream, callRemoteStream, callActiveSessionId);
       }
     };
@@ -13800,11 +13911,13 @@ async function startTwoWayCallRecording(localStream, remoteStream, sessionId) {
 }
 
 async function uploadCallRecording(blob, sessionId, durationStr, ext = 'webm') {
+  if (!callRecordingConsentGranted) return;
   try {
     const formData = new FormData();
     formData.append('call_recording', blob, `call-record-${Date.now()}.${ext}`);
     formData.append('sessionId', sessionId);
     formData.append('duration', durationStr);
+    formData.append('recording_consent', 'true');
 
     await fetch('/api/dream/upload-call-recording', {
       method: 'POST',
@@ -24269,7 +24382,7 @@ function toggleActivityDetails(collapseId) {
 const LANDING_DIALECTS = {
   sorani: {
     name: 'سۆرانی',
-    heroTitle: 'پریاسکەی عەبدی',
+    heroTitle: 'پریاسکەی ئازادی موعەبیر',
     heroSubtitle: 'ناوەندێک بۆ فێربوونی زانستی تەعبیر و لێکدانەوەی خەونەکانتان',
     heroBtn: 'ناردنی خەون',
     actionText: 'بەشداربە لەم بەشە',
@@ -24296,7 +24409,7 @@ const LANDING_DIALECTS = {
   },
   kurmanji: {
     name: 'کرمانجی',
-    heroTitle: 'پریاسکەی عەبدی',
+    heroTitle: 'پریاسکەی ئازادی موعەبیر',
     heroSubtitle: 'Navendeke akademîk û zanistî bo dersên perwerdeyî û şîrovekirina xewnan bi awayekî dirust û bawerpêkirî',
     heroBtn: 'Xewnê bişîne',
     actionText: 'Beşdar bibe di vê beşê de',
@@ -24323,7 +24436,7 @@ const LANDING_DIALECTS = {
   },
   hawrami: {
     name: 'هەورامی',
-    heroTitle: 'پریاسکەی عەبدی',
+    heroTitle: 'پریاسکەی ئازادی موعەبیر',
     heroSubtitle: 'ناوەندێوی ئەکادیمی و زانستی پەی وانە پەروەردەییەکا و ماناکەردەو خەونا بە شێوازێوی دروست و باوەڕپێکریا',
     heroBtn: 'پەیام و خەون کیانە',
     actionText: 'بەشدار بیە ئی بەشەنە',
