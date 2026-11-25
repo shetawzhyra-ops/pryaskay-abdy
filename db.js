@@ -3766,6 +3766,18 @@ const articlesDb = {
       return false;
     }
   },
+  update(id, { title, content }) {
+    try {
+      const existing = this.getById(id);
+      if (!existing) return null;
+      const nextTitle = title !== undefined ? String(title).trim() : existing.title;
+      const nextContent = content !== undefined ? String(content).trim() : existing.content;
+      db.prepare('UPDATE articles SET title = ?, content = ? WHERE id = ?').run(nextTitle, nextContent, id);
+      return this.getById(id);
+    } catch (e) {
+      return null;
+    }
+  },
   delete(id) {
     try {
       db.prepare('DELETE FROM article_reactions WHERE article_id = ?').run(id);
@@ -3809,6 +3821,19 @@ const poemsDb = {
     const now = Date.now();
     const res = db.prepare('INSERT INTO poems (title, content, author, likes, created_at) VALUES (?, ?, ?, 0, ?)').run(title, content, author, now);
     return { id: Number(res.lastInsertRowid), title, content, author, likes: 0, created_at: now };
+  },
+  update(id, { title, content, author }) {
+    try {
+      const existing = this.getById(id);
+      if (!existing) return null;
+      const nextTitle = title !== undefined ? String(title).trim() : existing.title;
+      const nextContent = content !== undefined ? String(content).trim() : existing.content;
+      const nextAuthor = (author !== undefined && String(author).trim()) ? String(author).trim() : (existing.author || 'م. ئازاد');
+      db.prepare('UPDATE poems SET title = ?, content = ?, author = ? WHERE id = ?').run(nextTitle, nextContent, nextAuthor, id);
+      return this.getById(id);
+    } catch (e) {
+      return null;
+    }
   },
   delete(id) {
     try {

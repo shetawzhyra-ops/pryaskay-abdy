@@ -353,6 +353,47 @@ app.post('/api/poems', (req, res) => {
   }
 });
 
+app.put('/api/poems/:id', (req, res) => {
+  try {
+    let authedUser = null;
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        authedUser = users.findById(decoded.id);
+      } catch (e) {}
+    }
+
+    if (!authedUser) {
+      return res.status(401).json({ success: false, error: 'تکایە سەرەتا بچۆ ژوورەوە' });
+    }
+
+    const uname = (authedUser.username || '').toLowerCase().trim();
+    const isAzad = uname === 'azad' || authedUser.id === 6 || (authedUser.full_name || '').includes('ئازاد');
+    const isManager = isAzad || isHemnOrAzadUser(authedUser);
+
+    if (!isManager) {
+      return res.status(403).json({ success: false, error: 'دەسەڵاتی دەستکاریکردنی شیعرت نییە' });
+    }
+
+    const { title, content, author } = req.body || {};
+    if (!title || !content || !String(title).trim() || !String(content).trim()) {
+      return res.status(400).json({ success: false, error: 'تکایە ناونیشان و دەقی شیعرەکە بنووسە' });
+    }
+
+    const updated = poemsDb.update(req.params.id, { title, content, author });
+    if (!updated) {
+      return res.status(404).json({ success: false, error: 'شیعرەکە نەدۆزرایەوە' });
+    }
+    scheduleSearchReindex();
+    if (io) io.emit('poem_updated', updated);
+    res.json({ success: true, poem: updated });
+  } catch (err) {
+    console.error('Error updating poem:', err);
+    res.status(500).json({ success: false, error: 'هەڵە لە دەستکاریکردنی شیعر' });
+  }
+});
+
 app.delete('/api/poems/:id', (req, res) => {
   try {
     let authedUser = null;
@@ -603,6 +644,42 @@ app.put('/api/admin/articles/:id/status', (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ success: false, error: 'هەڵە لە گۆڕینی دۆخی وتار' });
+  }
+});
+
+// 5b. Admin: Edit article content & title
+app.put('/api/admin/articles/:id', (req, res) => {
+  try {
+    let authedUser = null;
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        authedUser = users.findById(decoded.id);
+      } catch (e) {}
+    }
+    const _r = (authedUser?.role || '').toLowerCase();
+    const _u = (authedUser?.username || '').toLowerCase().trim();
+    const _isArtStaff = authedUser && (_r === 'admin' || _r === 'super_admin' || _r === 'teacher' || _u === 'azad' || Number(authedUser.id) === 6 || (authedUser.full_name || '').includes('ئازاد'));
+    if (!_isArtStaff) {
+      return res.status(403).json({ success: false, error: 'دەسەڵاتی ئەدمین یان مامۆستات نییە' });
+    }
+
+    const { title, content } = req.body || {};
+    if (!title || !content || !String(title).trim() || !String(content).trim()) {
+      return res.status(400).json({ success: false, error: 'تکایە ناونیشان و دەقی کورتە وتارەکە بنووسە' });
+    }
+
+    const updated = articlesDb.update(req.params.id, { title, content });
+    if (!updated) {
+      return res.status(404).json({ success: false, error: 'وتارەکە نەدۆزرایەوە' });
+    }
+    scheduleSearchReindex();
+    if (typeof io !== 'undefined' && io) io.emit('article_updated', updated);
+    res.json({ success: true, article: updated });
+  } catch (err) {
+    console.error('Error updating article:', err);
+    res.status(500).json({ success: false, error: 'هەڵە لە دەستکاریکردنی وتار' });
   }
 });
 

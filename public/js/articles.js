@@ -259,17 +259,24 @@
               </button>
             </div>
 
-            <!-- Admin Actions -->
+            <!-- Admin Actions (Edit & Delete matching Dreams section) -->
             ${isAdmin ? `
-              <div class="flex items-center gap-2">
-                <button 
-                  type="button" 
-                  onclick="window.handleAdminDeleteArticle(${art.id})" 
-                  class="px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/35 text-rose-800 text-xs font-bold transition cursor-pointer flex items-center gap-1.5"
-                  title="سڕینەوەی وتار (ئەدمین)"
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <button
+                  type="button"
+                  onclick="window.openEditArticleModal(${art.id})"
+                  class="text-[#785336] hover:text-[#b45309] p-1.5 rounded-lg transition-colors cursor-pointer"
+                  title="دەستکاریکردنی نوسین"
                 >
-                  <i class="fa-solid fa-trash-can text-[11px]"></i>
-                  <span>سڕینەوە</span>
+                  <i class="fa-solid fa-pen-to-square text-xs"></i>
+                </button>
+                <button
+                  type="button"
+                  onclick="window.handleAdminDeleteArticle(${art.id})"
+                  class="text-[#785336] hover:text-rose-700 p-1.5 rounded-lg transition-colors cursor-pointer"
+                  title="سڕینەوەی وتار"
+                >
+                  <i class="fa-solid fa-trash-can text-xs"></i>
                 </button>
               </div>
             ` : ''}
@@ -325,6 +332,73 @@
       }).catch(() => {
         showToast('نەتوانرا بەستەرەکە کۆپی بکرێت');
       });
+    }
+  };
+
+  // Admin Edit Article
+  window.openEditArticleModal = function(articleId) {
+    const art = allArticles.find(a => Number(a.id) === Number(articleId));
+    if (!art) return;
+    const modal = document.getElementById('modalArticlePageEdit');
+    if (!modal) return;
+    const idEl = document.getElementById('editArticleId');
+    const titleEl = document.getElementById('editArticleTitleInput');
+    const contentEl = document.getElementById('editArticleContentInput');
+    if (idEl) idEl.value = art.id;
+    if (titleEl) titleEl.value = art.title || '';
+    if (contentEl) contentEl.value = art.content || '';
+    modal.classList.remove('hidden');
+    if (titleEl) setTimeout(() => titleEl.focus(), 80);
+  };
+
+  window.closeEditArticleModal = function() {
+    const modal = document.getElementById('modalArticlePageEdit');
+    if (modal) modal.classList.add('hidden');
+    document.getElementById('pageEditArticleForm')?.reset();
+  };
+
+  window.handlePageEditArticle = async function(e) {
+    if (e) e.preventDefault();
+    const token = localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
+    if (!token) return;
+    const id = Number(document.getElementById('editArticleId')?.value);
+    const title = (document.getElementById('editArticleTitleInput')?.value || '').trim();
+    const content = (document.getElementById('editArticleContentInput')?.value || '').trim();
+    if (!id || !title || !content) {
+      alert('تکایە ناونیشان و دەقی کورتە وتارەکە بنووسە');
+      return;
+    }
+    const btn = document.getElementById('pageArticleSaveEditBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>پاشەکەوتکردن...</span>';
+    }
+    try {
+      const res = await fetch(`/api/admin/articles/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ title, content })
+      });
+      const data = await res.json();
+      if (data.success && data.article) {
+        const idx = allArticles.findIndex(a => Number(a.id) === id);
+        if (idx >= 0) allArticles[idx] = data.article;
+        closeEditArticleModal();
+        renderArticles(allArticles);
+        showToast('وتارەکە بە سەرکەوتوویی دەستکاری کرا ✨');
+      } else {
+        alert(data.error || 'هەڵە لە دەستکاریکردنی وتار');
+      }
+    } catch (err) {
+      alert('هەڵە لە پەیوەندی بە سێرڤەر');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i><span>پاشەکەوتکردنی گۆڕانکاری</span>';
+      }
     }
   };
 
@@ -459,6 +533,17 @@
       const socket = io();
       socket.on('new_article_published', () => loadArticles());
       socket.on('article_status_updated', () => loadArticles());
+      socket.on('article_updated', (updated) => {
+        if (updated && updated.id) {
+          const idx = allArticles.findIndex(a => Number(a.id) === Number(updated.id));
+          if (idx >= 0) {
+            allArticles[idx] = updated;
+            renderArticles(allArticles);
+          } else {
+            loadArticles();
+          }
+        }
+      });
       socket.on('article_deleted', (data) => {
         if (data && data.id) {
           allArticles = allArticles.filter(a => a.id !== Number(data.id));

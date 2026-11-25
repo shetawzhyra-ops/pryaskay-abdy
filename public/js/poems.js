@@ -60,12 +60,19 @@
     }, 3200);
   }
 
-  // Helper: Check if logged-in user is Mamosta Azad
+  // Helper: Check if logged-in user is Mamosta Azad or Super Admin Manager
   function isAzadUser(u) {
     if (!u) return false;
     const uname = (u.username || '').toLowerCase().trim();
     const fname = (u.full_name || '').trim();
     return uname === 'azad' || Number(u.id) === 6 || fname.includes('ئازاد');
+  }
+
+  function canEditPoem(u) {
+    if (!u) return false;
+    const uname = (u.username || '').toLowerCase().trim();
+    const role = (u.role || '').toLowerCase().trim();
+    return isAzadUser(u) || role === 'super_admin' || uname === 'hemntjabar' || uname === 'admin' || Number(u.id) === 3 || Number(u.id) === 1;
   }
 
   function updatePoemPublisherUI() {
@@ -156,6 +163,7 @@
     }
 
     const isAzad = isAzadUser(currentUser);
+    const canEdit = canEditPoem(currentUser);
 
     container.innerHTML = list.map(poem => {
       const d = new Date(poem.created_at || Date.now());
@@ -165,14 +173,25 @@
         day: 'numeric'
       });
 
-      const deleteBtn = isAzad ? `
-        <button 
-          onclick="deletePoem(${poem.id})" 
-          class="text-rose-500 hover:text-rose-700 bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
-          title="سڕینەوەی ئەم شیعرە"
+      const editBtn = canEdit ? `
+        <button
+          type="button"
+          onclick="openEditPoemModal(${poem.id})"
+          class="text-[#785336] hover:text-[#b45309] p-1.5 rounded-lg transition-colors cursor-pointer"
+          title="دەستکاریکردنی نوسین"
         >
-          <i class="fa-solid fa-trash-can text-[11px]"></i>
-          <span class="hidden sm:inline">سڕینەوە</span>
+          <i class="fa-solid fa-pen-to-square text-xs"></i>
+        </button>
+      ` : '';
+
+      const deleteBtn = isAzad ? `
+        <button
+          type="button"
+          onclick="deletePoem(${poem.id})"
+          class="text-[#785336] hover:text-rose-700 p-1.5 rounded-lg transition-colors cursor-pointer"
+          title="سڕینەوەی پۆست"
+        >
+          <i class="fa-solid fa-trash-can text-xs"></i>
         </button>
       ` : '';
 
@@ -186,11 +205,12 @@
                 ${escapeHtml(poem.title)}
               </h2>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
               <span class="text-[11px] text-[#785336] font-bold flex items-center gap-1">
                 <i class="fa-regular fa-calendar-days text-[10px] text-[#b45309]"></i>
                 <span>${dateStr}</span>
               </span>
+              ${editBtn}
               ${deleteBtn}
             </div>
           </div>
@@ -282,6 +302,79 @@ ${escapeHtml(poem.content)}
       });
     } else {
       alert(shareText);
+    }
+  };
+
+  // Edit Poem Modal
+  window.openEditPoemModal = function(id) {
+    const poem = allPoems.find(p => Number(p.id) === Number(id));
+    if (!poem) return;
+    const modal = document.getElementById('modalEditPoem');
+    if (!modal) return;
+    const idEl = document.getElementById('editPoemId');
+    const titleEl = document.getElementById('editPoemInputTitle');
+    const contentEl = document.getElementById('editPoemInputContent');
+    const authorEl = document.getElementById('editPoemInputAuthor');
+    if (idEl) idEl.value = poem.id;
+    if (titleEl) titleEl.value = poem.title || '';
+    if (contentEl) contentEl.value = poem.content || '';
+    if (authorEl) authorEl.value = poem.author || 'م. ئازاد';
+    modal.classList.remove('hidden');
+    if (titleEl) setTimeout(() => titleEl.focus(), 80);
+  };
+
+  window.closeEditPoemModal = function() {
+    const modal = document.getElementById('modalEditPoem');
+    if (modal) modal.classList.add('hidden');
+    document.getElementById('formEditPoem')?.reset();
+  };
+
+  window.submitEditPoem = async function(e) {
+    if (e) e.preventDefault();
+    const id = Number(document.getElementById('editPoemId')?.value);
+    const title = (document.getElementById('editPoemInputTitle')?.value || '').trim();
+    const content = (document.getElementById('editPoemInputContent')?.value || '').trim();
+    const author = (document.getElementById('editPoemInputAuthor')?.value || '').trim() || 'م. ئازاد';
+    if (!id || !title || !content) {
+      alert('تکایە ناونیشان و دەقی شیعر بنووسە');
+      return;
+    }
+    const token = localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
+    if (!token) {
+      alert('تکایە سەرەتا بچۆ ژوورەوە');
+      return;
+    }
+    const btn = document.getElementById('btnSaveEditPoem');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>پاشەکەوتکردن...</span>';
+    }
+    try {
+      const res = await fetch(`/api/poems/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ title, content, author })
+      });
+      const data = await res.json();
+      if (data.success && data.poem) {
+        const idx = allPoems.findIndex(p => Number(p.id) === id);
+        if (idx >= 0) allPoems[idx] = data.poem;
+        closeEditPoemModal();
+        renderPoems(allPoems);
+        showToast('شیعرەکە بە سەرکەوتوویی دەستکاری کرا ✨');
+      } else {
+        alert(data.error || 'هەڵە لە دەستکاریکردنی شیعر');
+      }
+    } catch (err) {
+      alert('هەڵەیەک ڕوویدا لە پەیوەندی لەگەڵ سێرڤەر');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-check text-xs"></i><span>پاشەکەوتکردنی گۆڕانکاری</span>';
+      }
     }
   };
 
@@ -419,6 +512,17 @@ ${escapeHtml(poem.content)}
       });
       socket.on('new_poem_published', () => {
         loadPoems();
+      });
+      socket.on('poem_updated', (updated) => {
+        if (updated && updated.id) {
+          const idx = allPoems.findIndex(p => Number(p.id) === Number(updated.id));
+          if (idx >= 0) {
+            allPoems[idx] = updated;
+            renderPoems(allPoems);
+          } else {
+            loadPoems();
+          }
+        }
       });
       socket.on('poem_deleted', (data) => {
         if (data && data.id) {

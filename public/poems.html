@@ -369,6 +369,80 @@
     </div>
   </div>
 
+  <!-- ========================================== -->
+  <!-- MODAL: Edit Existing Poem (#modalEditPoem) -->
+  <!-- ========================================== -->
+  <div id="modalEditPoem" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1a241b]/65 backdrop-blur-md hidden animate-fade-in">
+    <div class="modal-content rounded-3xl p-6 sm:p-7 w-full max-w-xl shadow-2xl relative max-h-[90vh] overflow-y-auto text-right text-[#361c0c]">
+      <button onclick="closeEditPoemModal()" type="button" class="absolute top-4 left-4 text-[#78350f] hover:text-[#361c0c] p-2 rounded-xl transition cursor-pointer">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="flex items-center gap-3 border-b border-[#9c784e]/25 pb-4 mb-5">
+        <div class="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-600/30 text-[#b45309] flex items-center justify-center text-lg shadow-sm">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-[#361c0c]">دەستکاریکردنی شیعر</h3>
+          <p class="text-xs text-[#54371f] font-medium">گۆڕانکاری لە ناونیشان و دەقی هۆنراوەکە</p>
+        </div>
+      </div>
+
+      <form id="formEditPoem" onsubmit="submitEditPoem(event)" class="space-y-4">
+        <input type="hidden" id="editPoemId">
+        <div>
+          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">ناونیشانی شیعر:</label>
+          <input
+            type="text"
+            id="editPoemInputTitle"
+            required
+            placeholder="ناونیشانی شیعر..."
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#9c784e]/35 bg-[#fbf7f0] text-sm font-bold text-[#361c0c] placeholder-[#8c6846] focus:outline-none focus:border-amber-600"
+          >
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">دەق و دێڕەکانی شیعر:</label>
+          <textarea
+            id="editPoemInputContent"
+            rows="8"
+            required
+            placeholder="دێڕەکانی هۆنراوەکە..."
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#9c784e]/35 bg-[#fbf7f0] text-sm font-serif leading-loose text-[#361c0c] placeholder-[#8c6846] focus:outline-none focus:border-amber-600"
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">ناوی شاعیر / خاوەن بەرهەم:</label>
+          <input
+            type="text"
+            id="editPoemInputAuthor"
+            value="م. ئازاد"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#9c784e]/35 bg-[#fbf7f0] text-sm font-bold text-[#361c0c] focus:outline-none focus:border-amber-600"
+          >
+        </div>
+
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-[#9c784e]/25">
+          <button
+            type="button"
+            onclick="closeEditPoemModal()"
+            class="px-4 py-2 rounded-xl bg-[#e4d4bd] text-[#361c0c] font-bold text-xs hover:bg-[#d9c4a6] border border-[#9c784e]/30 transition cursor-pointer"
+          >
+            پاشگەزبوونەوە
+          </button>
+          <button
+            type="submit"
+            id="btnSaveEditPoem"
+            class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs sm:text-sm shadow-md transition active:scale-95 cursor-pointer flex items-center gap-1.5"
+          >
+            <i class="fa-solid fa-check text-xs"></i>
+            <span>پاشەکەوتکردنی گۆڕانکاری</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div id="poemToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden px-4 py-2 rounded-2xl bg-[#f4e9d8] text-[#361c0c] text-xs font-bold shadow-2xl border border-[#9c784e]/45 flex items-center gap-2">
     <i class="fa-solid fa-circle-check text-[#b45309]"></i>
@@ -378,7 +452,7 @@
   <!-- Socket.io -->
   <script src="/socket.io/socket.io.js"></script>
   <!-- Dedicated Poems Script -->
-  <script src="/js/poems.js?v=10.0&t=1795730000"></script>
+  <script src="/js/poems.js?v=11.0&t=1796200000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
   <script src="/js/post-comments.js?v=2.0" defer></script>
