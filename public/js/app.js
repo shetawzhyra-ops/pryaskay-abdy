@@ -26141,8 +26141,8 @@ ${escapeHtml(poem.content)}
           </div>
         </div>
 
-        ${mediaHtml}
         ${contentHtml}
+        ${mediaHtml}
 
         <div class="flex items-center justify-end text-xs pt-1.5">
           <div class="flex items-center gap-2">

@@ -225,8 +225,8 @@ ${escapeHtml(poem.content)}
             </div>
           </div>
 
-          ${mediaHtml}
           ${contentHtml}
+          ${mediaHtml}
 
           <!-- Card Footer -->
           <div class="pt-3 border-t border-[#9c784e]/25 flex items-center justify-end gap-3 flex-wrap text-xs">
