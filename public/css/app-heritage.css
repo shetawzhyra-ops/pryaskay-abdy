@@ -979,12 +979,77 @@ div[id^="alarm-card-"] > *,
   padding-bottom: 0.35rem !important;
 }
 
+/* Custom Private Groups Section (#drawerCustomGroupsSection) — Warm Manuscript Card */
+#drawerCustomGroupsSection,
+body.light-theme #drawerCustomGroupsSection {
+  background: linear-gradient(166deg, rgba(251, 245, 236, 0.88) 0%, rgba(241, 229, 210, 0.82) 100%) !important;
+  border: 1px solid rgba(156, 120, 78, 0.28) !important;
+  border-radius: 1.1rem !important;
+  padding: 0.8rem 0.85rem !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 4px 12px -6px rgba(42, 24, 10, 0.12) !important;
+}
+
+#drawerCustomGroupsSection > div:first-child > span,
+body.light-theme #drawerCustomGroupsSection > div:first-child > span,
+#drawerCustomGroupsSection > div:first-child > span span {
+  color: #78350f !important;
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: 0.96rem !important;
+}
+
+#drawerCustomGroupsSection > div:first-child > span i,
+body.light-theme #drawerCustomGroupsSection > div:first-child > span i {
+  color: #b45309 !important;
+}
+
+#drawerCustomGroupsSection #drawerCreateGroupBtn,
+body.light-theme #mainMenuDrawerPanel .overflow-y-auto #drawerCreateGroupBtn {
+  background: linear-gradient(145deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.12) 100%) !important;
+  border: 1px solid rgba(180, 83, 9, 0.36) !important;
+  color: #78350f !important;
+  border-radius: 0.85rem !important;
+  padding: 0.35rem 0.75rem !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+
+#drawerCustomGroupsSection #drawerCreateGroupBtn span,
+#drawerCustomGroupsSection #drawerCreateGroupBtn i,
+body.light-theme #drawerCustomGroupsSection #drawerCreateGroupBtn span,
+body.light-theme #drawerCustomGroupsSection #drawerCreateGroupBtn i {
+  color: #78350f !important;
+}
+
+#drawerCustomGroupsSection #drawerCreateGroupBtn:hover {
+  background: linear-gradient(145deg, rgba(245, 158, 11, 0.28) 0%, rgba(217, 119, 6, 0.20) 100%) !important;
+  border-color: rgba(180, 83, 9, 0.55) !important;
+}
+
+#drawerCustomGroupsList p,
+body.light-theme #drawerCustomGroupsSection #drawerCustomGroupsList p {
+  color: #6e4e2e !important;
+}
+
 #mainMenuDrawerPanel div[onclick*="openMyProfile"] {
   background: linear-gradient(166deg, #fdfaf4 0%, #f2e5d1 100%) !important;
   border: 1px solid rgba(156, 120, 78, 0.36) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.85),
     0 8px 20px -8px rgba(42, 24, 10, 0.14) !important;
+}
+
+/* Remove legacy blue pill wrapper from #drawerUserRoleBadge and hide empty role slots */
+#drawerUserRoleBadge,
+body.light-theme #drawerUserRoleBadge {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+#drawerUserRoleBadge:empty,
+#headerRoleBadge:empty {
+  display: none !important;
 }
 
 /* All Drawer Tool Tiles (Explicitly overriding dark !from-*-950/40 Tailwind rules) */
@@ -1383,4 +1448,51 @@ div[id$="Modal"] select:focus {
   #mainMenuDrawerPanel #drawerArticlesAdminBtn:hover {
     transform: none !important;
   }
+}
+
+/* Dream Management Top Header (#dreamAdminModalHeader) — Clean Single-Row Manuscript Polish */
+#dreamAdminModalHeader {
+  min-height: 58px !important;
+  padding: 0.6rem 0.9rem !important;
+  background: linear-gradient(165deg, rgba(244, 234, 219, 0.99) 0%, rgba(232, 217, 195, 0.98) 100%) !important;
+  border-bottom: 1px solid rgba(156, 120, 78, 0.30) !important;
+  box-shadow: 0 2px 10px -4px rgba(54, 28, 12, 0.14) !important;
+}
+
+#dreamAdminModalHeader #dreamDownloadAllAudioBtn,
+#dreamAdminModalHeader #dreamAvailabilityToggleBtn,
+#dreamAdminModalHeader #dreamPublicPostsLinkBtn,
+#dreamAdminModalHeader #dreamAdminCloseBtn {
+  height: 2.25rem !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 1px 3px rgba(54, 28, 12, 0.08) !important;
+}
+
+#dreamAdminModalHeader #dreamDownloadAllAudioBtn {
+  background: rgba(247, 240, 228, 0.96) !important;
+  border: 1px solid rgba(180, 83, 9, 0.32) !important;
+  color: #92400e !important;
+}
+
+#dreamAdminModalHeader #dreamPublicPostsLinkBtn {
+  background: rgba(247, 240, 228, 0.96) !important;
+  border: 1px solid rgba(156, 120, 78, 0.34) !important;
+  color: #361c0c !important;
+}
+
+#dreamAdminModalHeader #dreamPublicPostsLinkBtn i {
+  color: #b45309 !important;
+}
+
+#dreamAdminModalHeader #dreamAdminCloseBtn {
+  width: 2.25rem !important;
+  background: rgba(247, 240, 228, 0.96) !important;
+  border: 1px solid rgba(156, 120, 78, 0.34) !important;
+  color: #54371f !important;
+}
+
+#dreamAdminModalHeader #dreamAdminCloseBtn:hover {
+  background: rgba(220, 38, 38, 0.12) !important;
+  border-color: rgba(220, 38, 38, 0.35) !important;
+  color: #b91c1c !important;
 }

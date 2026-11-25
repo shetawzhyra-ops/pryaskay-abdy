@@ -2143,7 +2143,7 @@ body.light-theme #mainMenuDrawerPanel {
 
 /* Drawer Header */
 
-body.light-theme #mainMenuDrawerPanel .border-b.border-slate-800\/80 {
+body.light-theme #mainMenuDrawerPanel > div:first-child.border-b.border-slate-800\/80 {
 
   background-color: #f8fafc !important;
 
@@ -2151,21 +2151,21 @@ body.light-theme #mainMenuDrawerPanel .border-b.border-slate-800\/80 {
 
 }
 
-body.light-theme #mainMenuDrawerPanel .border-b.border-slate-800\/80 h3 {
+body.light-theme #mainMenuDrawerPanel > div:first-child.border-b.border-slate-800\/80 h3 {
 
   color: #0f172a !important;
 
 }
 
-body.light-theme #mainMenuDrawerPanel .border-b.border-slate-800\/80 p {
+body.light-theme #mainMenuDrawerPanel > div:first-child.border-b.border-slate-800\/80 p {
 
   color: #64748b !important;
 
 }
 
-body.light-theme #mainMenuDrawerPanel .border-b.border-slate-800\/80 .w-8.h-8.rounded-xl.bg-amber-400\/15,
+body.light-theme #mainMenuDrawerPanel > div:first-child.border-b.border-slate-800\/80 .w-8.h-8.rounded-xl.bg-amber-400\/15,
 
-body.light-theme #mainMenuDrawerPanel .border-b.border-slate-800\/80 .w-10.h-10.rounded-2xl.bg-amber-400\/15 {
+body.light-theme #mainMenuDrawerPanel > div:first-child.border-b.border-slate-800\/80 .w-10.h-10.rounded-2xl.bg-amber-400\/15 {
 
   background-color: #fef3c7 !important;
 
@@ -2175,7 +2175,7 @@ body.light-theme #mainMenuDrawerPanel .border-b.border-slate-800\/80 .w-10.h-10.
 
 }
 
-body.light-theme #mainMenuDrawerPanel .border-b.border-slate-800\/80 button[onclick="closeMainMenuDrawer()"] {
+body.light-theme #mainMenuDrawerPanel > div:first-child.border-b.border-slate-800\/80 button[onclick="closeMainMenuDrawer()"] {
 
   background-color: #f1f5f9 !important;
 
@@ -2185,7 +2185,7 @@ body.light-theme #mainMenuDrawerPanel .border-b.border-slate-800\/80 button[oncl
 
 }
 
-body.light-theme #mainMenuDrawerPanel .border-b.border-slate-800\/80 button[onclick="closeMainMenuDrawer()"]:hover {
+body.light-theme #mainMenuDrawerPanel > div:first-child.border-b.border-slate-800\/80 button[onclick="closeMainMenuDrawer()"]:hover {
 
   background-color: #e2e8f0 !important;
 
@@ -2277,7 +2277,7 @@ body.light-theme #drawerStaffHeader {
 
 body.light-theme #drawerCustomGroupsSection span {
 
-  color: #4338ca !important;
+  color: #78350f !important;
 
 }
 

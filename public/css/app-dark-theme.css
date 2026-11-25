@@ -578,6 +578,55 @@ html.dark #mainMenuDrawerPanel div[onclick*="openMyProfile"] {
   border: 1px solid rgba(245, 158, 11, 0.30) !important;
 }
 
+html.dark #drawerUserRoleBadge {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+html.dark #drawerUserRoleBadge:empty,
+html.dark #headerRoleBadge:empty {
+  display: none !important;
+}
+
+html.dark #drawerCustomGroupsSection,
+body.dark-theme #drawerCustomGroupsSection,
+body.dark-mode #drawerCustomGroupsSection {
+  background: rgba(18, 30, 23, 0.88) !important;
+  border: 1px solid rgba(245, 158, 11, 0.24) !important;
+  border-radius: 1.1rem !important;
+  padding: 0.8rem 0.85rem !important;
+  box-shadow: none !important;
+}
+
+html.dark #drawerCustomGroupsSection > div:first-child > span,
+html.dark #drawerCustomGroupsSection > div:first-child > span span,
+body.dark-theme #drawerCustomGroupsSection > div:first-child > span {
+  color: #fef3c7 !important;
+}
+
+html.dark #drawerCustomGroupsSection > div:first-child > span i {
+  color: #fbbf24 !important;
+}
+
+html.dark #drawerCustomGroupsSection #drawerCreateGroupBtn,
+body.dark-theme #mainMenuDrawerPanel .overflow-y-auto #drawerCreateGroupBtn {
+  background: rgba(245, 158, 11, 0.16) !important;
+  border: 1px solid rgba(245, 158, 11, 0.38) !important;
+  color: #fde68a !important;
+  border-radius: 0.85rem !important;
+  padding: 0.35rem 0.75rem !important;
+}
+
+html.dark #drawerCustomGroupsSection #drawerCreateGroupBtn span,
+html.dark #drawerCustomGroupsSection #drawerCreateGroupBtn i {
+  color: #fde68a !important;
+}
+
+html.dark #drawerCustomGroupsList p {
+  color: #a7bfae !important;
+}
+
 html.dark #mainMenuDrawerPanel button[onclick="closeMainMenuDrawer()"] {
   background: rgba(24, 39, 30, 0.94) !important;
   border: 1px solid rgba(245, 158, 11, 0.32) !important;
@@ -967,4 +1016,30 @@ html.dark div[id$="Modal"] .text-amber-950,
 html.dark div[id$="Modal"] .text-slate-900,
 html.dark div[id$="Modal"] .text-slate-950 {
   color: #fff8eb !important;
+}
+
+/* Dream Management Top Header in Dark Mode */
+html.dark #dreamAdminModalHeader {
+  background: linear-gradient(165deg, rgba(16, 27, 21, 0.98) 0%, rgba(11, 19, 15, 0.98) 100%) !important;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.24) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+html.dark #dreamAdminModalHeader #dreamDownloadAllAudioBtn,
+html.dark #dreamAdminModalHeader #dreamPublicPostsLinkBtn,
+html.dark #dreamAdminModalHeader #dreamAdminCloseBtn {
+  background: rgba(24, 39, 31, 0.95) !important;
+  border: 1px solid rgba(245, 158, 11, 0.30) !important;
+  color: #fef3c7 !important;
+}
+
+html.dark #dreamAdminModalHeader #dreamPublicPostsLinkBtn i,
+html.dark #dreamAdminModalHeader #dreamDownloadAllAudioBtn i {
+  color: #fbbf24 !important;
+}
+
+html.dark #dreamAdminModalHeader #dreamAdminCloseBtn:hover {
+  background: rgba(239, 68, 68, 0.20) !important;
+  border-color: rgba(248, 113, 113, 0.45) !important;
+  color: #fecaca !important;
 }

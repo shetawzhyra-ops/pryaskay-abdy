@@ -2,7 +2,7 @@
  * Service Worker for پریاسکەی عەبدی (PWA, Offline Fallback & Background Push Notifications)
  */
 
-const CACHE_NAME = 'pryaska-cache-v4';
+const CACHE_NAME = 'pryaska-cache-v5';
 const STATIC_ASSETS = [
   '/',
   '/offline.html',
@@ -14,12 +14,13 @@ const STATIC_ASSETS = [
   '/css/dreams-heritage.css',
   '/js/global-search.js',
   '/js/post-comments.js',
-  '/images/logo.jpg',
+  '/images/logo.jpg?v=1796050000',
+  '/images/pryaska_icon.png?v=6',
   '/images/avatar_male.svg?v=3.0',
   '/images/avatar_female.svg?v=3.0',
-  '/images/icon-192.png',
-  '/images/icon-512.png',
-  '/favicon.png'
+  '/images/icon-192.png?v=6',
+  '/images/icon-512.png?v=6',
+  '/favicon.png?v=6'
 ];
 
 // Install: pre-cache app shell + offline folio
@@ -45,8 +46,8 @@ self.addEventListener('push', (event) => {
   let payload = {
     title: 'پریاسکەی عەبدی',
     body: 'ئاگادارییەکی نوێت بۆ هاتووە',
-    icon: '/images/logo.jpg',
-    badge: '/favicon.png',
+    icon: '/images/logo.jpg?v=1796050000',
+    badge: '/favicon.png?v=6',
     tag: 'pryaska-notif',
     data: { url: '/' }
   };
@@ -62,8 +63,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: payload.body || '',
-    icon: payload.icon || '/images/logo.jpg',
-    badge: payload.badge || '/favicon.png',
+    icon: payload.icon || '/images/logo.jpg?v=1796050000',
+    badge: payload.badge || '/favicon.png?v=6',
     tag: payload.tag || 'pryaska-notif',
     dir: 'rtl',
     lang: 'ckb',

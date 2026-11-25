@@ -301,7 +301,7 @@ function formatUserDisplayName(user) {
   const isSuper = user.role === 'super_admin' || uname === 'admin' || uname === 'hemntjabar' || uname === 'azad';
 
   if (uname === 'azad' || user.id === 6 || (user.full_name || '').includes('ئازاد')) {
-    return 'ئازادی موعەبیر 🛡️';
+    return 'ئازادی موعەبیر';
   }
 
   if (user.role === 'guest') {
@@ -310,8 +310,6 @@ function formatUserDisplayName(user) {
     suffix = ' 🔰';
   } else if (user.role === 'teacher') {
     suffix = ' 🎓';
-  } else if (isSuper) {
-    suffix = ' 🛡️';
   }
   const nameToUse = user.username || user.full_name;
   return `${prefix}${nameToUse}${suffix}`;
@@ -1087,7 +1085,7 @@ function updateUserUI() {
 
   const headerNameElem = document.getElementById('headerFullName');
   headerNameElem.innerText = formatUserDisplayName(currentUser);
-  headerNameElem.className = `text-xs font-black max-w-[65px] xs:max-w-[85px] sm:max-w-[120px] truncate block ${getUserNameClass(currentUser)}`;
+  headerNameElem.className = `text-xs font-black max-w-[95px] xs:max-w-[120px] sm:max-w-[155px] truncate block ${getUserNameClass(currentUser)}`;
   
   const isGirl = currentUser.gender === 'female';
   const roleBadgeElem = document.getElementById('headerRoleBadge');
@@ -1154,7 +1152,14 @@ function updateUserUI() {
     }
   }
   if (drawerRole) {
-    drawerRole.innerHTML = renderRoleBadge(currentUser.role, currentUser.gender);
+    const drawerRoleHtml = renderRoleBadge(currentUser.role, currentUser.gender);
+    if (drawerRoleHtml && drawerRoleHtml.trim()) {
+      drawerRole.innerHTML = drawerRoleHtml;
+      drawerRole.classList.remove('hidden');
+    } else {
+      drawerRole.innerHTML = '';
+      drawerRole.classList.add('hidden');
+    }
   }
   if (drawerStars) {
     if (isStudentUser) {
@@ -2104,8 +2109,8 @@ function sendBrowserNotification(msg) {
 
     const options = {
       body: bodyText,
-      icon: '/images/logo.jpg',
-      badge: '/images/logo.jpg',
+      icon: '/images/logo.jpg?v=1796050000',
+      badge: '/images/logo.jpg?v=1796050000',
       tag: 'seereen-msg',
       renotify: true,
       vibrate: [200, 100, 200]
@@ -2135,8 +2140,8 @@ function sendQuestionNotification(q) {
     }
     const options = {
       body: q.question_text || 'پرسیارێکی نوێ لەناو چات دانرا!',
-      icon: '/images/logo.jpg',
-      badge: '/images/logo.jpg',
+      icon: '/images/logo.jpg?v=1796050000',
+      badge: '/images/logo.jpg?v=1796050000',
       tag: 'seereen-question',
       renotify: true,
       vibrate: [300, 100, 300]
@@ -3555,7 +3560,7 @@ async function loadMessages() {
         <div class="text-center py-12 flex flex-col items-center justify-center empty-welcome-box">
           <div class="relative mb-3">
             <div class="absolute -inset-1.5 bg-gradient-to-r from-amber-400 via-sky-400 to-amber-300 rounded-2xl blur-sm opacity-50"></div>
-            <img src="/images/logo.jpg" alt="ستافی سیرین" class="relative w-20 h-20 rounded-2xl object-cover border border-[#fef3c7]/60 shadow-xl shadow-[#f59e0b]/20">
+            <img src="/images/logo.jpg?v=1796050000" alt="پریاسکەی عەبدی" class="relative w-20 h-20 rounded-2xl object-cover border border-[#fef3c7]/60 shadow-xl shadow-[#f59e0b]/20 bg-white">
           </div>
           <h3 class="font-black text-base text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-100 to-[#fcd34d]">بەخێربێن بۆ ستافی سیرین</h3>
         </div>
@@ -7795,7 +7800,16 @@ async function openUserProfileModal(userId) {
       genderEl.innerHTML = '';
       genderEl.classList.add('hidden');
     }
-    roleEl.innerHTML = renderRoleBadge(prof.role, prof.gender);
+    if (roleEl) {
+      const profRoleHtml = renderRoleBadge(prof.role, prof.gender);
+      if (profRoleHtml && profRoleHtml.trim()) {
+        roleEl.innerHTML = profRoleHtml;
+        roleEl.classList.remove('hidden');
+      } else {
+        roleEl.innerHTML = '';
+        roleEl.classList.add('hidden');
+      }
+    }
 
     const userBadges = parseUserBadges(prof.special_badge);
     const specialBadgeSlot = document.getElementById('profSpecialBadgeSlot');
@@ -12841,16 +12855,8 @@ function openDreamAdminModal() {
 
   const roleIndicator = document.getElementById('dreamAdminRoleIndicator');
   if (roleIndicator) {
-    if (isSuperOrAdmin) {
-      roleIndicator.innerHTML = '<i class="fa-solid fa-crown text-[10px]"></i> سەرکردایەتی و بەڕێوەبەر';
-      roleIndicator.className = 'text-amber-400 text-[11px] font-black whitespace-nowrap inline-flex items-center gap-1';
-    } else if (hasUserBadge(currentUser, 'purple')) {
-      roleIndicator.innerHTML = '<i class="fa-solid fa-moon text-[10px]"></i> لێکدەرەوەی خەون (باجی مۆر)';
-      roleIndicator.className = 'text-purple-400 text-[11px] font-black whitespace-nowrap inline-flex items-center gap-1';
-    } else {
-      roleIndicator.innerHTML = '<i class="fa-solid fa-graduation-cap text-[10px]"></i> مامۆستا';
-      roleIndicator.className = 'role-text-teacher text-[11px] font-black whitespace-nowrap inline-flex items-center gap-1';
-    }
+    roleIndicator.innerHTML = '';
+    roleIndicator.className = 'hidden';
   }
 
   const availToggleWrapper = document.getElementById('dreamAvailabilityToggleWrapper');
@@ -14203,13 +14209,13 @@ function updateDreamAvailabilityUI(data) {
   const toggleLabel = document.getElementById('dreamAvailabilityLabel');
   if (toggleBtn && toggleDot && toggleLabel) {
     if (status === 'online') {
-      toggleBtn.className = 'px-2.5 py-1 rounded-lg text-[10px] font-black transition flex items-center gap-1.5 bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-600/40 active:scale-95';
-      toggleDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
-      toggleLabel.innerText = 'پەیوەندی کارایە 🟢';
+      toggleBtn.className = 'h-9 px-3 rounded-xl text-[11px] font-black transition inline-flex items-center justify-center gap-1.5 bg-emerald-600/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/40 hover:bg-emerald-600/30 active:scale-95 cursor-pointer';
+      toggleDot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0';
+      toggleLabel.innerText = 'کارایە';
     } else {
-      toggleBtn.className = 'px-2.5 py-1 rounded-lg text-[10px] font-black transition flex items-center gap-1.5 bg-rose-600/30 text-rose-300 border border-rose-500/40 hover:bg-rose-600/40 active:scale-95';
-      toggleDot.className = 'w-2 h-2 rounded-full bg-rose-500';
-      toggleLabel.innerText = 'چالاک نییە 🔴';
+      toggleBtn.className = 'h-9 px-3 rounded-xl text-[11px] font-black transition inline-flex items-center justify-center gap-1.5 bg-rose-600/20 text-rose-800 dark:text-rose-300 border border-rose-500/40 hover:bg-rose-600/30 active:scale-95 cursor-pointer';
+      toggleDot.className = 'w-2 h-2 rounded-full bg-rose-500 shrink-0';
+      toggleLabel.innerText = 'ناچالاکە';
     }
   }
 
@@ -18158,7 +18164,7 @@ function handleMentionAllAlert(data) {
     try {
       new Notification(`📢 ${data.sender_name} (@هەمووان)`, {
         body: data.content,
-        icon: '/logo.png'
+        icon: '/images/logo.png?v=1796050000'
       });
     } catch (e) {}
   }
@@ -21617,7 +21623,7 @@ function renderDrawerCustomGroups() {
 
   if (userCustomGroupsCache.length === 0 && isSuperAdmin) {
     list.innerHTML = `
-      <p class="text-[11px] text-slate-400 py-1 px-2">هیچ گروپ چاتێک نییە؛ کلیک لە دوگمەی سەرەوە بکە بۆ دروستکردن.</p>
+      <p class="text-[11px] text-[#6e4e2e] dark:text-[#a7bfae] py-1 px-2">هیچ گروپ چاتێک نییە؛ کلیک لە دوگمەی سەرەوە بکە بۆ دروستکردن.</p>
     `;
     return;
   }
@@ -24263,7 +24269,7 @@ function toggleActivityDetails(collapseId) {
 const LANDING_DIALECTS = {
   sorani: {
     name: 'سۆرانی',
-    heroTitle: 'پریاسکەی ئازادی موعەبیر',
+    heroTitle: 'پریاسکەی عەبدی',
     heroSubtitle: 'ناوەندێک بۆ فێربوونی زانستی تەعبیر و لێکدانەوەی خەونەکانتان',
     heroBtn: 'ناردنی خەون',
     actionText: 'بەشداربە لەم بەشە',
@@ -24290,7 +24296,7 @@ const LANDING_DIALECTS = {
   },
   kurmanji: {
     name: 'کرمانجی',
-    heroTitle: 'پریاسکەی ئازادی موعەبیر',
+    heroTitle: 'پریاسکەی عەبدی',
     heroSubtitle: 'Navendeke akademîk û zanistî bo dersên perwerdeyî û şîrovekirina xewnan bi awayekî dirust û bawerpêkirî',
     heroBtn: 'Xewnê bişîne',
     actionText: 'Beşdar bibe di vê beşê de',
@@ -24317,7 +24323,7 @@ const LANDING_DIALECTS = {
   },
   hawrami: {
     name: 'هەورامی',
-    heroTitle: 'پریاسکەی ئازادی موعەبیر',
+    heroTitle: 'پریاسکەی عەبدی',
     heroSubtitle: 'ناوەندێوی ئەکادیمی و زانستی پەی وانە پەروەردەییەکا و ماناکەردەو خەونا بە شێوازێوی دروست و باوەڕپێکریا',
     heroBtn: 'پەیام و خەون کیانە',
     actionText: 'بەشدار بیە ئی بەشەنە',

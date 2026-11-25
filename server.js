@@ -301,6 +301,10 @@ app.get('/api/sections', (req, res) => {
 
 
 // ================= POEMS OF M. AZAD (تایبەت بە شیعرەکانی مامۆستا ئازاد) =================
+app.get('/poems', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'poems.html'));
+});
+
 app.get('/api/poems', (req, res) => {
   try {
     const list = poemsDb.getAll();
