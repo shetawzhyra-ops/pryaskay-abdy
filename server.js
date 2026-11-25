@@ -315,35 +315,82 @@ app.get('/api/poems', (req, res) => {
   }
 });
 
+function resolvePoemAuth(req) {
+  let authedUser = null;
+  const authHeader = req.headers['authorization'];
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    try {
+      const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+      authedUser = users.findById(decoded.id);
+    } catch (e) {}
+  }
+  const uname = (authedUser?.username || '').toLowerCase().trim();
+  const isAzad = Boolean(authedUser && (uname === 'azad' || Number(authedUser.id) === 6 || (authedUser.full_name || '').includes('ئازاد')));
+  const isManager = Boolean(authedUser && (isAzad || isHemnOrAzadUser(authedUser)));
+  return { authedUser, isAzad, isManager };
+}
+
+app.post('/api/poems/upload-media', (req, res) => {
+  const { authedUser, isManager } = resolvePoemAuth(req);
+  if (!authedUser) {
+    return res.status(401).json({ success: false, error: 'تکایە سەرەتا بچۆ ژوورەوە' });
+  }
+  if (!isManager) {
+    return res.status(403).json({ success: false, error: 'دەسەڵاتی بارکردنی میدیا بۆ شیعرەکانت نییە' });
+  }
+  upload.single('media')(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err.message || 'هەڵە لە بارکردنی فایل' });
+    }
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: 'هیچ فایلێک دیاری نەکراوە' });
+    }
+    const mime = String(req.file.mimetype || '').toLowerCase();
+    const ext = path.extname(req.file.originalname || req.file.filename || '').toLowerCase();
+    const isAudio = mime.startsWith('audio/') || ['.mp3', '.wav', '.ogg', '.m4a', '.aac', '.opus', '.flac', '.oga'].includes(ext);
+    const isVideo = mime.startsWith('video/') || (!isAudio && ['.mp4', '.mov', '.mkv', '.m4v', '.ogv'].includes(ext)) || (mime === 'video/webm' || (ext === '.webm' && mime.startsWith('video/')));
+    const isImage = mime.startsWith('image/') || ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif', '.bmp'].includes(ext);
+    if (!isAudio && !isVideo && !isImage) {
+      try { fs.unlinkSync(req.file.path); } catch (e) {}
+      return res.status(400).json({ success: false, error: 'تەنها دەنگ، وێنە، یان ڤیدیۆ ڕێگەپێدراوە' });
+    }
+    if (isImage) {
+      await optimizeSingleFile(req.file);
+    }
+    const fileUrl = `/uploads/${req.file.filename}`;
+    const mediaType = isVideo ? 'video' : (isAudio ? 'audio' : 'image');
+    res.json({ success: true, url: fileUrl, file_url: fileUrl, media_type: mediaType, filename: req.file.filename });
+  });
+});
+
 app.post('/api/poems', (req, res) => {
   try {
-    // Authenticate user
-    let authedUser = null;
-    const authHeader = req.headers['authorization'];
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      try {
-        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
-        authedUser = users.findById(decoded.id);
-      } catch (e) {}
-    }
-
+    const { authedUser, isAzad } = resolvePoemAuth(req);
     if (!authedUser) {
       return res.status(401).json({ success: false, error: 'تکایە سەرەتا بچۆ ژوورەوە' });
     }
-
-    const uname = (authedUser.username || '').toLowerCase().trim();
-    const isAzad = uname === 'azad' || authedUser.id === 6 || (authedUser.full_name || '').includes('ئازاد');
-
     if (!isAzad) {
       return res.status(403).json({ success: false, error: 'تەنها مامۆستا ئازاد (خاوەنی ماڵپەڕ) دەسەڵاتی دانانی شیعری هەیە' });
     }
 
-    const { title, content } = req.body;
-    if (!title || !content || !title.trim() || !content.trim()) {
-      return res.status(400).json({ success: false, error: 'تکایە ناونیشان و دەقی شیعرەکە بنووسە' });
+    const { title, content, author, image_url, video_url, audio_url, audio_duration } = req.body || {};
+    const cleanTitle = String(title || '').trim();
+    const cleanContent = String(content || '').trim();
+    const cleanImage = String(image_url || '').trim();
+    const cleanVideo = String(video_url || '').trim();
+    const cleanAudio = String(audio_url || '').trim();
+
+    if (!cleanTitle || (!cleanContent && !cleanImage && !cleanVideo && !cleanAudio)) {
+      return res.status(400).json({ success: false, error: 'تکایە ناونیشان و دەق یان میدیایەک (دەنگ/وێنە/ڤیدیۆ) بنووسە یان هەڵبژێرە' });
     }
 
-    const poem = poemsDb.create(title.trim(), content.trim(), 'م. ئازاد');
+    const resolvedAuthor = (author && String(author).trim()) ? String(author).trim() : 'م. ئازاد';
+    const poem = poemsDb.create(cleanTitle, cleanContent, resolvedAuthor, {
+      image_url: cleanImage,
+      video_url: cleanVideo,
+      audio_url: cleanAudio,
+      audio_duration: Number(audio_duration || 0)
+    });
     scheduleSearchReindex();
     if (io) io.emit('new_poem_published', poem);
     res.json({ success: true, poem });
@@ -355,33 +402,39 @@ app.post('/api/poems', (req, res) => {
 
 app.put('/api/poems/:id', (req, res) => {
   try {
-    let authedUser = null;
-    const authHeader = req.headers['authorization'];
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      try {
-        const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
-        authedUser = users.findById(decoded.id);
-      } catch (e) {}
-    }
-
+    const { authedUser, isManager } = resolvePoemAuth(req);
     if (!authedUser) {
       return res.status(401).json({ success: false, error: 'تکایە سەرەتا بچۆ ژوورەوە' });
     }
-
-    const uname = (authedUser.username || '').toLowerCase().trim();
-    const isAzad = uname === 'azad' || authedUser.id === 6 || (authedUser.full_name || '').includes('ئازاد');
-    const isManager = isAzad || isHemnOrAzadUser(authedUser);
-
     if (!isManager) {
       return res.status(403).json({ success: false, error: 'دەسەڵاتی دەستکاریکردنی شیعرت نییە' });
     }
 
-    const { title, content, author } = req.body || {};
-    if (!title || !content || !String(title).trim() || !String(content).trim()) {
-      return res.status(400).json({ success: false, error: 'تکایە ناونیشان و دەقی شیعرەکە بنووسە' });
+    const existing = poemsDb.getById(req.params.id);
+    if (!existing) {
+      return res.status(404).json({ success: false, error: 'شیعرەکە نەدۆزرایەوە' });
     }
 
-    const updated = poemsDb.update(req.params.id, { title, content, author });
+    const { title, content, author, image_url, video_url, audio_url, audio_duration } = req.body || {};
+    const cleanTitle = title !== undefined ? String(title).trim() : existing.title;
+    const cleanContent = content !== undefined ? String(content).trim() : (existing.content || '');
+    const cleanImage = image_url !== undefined ? String(image_url || '').trim() : (existing.image_url || '');
+    const cleanVideo = video_url !== undefined ? String(video_url || '').trim() : (existing.video_url || '');
+    const cleanAudio = audio_url !== undefined ? String(audio_url || '').trim() : (existing.audio_url || '');
+
+    if (!cleanTitle || (!cleanContent && !cleanImage && !cleanVideo && !cleanAudio)) {
+      return res.status(400).json({ success: false, error: 'تکایە ناونیشان و دەق یان میدیایەک (دەنگ/وێنە/ڤیدیۆ) بهێڵەرەوە' });
+    }
+
+    const updated = poemsDb.update(req.params.id, {
+      title: cleanTitle,
+      content: cleanContent,
+      author,
+      image_url: cleanImage,
+      video_url: cleanVideo,
+      audio_url: cleanAudio,
+      audio_duration
+    });
     if (!updated) {
       return res.status(404).json({ success: false, error: 'شیعرەکە نەدۆزرایەوە' });
     }

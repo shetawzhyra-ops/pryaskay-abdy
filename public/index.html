@@ -8429,15 +8429,17 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <script>if (typeof io === 'undefined') { document.write('<script src="/socket.io/socket.io.js"><\\/script>'); }</script>
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=99.0&t=1795930000"></script>
+<!-- Shared Poem Media Helper -->
+<script src="/js/poem-media.js?v=1.0&t=1796210000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=138.0&t=1796200000"></script>
+<script src="/js/app.js?v=139.0&t=1796210000"></script>
 <!-- Store Compliance (Account Deletion, UGC Report & User Blocking) -->
 <script src="/js/compliance.js?v=1.0&t=1796090000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=6.0&t=1796050000"></script>
 <!-- ================= MODAL: ADD POEM (تایبەت بە م. ئازاد) ================= -->
 <div id="addPoemModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-md">
-<div class="glass-card rounded-3xl w-full max-w-lg border border-amber-900/25 p-5 sm:p-6 shadow-2xl relative overflow-hidden bg-[#fdf6ee]">
+<div class="glass-card rounded-3xl w-full max-w-lg border border-amber-900/25 p-5 sm:p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto bg-[#fdf6ee]">
 <div class="flex items-center justify-between pb-3 mb-4 border-b border-amber-900/15">
 <div class="flex items-center gap-2.5">
 <div class="w-9 h-9 rounded-2xl bg-amber-500/20 text-amber-700 flex items-center justify-center text-base border border-amber-500/30">
@@ -8459,9 +8461,10 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <input type="text" id="newPoemTitle" required placeholder="ناونیشانی شیعر بنووسە..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl bg-white border border-amber-900/25 text-amber-950 focus:outline-none focus:border-amber-500 shadow-sm">
 </div>
 <div>
-<label class="block text-xs font-bold text-amber-950 mb-1">دەق و دێڕەکانی شیعرەکە:</label>
-<textarea id="newPoemContent" rows="6" required placeholder="دێڕەکانی شیعر بنووسە (هەر دێڕێک لە خەتێکی نوێدا)..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl bg-white border border-amber-900/25 text-amber-950 focus:outline-none focus:border-amber-500 shadow-sm leading-relaxed"></textarea>
+<label class="block text-xs font-bold text-amber-950 mb-1">دەق و دێڕەکانی شیعر (ئەگەر دەنگ/وێنە/ڤیدیۆ دابنرێت ئیختیارییە):</label>
+<textarea id="newPoemContent" rows="5" placeholder="دێڕەکانی شیعر بنووسە (هەر دێڕێک لە خەتێکی نوێدا)..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl bg-white border border-amber-900/25 text-amber-950 focus:outline-none focus:border-amber-500 shadow-sm leading-relaxed"></textarea>
 </div>
+<div id="landingPoemMediaHost"></div>
 <div class="flex items-center justify-end gap-2 pt-2">
 <button type="button" onclick="closeAddPoemModal()" class="px-4 py-2 rounded-xl bg-white border border-amber-900/20 text-amber-900 text-xs font-bold hover:bg-amber-50 transition cursor-pointer">
 پەشیمانبوونەوە

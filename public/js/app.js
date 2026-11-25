@@ -26118,6 +26118,15 @@ function renderLandingPoems() {
       </button>
     ` : '';
 
+    const mediaHtml = typeof window.renderPoemMediaHtml === 'function'
+      ? window.renderPoemMediaHtml(poem, { compact: true })
+      : '';
+    const hasContent = Boolean(poem.content && String(poem.content).trim());
+    const contentHtml = hasContent ? `
+        <div class="my-2 p-3 bg-amber-50/70 rounded-xl border border-amber-900/10 text-center font-serif text-xs sm:text-sm text-amber-950 leading-loose whitespace-pre-line shadow-inner select-text">
+${escapeHtml(poem.content)}
+        </div>` : '';
+
     return `
       <div class="p-3.5 sm:p-4 rounded-2xl bg-white/90 border border-amber-900/15 shadow-sm hover:shadow transition-all">
         <div class="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-amber-900/10">
@@ -26132,9 +26141,8 @@ function renderLandingPoems() {
           </div>
         </div>
 
-        <div class="my-2 p-3 bg-amber-50/70 rounded-xl border border-amber-900/10 text-center font-serif text-xs sm:text-sm text-amber-950 leading-loose whitespace-pre-line shadow-inner select-text">
-${escapeHtml(poem.content)}
-        </div>
+        ${mediaHtml}
+        ${contentHtml}
 
         <div class="flex items-center justify-end text-xs pt-1.5">
           <div class="flex items-center gap-2">
@@ -26212,6 +26220,14 @@ function checkAzadPoemPrivilege() {
   renderLandingPoems();
 }
 
+let _landingPoemMediaCtrl = null;
+function getLandingPoemMediaCtrl() {
+  if (!_landingPoemMediaCtrl && typeof window.createPoemMediaController === 'function') {
+    _landingPoemMediaCtrl = window.createPoemMediaController('landingPoem', 'landingPoemMediaHost');
+  }
+  return _landingPoemMediaCtrl || { reset() {}, loadExisting() {}, async resolvePayload() { return {}; } };
+}
+
 function openAddPoemModal() {
   if (!canManageLandingPoems()) {
     alert('تەنها مامۆستا ئازاد دەسەڵاتی دانانی شیعری هەیە.');
@@ -26227,6 +26243,7 @@ function openAddPoemModal() {
   if (titleInput) titleInput.value = '';
   if (contentInput) contentInput.value = '';
   if (btn) btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>بڵاوکردنەوەی شیعر</span>';
+  getLandingPoemMediaCtrl().reset();
   const modal = document.getElementById('addPoemModal');
   if (modal) modal.classList.remove('hidden');
 }
@@ -26248,6 +26265,7 @@ function openEditLandingPoemModal(id) {
   if (titleInput) titleInput.value = poem.title || '';
   if (contentInput) contentInput.value = poem.content || '';
   if (btn) btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> <span>پاشەکەوتکردنی گۆڕانکاری</span>';
+  getLandingPoemMediaCtrl().loadExisting(poem);
   const modal = document.getElementById('addPoemModal');
   if (modal) modal.classList.remove('hidden');
 }
@@ -26255,6 +26273,7 @@ function openEditLandingPoemModal(id) {
 function closeAddPoemModal() {
   const editIdEl = document.getElementById('editLandingPoemId');
   if (editIdEl) editIdEl.value = '';
+  getLandingPoemMediaCtrl().reset();
   const modal = document.getElementById('addPoemModal');
   if (modal) modal.classList.add('hidden');
 }
@@ -26271,11 +26290,6 @@ async function handleAddNewPoem(e) {
   const title = titleInput ? titleInput.value.trim() : '';
   const content = contentInput ? contentInput.value.trim() : '';
 
-  if (!title || !content) {
-    alert('تکایە ناونیشان و دەقی شیعرەکە بنووسە.');
-    return;
-  }
-
   if (btn) {
     btn.disabled = true;
     btn.innerHTML = isEditing
@@ -26285,6 +26299,12 @@ async function handleAddNewPoem(e) {
 
   try {
     const curToken = token || localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
+    const mediaPayload = await getLandingPoemMediaCtrl().resolvePayload(curToken);
+    if (!title || (!content && !mediaPayload.image_url && !mediaPayload.video_url && !mediaPayload.audio_url)) {
+      alert('تکایە ناونیشان و دەق یان میدیایەک (دەنگ/وێنە/ڤیدیۆ) بنووسە یان هەڵبژێرە.');
+      return;
+    }
+
     const url = isEditing ? `/api/poems/${editId}` : '/api/poems';
     const method = isEditing ? 'PUT' : 'POST';
     const res = await fetch(url, {
@@ -26293,7 +26313,7 @@ async function handleAddNewPoem(e) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${curToken}`
       },
-      body: JSON.stringify({ title, content })
+      body: JSON.stringify({ title, content, ...mediaPayload })
     });
 
     const data = await res.json();

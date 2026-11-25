@@ -328,15 +328,16 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">دەق و دێڕەکانی شیعر (هەر دێڕێک لە خەتێکی جیاواز):</label>
+          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">دەق و دێڕەکانی شیعر (ئەگەر دەنگ/وێنە/ڤیدیۆ دابنرێت ئیختیارییە):</label>
           <textarea 
             id="poemInputContent" 
-            rows="8" 
-            required
+            rows="6" 
             placeholder="دێڕەکانی هۆنراوەکە لێرە بنووسە..."
             class="w-full px-3.5 py-2.5 rounded-xl border border-[#9c784e]/35 bg-[#fbf7f0] text-sm font-serif leading-loose text-[#361c0c] placeholder-[#8c6846] focus:outline-none focus:border-amber-600"
           ></textarea>
         </div>
+
+        <div id="newPoemMediaHost"></div>
 
         <div>
           <label class="block text-xs font-bold text-[#361c0c] mb-1.5">ناوی شاعیر / خاوەن بەرهەم:</label>
@@ -402,15 +403,16 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">دەق و دێڕەکانی شیعر:</label>
+          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">دەق و دێڕەکانی شیعر (ئەگەر دەنگ/وێنە/ڤیدیۆ دابنرێت ئیختیارییە):</label>
           <textarea
             id="editPoemInputContent"
-            rows="8"
-            required
+            rows="6"
             placeholder="دێڕەکانی هۆنراوەکە..."
             class="w-full px-3.5 py-2.5 rounded-xl border border-[#9c784e]/35 bg-[#fbf7f0] text-sm font-serif leading-loose text-[#361c0c] placeholder-[#8c6846] focus:outline-none focus:border-amber-600"
           ></textarea>
         </div>
+
+        <div id="editPoemMediaHost"></div>
 
         <div>
           <label class="block text-xs font-bold text-[#361c0c] mb-1.5">ناوی شاعیر / خاوەن بەرهەم:</label>
@@ -451,8 +453,10 @@
 
   <!-- Socket.io -->
   <script src="/socket.io/socket.io.js"></script>
+  <!-- Shared Poem Media Helper -->
+  <script src="/js/poem-media.js?v=1.0&t=1796210000"></script>
   <!-- Dedicated Poems Script -->
-  <script src="/js/poems.js?v=11.0&t=1796200000"></script>
+  <script src="/js/poems.js?v=13.0&t=1796210000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
   <script src="/js/post-comments.js?v=2.0" defer></script>

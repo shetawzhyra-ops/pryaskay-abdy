@@ -77,8 +77,12 @@ function initDb() {
     CREATE TABLE IF NOT EXISTS poems (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
-      content TEXT NOT NULL,
+      content TEXT NOT NULL DEFAULT '',
       author TEXT NOT NULL DEFAULT 'م. ئازاد',
+      image_url TEXT NOT NULL DEFAULT '',
+      video_url TEXT NOT NULL DEFAULT '',
+      audio_url TEXT NOT NULL DEFAULT '',
+      audio_duration INTEGER NOT NULL DEFAULT 0,
       likes INTEGER NOT NULL DEFAULT 0,
       created_at INTEGER NOT NULL
     );
@@ -547,6 +551,10 @@ function initDb() {
   try { db.exec("ALTER TABLE dream_sessions ADD COLUMN answered_by_name TEXT DEFAULT NULL"); } catch (e) {}
   try { db.exec("ALTER TABLE dream_sessions ADD COLUMN answered_by_role TEXT DEFAULT NULL"); } catch (e) {}
   try { db.exec("ALTER TABLE dream_sessions ADD COLUMN answered_at INTEGER DEFAULT NULL"); } catch (e) {}
+  try { db.exec("ALTER TABLE poems ADD COLUMN image_url TEXT NOT NULL DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE poems ADD COLUMN video_url TEXT NOT NULL DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE poems ADD COLUMN audio_url TEXT NOT NULL DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE poems ADD COLUMN audio_duration INTEGER NOT NULL DEFAULT 0"); } catch (e) {}
   try {
     db.exec(`
       UPDATE dream_sessions 
@@ -3817,19 +3825,43 @@ const poemsDb = {
       return null;
     }
   },
-  create(title, content, author = 'م. ئازاد') {
+  create(title, content = '', author = 'م. ئازاد', media = {}) {
     const now = Date.now();
-    const res = db.prepare('INSERT INTO poems (title, content, author, likes, created_at) VALUES (?, ?, ?, 0, ?)').run(title, content, author, now);
-    return { id: Number(res.lastInsertRowid), title, content, author, likes: 0, created_at: now };
+    const imageUrl = String((media && media.image_url) || '').trim();
+    const videoUrl = String((media && media.video_url) || '').trim();
+    const audioUrl = String((media && media.audio_url) || '').trim();
+    const audioDuration = Math.max(0, Number((media && media.audio_duration) || 0) || 0);
+    const cleanContent = String(content || '').trim();
+    const res = db.prepare(
+      'INSERT INTO poems (title, content, author, image_url, video_url, audio_url, audio_duration, likes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?)'
+    ).run(title, cleanContent, author, imageUrl, videoUrl, audioUrl, audioDuration, now);
+    return {
+      id: Number(res.lastInsertRowid),
+      title,
+      content: cleanContent,
+      author,
+      image_url: imageUrl,
+      video_url: videoUrl,
+      audio_url: audioUrl,
+      audio_duration: audioDuration,
+      likes: 0,
+      created_at: now
+    };
   },
-  update(id, { title, content, author }) {
+  update(id, { title, content, author, image_url, video_url, audio_url, audio_duration }) {
     try {
       const existing = this.getById(id);
       if (!existing) return null;
       const nextTitle = title !== undefined ? String(title).trim() : existing.title;
-      const nextContent = content !== undefined ? String(content).trim() : existing.content;
+      const nextContent = content !== undefined ? String(content).trim() : (existing.content || '');
       const nextAuthor = (author !== undefined && String(author).trim()) ? String(author).trim() : (existing.author || 'م. ئازاد');
-      db.prepare('UPDATE poems SET title = ?, content = ?, author = ? WHERE id = ?').run(nextTitle, nextContent, nextAuthor, id);
+      const nextImage = image_url !== undefined ? String(image_url || '').trim() : (existing.image_url || '');
+      const nextVideo = video_url !== undefined ? String(video_url || '').trim() : (existing.video_url || '');
+      const nextAudio = audio_url !== undefined ? String(audio_url || '').trim() : (existing.audio_url || '');
+      const nextDuration = audio_duration !== undefined ? (Math.max(0, Number(audio_duration) || 0)) : (Number(existing.audio_duration) || 0);
+      db.prepare(
+        'UPDATE poems SET title = ?, content = ?, author = ?, image_url = ?, video_url = ?, audio_url = ?, audio_duration = ? WHERE id = ?'
+      ).run(nextTitle, nextContent, nextAuthor, nextImage, nextVideo, nextAudio, nextDuration, id);
       return this.getById(id);
     } catch (e) {
       return null;

@@ -195,6 +195,16 @@
         </button>
       ` : '';
 
+      const mediaHtml = renderPoemMediaHtml(poem);
+      const hasContent = Boolean(poem.content && String(poem.content).trim());
+      const contentHtml = hasContent ? `
+          <!-- Poem Verses Body -->
+          <div class="my-4 p-5 sm:p-7 rounded-2xl bg-[#fbf7f0]/90 border border-[#9c784e]/25 shadow-inner">
+            <div class="poem-verse-text text-center font-serif text-base sm:text-lg md:text-xl text-[#361c0c] leading-[2.3] sm:leading-[2.5] whitespace-pre-line select-text font-medium tracking-wide">
+${escapeHtml(poem.content)}
+            </div>
+          </div>` : '';
+
       return `
         <article class="glass-card rounded-3xl p-5 sm:p-8 border border-[#9c784e]/35 shadow-xl hover:shadow-2xl hover:border-amber-600/50 transition-all duration-300 relative overflow-hidden group">
           <!-- Card Header -->
@@ -215,12 +225,8 @@
             </div>
           </div>
 
-          <!-- Poem Verses Body -->
-          <div class="my-4 p-5 sm:p-7 rounded-2xl bg-[#fbf7f0]/90 border border-[#9c784e]/25 shadow-inner">
-            <div class="poem-verse-text text-center font-serif text-base sm:text-lg md:text-xl text-[#361c0c] leading-[2.3] sm:leading-[2.5] whitespace-pre-line select-text font-medium tracking-wide">
-${escapeHtml(poem.content)}
-            </div>
-          </div>
+          ${mediaHtml}
+          ${contentHtml}
 
           <!-- Card Footer -->
           <div class="pt-3 border-t border-[#9c784e]/25 flex items-center justify-end gap-3 flex-wrap text-xs">
@@ -305,6 +311,16 @@ ${escapeHtml(poem.content)}
     }
   };
 
+  // Reusable Poem Media Helpers & Upload Controller (shared via /js/poem-media.js)
+  const renderPoemMediaHtml = window.renderPoemMediaHtml || (() => '');
+  const noopMedia = { reset() {}, loadExisting() {}, async resolvePayload() { return {}; } };
+  const newPoemMedia = typeof window.createPoemMediaController === 'function'
+    ? window.createPoemMediaController('newPoem', 'newPoemMediaHost')
+    : noopMedia;
+  const editPoemMedia = typeof window.createPoemMediaController === 'function'
+    ? window.createPoemMediaController('editPoem', 'editPoemMediaHost')
+    : noopMedia;
+
   // Edit Poem Modal
   window.openEditPoemModal = function(id) {
     const poem = allPoems.find(p => Number(p.id) === Number(id));
@@ -319,6 +335,7 @@ ${escapeHtml(poem.content)}
     if (titleEl) titleEl.value = poem.title || '';
     if (contentEl) contentEl.value = poem.content || '';
     if (authorEl) authorEl.value = poem.author || 'م. ئازاد';
+    editPoemMedia.loadExisting(poem);
     modal.classList.remove('hidden');
     if (titleEl) setTimeout(() => titleEl.focus(), 80);
   };
@@ -327,6 +344,7 @@ ${escapeHtml(poem.content)}
     const modal = document.getElementById('modalEditPoem');
     if (modal) modal.classList.add('hidden');
     document.getElementById('formEditPoem')?.reset();
+    editPoemMedia.reset();
   };
 
   window.submitEditPoem = async function(e) {
@@ -335,10 +353,6 @@ ${escapeHtml(poem.content)}
     const title = (document.getElementById('editPoemInputTitle')?.value || '').trim();
     const content = (document.getElementById('editPoemInputContent')?.value || '').trim();
     const author = (document.getElementById('editPoemInputAuthor')?.value || '').trim() || 'م. ئازاد';
-    if (!id || !title || !content) {
-      alert('تکایە ناونیشان و دەقی شیعر بنووسە');
-      return;
-    }
     const token = localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
     if (!token) {
       alert('تکایە سەرەتا بچۆ ژوورەوە');
@@ -350,13 +364,18 @@ ${escapeHtml(poem.content)}
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>پاشەکەوتکردن...</span>';
     }
     try {
+      const mediaPayload = await editPoemMedia.resolvePayload(token);
+      if (!id || !title || (!content && !mediaPayload.image_url && !mediaPayload.video_url && !mediaPayload.audio_url)) {
+        alert('تکایە ناونیشان و دەق یان میدیایەک (دەنگ/وێنە/ڤیدیۆ) بنووسە یان هەڵبژێرە');
+        return;
+      }
       const res = await fetch(`/api/poems/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ title, content, author })
+        body: JSON.stringify({ title, content, author, ...mediaPayload })
       });
       const data = await res.json();
       if (data.success && data.poem) {
@@ -369,7 +388,7 @@ ${escapeHtml(poem.content)}
         alert(data.error || 'هەڵە لە دەستکاریکردنی شیعر');
       }
     } catch (err) {
-      alert('هەڵەیەک ڕوویدا لە پەیوەندی لەگەڵ سێرڤەر');
+      alert(err.message || 'هەڵەیەک ڕوویدا لە پەیوەندی لەگەڵ سێرڤەر');
     } finally {
       if (btn) {
         btn.disabled = false;
@@ -403,6 +422,7 @@ ${escapeHtml(poem.content)}
 
   // Add Poem Modal
   window.openNewPoemModal = function() {
+    newPoemMedia.reset();
     const m = document.getElementById('modalNewPoem');
     if (m) m.classList.remove('hidden');
     const input = document.getElementById('poemInputTitle');
@@ -410,6 +430,7 @@ ${escapeHtml(poem.content)}
   };
 
   window.closeNewPoemModal = function() {
+    newPoemMedia.reset();
     const m = document.getElementById('modalNewPoem');
     if (m) m.classList.add('hidden');
   };
@@ -419,11 +440,6 @@ ${escapeHtml(poem.content)}
     const title = (document.getElementById('poemInputTitle')?.value || '').trim();
     const content = (document.getElementById('poemInputContent')?.value || '').trim();
     const author = (document.getElementById('poemInputAuthor')?.value || '').trim() || 'م. ئازاد';
-
-    if (!title || !content) {
-      alert('تکایە ناونیشان و دەقی شیعر بنووسە');
-      return;
-    }
 
     const token = localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
     if (!token) {
@@ -438,13 +454,19 @@ ${escapeHtml(poem.content)}
     }
 
     try {
+      const mediaPayload = await newPoemMedia.resolvePayload(token);
+      if (!title || (!content && !mediaPayload.image_url && !mediaPayload.video_url && !mediaPayload.audio_url)) {
+        alert('تکایە ناونیشان و دەق یان میدیایەک (دەنگ/وێنە/ڤیدیۆ) بنووسە یان هەڵبژێرە');
+        return;
+      }
+
       const res = await fetch('/api/poems', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ title, content, author })
+        body: JSON.stringify({ title, content, author, ...mediaPayload })
       });
       const data = await res.json();
       if (data.success) {
@@ -456,7 +478,7 @@ ${escapeHtml(poem.content)}
         alert(data.error || 'هەڵەیەک ڕوویدا لە بڵاوکردنەوەی شیعر');
       }
     } catch (err) {
-      alert('هەڵەیەک ڕوویدا لە پەیوەندی لەگەڵ سێرڤەر');
+      alert(err.message || 'هەڵەیەک ڕوویدا لە پەیوەندی لەگەڵ سێرڤەر');
     } finally {
       if (btn) {
         btn.disabled = false;
