@@ -17430,15 +17430,29 @@ function handleLiveAudioChunk(data) {
 // =========================================================================
 let logoPopupTimeout = null;
 
-function showLogoPopupAnimation() {
+function showLogoPopupAnimation(triggerEl) {
+  if (triggerEl && triggerEl.classList) {
+    triggerEl.classList.remove('logo-tap-spark');
+    void triggerEl.offsetWidth;
+    triggerEl.classList.add('logo-tap-spark');
+    setTimeout(() => {
+      try { triggerEl.classList.remove('logo-tap-spark'); } catch (e) {}
+    }, 800);
+  }
   const modal = document.getElementById('logoPopupModal');
+  const card = document.getElementById('logoPopupCard');
   if (!modal) return;
   modal.classList.remove('hidden');
+  if (card) {
+    card.classList.remove('logo-popup-zoom');
+    void card.offsetWidth;
+    card.classList.add('logo-popup-zoom');
+  }
 
   if (logoPopupTimeout) clearTimeout(logoPopupTimeout);
   logoPopupTimeout = setTimeout(() => {
     closeLogoPopupAnimation();
-  }, 3000);
+  }, 4200);
 }
 
 function closeLogoPopupAnimation() {

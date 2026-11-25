@@ -5234,20 +5234,186 @@ html[data-font-size="xxl"] {
 
 
 
-/* ================= LOGO POPUP 3D ANIMATION ================= */
-
+/* ================= LOGO POPUP 3D ANIMATION & RADIANT SHIMMER ================= */
 .logo-popup-zoom {
-
-  animation: logoZoomIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-
+  animation: logoZoomIn 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
-
 @keyframes logoZoomIn {
-
-  0% { transform: scale(0.65) translateY(-25px); opacity: 0; }
-
-  100% { transform: scale(1) translateY(0); opacity: 1; }
-
+  0% { transform: scale(0.55) translateY(-18px) rotate(-3deg); opacity: 0; }
+  65% { transform: scale(1.03) translateY(0) rotate(0.5deg); opacity: 1; }
+  100% { transform: scale(1) translateY(0) rotate(0deg); opacity: 1; }
+}
+.logo-popup-card {
+  background: linear-gradient(166deg, rgba(250, 244, 234, 0.99) 0%, rgba(235, 221, 200, 0.98) 100%) !important;
+  border: 2px solid rgba(180, 120, 32, 0.55) !important;
+  box-shadow: 0 28px 65px -12px rgba(24, 14, 5, 0.45), 0 0 36px rgba(245, 158, 11, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  color: #361c0c !important;
+}
+html.dark .logo-popup-card,
+body.dark-theme .logo-popup-card {
+  background: linear-gradient(166deg, rgba(19, 34, 26, 0.99) 0%, rgba(11, 21, 16, 0.99) 100%) !important;
+  border: 2px solid rgba(245, 158, 11, 0.52) !important;
+  box-shadow: 0 28px 70px -12px rgba(0, 0, 0, 0.78), 0 0 42px rgba(245, 158, 11, 0.22), inset 0 1px 0 rgba(255, 248, 220, 0.14) !important;
+  color: #fff8eb !important;
+}
+.logo-popup-emblem-stage {
+  width: 9.5rem;
+  height: 9.5rem;
+}
+.logo-popup-rays {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(251, 191, 36, 0.48) 0deg 25deg,
+    transparent 25deg 60deg,
+    rgba(245, 158, 11, 0.35) 60deg 85deg,
+    transparent 85deg 120deg,
+    rgba(251, 191, 36, 0.48) 120deg 145deg,
+    transparent 145deg 180deg,
+    rgba(245, 158, 11, 0.35) 180deg 205deg,
+    transparent 205deg 240deg,
+    rgba(251, 191, 36, 0.48) 240deg 265deg,
+    transparent 265deg 300deg,
+    rgba(245, 158, 11, 0.35) 300deg 325deg,
+    transparent 325deg 360deg
+  );
+  filter: blur(8px);
+  opacity: 0.82;
+  animation: logoAuraSpin 10s linear infinite;
+  pointer-events: none;
+}
+@keyframes logoAuraSpin {
+  0% { transform: rotate(0deg) scale(0.96); opacity: 0.65; }
+  50% { transform: rotate(180deg) scale(1.06); opacity: 0.94; }
+  100% { transform: rotate(360deg) scale(0.96); opacity: 0.65; }
+}
+.logo-popup-ripple {
+  position: absolute;
+  inset: 0.4rem;
+  border-radius: 2rem;
+  border: 2px solid rgba(245, 158, 11, 0.72);
+  animation: logoTapRipple 1.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  pointer-events: none;
+}
+@keyframes logoTapRipple {
+  0% { transform: scale(0.88); opacity: 0.9; }
+  100% { transform: scale(1.28); opacity: 0; }
+}
+.logo-popup-emblem-frame {
+  border: 2.5px solid #d97706 !important;
+  box-shadow: 0 14px 34px -6px rgba(180, 83, 9, 0.45), 0 0 24px rgba(251, 191, 36, 0.42) !important;
+  animation: logoFloatPulse 2.8s ease-in-out infinite;
+  z-index: 2;
+}
+@keyframes logoFloatPulse {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.03); }
+}
+.logo-popup-shimmer,
+.logo-mini-shimmer {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -65%;
+  width: 52%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 250, 224, 0.18) 30%,
+    rgba(255, 236, 168, 0.85) 50%,
+    rgba(255, 250, 224, 0.18) 70%,
+    transparent 100%
+  );
+  transform: skewX(-22deg);
+  pointer-events: none;
+}
+.logo-popup-shimmer {
+  animation: logoLightSweep 2.1s ease-in-out infinite;
+}
+.logo-mini-shimmer {
+  opacity: 0;
+}
+.logo-tap-spark .logo-mini-shimmer,
+.logo-brand-container:hover .logo-mini-shimmer {
+  opacity: 1;
+  animation: logoLightSweep 0.75s ease-out forwards;
+}
+.logo-tap-spark {
+  animation: logoMiniTapBounce 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes logoLightSweep {
+  0% { left: -75%; opacity: 0.2; }
+  35% { opacity: 1; }
+  100% { left: 135%; opacity: 0.1; }
+}
+@keyframes logoMiniTapBounce {
+  0% { transform: scale(1); filter: brightness(1); }
+  40% { transform: scale(1.12); filter: brightness(1.18) drop-shadow(0 0 10px rgba(251, 191, 36, 0.65)); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.logo-popup-spark-badge {
+  position: absolute;
+  bottom: 0.25rem;
+  right: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  color: #241206;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 12px rgba(180, 83, 9, 0.45);
+  z-index: 3;
+  animation: logoSparkPop 1.8s ease-in-out infinite;
+}
+@keyframes logoSparkPop {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(12deg); }
+}
+.logo-popup-title {
+  color: #361c0c;
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif;
+  font-size: 1.45rem;
+}
+html.dark .logo-popup-title,
+body.dark-theme .logo-popup-title {
+  color: #fef3c7;
+}
+.logo-popup-tagline {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(180, 83, 9, 0.28);
+  color: #54371f;
+}
+html.dark .logo-popup-tagline,
+body.dark-theme .logo-popup-tagline {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fde68a;
+}
+.logo-popup-close-btn {
+  background: rgba(180, 83, 9, 0.12);
+  border: 1px solid rgba(156, 120, 78, 0.35);
+  color: #54371f;
+}
+.logo-popup-close-btn:hover {
+  background: rgba(180, 83, 9, 0.22);
+  color: #361c0c;
+}
+html.dark .logo-popup-close-btn,
+body.dark-theme .logo-popup-close-btn {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: rgba(245, 158, 11, 0.34);
+  color: #fde68a;
+}
+html.dark .logo-popup-close-btn:hover,
+body.dark-theme .logo-popup-close-btn:hover {
+  background: rgba(245, 158, 11, 0.28);
+  color: #ffffff;
 }
 
 

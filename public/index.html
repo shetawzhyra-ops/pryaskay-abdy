@@ -1544,7 +1544,7 @@ body.light-theme #mainMenuDrawerPanel .overflow-y-auto button:not(#drawerCreateG
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@600;700&family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=109.0&t=1796010000">
+<link rel="stylesheet" href="/css/style.css?v=110.0&t=1796150000">
 <style>
 /* Pre-render instant visibility rules: prevent landing page from flashing on refresh */
 html.in-app-mode #landingPage,
@@ -2001,16 +2001,17 @@ background: rgba(56, 189, 248, 0.85);
 <header id="landingHeader" class="fixed top-0 left-0 right-0 z-40 glass-header landing-navbar-premium px-4 sm:px-8 py-2.5 sm:py-3 transition-all duration-300">
 <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
 <!-- Right in RTL: Academy Emblem & Brand Word -->
-<div class="logo-brand-container relative flex items-center gap-2.5 sm:gap-3 select-none group" title="پریاسکەی عەبدی">
+<button type="button" onclick="showLogoPopupAnimation(this)" class="logo-brand-container relative flex items-center gap-2.5 sm:gap-3 select-none group cursor-pointer active:scale-95 transition-transform bg-transparent border-0 p-0 text-right focus:outline-none" title="کلیک بکە بۆ گەورەکردنی لۆگۆ">
 <div class="logo-box landing-emblem-box relative z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 overflow-hidden p-0.5">
-<img src="/images/logo.jpg?v=1796050000" alt="پریاسکەی عەبدی" class="w-full h-full object-cover rounded-[14px]">
+<img src="/images/logo.jpg?v=1796050000" alt="پریاسکەی ئازادی موعەبیر" class="w-full h-full object-cover rounded-[14px]">
+<span class="logo-mini-shimmer" aria-hidden="true"></span>
 </div>
 <div class="logo-text-wrapper relative z-10 flex items-center">
 <h1 class="logo-text-animated landing-brand-word text-lg sm:text-2xl font-black tracking-wide whitespace-nowrap m-0">
 پریاسکە
 </h1>
 </div>
-</div>
+</button>
 <!-- Left in RTL: Login Pill + Search + Dialect Globe -->
 <div class="flex items-center gap-1.5 sm:gap-2">
 <!-- Login Pill Button (Quran.com "تسجيل الدخول" style) -->
@@ -2744,9 +2745,10 @@ Change language here • تغيير لغة الموقع من هنا
 <header class="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-2 sm:px-4 py-1.5 sm:py-2 flex items-center justify-between z-30 shrink-0 w-full min-h-[50px]">
 <!-- Logo & Channel Info (Right side in RTL) -->
 <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0 shrink">
-<div onclick="showLogoPopupAnimation()" class="flex items-center gap-1.5 sm:gap-2 shrink-0 cursor-pointer active:scale-95 transition" title="کلیک بکە بۆ بینینی لۆگۆ و زانیاری">
-<div class="relative shrink-0">
-<img src="/images/logo.jpg?v=1796050000" alt="پریاسکەی عەبدی" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover border border-amber-400/60 shadow-md shadow-amber-500/25 ring-1 ring-amber-400/35">
+<div onclick="showLogoPopupAnimation(this)" class="flex items-center gap-1.5 sm:gap-2 shrink-0 cursor-pointer active:scale-95 transition group" title="کلیک بکە بۆ گەورەکردنی لۆگۆ و بینینی زانیاری">
+<div class="relative shrink-0 overflow-hidden rounded-xl">
+<img src="/images/logo.jpg?v=1796050000" alt="پریاسکەی ئازادی موعەبیر" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover border border-amber-400/60 shadow-md shadow-amber-500/25 ring-1 ring-amber-400/35 bg-white transition-transform duration-300 group-hover:scale-105">
+<span class="logo-mini-shimmer" aria-hidden="true"></span>
 </div>
 <div class="shrink-0 leading-tight hidden xs:block">
 <h2 class="font-black text-xs sm:text-sm text-transparent bg-clip-text bg-gradient-to-l from-white via-amber-100 to-[#fcd34d] truncate max-w-[90px] sm:max-w-none">پریاسکەی عەبدی</h2>
@@ -6294,22 +6296,27 @@ onkeydown="if(event.key === 'Enter') sendDreamTextMessage(true)"
 </div>
 </div>
 </div>
-<!-- ================= POPUP: LOGO 3D ANIMATION MODAL (3 SECONDS) ================= -->
-<div id="logoPopupModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md transition-opacity duration-300" onclick="closeLogoPopupAnimation()">
-<div class="logo-popup-zoom bg-slate-900 border-2 border-amber-400/70 rounded-3xl p-6 sm:p-7 max-w-sm w-full text-center shadow-2xl relative flex flex-col items-center gap-4" onclick="event.stopPropagation()">
-<div class="relative">
-<img src="/images/logo.jpg?v=1796050000" alt="پریاسکەی عەبدی" class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl object-cover border-2 border-amber-400 shadow-2xl shadow-amber-500/40 ring-4 ring-amber-400/20">
-<span class="absolute -bottom-2 -right-2 w-7 h-7 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-xs shadow-md">✨</span>
+<!-- ================= POPUP: LOGO 3D ANIMATION & RADIANT SHIMMER MODAL ================= -->
+<div id="logoPopupModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md transition-opacity duration-300" onclick="closeLogoPopupAnimation()">
+<div id="logoPopupCard" class="logo-popup-zoom logo-popup-card rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center relative flex flex-col items-center gap-4 overflow-hidden" onclick="event.stopPropagation()">
+<div class="logo-popup-emblem-stage relative flex items-center justify-center my-1">
+<span class="logo-popup-rays" aria-hidden="true"></span>
+<span class="logo-popup-ripple" aria-hidden="true"></span>
+<div class="logo-popup-emblem-frame relative w-28 h-28 sm:w-32 sm:h-32 rounded-[1.75rem] overflow-hidden p-1 bg-white">
+<img src="/images/logo.jpg?v=1796050000" alt="پریاسکەی ئازادی موعەبیر" class="w-full h-full rounded-[1.35rem] object-cover">
+<span class="logo-popup-shimmer" aria-hidden="true"></span>
 </div>
-<div class="space-y-2 px-1">
-<h3 class="font-black text-base sm:text-lg text-transparent bg-clip-text bg-gradient-to-l from-white via-amber-100 to-[#fcd34d]">
-پریاسکەی عەبدی
+<span class="logo-popup-spark-badge" aria-hidden="true">✨</span>
+</div>
+<div class="space-y-2.5 px-1 relative z-10 w-full">
+<h3 class="logo-popup-title font-black text-lg sm:text-xl leading-snug">
+پریاسکەی ئازادی موعەبیر
 </h3>
-<div class="text-xs sm:text-sm font-black text-amber-100 leading-relaxed bg-gradient-to-r from-amber-500/15 via-sky-500/20 to-amber-500/15 border border-amber-400/40 rounded-2xl p-3 shadow-inner">
-پریاسکەی عەبدی پەروەردە و فێرکردن شارەزابوون لە پەڕاندنەوەی خەون
+<div class="logo-popup-tagline text-xs sm:text-sm font-bold leading-relaxed rounded-2xl px-3.5 py-2.5">
+پریاسکەی ئازادی موعەبیر — پەروەردە و فێرکردن و شارەزابوون لە تەئویل و لێکدانەوەی خەون
 </div>
 </div>
-<button type="button" onclick="closeLogoPopupAnimation()" class="text-[11px] text-slate-400 hover:text-white transition">
+<button type="button" onclick="closeLogoPopupAnimation()" class="logo-popup-close-btn text-xs font-bold px-4 py-1.5 rounded-xl transition cursor-pointer relative z-10">
 داخستن
 </button>
 </div>
@@ -8423,7 +8430,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Palettes & Themes -->
 <script src="/js/palettes.js?v=99.0&t=1795930000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=136.0&t=1796100000"></script>
+<script src="/js/app.js?v=137.0&t=1796150000"></script>
 <!-- Store Compliance (Account Deletion, UGC Report & User Blocking) -->
 <script src="/js/compliance.js?v=1.0&t=1796090000"></script>
   <!-- PWA & Android App Installation Controller -->
