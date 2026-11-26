@@ -17396,18 +17396,29 @@ function handleLiveAudioChunk(data) {
 }
 
 // =========================================================================
-// 5. ENLARGED LOGO MODAL (CLEAN STATIC PREVIEW)
+// 5. ENLARGED LOGO MODAL (CLEAN STATIC PREVIEW — 4.5s AUTO CLOSE)
 // =========================================================================
+let logoPopupTimeout = null;
+
 function showLogoPopupAnimation() {
   const modal = document.getElementById('logoPopupModal');
   if (!modal) return;
   modal.classList.remove('hidden');
+
+  if (logoPopupTimeout) clearTimeout(logoPopupTimeout);
+  logoPopupTimeout = setTimeout(() => {
+    closeLogoPopupAnimation();
+  }, 4500);
 }
 
 function closeLogoPopupAnimation() {
   const modal = document.getElementById('logoPopupModal');
   if (!modal) return;
   modal.classList.add('hidden');
+  if (logoPopupTimeout) {
+    clearTimeout(logoPopupTimeout);
+    logoPopupTimeout = null;
+  }
 }
 
 // =========================================================================
