@@ -3164,37 +3164,7 @@ function renderClassrooms() {
 
     return `
       <div onclick="if (!event.target.closest('button')) enterClassroom(${c.id})" class="classroom-lobby-card relative ${isLive ? 'is-live' : ''} transition duration-200 group cursor-pointer">
-        
-        <!-- Authentic Folded Cloth Pryaska Silhouette (Full Tied Bundle Backdrop) -->
-        <svg class="pryaska-pouch-svg" viewBox="0 0 360 304" preserveAspectRatio="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-          <!-- Two Soft Draped Cloth Corners Falling Together to One Side (Left) -->
-          <path class="pryaska-svg-fold pryaska-svg-stroke" vector-effect="non-scaling-stroke" d="M 170,22 C 145,10 112,14 88,30 C 82,34 80,44 76,56 C 92,58 112,48 134,42 C 150,37 162,36 172,38 Z"/>
-          <path class="pryaska-svg-body pryaska-svg-stroke" vector-effect="non-scaling-stroke" d="M 164,32 C 138,34 114,48 94,68 C 91,72 90,82 95,92 C 108,90 124,78 140,64 C 152,54 162,48 172,44 Z"/>
-          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 155,27 C 132,26 110,33 92,46"/>
-          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 156,42 C 135,48 117,62 103,79"/>
-
-          <!-- Cushioned Folded-Cloth Pryaska Body -->
-          <path class="pryaska-svg-body pryaska-svg-stroke" vector-effect="non-scaling-stroke" d="M 165,42 C 142,56 106,70 72,96 C 36,124 14,162 14,208 C 14,264 56,294 180,296 C 304,294 346,264 346,208 C 346,162 324,124 288,96 C 254,70 218,56 195,42 Z"/>
-
-          <!-- Diagonal Overlapping Cloth-Wrap Panels on Both Shoulders -->
-          <path class="pryaska-svg-fold-overlay" d="M 162,45 C 134,76 86,104 34,138 C 48,116 74,94 106,76 C 132,61 152,52 165,42 Z"/>
-          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 163,46 C 135,78 88,107 32,144"/>
-          <path class="pryaska-svg-fold-overlay" d="M 198,45 C 226,76 274,104 326,138 C 312,116 286,94 254,76 C 228,61 208,52 195,42 Z"/>
-          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 197,46 C 225,78 272,107 328,144"/>
-
-          <!-- Delicate Inner Stitched Cloth Hairline -->
-          <path class="pryaska-svg-stitch" vector-effect="non-scaling-stroke" d="M 168,56 C 144,69 112,82 80,106 C 46,132 26,166 26,208 C 26,256 64,282 180,284 C 296,282 334,256 334,208 C 334,166 314,132 280,106 C 248,82 216,69 192,56"/>
-
-          <!-- Soft Gathered Fabric Pleats Below Neck -->
-          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 166,48 C 158,64 148,78 134,88"/>
-          <path class="pryaska-svg-crease" vector-effect="non-scaling-stroke" d="M 194,48 C 202,64 212,78 226,88"/>
-
-          <!-- Tied Cloth Knot Centerpiece -->
-          <ellipse class="pryaska-svg-knot pryaska-svg-stroke" vector-effect="non-scaling-stroke" cx="180" cy="37" rx="19" ry="12"/>
-          <path class="pryaska-svg-stroke" vector-effect="non-scaling-stroke" fill="none" d="M 169,44 C 174,34 182,28 192,27"/>
-        </svg>
-
-        <!-- Center Content inside Pryaska Pouch -->
+        <!-- Right Side: Icon + Room Details -->
         <div class="pryaska-card-body min-w-0">
           <!-- Room Icon -->
           <div class="pryaska-card-icon flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
@@ -3202,9 +3172,9 @@ function renderClassrooms() {
           </div>
 
           <!-- Room Details -->
-          <div class="min-w-0 w-full leading-tight space-y-1">
-            <div class="flex items-center justify-center gap-1.5 flex-wrap">
-              <h3 class="font-black text-sm sm:text-base transition-colors">
+          <div class="min-w-0 flex-1 leading-tight space-y-1 text-right">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <h3 class="font-black text-sm sm:text-base transition-colors truncate max-w-full">
                 ${escapeHtml(c.name)}
               </h3>
               ${isDefault ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 font-bold shrink-0">سەرەکی</span>' : ''}
@@ -3212,18 +3182,18 @@ function renderClassrooms() {
               ${isLive ? `<span class="px-1.5 py-0.2 rounded-md bg-rose-600/90 text-white text-[9px] font-black shrink-0 animate-pulse flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-white"></span>لایڤ</span>` : ''}
             </div>
 
-            <div class="flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] text-slate-400 flex-wrap">
+            <div class="flex items-center gap-1.5 text-[10px] sm:text-[11px] text-slate-400 flex-wrap">
               <span class="text-amber-300/80 font-bold flex items-center gap-1 shrink-0">
                 <i class="fa-solid fa-chalkboard-user text-[9px]"></i>
                 <span class="max-w-[130px] truncate">${escapeHtml(c.teacher_name || 'دەستەی بەڕێوەبەرایەتی')}</span>
               </span>
               <span class="text-slate-500 shrink-0">•</span>
-              <span class="truncate max-w-[160px] text-slate-400/80">${escapeHtml(c.description || 'ژووری گفتوگۆ')}</span>
+              <span class="truncate max-w-[170px] text-slate-400/80">${escapeHtml(c.description || 'ژووری گفتوگۆ')}</span>
             </div>
           </div>
         </div>
 
-        <!-- Bottom Action Strip inside Pryaska Pouch -->
+        <!-- Left Side: Compact Action Strip -->
         <div class="pryaska-card-actions shrink-0">
           ${isLive ? `
             <button type="button" onclick="enterClassroomAndOpenLive(${c.id})" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] rounded-xl transition shadow active:scale-95 cursor-pointer shrink-0 animate-pulse flex items-center gap-1">
@@ -3233,7 +3203,7 @@ function renderClassrooms() {
           ` : ''}
 
           ${isStaff && !isDefault ? `
-            <div class="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition">
+            <div class="flex items-center gap-1 opacity-85 group-hover:opacity-100 transition">
               <button type="button" onclick="openCreateClassroomModal(${c.id})" class="p-1.5 rounded-lg text-slate-400 hover:text-amber-300 hover:bg-slate-800 transition text-[11px] cursor-pointer" title="دەستکاری">
                 <i class="fa-solid fa-pen"></i>
               </button>
