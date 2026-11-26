@@ -17,7 +17,7 @@
   <!-- Google Fonts: Classical Islamic Calligraphy (Amiri & Noto Naskh Arabic) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -155,7 +155,7 @@
     }
   </style>
   <!-- Modern Heritage / Manuscript Luxe Styling for Dreams Section -->
-  <link id="dreamsHeritageCss" rel="stylesheet" href="/css/dreams-heritage.css?v=1.0&t=1795480000">
+  <link id="dreamsHeritageCss" rel="stylesheet" href="/css/dreams-heritage.css?v=2.0&t=1796300000">
 </head>
 <body class="light-theme light-mode in-landing text-slate-900 font-kurdish min-h-screen flex flex-col antialiased selection:bg-amber-400 selection:text-slate-950">
 
@@ -174,13 +174,16 @@
       
       <!-- Brand Logo + Back to Home Button -->
       <div class="flex items-center gap-3 sm:gap-4">
-        <a href="/" class="flex items-center gap-2.5 sm:gap-3 group cursor-pointer focus:outline-none select-none" title="گەڕانەوە بۆ پەڕەی سەرەکی">
-          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-amber-400 via-amber-500 to-amber-600 p-[1.5px] shadow-md transition-all duration-300 shrink-0 overflow-hidden">
-            <img src="/images/logo.jpg?v=1796050000" alt="پریاسکەی عەبدی" class="w-full h-full object-cover rounded-[14px] bg-white">
+        <a href="/" class="logo-brand-container relative flex items-center gap-2.5 sm:gap-3 select-none group cursor-pointer active:scale-95 transition-transform focus:outline-none" title="گەڕانەوە بۆ پەڕەی سەرەکی">
+          <div class="logo-box landing-emblem-box relative z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 overflow-hidden p-0.5">
+            <img src="/images/logo.jpg?v=1796050000" alt="پریاسکەی ئازادی موعەبیر" class="w-full h-full object-cover rounded-[14px] bg-white">
+            <span class="logo-mini-shimmer" aria-hidden="true"></span>
           </div>
-          <span class="brand-title text-xl sm:text-2xl font-black tracking-wide text-[#361c0c] transition-all">
-            پریاسکەی عەبدی
-          </span>
+          <div class="logo-text-wrapper relative z-10 flex items-center">
+            <span class="logo-text-animated landing-brand-word text-lg sm:text-2xl font-black tracking-wide whitespace-nowrap m-0">
+              پریاسکە
+            </span>
+          </div>
         </a>
 
         <!-- Back Button -->
