@@ -589,6 +589,8 @@
       question_text: '',
       question_type: 'text',
       options: ['', '', '', ''],
+      correct_answer: '',
+      _correctIdx: -1,
       attachments: [],
       max_score: 1
     };
@@ -602,15 +604,25 @@
         state.builder = {
           examId: ex.id,
           status: ex.status || 'published',
-          questions: (ex.questions || []).map(q => ({
-            _uid: nextUid(),
-            id: q.id,
-            question_text: q.question_text || '',
-            question_type: q.question_type === 'choice' ? 'choice' : 'text',
-            options: Array.isArray(q.options) && q.options.length >= 2 ? q.options.slice() : ['', '', '', ''],
-            attachments: Array.isArray(q.attachments) ? q.attachments.slice() : [],
-            max_score: roundScore(q.max_score || 1)
-          }))
+          questions: (ex.questions || []).map(q => {
+            const qType = q.question_type === 'choice'
+              ? 'choice'
+              : (q.question_type === 'true_false' ? 'true_false' : 'text');
+            const opts = Array.isArray(q.options) && q.options.length >= 2 ? q.options.slice() : ['', '', '', ''];
+            const corr = String(q.correct_answer || '').trim();
+            const corrIdx = qType === 'choice' ? opts.findIndex(o => String(o || '').trim() === corr) : -1;
+            return {
+              _uid: nextUid(),
+              id: q.id,
+              question_text: q.question_text || '',
+              question_type: qType,
+              options: opts,
+              correct_answer: corr,
+              _correctIdx: corrIdx,
+              attachments: Array.isArray(q.attachments) ? q.attachments.slice() : [],
+              max_score: roundScore(q.max_score || 1)
+            };
+          })
         };
         $('builderModeHeading').textContent = 'دەستکاریکردنی پەڕەی ئیمتیحان';
         $('builderTitle').value = ex.title || '';
@@ -663,6 +675,8 @@
 
     const isRec = state.recorder.activeUid === q._uid;
     const isChoice = q.question_type === 'choice';
+    const isTF = q.question_type === 'true_false';
+    const tfKey = isTF ? String(q.correct_answer || '').trim() : '';
 
     card.innerHTML = `
       <div class="exam-q-head">
@@ -672,8 +686,9 @@
         </div>
         <div style="display:flex; flex-wrap:wrap; align-items:center; gap:0.45rem;">
           <select class="exam-select" data-b-type="${q._uid}" style="width:auto; padding:0.32rem 0.6rem; font-size:0.78rem;">
-            <option value="text" ${!isChoice ? 'selected' : ''}>وەڵامی نووسراو</option>
-            <option value="choice" ${isChoice ? 'selected' : ''}>هەڵبژاردن (چەند بژاردە)</option>
+            <option value="text" ${!isChoice && !isTF ? 'selected' : ''}>وەڵامی نووسراو</option>
+            <option value="true_false" ${isTF ? 'selected' : ''}>ڕاست و هەڵە (تۆماتیکی)</option>
+            <option value="choice" ${isChoice ? 'selected' : ''}>هەڵبژاردن (تۆماتیکی)</option>
           </select>
           <div class="exam-score-input-wrap" style="padding:0.15rem 0.45rem;">
             <span style="font-size:0.74rem; font-weight:800; color:var(--exam-ink-muted);">نمرە:</span>
@@ -687,16 +702,40 @@
 
       <textarea class="exam-textarea" data-b-text="${q._uid}" placeholder="دەقی پرسیارەکە لێرە بنووسە... (یان دەتوانیت تەنها وێنە / ڤیدیۆ / دەنگ / فایل دابنێیت)">${escHtml(q.question_text)}</textarea>
 
+      <div class="exam-builder-options-wrap ${isTF ? '' : 'hidden'}" data-b-tf-wrap="${q._uid}">
+        <div style="font-size:0.78rem; font-weight:800; color:var(--exam-gold); margin-bottom:0.5rem;">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> وەڵامی ڕاست دیاری بکە (بۆ سەحکردن و نمرەدانی تۆماتیکی):
+        </div>
+        <div class="exam-tf-key-group">
+          <button type="button" class="exam-tf-key-btn is-true ${tfKey === 'ڕاست' ? 'is-selected' : ''}" data-b-tf-key="${q._uid}" data-tf-val="ڕاست">
+            <i class="fa-solid fa-check"></i>
+            <span>ڕاستە (ڕاست)</span>
+          </button>
+          <button type="button" class="exam-tf-key-btn is-false ${tfKey === 'هەڵە' ? 'is-selected' : ''}" data-b-tf-key="${q._uid}" data-tf-val="هەڵە">
+            <i class="fa-solid fa-xmark"></i>
+            <span>هەڵەیە (هەڵە)</span>
+          </button>
+        </div>
+      </div>
+
       <div class="exam-builder-options-wrap ${isChoice ? '' : 'hidden'}" data-b-opts-wrap="${q._uid}">
-        <div style="font-size:0.78rem; font-weight:800; color:var(--exam-gold); margin-bottom:0.45rem;">بژاردەکانی وەڵامدانەوە بۆ قوتابی:</div>
+        <div style="font-size:0.78rem; font-weight:800; color:var(--exam-gold); margin-bottom:0.45rem;">
+          بژاردەکان بنووسە و وەڵامی ڕاست دیاری بکە (بۆ سەحکردنی تۆماتیکی):
+        </div>
         <div data-b-opts-list="${q._uid}">
-          ${(q.options || ['', '']).map((opt, oi) => `
+          ${(q.options || ['', '']).map((opt, oi) => {
+            const isKey = q._correctIdx === oi || (String(opt || '').trim() !== '' && String(opt || '').trim() === String(q.correct_answer || '').trim());
+            return `
             <div class="exam-builder-opt-row">
               <span style="font-size:0.8rem; font-weight:800; color:var(--exam-ink-muted); min-width:1.4rem;">${oi + 1}.</span>
               <input type="text" class="exam-input" style="padding:0.42rem 0.7rem; font-size:0.86rem;" value="${escHtml(opt)}" data-b-opt="${q._uid}" data-opt-idx="${oi}" placeholder="بژاردەی ${oi + 1}">
+              <button type="button" class="exam-opt-key-btn ${isKey ? 'is-correct-key' : ''}" data-b-choice-key="${q._uid}" data-opt-idx="${oi}" title="دیاریکردنی وەڵامی ڕاست">
+                <i class="fa-solid fa-check"></i>
+                <span>${isKey ? 'وەڵامی ڕاست' : 'ڕاستە؟'}</span>
+              </button>
               ${(q.options || []).length > 2 ? `<button type="button" class="exam-btn exam-btn-danger exam-btn-sm" data-b-del-opt="${q._uid}" data-opt-idx="${oi}"><i class="fa-solid fa-xmark"></i></button>` : ''}
-            </div>
-          `).join('')}
+            </div>`;
+          }).join('')}
         </div>
         <button type="button" class="exam-btn exam-btn-soft exam-btn-sm" data-b-add-opt="${q._uid}" style="margin-top:0.25rem;">
           <i class="fa-solid fa-plus"></i> زیادکردنی بژاردە
@@ -945,21 +984,49 @@
 
     const cleanQs = state.builder.questions
       .filter(q => String(q.question_text || '').trim().length > 0 || (q.attachments && q.attachments.length > 0))
-      .map((q, idx) => ({
-        id: q.id || null,
-        sort_order: idx + 1,
-        question_text: String(q.question_text || '').trim(),
-        question_type: q.question_type === 'choice' ? 'choice' : 'text',
-        options: q.question_type === 'choice'
-          ? (q.options || []).map(o => String(o || '').trim()).filter(Boolean)
-          : [],
-        attachments: q.attachments || [],
-        max_score: roundScore(q.max_score)
-      }));
+      .map((q, idx) => {
+        const qType = q.question_type === 'choice'
+          ? 'choice'
+          : (q.question_type === 'true_false' ? 'true_false' : 'text');
+        const opts = qType === 'true_false'
+          ? ['ڕاست', 'هەڵە']
+          : (qType === 'choice' ? (q.options || []).map(o => String(o || '').trim()).filter(Boolean) : []);
+        let correctAnswer = '';
+        if (qType === 'true_false') {
+          correctAnswer = String(q.correct_answer || '').trim();
+        } else if (qType === 'choice') {
+          const pickedByIdx = (typeof q._correctIdx === 'number' && q._correctIdx >= 0 && q.options[q._correctIdx] !== undefined)
+            ? String(q.options[q._correctIdx] || '').trim()
+            : '';
+          const candidate = pickedByIdx || String(q.correct_answer || '').trim();
+          if (candidate && opts.includes(candidate)) correctAnswer = candidate;
+        }
+        return {
+          id: q.id || null,
+          sort_order: idx + 1,
+          question_text: String(q.question_text || '').trim(),
+          question_type: qType,
+          options: opts,
+          correct_answer: correctAnswer,
+          attachments: q.attachments || [],
+          max_score: roundScore(q.max_score)
+        };
+      });
 
     if (cleanQs.length === 0) {
       toast('تکایە لانی کەم یەک پرسیار (دەق یان فایل) دابنێ', true);
       return;
+    }
+
+    if (targetStatus === 'published') {
+      const missingKeyIndex = cleanQs.findIndex(q =>
+        (q.question_type === 'true_false' || (q.question_type === 'choice' && q.options.length > 0)) &&
+        !q.correct_answer
+      );
+      if (missingKeyIndex !== -1) {
+        toast(`تکایە بۆ پرسیاری ژمارە ${missingKeyIndex + 1} وەڵامی ڕاست دیاری بکە بۆ سەحکردنی تۆماتیکی`, true);
+        return;
+      }
     }
 
     const btnDraft = $('btnBuilderSaveDraft');
@@ -1122,18 +1189,43 @@
     let answerAreaHtml = '';
     if (!canEdit) {
       const displayAns = ans && ans.answer_text ? escHtml(ans.answer_text) : '<span style="color:var(--exam-ink-muted); font-style:italic;">وەڵام نەنووسراوە</span>';
+      const correctHint = (isGraded && ans && ans.is_correct === 0 && q.correct_answer)
+        ? `<div style="margin-top:0.45rem; font-size:0.8rem; font-weight:800; color:#15803d;"><i class="fa-solid fa-circle-check"></i> وەڵامی ڕاست: ${escHtml(q.correct_answer)}</div>`
+        : '';
       answerAreaHtml = `
         <div class="exam-locked-answer-box">
           <div style="font-size:0.76rem; font-weight:800; color:#15803d; margin-bottom:0.3rem;">
             <i class="fa-solid fa-lock"></i> وەڵامی جێگیرکراوی تۆ:
           </div>
           <div>${displayAns}</div>
+          ${correctHint}
         </div>
         ${isLocked && !isGraded && !isSubmitted ? `
           <div class="exam-lock-footer">
             <span class="exam-locked-pill"><i class="fa-solid fa-shield-halved"></i> جێگیرکراوە — ناتوانرێت بسڕدرێتەوە</span>
           </div>` : ''}
       `;
+    } else if (q.question_type === 'true_false') {
+      answerAreaHtml = `
+        <div class="exam-tf-grid" data-s-mcq-group="${q.id}" style="margin-bottom:0.75rem;">
+          ${['ڕاست', 'هەڵە'].map(opt => {
+            const selected = currentText === opt;
+            const isTrueOpt = opt === 'ڕاست';
+            return `
+              <div class="exam-mcq-option ${selected ? 'is-selected' : ''}" data-s-mcq-pick="${q.id}" data-opt-val="${opt}">
+                <span class="exam-mcq-radio">${selected ? '<i class="fa-solid fa-check"></i>' : ''}</span>
+                <span style="font-weight:800; color:${isTrueOpt ? '#15803d' : 'var(--exam-crimson)'};">
+                  <i class="fa-solid ${isTrueOpt ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${opt === 'ڕاست' ? 'ڕاستە (ڕاست)' : 'هەڵەیە (هەڵە)'}
+                </span>
+              </div>`;
+          }).join('')}
+        </div>
+        <div class="exam-lock-footer">
+          <span style="font-size:0.78rem; color:var(--exam-ink-muted);">ڕاست یان هەڵە دیاری بکە و دوگمەی «جێگیرکردنی وەڵام» دابگرە</span>
+          <button type="button" class="exam-btn exam-btn-primary exam-btn-sm" data-s-lock-btn="${q.id}">
+            <i class="fa-solid fa-lock"></i> جێگیرکردنی وەڵام
+          </button>
+        </div>`;
     } else if (q.question_type === 'choice' && Array.isArray(q.options) && q.options.length > 0) {
       answerAreaHtml = `
         <div class="exam-mcq-list" data-s-mcq-group="${q.id}">
@@ -1393,10 +1485,14 @@
     emptyEl.classList.add('hidden');
     listEl.innerHTML = filtered.map(s => {
       const isGraded = s.status === 'graded';
+      const hasAutoPreGraded = !isGraded && Number(s.graded_answers_count || 0) > 0;
       const pct = s.max_total_score > 0 ? Math.round((Number(s.total_score) / Number(s.max_total_score)) * 100) : 0;
+      const lostScore = roundScore(Math.max(0, Number(s.max_total_score || 0) - Number(s.total_score || 0)));
       const badge = isGraded
         ? `<span class="exam-status-badge is-published"><i class="fa-solid fa-award"></i> نمرە: ${fmtNum(s.total_score)} / ${fmtNum(s.max_total_score)} (${pct}%)</span>`
-        : '<span class="exam-status-badge is-pending"><i class="fa-solid fa-bell"></i> چاوەڕوانی هەڵسەنگاندن</span>';
+        : (hasAutoPreGraded
+          ? `<span class="exam-auto-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> سەحکراوی تۆماتیکی: ${fmtNum(s.total_score)} / ${fmtNum(s.max_total_score)} (${pct}%)</span>`
+          : '<span class="exam-status-badge is-pending"><i class="fa-solid fa-bell"></i> چاوەڕوانی هەڵسەنگاندن</span>');
 
       return `
         <div class="exam-sub-row">
@@ -1409,12 +1505,12 @@
             <div class="exam-card-meta">
               <span><i class="fa-regular fa-clock" style="color:var(--exam-gold);"></i> کاتی ناردن: ${escHtml(fmtDate(s.submitted_at))}</span>
               <span><i class="fa-solid fa-file-pen" style="color:var(--exam-gold);"></i> وەڵامدراو: ${s.answered_count || 0} / ${s.total_questions || 0}</span>
-              ${isGraded ? `<span><i class="fa-solid fa-check" style="color:#15803d;"></i> ${s.correct_count || 0} ڕاست • <i class="fa-solid fa-xmark" style="color:var(--exam-crimson);"></i> ${s.wrong_count || 0} هەڵە</span>` : ''}
+              ${(isGraded || hasAutoPreGraded) ? `<span><i class="fa-solid fa-check" style="color:#15803d;"></i> ${s.correct_count || 0} ڕاست • <i class="fa-solid fa-xmark" style="color:var(--exam-crimson);"></i> ${s.wrong_count || 0} هەڵە • دەرەجەی لێڕۆشتوو: ${fmtNum(lostScore)}</span>` : ''}
             </div>
           </div>
           <button type="button" class="exam-btn ${isGraded ? 'exam-btn-soft' : 'exam-btn-primary'} exam-btn-sm" data-open-grade="${s.id}">
             <i class="fa-solid ${isGraded ? 'fa-eye' : 'fa-pen-clip'}"></i>
-            ${isGraded ? 'بینین / گۆڕانکاری' : 'پشکنین و نمرەدان'}
+            ${isGraded ? 'بینین / گۆڕانکاری' : (hasAutoPreGraded ? 'بینین و ناردنی ئەنجام' : 'پشکنین و نمرەدان')}
           </button>
         </div>`;
     }).join('');
@@ -1534,6 +1630,8 @@
         ? 'exam-question-card grade-correct'
         : (g.is_correct === 0 ? 'exam-question-card grade-wrong' : 'exam-question-card');
       const hasAns = ans && String(ans.answer_text || '').trim().length > 0;
+      const isAutoQ = (q.question_type === 'true_false' || q.question_type === 'choice') && String(q.correct_answer || '').trim() !== '';
+      const lostPts = g.is_correct === 0 ? roundScore(q.max_score) : 0;
 
       return `
         <div class="${cardCls}" id="grade_q_${q.id}" data-gqid="${q.id}">
@@ -1541,6 +1639,7 @@
             <div class="exam-q-num-group">
               <span class="exam-q-num">${idx + 1}</span>
               <span class="exam-q-label">پرسیاری ${idx + 1}</span>
+              ${isAutoQ ? `<span class="exam-auto-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> سەحکراوی تۆماتیکی</span>` : ''}
             </div>
             <span class="exam-q-score-pill"><i class="fa-solid fa-star"></i> لە ${fmtNum(q.max_score)} نمرە</span>
           </div>
@@ -1555,6 +1654,12 @@
             <div class="exam-student-ans-body ${hasAns ? '' : 'exam-student-ans-empty'}">
               ${hasAns ? escHtml(ans.answer_text) : 'قوتابی وەڵامی ئەم پرسیارەی نەنووسیوە.'}
             </div>
+            ${isAutoQ ? `
+              <div style="margin-top:0.45rem; display:flex; flex-wrap:wrap; align-items:center; gap:0.6rem; font-size:0.8rem; font-weight:800;">
+                <span style="color:#15803d;"><i class="fa-solid fa-key"></i> وەڵامی ڕاست: ${escHtml(q.correct_answer)}</span>
+                ${lostPts > 0 ? `<span style="color:var(--exam-crimson);"><i class="fa-solid fa-arrow-trend-down"></i> دەرەجەی لێڕۆشتوو: ${fmtNum(lostPts)} نمرە</span>` : ''}
+              </div>
+            ` : ''}
           </div>
 
           <div class="exam-grade-bar">
@@ -1872,7 +1977,51 @@
         const oi = Number(delOptBtn.dataset.optIdx);
         if (q && q.options.length > 2) {
           q.options.splice(oi, 1);
+          if (q._correctIdx === oi) {
+            q._correctIdx = -1;
+            q.correct_answer = '';
+          } else if (q._correctIdx > oi) {
+            q._correctIdx -= 1;
+          }
           renderAllBuilderQuestions();
+        }
+        return;
+      }
+
+      const tfKeyBtn = e.target.closest('[data-b-tf-key]');
+      if (tfKeyBtn) {
+        const qUid = tfKeyBtn.dataset.bTfKey;
+        const val = tfKeyBtn.dataset.tfVal;
+        const q = state.builder.questions.find(item => item._uid === qUid);
+        if (q) {
+          q.correct_answer = val;
+          const wrap = document.querySelector(`[data-b-tf-wrap="${qUid}"]`);
+          if (wrap) {
+            wrap.querySelectorAll('[data-b-tf-key]').forEach(btn => {
+              btn.classList.toggle('is-selected', btn.dataset.tfVal === val);
+            });
+          }
+        }
+        return;
+      }
+
+      const choiceKeyBtn = e.target.closest('[data-b-choice-key]');
+      if (choiceKeyBtn) {
+        const qUid = choiceKeyBtn.dataset.bChoiceKey;
+        const oi = Number(choiceKeyBtn.dataset.optIdx);
+        const q = state.builder.questions.find(item => item._uid === qUid);
+        if (q && Array.isArray(q.options)) {
+          q._correctIdx = oi;
+          q.correct_answer = String(q.options[oi] || '').trim();
+          const list = document.querySelector(`[data-b-opts-list="${qUid}"]`);
+          if (list) {
+            list.querySelectorAll('[data-b-choice-key]').forEach(btn => {
+              const isMatch = Number(btn.dataset.optIdx) === oi;
+              btn.classList.toggle('is-correct-key', isMatch);
+              const lbl = btn.querySelector('span');
+              if (lbl) lbl.textContent = isMatch ? 'وەڵامی ڕاست' : 'ڕاستە؟';
+            });
+          }
         }
         return;
       }
@@ -1962,7 +2111,12 @@
       if (bOpt) {
         const q = state.builder.questions.find(item => item._uid === bOpt.dataset.bOpt);
         const oi = Number(bOpt.dataset.optIdx);
-        if (q && Array.isArray(q.options)) q.options[oi] = bOpt.value;
+        if (q && Array.isArray(q.options)) {
+          q.options[oi] = bOpt.value;
+          if (q._correctIdx === oi) {
+            q.correct_answer = String(bOpt.value || '').trim();
+          }
+        }
         return;
       }
 
@@ -2002,9 +2156,23 @@
         const qUid = bType.dataset.bType;
         const q = state.builder.questions.find(item => item._uid === qUid);
         if (q) {
-          q.question_type = bType.value === 'choice' ? 'choice' : 'text';
-          const wrap = document.querySelector(`[data-b-opts-wrap="${qUid}"]`);
-          if (wrap) wrap.classList.toggle('hidden', q.question_type !== 'choice');
+          const prevType = q.question_type;
+          q.question_type = bType.value === 'choice'
+            ? 'choice'
+            : (bType.value === 'true_false' ? 'true_false' : 'text');
+          if (prevType !== q.question_type) {
+            q.correct_answer = '';
+            q._correctIdx = -1;
+          }
+          const optsWrap = document.querySelector(`[data-b-opts-wrap="${qUid}"]`);
+          const tfWrap = document.querySelector(`[data-b-tf-wrap="${qUid}"]`);
+          if (optsWrap) optsWrap.classList.toggle('hidden', q.question_type !== 'choice');
+          if (tfWrap) {
+            tfWrap.classList.toggle('hidden', q.question_type !== 'true_false');
+            if (q.question_type === 'true_false') {
+              tfWrap.querySelectorAll('[data-b-tf-key]').forEach(btn => btn.classList.remove('is-selected'));
+            }
+          }
         }
       }
     });

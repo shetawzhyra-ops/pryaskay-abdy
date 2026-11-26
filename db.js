@@ -555,6 +555,7 @@ function initDb() {
   try { db.exec("ALTER TABLE poems ADD COLUMN video_url TEXT NOT NULL DEFAULT ''"); } catch (e) {}
   try { db.exec("ALTER TABLE poems ADD COLUMN audio_url TEXT NOT NULL DEFAULT ''"); } catch (e) {}
   try { db.exec("ALTER TABLE poems ADD COLUMN audio_duration INTEGER NOT NULL DEFAULT 0"); } catch (e) {}
+  try { db.exec("ALTER TABLE exam_questions ADD COLUMN correct_answer TEXT NOT NULL DEFAULT ''"); } catch (e) {}
   try {
     db.exec(`
       UPDATE dream_sessions 
@@ -867,6 +868,7 @@ function initDb() {
         question_text TEXT NOT NULL DEFAULT '',
         question_type TEXT NOT NULL DEFAULT 'text',
         options_json TEXT DEFAULT '[]',
+        correct_answer TEXT NOT NULL DEFAULT '',
         attachments_json TEXT DEFAULT '[]',
         max_score REAL NOT NULL DEFAULT 1,
         created_at INTEGER NOT NULL,
@@ -3907,13 +3909,45 @@ function roundExamScore(val) {
   return Math.round(num * 100) / 100;
 }
 
+function normalizeExamObjectiveAnswer(questionType, rawVal) {
+  const s = String(rawVal ?? '').trim().replace(/\s+/g, ' ');
+  if (!s) return '';
+  if (questionType === 'true_false') {
+    const low = s.toLowerCase();
+    if (s === 'ڕاست' || s === 'ڕاستە' || s === 'راست' || s === 'راستە' || low === 'true' || s === '1') {
+      return 'ڕاست';
+    }
+    if (s === 'هەڵە' || s === 'هەڵەیە' || s === 'ھەڵە' || s === 'هەلە' || low === 'false' || s === '0') {
+      return 'هەڵە';
+    }
+    return '';
+  }
+  if (questionType === 'choice') {
+    return s;
+  }
+  return '';
+}
+
 function sanitizeQuestionInput(q, idx) {
   const questionText = String(q?.question_text ?? q?.text ?? '').trim();
-  const qType = q?.question_type === 'choice' ? 'choice' : 'text';
+  const qType = ['choice', 'true_false', 'text'].includes(q?.question_type) ? q.question_type : 'text';
   const rawOpts = Array.isArray(q?.options) ? q.options : safeParseJsonArray(q?.options_json);
-  const options = qType === 'choice'
-    ? rawOpts.map(o => String(o || '').trim()).filter(Boolean)
-    : [];
+  let options = [];
+  if (qType === 'choice') {
+    options = rawOpts.map(o => String(o || '').trim().replace(/\s+/g, ' ')).filter(Boolean);
+  } else if (qType === 'true_false') {
+    options = ['ڕاست', 'هەڵە'];
+  }
+  let correctAnswer = '';
+  if (qType === 'true_false') {
+    correctAnswer = normalizeExamObjectiveAnswer('true_false', q?.correct_answer);
+  } else if (qType === 'choice') {
+    const candidate = normalizeExamObjectiveAnswer('choice', q?.correct_answer);
+    if (candidate) {
+      const matched = options.find(opt => normalizeExamObjectiveAnswer('choice', opt) === candidate);
+      correctAnswer = matched || '';
+    }
+  }
   const rawAtts = Array.isArray(q?.attachments) ? q.attachments : safeParseJsonArray(q?.attachments_json);
   const attachments = rawAtts
     .filter(a => a && typeof a.url === 'string' && a.url.trim())
@@ -3930,6 +3964,7 @@ function sanitizeQuestionInput(q, idx) {
     question_text: questionText,
     question_type: qType,
     options_json: JSON.stringify(options),
+    correct_answer: correctAnswer,
     attachments_json: JSON.stringify(attachments),
     max_score: maxScore > 0 ? maxScore : 1
   };
@@ -3938,9 +3973,12 @@ function sanitizeQuestionInput(q, idx) {
 const examsDb = {
   formatQuestion(row) {
     if (!row) return null;
+    const qType = ['choice', 'true_false', 'text'].includes(row.question_type) ? row.question_type : 'text';
     return {
       ...row,
-      options: safeParseJsonArray(row.options_json),
+      question_type: qType,
+      options: qType === 'true_false' ? ['ڕاست', 'هەڵە'] : safeParseJsonArray(row.options_json),
+      correct_answer: String(row.correct_answer || '').trim(),
       attachments: safeParseJsonArray(row.attachments_json),
       max_score: roundExamScore(row.max_score)
     };
@@ -3968,11 +4006,11 @@ const examsDb = {
       const examId = Number(res.lastInsertRowid);
 
       const insQ = db.prepare(`
-        INSERT INTO exam_questions (exam_id, sort_order, question_text, question_type, options_json, attachments_json, max_score, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO exam_questions (exam_id, sort_order, question_text, question_type, options_json, correct_answer, attachments_json, max_score, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
       for (const q of cleanQuestions) {
-        insQ.run(examId, q.sort_order, q.question_text, q.question_type, q.options_json, q.attachments_json, q.max_score, now);
+        insQ.run(examId, q.sort_order, q.question_text, q.question_type, q.options_json, q.correct_answer, q.attachments_json, q.max_score, now);
       }
       db.exec('COMMIT');
       return this.getExamWithQuestions(examId);
@@ -4004,20 +4042,20 @@ const examsDb = {
 
       const updQ = db.prepare(`
         UPDATE exam_questions
-        SET sort_order = ?, question_text = ?, question_type = ?, options_json = ?, attachments_json = ?, max_score = ?
+        SET sort_order = ?, question_text = ?, question_type = ?, options_json = ?, correct_answer = ?, attachments_json = ?, max_score = ?
         WHERE id = ? AND exam_id = ?
       `);
       const insQ = db.prepare(`
-        INSERT INTO exam_questions (exam_id, sort_order, question_text, question_type, options_json, attachments_json, max_score, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO exam_questions (exam_id, sort_order, question_text, question_type, options_json, correct_answer, attachments_json, max_score, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
 
       for (const q of cleanQuestions) {
         if (q.id && existingIds.has(Number(q.id))) {
-          updQ.run(q.sort_order, q.question_text, q.question_type, q.options_json, q.attachments_json, q.max_score, q.id, examId);
+          updQ.run(q.sort_order, q.question_text, q.question_type, q.options_json, q.correct_answer, q.attachments_json, q.max_score, q.id, examId);
           keepIds.add(Number(q.id));
         } else {
-          const r = insQ.run(examId, q.sort_order, q.question_text, q.question_type, q.options_json, q.attachments_json, q.max_score, now);
+          const r = insQ.run(examId, q.sort_order, q.question_text, q.question_type, q.options_json, q.correct_answer, q.attachments_json, q.max_score, now);
           keepIds.add(Number(r.lastInsertRowid));
         }
       }
@@ -4180,13 +4218,32 @@ const examsDb = {
           }
         }
       }
-      const maxRow = db.prepare('SELECT COALESCE(SUM(max_score), 0) as total FROM exam_questions WHERE exam_id = ?').get(examId);
-      const maxScore = roundExamScore(maxRow ? maxRow.total : 0);
+      const examQuestions = db.prepare('SELECT * FROM exam_questions WHERE exam_id = ? ORDER BY sort_order ASC, id ASC').all(examId);
+      for (const q of examQuestions) {
+        if (q.question_type !== 'true_false' && q.question_type !== 'choice') continue;
+        const correctKey = normalizeExamObjectiveAnswer(q.question_type, q.correct_answer);
+        if (!correctKey) continue;
+        const existingAns = db.prepare('SELECT * FROM exam_answers WHERE submission_id = ? AND question_id = ?').get(submissionId, q.id);
+        const studentVal = normalizeExamObjectiveAnswer(q.question_type, existingAns ? existingAns.answer_text : '');
+        const isCorrect = (studentVal !== '' && studentVal === correctKey) ? 1 : 0;
+        const earnedScore = isCorrect === 1 ? roundExamScore(q.max_score) : 0;
+        if (existingAns) {
+          db.prepare('UPDATE exam_answers SET is_correct = ?, score = ?, updated_at = ? WHERE id = ?')
+            .run(isCorrect, earnedScore, now, existingAns.id);
+        } else {
+          db.prepare(`
+            INSERT INTO exam_answers (submission_id, exam_id, question_id, answer_text, is_locked, locked_at, is_correct, score, teacher_note, updated_at)
+            VALUES (?, ?, ?, '', 1, ?, 0, 0, '', ?)
+          `).run(submissionId, examId, q.id, now, now);
+        }
+      }
+
+      const totals = this.computeSubmissionTotals(submissionId, examId);
       db.prepare(`
         UPDATE exam_submissions
-        SET status = 'submitted', max_total_score = ?, submitted_at = ?
+        SET status = 'submitted', total_score = ?, max_total_score = ?, correct_count = ?, wrong_count = ?, submitted_at = ?
         WHERE id = ?
-      `).run(maxScore, now, submissionId);
+      `).run(totals.total_score, totals.max_total_score, totals.correct_count, totals.wrong_count, now, submissionId);
       db.exec('COMMIT');
       return { success: true, submission: this.getSubmissionById(submissionId) };
     } catch (err) {

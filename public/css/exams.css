@@ -1529,6 +1529,85 @@ html.dark .exam-grade-saved-tag {
   margin-bottom: 0.45rem;
 }
 
+.exam-opt-key-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.38rem 0.65rem;
+  border-radius: 0.7rem;
+  border: 1.5px solid var(--exam-border-strong);
+  background: var(--exam-input-bg);
+  color: var(--exam-ink-muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.exam-opt-key-btn:hover {
+  border-color: #15803d;
+  color: #15803d;
+}
+
+.exam-opt-key-btn.is-correct-key {
+  background: #15803d;
+  border-color: #15803d;
+  color: #ffffff;
+  box-shadow: 0 3px 10px -3px rgba(21, 128, 61, 0.45);
+}
+
+.exam-tf-key-group,
+.exam-tf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.exam-tf-key-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.58rem 0.9rem;
+  border-radius: 0.85rem;
+  border: 1.5px solid var(--exam-border-strong);
+  background: var(--exam-input-bg);
+  color: var(--exam-ink);
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.exam-tf-key-btn.is-true.is-selected {
+  background: #15803d;
+  border-color: #15803d;
+  color: #ffffff;
+  box-shadow: 0 4px 14px -4px rgba(21, 128, 61, 0.45);
+}
+
+.exam-tf-key-btn.is-false.is-selected {
+  background: var(--exam-crimson);
+  border-color: var(--exam-crimson);
+  color: #ffffff;
+  box-shadow: 0 4px 14px -4px rgba(185, 28, 28, 0.45);
+}
+
+.exam-auto-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(21, 128, 61, 0.32);
+  color: #15803d;
+}
+
 /* ==========================================================================
    RESPONSIVE POLISH
    ========================================================================== */

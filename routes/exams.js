@@ -408,7 +408,12 @@ function registerExamRoutes(app, {
       const rawAnswers = submission ? examsDb.getSubmissionAnswers(submission.id) : [];
       const isGraded = submission && submission.status === 'graded';
 
-      // Hide grading marks/notes until teacher finalizes the result
+      // Hide grading marks/notes AND objective answer keys until teacher finalizes the result
+      exam.questions = (exam.questions || []).map(q => ({
+        ...q,
+        correct_answer: isGraded ? (q.correct_answer || '') : ''
+      }));
+
       const answers = rawAnswers.map(a => ({
         id: a.id,
         question_id: a.question_id,
