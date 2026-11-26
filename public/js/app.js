@@ -17396,43 +17396,18 @@ function handleLiveAudioChunk(data) {
 }
 
 // =========================================================================
-// 5. LOGO POPUP ANIMATION (ستافی سیرین 3D ZOOM)
+// 5. ENLARGED LOGO MODAL (CLEAN STATIC PREVIEW)
 // =========================================================================
-let logoPopupTimeout = null;
-
-function showLogoPopupAnimation(triggerEl) {
-  if (triggerEl && triggerEl.classList) {
-    triggerEl.classList.remove('logo-tap-spark');
-    void triggerEl.offsetWidth;
-    triggerEl.classList.add('logo-tap-spark');
-    setTimeout(() => {
-      try { triggerEl.classList.remove('logo-tap-spark'); } catch (e) {}
-    }, 800);
-  }
+function showLogoPopupAnimation() {
   const modal = document.getElementById('logoPopupModal');
-  const card = document.getElementById('logoPopupCard');
   if (!modal) return;
   modal.classList.remove('hidden');
-  if (card) {
-    card.classList.remove('logo-popup-zoom');
-    void card.offsetWidth;
-    card.classList.add('logo-popup-zoom');
-  }
-
-  if (logoPopupTimeout) clearTimeout(logoPopupTimeout);
-  logoPopupTimeout = setTimeout(() => {
-    closeLogoPopupAnimation();
-  }, 4200);
 }
 
 function closeLogoPopupAnimation() {
   const modal = document.getElementById('logoPopupModal');
   if (!modal) return;
   modal.classList.add('hidden');
-  if (logoPopupTimeout) {
-    clearTimeout(logoPopupTimeout);
-    logoPopupTimeout = null;
-  }
 }
 
 // =========================================================================
