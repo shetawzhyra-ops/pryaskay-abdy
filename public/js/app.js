@@ -3172,7 +3172,7 @@ function renderClassrooms() {
           </div>
 
           <!-- Room Details -->
-          <div class="min-w-0 flex-1 leading-tight space-y-1 text-right">
+          <div class="min-w-0 flex-1 overflow-hidden leading-tight space-y-1 text-right">
             <div class="flex items-center gap-1.5 flex-wrap">
               <h3 class="font-black text-sm sm:text-base transition-colors truncate max-w-full">
                 ${escapeHtml(c.name)}
@@ -3182,13 +3182,13 @@ function renderClassrooms() {
               ${isLive ? `<span class="px-1.5 py-0.2 rounded-md bg-rose-600/90 text-white text-[9px] font-black shrink-0 animate-pulse flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-white"></span>لایڤ</span>` : ''}
             </div>
 
-            <div class="flex items-center gap-1.5 text-[10px] sm:text-[11px] text-slate-400 flex-wrap">
-              <span class="text-amber-300/80 font-bold flex items-center gap-1 shrink-0">
-                <i class="fa-solid fa-chalkboard-user text-[9px]"></i>
-                <span class="max-w-[130px] truncate">${escapeHtml(c.teacher_name || 'دەستەی بەڕێوەبەرایەتی')}</span>
+            <div class="flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-400 min-w-0 overflow-hidden">
+              <span class="text-amber-300/80 font-bold flex items-center gap-1 min-w-0 shrink overflow-hidden">
+                <i class="fa-solid fa-chalkboard-user text-[9px] shrink-0"></i>
+                <span class="truncate">${escapeHtml(c.teacher_name || 'دەستەی بەڕێوەبەرایەتی')}</span>
               </span>
               <span class="text-slate-500 shrink-0">•</span>
-              <span class="truncate max-w-[170px] text-slate-400/80">${escapeHtml(c.description || 'ژووری گفتوگۆ')}</span>
+              <span class="truncate min-w-0 flex-1 text-slate-400/80">${escapeHtml(c.description || 'ژووری گفتوگۆ')}</span>
             </div>
           </div>
         </div>
