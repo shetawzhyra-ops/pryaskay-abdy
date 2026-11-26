@@ -1122,6 +1122,7 @@
     el.modalNewDreamPost.classList.remove('hidden');
     if (el.dreamInputTitle) el.dreamInputTitle.focus();
   }
+  window.openNewDreamModal = openNewDreamModal;
 
   function closeNewDreamModal() {
     if (!el.modalNewDreamPost) return;

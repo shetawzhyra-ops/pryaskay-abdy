@@ -316,8 +316,9 @@
         <!-- Direct Publish Action Inside Dreams Section (Shown for Logged-In Staff / Interpreter) -->
         <div id="heroDreamPublishContainer" class="hidden pt-3">
           <button
+            id="btnHeroPublishDream"
             type="button"
-            onclick="document.getElementById('btnOpenNewDreamModal')?.click()"
+            onclick="window.openNewDreamModal && window.openNewDreamModal()"
             class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:brightness-110 text-white font-black text-xs sm:text-sm shadow-lg shadow-amber-600/25 border border-amber-300/50 transition-all active:scale-95 cursor-pointer"
           >
             <i class="fa-solid fa-plus-circle text-sm"></i>
@@ -635,7 +636,7 @@
 
   <!-- Dreams Page Application Script -->
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/dreams.js?v=15.0&t=1796310000"></script>
+  <script src="/js/dreams.js?v=16.0&t=1796320000"></script>
   <script src="/js/post-comments.js?v=2.0" defer></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
