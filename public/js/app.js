@@ -3561,7 +3561,7 @@ async function loadMessages() {
             <div class="absolute -inset-1.5 bg-gradient-to-r from-amber-400 via-sky-400 to-amber-300 rounded-2xl blur-sm opacity-50"></div>
             <img src="/images/logo.jpg?v=1796050000" alt="پریاسکەی عەبدی" class="relative w-20 h-20 rounded-2xl object-cover border border-[#fef3c7]/60 shadow-xl shadow-[#f59e0b]/20 bg-white">
           </div>
-          <h3 class="font-black text-base text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-100 to-[#fcd34d]">بەخێربێن بۆ ستافی سیرین</h3>
+          <h3 class="font-black text-base text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-100 to-[#fcd34d]">بەخێربێن بۆ پریاسکەی تەعبیر</h3>
         </div>
       `;
     }
