@@ -161,8 +161,6 @@
     footerRightsText: document.getElementById('footerRightsText'),
 
     // Admin
-    adminDreamActionContainer: document.getElementById('adminDreamActionContainer'),
-    btnOpenNewDreamModal: document.getElementById('btnOpenNewDreamModal'),
     modalNewDreamPost: document.getElementById('modalNewDreamPost'),
     btnCloseNewDreamModal: document.getElementById('btnCloseNewDreamModal'),
     btnCancelNewDream: document.getElementById('btnCancelNewDream'),
@@ -999,9 +997,6 @@
 
   function updateDreamPublisherUI() {
     const allowed = isDreamPublisher(state.currentUser);
-    if (el.adminDreamActionContainer) {
-      el.adminDreamActionContainer.classList.toggle('hidden', !allowed);
-    }
     const heroPub = document.getElementById('heroDreamPublishContainer');
     if (heroPub) {
       heroPub.classList.toggle('hidden', !allowed);
@@ -1225,9 +1220,6 @@
     }
 
     // Admin Modal Controls
-    if (el.btnOpenNewDreamModal) {
-      el.btnOpenNewDreamModal.addEventListener('click', openNewDreamModal);
-    }
     if (el.btnCloseNewDreamModal) {
       el.btnCloseNewDreamModal.addEventListener('click', closeNewDreamModal);
     }
