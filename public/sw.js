@@ -2,7 +2,7 @@
  * Service Worker for پریاسکەی عەبدی (PWA, Offline Fallback & Background Push Notifications)
  */
 
-const CACHE_NAME = 'pryaska-cache-v7';
+const CACHE_NAME = 'pryaska-cache-v8';
 const STATIC_ASSETS = [
   '/',
   '/offline.html',
@@ -18,6 +18,9 @@ const STATIC_ASSETS = [
   '/exams.html',
   '/css/exams.css',
   '/js/exams.js',
+  '/hezara.html',
+  '/css/hezara.css',
+  '/js/hezara.js',
   '/js/compliance.js',
   '/js/global-search.js',
   '/js/post-comments.js',
@@ -112,12 +115,13 @@ self.addEventListener('notificationclick', (event) => {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
 
-  // Skip non-GET, API calls, Socket.IO, and Range media requests
+  // Skip non-GET, API calls, Socket.IO, uploaded media streams, and Range media requests
   if (
     req.method !== 'GET' ||
     req.headers.has('range') ||
     req.url.includes('/socket.io/') ||
-    req.url.includes('/api/')
+    req.url.includes('/api/') ||
+    req.url.includes('/uploads/')
   ) {
     return;
   }

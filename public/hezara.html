@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>هەزارەی عەبدی — کۆگای دەنگی مامۆستایان | پریاسکەی عەبدی</title>
+  <meta name="description" content="هەزارەی عەبدی — بەشی تایبەت بە دەنگ و وانە دەنگییەکانی مامۆستایان بە کوالێتی بەرز و گوێگرتنی بەردەوام لە پاشبنەمادا.">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/images/icon-192.png?v=6">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png?v=6">
+  <link rel="icon" type="image/png" sizes="512x512" href="/images/icon-512.png?v=6">
+  <meta name="theme-color" content="#1b432e">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <script>
+    try {
+      sessionStorage.setItem('has_visited_section', 'true');
+      var _t = localStorage.getItem('seereen_theme');
+      if (_t === 'dark') {
+        document.documentElement.classList.add('dark', 'dark-theme');
+      } else {
+        document.documentElement.classList.remove('dark', 'dark-theme');
+      }
+    } catch (e) {}
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/css/hezara.css?v=1.0&t=1796400000">
+</head>
+<body>
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="hz-topbar">
+    <div class="hz-topbar-inner">
+      <div class="hz-brand-wrap">
+        <a href="/" class="hz-back-btn" title="گەڕانەوە بۆ پەڕەی سەرەکی">
+          <i class="fa-solid fa-arrow-right"></i>
+          <span>سەرەکی</span>
+        </a>
+        <div class="hz-brand-emblem">
+          <img src="/images/logo.jpg?v=1796050000" alt="هەزارەی عەبدی">
+        </div>
+        <div class="hz-brand-text">
+          <h1 class="hz-brand-title">هەزارەی عەبدی</h1>
+          <p class="hz-brand-sub">بەشی تەنها دەنگی — کوالێتی بەرز و گوێگرتنی بێ‌پچڕان</p>
+        </div>
+      </div>
+
+      <div class="hz-topbar-actions">
+        <button id="hzAddTrackBtn" type="button" class="hz-btn hz-btn-primary hidden">
+          <i class="fa-solid fa-microphone-lines"></i>
+          <span>دانانی دەنگ</span>
+        </button>
+
+        <div id="hzUserPill" class="hz-user-pill hidden">
+          <i class="fa-solid fa-headphones"></i>
+          <span id="hzUserName"></span>
+          <span id="hzUserRoleBadge" class="hz-role-badge"></span>
+        </div>
+
+        <button id="hzThemeToggle" type="button" class="hz-icon-btn" title="گۆڕینی دۆخی ڕووناکی/تاریک" aria-label="گۆڕینی دۆخ">
+          <i id="hzThemeIcon" class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="hz-container">
+
+    <!-- NOW PLAYING MASTER DECK (Always Audio-Focused, Lock-Screen Ready) -->
+    <section class="hz-player-deck" aria-label="پێشکەشکەری دەنگ">
+      <!-- Real Persistent HTMLAudioElement (Never destroyed between tracks so mobile lock-screen background playback stays uninterrupted) -->
+      <audio id="hzAudioElement" preload="auto" playsinline webkit-playsinline></audio>
+
+      <div class="hz-deck-main">
+        <div id="hzDeckDisc" class="hz-deck-disc">
+          <img src="/images/logo.jpg?v=1796050000" alt="هەزارەی عەبدی">
+          <div class="hz-disc-ring"></div>
+        </div>
+
+        <div class="hz-deck-meta">
+          <div class="hz-deck-badges">
+            <span class="hz-live-chip">
+              <i class="fa-solid fa-wave-square"></i>
+              <span>تەنها دەنگی</span>
+            </span>
+            <span id="hzNowCategory" class="hz-cat-chip hidden"></span>
+            <span id="hzNowQuality" class="hz-quality-chip hidden"></span>
+          </div>
+          <h2 id="hzNowTitle" class="hz-now-title">دەنگێک هەڵبژێرە بۆ گوێگرتن</h2>
+          <p id="hzNowSpeaker" class="hz-now-speaker">کلیک لەسەر هەر تۆمارێکی خوارەوە بکە — لەکاتی کوژانەوەی شاشەی مۆبایلیش بەردەوام دەبێت</p>
+        </div>
+      </div>
+
+      <!-- Scrubber / Progress Bar -->
+      <div class="hz-scrubber-wrap" dir="ltr">
+        <span id="hzTimeCurrent" class="hz-time">00:00</span>
+        <input id="hzSeekRange" type="range" min="0" max="100" value="0" step="0.1" class="hz-seek-input" aria-label="کات و پێشخستنی دەنگ" disabled>
+        <span id="hzTimeTotal" class="hz-time">00:00</span>
+      </div>
+
+      <!-- Primary Playback Controls -->
+      <div class="hz-controls-row">
+        <div class="hz-controls-side">
+          <button id="hzSpeedBtn" type="button" class="hz-pill-ctrl" title="خێرایی خوێندنەوە">1x</button>
+          <button id="hzAutoNextBtn" type="button" class="hz-pill-ctrl is-active" title="گوێگرتنی بەردەوام بەدوای یەکدا">
+            <i class="fa-solid fa-repeat"></i>
+            <span>بەردەوام</span>
+          </button>
+        </div>
+
+        <div class="hz-controls-center" dir="ltr">
+          <button id="hzPrevBtn" type="button" class="hz-ctrl-btn" title="دەنگی پێشوو">
+            <i class="fa-solid fa-backward-step"></i>
+          </button>
+          <button id="hzBack15Btn" type="button" class="hz-ctrl-btn hz-skip-btn" title="١٥ چرکە بۆ دواوە">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>15</span>
+          </button>
+          <button id="hzPlayPauseBtn" type="button" class="hz-play-btn" title="لێدان / وەستان">
+            <i id="hzPlayIcon" class="fa-solid fa-play"></i>
+          </button>
+          <button id="hzFwd15Btn" type="button" class="hz-ctrl-btn hz-skip-btn" title="١٥ چرکە بۆ پێشەوە">
+            <i class="fa-solid fa-rotate-right"></i>
+            <span>15</span>
+          </button>
+          <button id="hzNextBtn" type="button" class="hz-ctrl-btn" title="دەنگی دواتر">
+            <i class="fa-solid fa-forward-step"></i>
+          </button>
+        </div>
+
+        <div class="hz-controls-side hz-controls-end">
+          <span id="hzTrackCountChip" class="hz-count-chip">0 دەنگ</span>
+        </div>
+      </div>
+
+      <div class="hz-lockscreen-tip">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <span>پشتگیری لە گوێگرتنی پاشبنەما دەکات: دەتوانیت شاشەی مۆبایل بکوژێنیتەوە و لەسەر شاشەی قوفڵ کۆنتڕۆڵی بکەیت.</span>
+      </div>
+    </section>
+
+    <!-- SEARCH & CATEGORY FILTER BAR -->
+    <section class="hz-toolbar">
+      <div class="hz-search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="hzSearchInput" type="search" placeholder="گەڕان لە ناونیشان یان ناوی مامۆستا..." autocomplete="off">
+      </div>
+      <div id="hzCategoryPills" class="hz-category-pills"></div>
+    </section>
+
+    <!-- AUDIO TRACKS LIST -->
+    <section id="hzTracksWrap" class="hz-tracks-list" aria-live="polite">
+      <div class="hz-empty-state">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <p>بارکردنی دەنگەکانی هەزارەی عەبدی...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- TEACHER-ONLY AUDIO UPLOAD / STUDIO RECORDING MODAL -->
+  <div id="hzUploadModal" class="hz-modal hidden" role="dialog" aria-modal="true" aria-labelledby="hzModalTitle">
+    <div class="hz-modal-card">
+      <div class="hz-modal-header">
+        <div>
+          <h3 id="hzModalTitle" class="hz-modal-title">دانانی دەنگی نوێ لە هەزارەی عەبدی</h3>
+          <p class="hz-modal-sub">تەنها فایلی دەنگی یان تۆمارکردنی مایکرۆفۆن (بە بەرزترین کوالێتی)</p>
+        </div>
+        <button id="hzCloseModalBtn" type="button" class="hz-close-btn" title="داخستن">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="hzUploadForm" class="hz-modal-body">
+        <input type="hidden" id="hzEditId" value="">
+
+        <!-- Source Mode Tabs (Hidden during metadata-only edit) -->
+        <div id="hzSourceTabsWrap">
+          <div class="hz-source-tabs">
+            <button type="button" class="hz-source-tab is-active" data-mode="file">
+              <i class="fa-solid fa-file-audio"></i>
+              <span>هەڵبژاردنی فایلی دەنگی</span>
+            </button>
+            <button type="button" class="hz-source-tab" data-mode="mic">
+              <i class="fa-solid fa-microphone"></i>
+              <span>تۆمارکردنی ڕاستەوخۆ</span>
+            </button>
+          </div>
+
+          <!-- File Picker Mode -->
+          <div id="hzFileModePane" class="hz-source-pane">
+            <label for="hzAudioFileInput" class="hz-dropzone" id="hzDropzone">
+              <input id="hzAudioFileInput" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg,.aac,.flac,.opus,.webm" class="hidden">
+              <div class="hz-dropzone-icon">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <div id="hzFileChosenText" class="hz-dropzone-text">
+                <strong>کلیک بکە یان فایلی دەنگی لێرە دابنێ</strong>
+                <span>MP3, M4A, WAV, AAC, OGG, FLAC, OPUS — کوالێتی ئەسڵی دەپارێزرێت</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Studio Microphone Recording Mode -->
+          <div id="hzMicModePane" class="hz-source-pane hidden">
+            <div class="hz-mic-studio">
+              <canvas id="hzMicVisualizer" class="hz-mic-canvas" width="480" height="68"></canvas>
+              <div id="hzMicTimer" class="hz-mic-timer" dir="ltr">00:00</div>
+              <div id="hzMicStatus" class="hz-mic-status">ئامادەیە بۆ تۆمارکردن بە کوالێتی ستۆدیۆ (48kHz / 256kbps)</div>
+              <div class="hz-mic-btns">
+                <button id="hzMicStartBtn" type="button" class="hz-btn hz-btn-danger">
+                  <i class="fa-solid fa-circle-dot"></i>
+                  <span>دەستپێکردنی تۆمارکردن</span>
+                </button>
+                <button id="hzMicPauseBtn" type="button" class="hz-btn hz-btn-secondary hidden">
+                  <i class="fa-solid fa-pause"></i>
+                  <span>وەستان</span>
+                </button>
+                <button id="hzMicStopBtn" type="button" class="hz-btn hz-btn-primary hidden">
+                  <i class="fa-solid fa-stop"></i>
+                  <span>تەواوکردن و ئامادەکردن</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Local Audio Preview Before Upload -->
+          <div id="hzPreviewBox" class="hz-preview-box hidden">
+            <div class="hz-preview-head">
+              <span><i class="fa-solid fa-circle-check"></i> دەنگەکە ئامادەیە بۆ بڵاوکردنەوە</span>
+              <span id="hzPreviewDuration" class="hz-preview-meta"></span>
+            </div>
+            <audio id="hzPreviewAudio" controls preload="metadata" class="hz-preview-player"></audio>
+          </div>
+        </div>
+
+        <!-- Metadata Fields -->
+        <div class="hz-fields-grid">
+          <div class="hz-field hz-field-full">
+            <label for="hzInputTitle">ناونیشانی دەنگ <span class="hz-req">*</span></label>
+            <input id="hzInputTitle" type="text" required maxlength="180" placeholder="بۆ نموونە: هەزارەی یەکەم — وانەی تەفسیر">
+          </div>
+          <div class="hz-field">
+            <label for="hzInputSpeaker">ناوی مامۆستا / پێشکەشکار</label>
+            <input id="hzInputSpeaker" type="text" maxlength="100" placeholder="بۆ نموونە: مامۆستا ئازاد">
+          </div>
+          <div class="hz-field">
+            <label for="hzInputCategory">بەش / زنجیرە (ئیختیاری)</label>
+            <input id="hzInputCategory" type="text" maxlength="80" list="hzCategorySuggestions" placeholder="بۆ نموونە: تەعبیر یان زیکر">
+            <datalist id="hzCategorySuggestions"></datalist>
+          </div>
+          <div class="hz-field hz-field-full">
+            <label for="hzInputDesc">تێبینی کورت (ئیختیاری)</label>
+            <textarea id="hzInputDesc" rows="2" maxlength="400" placeholder="کورتەیەک دەربارەی ناوەڕۆکی دەنگەکە..."></textarea>
+          </div>
+        </div>
+
+        <!-- Upload Progress -->
+        <div id="hzUploadProgressWrap" class="hz-progress-wrap hidden">
+          <div class="hz-progress-top">
+            <span>خەریکە دەنگەکە بەرز دەکرێتەوە...</span>
+            <span id="hzUploadPct">0%</span>
+          </div>
+          <div class="hz-progress-bar">
+            <div id="hzUploadBarFill" class="hz-progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="hz-modal-footer">
+          <button id="hzCancelModalBtn" type="button" class="hz-btn hz-btn-secondary">پاشگەزبوونەوە</button>
+          <button id="hzSubmitBtn" type="submit" class="hz-btn hz-btn-primary">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span id="hzSubmitBtnText">بڵاوکردنەوەی دەنگ</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CONFIRM MODAL -->
+  <div id="hzConfirmModal" class="hz-modal hidden" role="dialog" aria-modal="true">
+    <div class="hz-confirm-card">
+      <div class="hz-confirm-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <h4 id="hzConfirmTitle">سڕینەوەی دەنگ</h4>
+      <p id="hzConfirmBody"></p>
+      <div class="hz-confirm-actions">
+        <button id="hzConfirmCancel" type="button" class="hz-btn hz-btn-secondary">پاشگەزبوونەوە</button>
+        <button id="hzConfirmOk" type="button" class="hz-btn hz-btn-danger">بەڵێ، بیسڕەوە</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="hzToastStack" class="hz-toast-stack" aria-live="polite"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/hezara.js?v=1.0&t=1796400000"></script>
+</body>
+</html>

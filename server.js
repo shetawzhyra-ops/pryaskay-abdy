@@ -9,6 +9,7 @@ const { validateRegistrationPayload } = require('./lib/registration');
 const { registerPublicPlatformRoutes } = require('./routes/publicContent');
 const { registerPublicCommentsRoutes } = require('./routes/publicComments');
 const { registerExamRoutes } = require('./routes/exams');
+const { registerHezaraRoutes } = require('./routes/hezara');
 const { registerAudioStudioRoutes } = require('./routes/audioStudio');
 const { registerComplianceRoutes } = require('./routes/compliance');
 let compression;
@@ -25,7 +26,7 @@ let archiver;
 try { archiver = require('archiver'); } catch (e) {}
 let DatabaseSync;
 try { DatabaseSync = require('node:sqlite').DatabaseSync; } catch (e) {}
-const { db, dbPath, classrooms, initDb, users, poemsDb, articlesDb, messages, questions, library, dreamSessions, dreamMessages, settings, passwordResets, privateMessages, messageReactions, profileChangeRequests, pushSubscriptions, calculateStars, liveRecordings, recordedLessons, lessonTeachers, lessonFolders, lessonProgress, getDreamTeacherAlias, aiSecurity, advisorDb, buttonClicks, customGroups, pollsDb, alarmsDb, complaints, attendanceDb, examsDb, complianceDb, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, getDreamPosts, reactToDreamPost, createDreamPost, deleteDreamPost, updateDreamPost } = require('./db');
+const { db, dbPath, classrooms, initDb, users, poemsDb, articlesDb, messages, questions, library, dreamSessions, dreamMessages, settings, passwordResets, privateMessages, messageReactions, profileChangeRequests, pushSubscriptions, calculateStars, liveRecordings, recordedLessons, lessonTeachers, lessonFolders, lessonProgress, getDreamTeacherAlias, aiSecurity, advisorDb, buttonClicks, customGroups, pollsDb, alarmsDb, complaints, attendanceDb, examsDb, hezaraDb, complianceDb, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, getDreamPosts, reactToDreamPost, createDreamPost, deleteDreamPost, updateDreamPost } = require('./db');
 
 const DEFAULT_DEV_JWT = 'seereen_group_chat_super_secret_key_2026';
 if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || process.env.JWT_SECRET === DEFAULT_DEV_JWT)) {
@@ -1324,6 +1325,19 @@ registerExamRoutes(app, {
   io,
   onlineUsers,
   publicDir: path.join(__dirname, 'public')
+});
+
+// Hezarey Abdy Routes (هەزارەی عەبدی - Strictly Audio Section for Teachers & Background Listening)
+registerHezaraRoutes(app, {
+  hezaraDb,
+  users,
+  authMiddleware,
+  hasSuperAdminPrivileges,
+  jwtSecret: JWT_SECRET,
+  upload,
+  uploadsDir,
+  publicDir: path.join(__dirname, 'public'),
+  io
 });
 
 // Manager-Only Audio Studio Routes (Voice Cutting & Irreversible Anonymization)

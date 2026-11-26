@@ -845,9 +845,27 @@ function initDb() {
       'CREATE INDEX IF NOT EXISTS idx_exam_questions_exam ON exam_questions(exam_id, sort_order ASC)',
       'CREATE INDEX IF NOT EXISTS idx_exam_submissions_exam ON exam_submissions(exam_id, status)',
       'CREATE INDEX IF NOT EXISTS idx_exam_submissions_student ON exam_submissions(student_id, status)',
-      'CREATE INDEX IF NOT EXISTS idx_exam_answers_sub ON exam_answers(submission_id, question_id)'
+      'CREATE INDEX IF NOT EXISTS idx_exam_answers_sub ON exam_answers(submission_id, question_id)',
+      'CREATE INDEX IF NOT EXISTS idx_hezara_sort ON hezara_tracks(sort_order ASC, created_at DESC)'
     ];
     db.exec(`
+      CREATE TABLE IF NOT EXISTS hezara_tracks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sort_order INTEGER NOT NULL DEFAULT 1,
+        title TEXT NOT NULL,
+        speaker TEXT NOT NULL DEFAULT '',
+        category TEXT NOT NULL DEFAULT '',
+        description TEXT NOT NULL DEFAULT '',
+        audio_url TEXT NOT NULL,
+        duration_sec REAL NOT NULL DEFAULT 0,
+        file_size INTEGER NOT NULL DEFAULT 0,
+        mime_type TEXT NOT NULL DEFAULT '',
+        uploader_id INTEGER NOT NULL DEFAULT 0,
+        uploader_name TEXT NOT NULL DEFAULT '',
+        created_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL
+      );
+
       CREATE TABLE IF NOT EXISTS exams (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -4527,6 +4545,81 @@ const complianceDb = {
   }
 };
 
+// Hezarey Abdy (هەزارەی عەبدی) - Dedicated Teacher-Uploaded High-Quality Audio Archive
+const hezaraDb = {
+  getNextSortOrder() {
+    const row = db.prepare('SELECT COALESCE(MAX(sort_order), 0) as max_sort FROM hezara_tracks').get();
+    return Number(row?.max_sort || 0) + 1;
+  },
+
+  list() {
+    return db.prepare(`
+      SELECT *
+      FROM hezara_tracks
+      ORDER BY sort_order ASC, created_at DESC
+    `).all();
+  },
+
+  getById(id) {
+    return db.prepare('SELECT * FROM hezara_tracks WHERE id = ?').get(Number(id)) || null;
+  },
+
+  create({ title, speaker = '', category = '', description = '', audio_url, duration_sec = 0, file_size = 0, mime_type = '', uploader_id = 0, uploader_name = '', sort_order = null }) {
+    const now = Date.now();
+    const orderNum = (sort_order != null && Number.isFinite(Number(sort_order)) && Number(sort_order) > 0)
+      ? Math.floor(Number(sort_order))
+      : this.getNextSortOrder();
+    const res = db.prepare(`
+      INSERT INTO hezara_tracks (sort_order, title, speaker, category, description, audio_url, duration_sec, file_size, mime_type, uploader_id, uploader_name, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      orderNum,
+      String(title || '').trim(),
+      String(speaker || '').trim(),
+      String(category || '').trim(),
+      String(description || '').trim(),
+      String(audio_url || '').trim(),
+      Math.max(0, Number(duration_sec) || 0),
+      Math.max(0, Math.floor(Number(file_size) || 0)),
+      String(mime_type || '').trim(),
+      Number(uploader_id) || 0,
+      String(uploader_name || '').trim(),
+      now,
+      now
+    );
+    return this.getById(Number(res.lastInsertRowid));
+  },
+
+  update(id, { title, speaker = '', category = '', description = '', sort_order = null }) {
+    const existing = this.getById(id);
+    if (!existing) return null;
+    const nextOrder = (sort_order != null && Number.isFinite(Number(sort_order)) && Number(sort_order) > 0)
+      ? Math.floor(Number(sort_order))
+      : existing.sort_order;
+    db.prepare(`
+      UPDATE hezara_tracks
+      SET title = ?, speaker = ?, category = ?, description = ?, sort_order = ?, updated_at = ?
+      WHERE id = ?
+    `).run(
+      String(title || existing.title).trim(),
+      String(speaker || '').trim(),
+      String(category || '').trim(),
+      String(description || '').trim(),
+      nextOrder,
+      Date.now(),
+      existing.id
+    );
+    return this.getById(existing.id);
+  },
+
+  delete(id) {
+    const existing = this.getById(id);
+    if (!existing) return null;
+    db.prepare('DELETE FROM hezara_tracks WHERE id = ?').run(existing.id);
+    return existing;
+  }
+};
+
 module.exports = {
   articlesDb,
   articles: articlesDb,
@@ -4576,5 +4669,6 @@ module.exports = {
   complaints,
   attendanceDb,
   examsDb,
+  hezaraDb,
   complianceDb
 };
