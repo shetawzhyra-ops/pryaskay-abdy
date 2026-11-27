@@ -3032,16 +3032,6 @@ Change language here • تغيير لغة الموقع من هنا
 <span>ئامرازەکانی ستاف و ئەدمین</span>
 </div>
 <div class="drawer-tools-grid">
-<!-- Manager Audio Studio (ستۆدیۆی دەنگ - تایبەت بە بەڕێوەبەر) -->
-<button id="drawerAudioStudioBtn" onclick="closeMainMenuDrawer(); window.location.href='/audio-studio';" class="hidden drawer-tool-btn group">
-<div class="flex items-center gap-3 sm:gap-4 min-w-0">
-<div class="drawer-tool-icon-box">
-<i class="fa-solid fa-sliders"></i>
-</div>
-<span class="drawer-tool-title">ستۆدیۆی دەنگ (بڕین و شاردنەوە)</span>
-</div>
-<span class="drawer-tool-badge">بەڕێوەبەر</span>
-</button>
 <!-- Live Recordings Archive (تۆماری وانەکانی لایڤ - مامۆستا و سوپەر ئەدمین) -->
 <button id="drawerLiveRecordingsBtn" onclick="closeMainMenuDrawer(); openLiveRecordingsModal();" class="drawer-tool-btn group">
 <div class="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -3854,24 +3844,6 @@ class="w-full bg-slate-800/90 border border-slate-700/70 rounded-xl pr-8 pl-8 py
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <span id="profExamsPendingBadge" class="hidden px-2 py-0.5 bg-rose-600 text-white text-[11px] leading-none font-black rounded-full min-w-[22px] h-[22px] items-center justify-center shadow animate-pulse">0</span>
-      <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-600/30 text-[10px] font-black">کردنەوە</span>
-    </div>
-  </button>
-</div>
-
-<!-- Manager Audio Studio Card Inside Manager Profile (Hemn & Azad Only) -->
-<div id="profAudioStudioCard" class="hidden prof-section-card p-3.5 rounded-2xl shadow-sm">
-  <button id="profAudioStudioBtn" type="button" onclick="closeUserProfileModal(); window.location.href='/audio-studio';" class="prof-inset-tile w-full p-3 rounded-xl flex items-center justify-between gap-3 transition hover:brightness-95 active:scale-[0.99] cursor-pointer text-right">
-    <div class="flex items-center gap-3 min-w-0">
-      <span class="w-10 h-10 rounded-xl bg-rose-600/15 text-rose-700 dark:text-rose-300 border border-rose-600/30 flex items-center justify-center text-base shrink-0">
-        <i class="fa-solid fa-sliders"></i>
-      </span>
-      <div class="min-w-0">
-        <span class="block text-xs sm:text-sm font-black truncate">ستۆدیۆی دەنگ (بڕین و شاردنەوەی دەنگ)</span>
-        <span class="block text-[11px] opacity-75 font-medium truncate">بڕینی دەنگ و شاردنەوەی تەواوی دەنگی کەسی بەرامبەر (نەگەڕاوە)</span>
-      </div>
-    </div>
-    <div class="flex items-center gap-2 shrink-0">
       <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-600/30 text-[10px] font-black">کردنەوە</span>
     </div>
   </button>
@@ -8436,7 +8408,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Poem Media Helper -->
 <script src="/js/poem-media.js?v=2.0&t=1796510000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=146.0&t=1796500000"></script>
+<script src="/js/app.js?v=147.0&t=1796600000"></script>
 <!-- Store Compliance (Account Deletion, UGC Report & User Blocking) -->
 <script src="/js/compliance.js?v=1.0&t=1796090000"></script>
   <!-- PWA & Android App Installation Controller -->

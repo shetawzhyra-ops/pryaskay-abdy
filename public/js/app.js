@@ -1310,20 +1310,10 @@ function updateUserUI() {
   }
 
   if (typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
-    const drawerAudioBtn = document.getElementById('drawerAudioStudioBtn');
-    if (drawerAudioBtn) {
-      drawerAudioBtn.classList.remove('hidden');
-      drawerAudioBtn.classList.add('flex');
-    }
     if (typeof checkPendingArticlesCount === 'function') {
       checkPendingArticlesCount();
     }
   } else {
-    const drawerAudioBtn = document.getElementById('drawerAudioStudioBtn');
-    if (drawerAudioBtn) {
-      drawerAudioBtn.classList.add('hidden');
-      drawerAudioBtn.classList.remove('flex');
-    }
     ['headerArticlesPendingBadge', 'drawerProfileArticlesPendingBadge', 'profArticlesPendingBadge'].forEach(id => {
       const b = document.getElementById(id);
       if (b) {
@@ -8025,14 +8015,6 @@ async function openUserProfileModal(userId) {
         if (typeof checkExamsSummaryBadge === 'function') checkExamsSummaryBadge();
       } else {
         examsManagerCard.classList.add('hidden');
-      }
-    }
-    const audioStudioCard = document.getElementById('profAudioStudioCard');
-    if (audioStudioCard) {
-      if (isMe && typeof isHemnOrAzadManager === 'function' && isHemnOrAzadManager(currentUser)) {
-        audioStudioCard.classList.remove('hidden');
-      } else {
-        audioStudioCard.classList.add('hidden');
       }
     }
     const studentExamsCard = document.getElementById('profStudentExamsCard');

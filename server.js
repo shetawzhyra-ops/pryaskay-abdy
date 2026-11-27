@@ -10,7 +10,6 @@ const { registerPublicPlatformRoutes } = require('./routes/publicContent');
 const { registerPublicCommentsRoutes } = require('./routes/publicComments');
 const { registerExamRoutes } = require('./routes/exams');
 const { registerHezaraRoutes } = require('./routes/hezara');
-const { registerAudioStudioRoutes } = require('./routes/audioStudio');
 const { registerComplianceRoutes } = require('./routes/compliance');
 let compression;
 try { compression = require('compression'); } catch(e) {}
@@ -1340,13 +1339,6 @@ registerHezaraRoutes(app, {
   uploadsDir,
   publicDir: path.join(__dirname, 'public'),
   io
-});
-
-// Manager-Only Audio Studio Routes (Voice Cutting & Irreversible Anonymization)
-registerAudioStudioRoutes(app, {
-  authMiddleware,
-  isHemnOrAzadUser,
-  publicDir: path.join(__dirname, 'public')
 });
 
 // Store Compliance Routes (/privacy, /terms, Self-Service Account Deletion, UGC Reports & User Blocking)
