@@ -536,8 +536,9 @@
       return btn;
     };
 
-    // Mount cleanly in subpage headers (/dreams, /articles, /poems)
+    // Mount cleanly inside subpage action containers (/dreams, /articles, /poems)
     const subpageActions =
+      document.querySelector('#dreamsHeaderActions, #articlesHeaderActions, #poemsHeaderActions') ||
       document.querySelector('#dreamsHeader .flex.items-center.gap-2, #articlesHeader .flex.items-center.gap-2, #poemsHeader .flex.items-center.gap-2');
     if (subpageActions) {
       subpageActions.prepend(makeBtn('globalSearchTriggerBtn'));

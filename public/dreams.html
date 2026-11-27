@@ -153,6 +153,42 @@
     #dreamsCountBadge i, #dreamsExpertBadge i {
       color: #85430e !important;
     }
+    @media (max-width: 639px) {
+      #dreamsHeader .max-w-6xl {
+        padding-left: 0.65rem !important;
+        padding-right: 0.65rem !important;
+        height: 3.75rem !important;
+        gap: 0.4rem !important;
+      }
+      #dreamsHeader .landing-brand-word {
+        font-size: 1.05rem !important;
+        line-height: 1.2 !important;
+      }
+      #dreamsHeader #btnBackToHome {
+        padding: 0.42rem 0.62rem !important;
+        height: 2.1rem;
+        white-space: nowrap !important;
+      }
+      #dreamsHeader #btnBackToHomeText,
+      #dreamsHeader #currentDialectLabel {
+        display: none !important;
+      }
+      #dreamsHeader #btnDialectDropdown,
+      #dreamsHeader .pgs-trigger-btn {
+        padding: 0.42rem 0.56rem !important;
+        height: 2.1rem;
+        gap: 0.3rem !important;
+        border-radius: 999px !important;
+      }
+      #dreamsHeader [onclick*="openNewDreamPostModal"],
+      #dreamsHeader #btnOpenNewDreamPost {
+        padding: 0.42rem 0.7rem !important;
+        height: 2.1rem;
+        font-size: 0.74rem !important;
+        border-radius: 999px !important;
+        white-space: nowrap !important;
+      }
+    }
   </style>
   <!-- Modern Heritage / Manuscript Luxe Styling for Dreams Section -->
   <link id="dreamsHeritageCss" rel="stylesheet" href="/css/dreams-heritage.css?v=2.0&t=1796300000">
@@ -170,10 +206,10 @@
 
   <!-- Fixed Header / Navbar -->
   <header id="dreamsHeader" class="fixed top-0 left-0 right-0 z-50 w-full backdrop-blur-xl bg-[#ecdeca]/95 glass-header border-b border-[#9c784e]/30 transition-colors duration-300">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2">
       
       <!-- Brand Logo + Back to Home Button -->
-      <div class="flex items-center gap-3 sm:gap-4">
+      <div class="flex items-center gap-2 sm:gap-4 min-w-0">
         <a href="/" class="logo-brand-container relative flex items-center gap-2.5 sm:gap-3 select-none group cursor-pointer active:scale-95 transition-transform focus:outline-none" title="گەڕانەوە بۆ پەڕەی سەرەکی">
           <div class="logo-box landing-emblem-box relative z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 overflow-hidden p-0.5">
             <img src="/images/logo.jpg?v=1796050000" alt="پریاسکەی ئازادی موعەبیر" class="w-full h-full object-cover rounded-[14px] bg-white">
@@ -199,7 +235,7 @@
       </div>
 
       <!-- Header Controls: Dialect, Theme, Admin Action -->
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div id="dreamsHeaderActions" class="flex items-center gap-1.5 sm:gap-3 shrink-0">
         
         <!-- Dialect Selector Dropdown -->
         <div class="relative inline-block text-right z-40" id="dialectDropdownContainer">
@@ -218,7 +254,7 @@
           <!-- Floating Dialect Menu -->
           <div 
             id="dialectDropdownMenu" 
-            class="hidden absolute top-full mt-2.5 left-1/2 -translate-x-1/2 w-64 sm:w-72 rounded-2xl border p-2.5 shadow-2xl z-50 text-right animate-dropdown-in"
+            class="hidden absolute top-full mt-2.5 left-0 sm:left-1/2 sm:-translate-x-1/2 w-60 sm:w-72 rounded-2xl border p-2.5 shadow-2xl z-50 text-right animate-dropdown-in"
           >
             <div class="px-3 py-1.5 text-[11px] font-bold text-[#54371f] border-b border-[#9c784e]/20 mb-1.5 flex items-center justify-between">
               <span>شێوەزارەکانی زمانی کوردی</span>
@@ -640,6 +676,6 @@
   <script src="/js/post-comments.js?v=2.0" defer></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
-  <script src="/js/global-search.js?v=1.0" defer></script>
+  <script src="/js/global-search.js?v=2.0&t=1796750000" defer></script>
 </body>
 </html>
