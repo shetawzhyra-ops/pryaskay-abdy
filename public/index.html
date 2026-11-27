@@ -3102,16 +3102,6 @@ Change language here • تغيير لغة الموقع من هنا
 </div>
 <span id="drawerAiSecurityBadge" class="px-2.5 py-1 bg-rose-500/80 text-white text-xs font-black rounded-full animate-pulse shadow-md">چاودێری</span>
 </button>
-<!-- UGC Content Reports Moderation Queue (ڕاپۆرتی بەکارهێنەران) -->
-<button id="drawerAdminReportsBtn" onclick="closeMainMenuDrawer(); openAdminReportsModal();" class="hidden drawer-tool-btn group">
-<div class="flex items-center gap-3 sm:gap-4 min-w-0">
-<div class="drawer-tool-icon-box">
-<i class="fa-solid fa-flag"></i>
-</div>
-<span class="drawer-tool-title">ڕاپۆرتەکانی ناوەڕۆک</span>
-</div>
-<span class="drawer-tool-badge">چاودێری</span>
-</button>
 </div><!-- end staff drawer-tools-grid -->
 </div>
 <!-- ================= SECTION: SETTINGS (ڕێکخستن - هەموو چوار بژاردەکە لە یەک شوێن) ================= -->
@@ -4364,7 +4354,7 @@ title="دەستکاریکردنی وەڵام پێش تەواوبوونی کات"
 </div>
 </div>
 <!-- Admin Top Navigation: Grid of Compact Square Tiles (No Horizontal Scroll) -->
-<div class="grid grid-cols-3 sm:grid-cols-6 gap-2 p-2.5 sm:p-3.5 border-b border-slate-800/80 bg-slate-950/80">
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 p-2.5 sm:p-3.5 border-b border-slate-800/80 bg-slate-950/80">
 <!-- 1. Pending Users -->
 <button id="adminTabPending" type="button" onclick="switchAdminSubTab('pending')" class="admin-subtab-tile active group" title="داواکارییە چاوەڕوانکراوەکان">
 <span id="adminPendingBadge" class="absolute top-1.5 left-1.5 px-1.5 py-0.2 rounded-full text-[10px] font-black bg-indigo-500 text-white shadow min-w-[18px] text-center">0</span>
@@ -4409,6 +4399,13 @@ title="دەستکاریکردنی وەڵام پێش تەواوبوونی کات"
 <i class="fa-solid fa-shield-cat text-xs sm:text-sm"></i>
 </div>
 <span class="admin-tile-label text-[11px] sm:text-xs font-bold truncate max-w-full">ئاسایشی AI</span>
+</button>
+<!-- 7. UGC Content Reports -->
+<button id="adminTabReports" type="button" onclick="openAdminReportsModal()" class="admin-subtab-tile group hover:border-amber-500/50 hover:bg-amber-950/30 text-amber-400 hover:text-amber-200" title="ڕاپۆرتەکانی ناوەڕۆک">
+<div class="admin-subtab-icon-box w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 transition-transform">
+<i class="fa-solid fa-flag text-xs sm:text-sm"></i>
+</div>
+<span class="admin-tile-label text-[11px] sm:text-xs font-bold truncate max-w-full">ڕاپۆرتەکانی ناوەڕۆک</span>
 </button>
 </div>
 <div id="adminContentPending" class="flex-1 overflow-y-auto p-3.5 sm:p-5">
@@ -8408,7 +8405,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Poem Media Helper -->
 <script src="/js/poem-media.js?v=2.0&t=1796510000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=147.0&t=1796600000"></script>
+<script src="/js/app.js?v=148.0&t=1796650000"></script>
 <!-- Store Compliance (Account Deletion, UGC Report & User Blocking) -->
 <script src="/js/compliance.js?v=1.0&t=1796090000"></script>
   <!-- PWA & Android App Installation Controller -->

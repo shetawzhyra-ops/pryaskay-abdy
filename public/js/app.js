@@ -1250,25 +1250,16 @@ function updateUserUI() {
     }
   }
 
-  // AI Security Operations Center & UGC Reports Queue (Super Admin or Black Badge)
-  const drawerAdminReportsBtn = document.getElementById('drawerAdminReportsBtn');
+  // AI Security Operations Center (Super Admin or Black Badge)
   if (isSuperAdmin || hasBlackBadge) {
     if (drawerAiSecurityBtn) {
       drawerAiSecurityBtn.classList.remove('hidden');
       drawerAiSecurityBtn.classList.add('flex');
     }
-    if (drawerAdminReportsBtn) {
-      drawerAdminReportsBtn.classList.remove('hidden');
-      drawerAdminReportsBtn.classList.add('flex');
-    }
   } else {
     if (drawerAiSecurityBtn) {
       drawerAiSecurityBtn.classList.add('hidden');
       drawerAiSecurityBtn.classList.remove('flex');
-    }
-    if (drawerAdminReportsBtn) {
-      drawerAdminReportsBtn.classList.add('hidden');
-      drawerAdminReportsBtn.classList.remove('flex');
     }
   }
 
@@ -9992,6 +9983,7 @@ function openAdminModal() {
   const isSuper = hasSuperAdminPrivileges(currentUser);
   const tabBackups = document.getElementById('adminTabBackups');
   const tabAiSecurity = document.getElementById('adminTabAiSecurity');
+  const tabReports = document.getElementById('adminTabReports');
   if (tabBackups) {
     if (isSuper) tabBackups.classList.remove('hidden');
     else tabBackups.classList.add('hidden');
@@ -9999,6 +9991,10 @@ function openAdminModal() {
   if (tabAiSecurity) {
     if (isSuper) tabAiSecurity.classList.remove('hidden');
     else tabAiSecurity.classList.add('hidden');
+  }
+  if (tabReports) {
+    if (isSuper) tabReports.classList.remove('hidden');
+    else tabReports.classList.add('hidden');
   }
 
   document.getElementById('adminModal').classList.remove('hidden');
