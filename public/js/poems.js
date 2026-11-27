@@ -197,10 +197,12 @@
 
       const mediaHtml = renderPoemMediaHtml(poem);
       const hasContent = Boolean(poem.content && String(poem.content).trim());
+      const safeAlign = normalizePoemAlign(poem.text_align);
+      const alignClass = safeAlign === 'right' ? 'text-right' : (safeAlign === 'left' ? 'text-left' : 'text-center');
       const contentHtml = hasContent ? `
           <!-- Poem Verses Body -->
           <div class="my-4 p-5 sm:p-7 rounded-2xl bg-[#fbf7f0]/90 border border-[#9c784e]/25 shadow-inner">
-            <div class="poem-verse-text text-center font-serif text-base sm:text-lg md:text-xl text-[#361c0c] leading-[2.3] sm:leading-[2.5] whitespace-pre-line select-text font-medium tracking-wide">
+            <div style="text-align: ${safeAlign};" class="poem-verse-text ${alignClass} font-serif text-base sm:text-lg md:text-xl text-[#361c0c] leading-[2.3] sm:leading-[2.5] whitespace-pre-line select-text font-medium tracking-wide">
 ${escapeHtml(poem.content)}
             </div>
           </div>` : '';
@@ -311,6 +313,29 @@ ${escapeHtml(poem.content)}
     }
   };
 
+  function normalizePoemAlign(val) {
+    const s = String(val || '').toLowerCase().trim();
+    return (s === 'right' || s === 'left' || s === 'center') ? s : 'center';
+  }
+
+  window.setPoemAlign = function(scope, align) {
+    const safe = normalizePoemAlign(align);
+    const isEdit = scope === 'editPoem';
+    const hiddenEl = document.getElementById(isEdit ? 'editPoemInputAlign' : 'poemInputAlign');
+    const textareaEl = document.getElementById(isEdit ? 'editPoemInputContent' : 'poemInputContent');
+    const groupEl = document.getElementById(isEdit ? 'editPoemAlignGroup' : 'newPoemAlignGroup');
+    if (hiddenEl) hiddenEl.value = safe;
+    if (textareaEl) textareaEl.style.textAlign = safe;
+    if (groupEl) {
+      groupEl.querySelectorAll('button[data-align]').forEach((btn) => {
+        const isActive = btn.dataset.align === safe;
+        btn.className = isActive
+          ? 'px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 bg-amber-600 text-white shadow-sm transition cursor-pointer'
+          : 'px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 text-[#54371f] hover:bg-amber-500/15 transition cursor-pointer';
+      });
+    }
+  };
+
   // Reusable Poem Media Helpers & Upload Controller (shared via /js/poem-media.js)
   const renderPoemMediaHtml = window.renderPoemMediaHtml || (() => '');
   const noopMedia = { reset() {}, loadExisting() {}, async resolvePayload() { return {}; } };
@@ -335,6 +360,7 @@ ${escapeHtml(poem.content)}
     if (titleEl) titleEl.value = poem.title || '';
     if (contentEl) contentEl.value = poem.content || '';
     if (authorEl) authorEl.value = poem.author || 'م. ئازاد';
+    window.setPoemAlign('editPoem', poem.text_align || 'center');
     editPoemMedia.loadExisting(poem);
     modal.classList.remove('hidden');
     if (titleEl) setTimeout(() => titleEl.focus(), 80);
@@ -353,6 +379,7 @@ ${escapeHtml(poem.content)}
     const title = (document.getElementById('editPoemInputTitle')?.value || '').trim();
     const content = (document.getElementById('editPoemInputContent')?.value || '').trim();
     const author = (document.getElementById('editPoemInputAuthor')?.value || '').trim() || 'م. ئازاد';
+    const text_align = normalizePoemAlign(document.getElementById('editPoemInputAlign')?.value);
     const token = localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
     if (!token) {
       alert('تکایە سەرەتا بچۆ ژوورەوە');
@@ -375,7 +402,7 @@ ${escapeHtml(poem.content)}
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ title, content, author, ...mediaPayload })
+        body: JSON.stringify({ title, content, author, text_align, ...mediaPayload })
       });
       const data = await res.json();
       if (data.success && data.poem) {
@@ -423,6 +450,7 @@ ${escapeHtml(poem.content)}
   // Add Poem Modal
   window.openNewPoemModal = function() {
     newPoemMedia.reset();
+    window.setPoemAlign('newPoem', 'center');
     const m = document.getElementById('modalNewPoem');
     if (m) m.classList.remove('hidden');
     const input = document.getElementById('poemInputTitle');
@@ -440,6 +468,7 @@ ${escapeHtml(poem.content)}
     const title = (document.getElementById('poemInputTitle')?.value || '').trim();
     const content = (document.getElementById('poemInputContent')?.value || '').trim();
     const author = (document.getElementById('poemInputAuthor')?.value || '').trim() || 'م. ئازاد';
+    const text_align = normalizePoemAlign(document.getElementById('poemInputAlign')?.value);
 
     const token = localStorage.getItem('ferga_token') || localStorage.getItem('seereen_token');
     if (!token) {
@@ -466,7 +495,7 @@ ${escapeHtml(poem.content)}
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ title, content, author, ...mediaPayload })
+        body: JSON.stringify({ title, content, author, text_align, ...mediaPayload })
       });
       const data = await res.json();
       if (data.success) {

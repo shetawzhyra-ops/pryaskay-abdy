@@ -374,7 +374,7 @@ app.post('/api/poems', (req, res) => {
       return res.status(403).json({ success: false, error: 'تەنها مامۆستا ئازاد (خاوەنی ماڵپەڕ) دەسەڵاتی دانانی شیعری هەیە' });
     }
 
-    const { title, content, author, image_url, video_url, audio_url, audio_duration } = req.body || {};
+    const { title, content, author, image_url, video_url, audio_url, audio_duration, text_align } = req.body || {};
     const cleanTitle = String(title || '').trim();
     const cleanContent = String(content || '').trim();
     const cleanImage = String(image_url || '').trim();
@@ -390,7 +390,8 @@ app.post('/api/poems', (req, res) => {
       image_url: cleanImage,
       video_url: cleanVideo,
       audio_url: cleanAudio,
-      audio_duration: Number(audio_duration || 0)
+      audio_duration: Number(audio_duration || 0),
+      text_align
     });
     scheduleSearchReindex();
     if (io) io.emit('new_poem_published', poem);
@@ -416,7 +417,7 @@ app.put('/api/poems/:id', (req, res) => {
       return res.status(404).json({ success: false, error: 'شیعرەکە نەدۆزرایەوە' });
     }
 
-    const { title, content, author, image_url, video_url, audio_url, audio_duration } = req.body || {};
+    const { title, content, author, image_url, video_url, audio_url, audio_duration, text_align } = req.body || {};
     const cleanTitle = title !== undefined ? String(title).trim() : existing.title;
     const cleanContent = content !== undefined ? String(content).trim() : (existing.content || '');
     const cleanImage = image_url !== undefined ? String(image_url || '').trim() : (existing.image_url || '');
@@ -434,7 +435,8 @@ app.put('/api/poems/:id', (req, res) => {
       image_url: cleanImage,
       video_url: cleanVideo,
       audio_url: cleanAudio,
-      audio_duration
+      audio_duration,
+      text_align
     });
     if (!updated) {
       return res.status(404).json({ success: false, error: 'شیعرەکە نەدۆزرایەوە' });

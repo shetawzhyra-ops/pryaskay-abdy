@@ -8443,7 +8443,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Poem Media Helper -->
 <script src="/js/poem-media.js?v=1.0&t=1796210000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=145.0&t=1796340000"></script>
+<script src="/js/app.js?v=146.0&t=1796500000"></script>
 <!-- Store Compliance (Account Deletion, UGC Report & User Blocking) -->
 <script src="/js/compliance.js?v=1.0&t=1796090000"></script>
   <!-- PWA & Android App Installation Controller -->
@@ -8472,8 +8472,22 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <input type="text" id="newPoemTitle" required placeholder="ناونیشانی شیعر بنووسە..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl bg-white border border-amber-900/25 text-amber-950 focus:outline-none focus:border-amber-500 shadow-sm">
 </div>
 <div>
-<label class="block text-xs font-bold text-amber-950 mb-1">دەق و دێڕەکانی شیعر (ئەگەر دەنگ/وێنە/ڤیدیۆ دابنرێت ئیختیارییە):</label>
-<textarea id="newPoemContent" rows="5" placeholder="دێڕەکانی شیعر بنووسە (هەر دێڕێک لە خەتێکی نوێدا)..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl bg-white border border-amber-900/25 text-amber-950 focus:outline-none focus:border-amber-500 shadow-sm leading-relaxed"></textarea>
+<div class="flex items-center justify-between gap-2 mb-1 flex-wrap">
+<label class="block text-xs font-bold text-amber-950">دەق و دێڕەکانی شیعر (ئەگەر دەنگ/وێنە/ڤیدیۆ دابنرێت ئیختیارییە):</label>
+<div class="inline-flex items-center gap-1 p-1 rounded-xl bg-amber-100/80 border border-amber-900/20" id="landingPoemAlignGroup" role="group" aria-label="ئاراستەی نووسین">
+<button type="button" data-align="right" onclick="setLandingPoemAlign('right')" class="px-2 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 text-amber-950 hover:bg-amber-500/15 transition cursor-pointer" title="بردنە لای ڕاست">
+<i class="fa-solid fa-align-right"></i><span>لای ڕاست</span>
+</button>
+<button type="button" data-align="center" onclick="setLandingPoemAlign('center')" class="px-2 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 bg-amber-600 text-white shadow-sm transition cursor-pointer" title="ناوەڕاست">
+<i class="fa-solid fa-align-center"></i><span>ناوەڕاست</span>
+</button>
+<button type="button" data-align="left" onclick="setLandingPoemAlign('left')" class="px-2 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 text-amber-950 hover:bg-amber-500/15 transition cursor-pointer" title="بردنە لای چەپ">
+<i class="fa-solid fa-align-left"></i><span>لای چەپ</span>
+</button>
+</div>
+</div>
+<input type="hidden" id="newLandingPoemAlign" value="center" />
+<textarea id="newPoemContent" rows="5" style="text-align: center;" placeholder="دێڕەکانی شیعر بنووسە (هەر دێڕێک لە خەتێکی نوێدا)..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl bg-white border border-amber-900/25 text-amber-950 focus:outline-none focus:border-amber-500 shadow-sm leading-relaxed"></textarea>
 </div>
 <div id="landingPoemMediaHost"></div>
 <div class="flex items-center justify-end gap-2 pt-2">

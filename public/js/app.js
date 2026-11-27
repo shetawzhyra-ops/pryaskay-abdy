@@ -26078,8 +26078,12 @@ function renderLandingPoems() {
       ? window.renderPoemMediaHtml(poem, { compact: true })
       : '';
     const hasContent = Boolean(poem.content && String(poem.content).trim());
+    const safeAlign = ['right', 'center', 'left'].includes(String(poem.text_align || '').toLowerCase())
+      ? String(poem.text_align).toLowerCase()
+      : 'center';
+    const alignClass = safeAlign === 'right' ? 'text-right' : (safeAlign === 'left' ? 'text-left' : 'text-center');
     const contentHtml = hasContent ? `
-        <div class="my-2 p-3 bg-amber-50/70 rounded-xl border border-amber-900/10 text-center font-serif text-xs sm:text-sm text-amber-950 leading-loose whitespace-pre-line shadow-inner select-text">
+        <div style="text-align: ${safeAlign};" class="my-2 p-3 bg-amber-50/70 rounded-xl border border-amber-900/10 ${alignClass} font-serif text-xs sm:text-sm text-amber-950 leading-loose whitespace-pre-line shadow-inner select-text">
 ${escapeHtml(poem.content)}
         </div>` : '';
 
@@ -26184,6 +26188,26 @@ function getLandingPoemMediaCtrl() {
   return _landingPoemMediaCtrl || { reset() {}, loadExisting() {}, async resolvePayload() { return {}; } };
 }
 
+function setLandingPoemAlign(align) {
+  const safe = ['right', 'center', 'left'].includes(String(align || '').toLowerCase())
+    ? String(align).toLowerCase()
+    : 'center';
+  const hiddenEl = document.getElementById('newLandingPoemAlign');
+  const textareaEl = document.getElementById('newPoemContent');
+  const groupEl = document.getElementById('landingPoemAlignGroup');
+  if (hiddenEl) hiddenEl.value = safe;
+  if (textareaEl) textareaEl.style.textAlign = safe;
+  if (groupEl) {
+    groupEl.querySelectorAll('button[data-align]').forEach((btn) => {
+      const isActive = btn.dataset.align === safe;
+      btn.className = isActive
+        ? 'px-2 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 bg-amber-600 text-white shadow-sm transition cursor-pointer'
+        : 'px-2 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 text-amber-950 hover:bg-amber-500/15 transition cursor-pointer';
+    });
+  }
+}
+window.setLandingPoemAlign = setLandingPoemAlign;
+
 function openAddPoemModal() {
   if (!canManageLandingPoems()) {
     alert('تەنها مامۆستا ئازاد دەسەڵاتی دانانی شیعری هەیە.');
@@ -26199,6 +26223,7 @@ function openAddPoemModal() {
   if (titleInput) titleInput.value = '';
   if (contentInput) contentInput.value = '';
   if (btn) btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>بڵاوکردنەوەی شیعر</span>';
+  setLandingPoemAlign('center');
   getLandingPoemMediaCtrl().reset();
   const modal = document.getElementById('addPoemModal');
   if (modal) modal.classList.remove('hidden');
@@ -26221,6 +26246,7 @@ function openEditLandingPoemModal(id) {
   if (titleInput) titleInput.value = poem.title || '';
   if (contentInput) contentInput.value = poem.content || '';
   if (btn) btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> <span>پاشەکەوتکردنی گۆڕانکاری</span>';
+  setLandingPoemAlign(poem.text_align || 'center');
   getLandingPoemMediaCtrl().loadExisting(poem);
   const modal = document.getElementById('addPoemModal');
   if (modal) modal.classList.remove('hidden');
@@ -26263,13 +26289,15 @@ async function handleAddNewPoem(e) {
 
     const url = isEditing ? `/api/poems/${editId}` : '/api/poems';
     const method = isEditing ? 'PUT' : 'POST';
+    const textAlignEl = document.getElementById('newLandingPoemAlign');
+    const text_align = textAlignEl ? textAlignEl.value : 'center';
     const res = await fetch(url, {
       method,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${curToken}`
       },
-      body: JSON.stringify({ title, content, ...mediaPayload })
+      body: JSON.stringify({ title, content, text_align, ...mediaPayload })
     });
 
     const data = await res.json();

@@ -328,11 +328,26 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">دەق و دێڕەکانی شیعر (ئەگەر دەنگ/وێنە/ڤیدیۆ دابنرێت ئیختیارییە):</label>
+          <div class="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
+            <label class="block text-xs font-bold text-[#361c0c]">دەق و دێڕەکانی شیعر (ئەگەر دەنگ/وێنە/ڤیدیۆ دابنرێت ئیختیارییە):</label>
+            <div class="inline-flex items-center gap-1 p-1 rounded-xl bg-[#efe3d1] border border-[#9c784e]/30" id="newPoemAlignGroup" role="group" aria-label="ئاراستەی نووسین">
+              <button type="button" data-align="right" onclick="setPoemAlign('newPoem', 'right')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 text-[#54371f] hover:bg-amber-500/15 transition cursor-pointer" title="بردنە لای ڕاست">
+                <i class="fa-solid fa-align-right"></i><span>لای ڕاست</span>
+              </button>
+              <button type="button" data-align="center" onclick="setPoemAlign('newPoem', 'center')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 bg-amber-600 text-white shadow-sm transition cursor-pointer" title="ناوەڕاست">
+                <i class="fa-solid fa-align-center"></i><span>ناوەڕاست</span>
+              </button>
+              <button type="button" data-align="left" onclick="setPoemAlign('newPoem', 'left')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 text-[#54371f] hover:bg-amber-500/15 transition cursor-pointer" title="بردنە لای چەپ">
+                <i class="fa-solid fa-align-left"></i><span>لای چەپ</span>
+              </button>
+            </div>
+          </div>
+          <input type="hidden" id="poemInputAlign" value="center">
           <textarea 
             id="poemInputContent" 
             rows="6" 
             placeholder="دێڕەکانی هۆنراوەکە لێرە بنووسە..."
+            style="text-align: center;"
             class="w-full px-3.5 py-2.5 rounded-xl border border-[#9c784e]/35 bg-[#fbf7f0] text-sm font-serif leading-loose text-[#361c0c] placeholder-[#8c6846] focus:outline-none focus:border-amber-600"
           ></textarea>
         </div>
@@ -403,11 +418,26 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-[#361c0c] mb-1.5">دەق و دێڕەکانی شیعر (ئەگەر دەنگ/وێنە/ڤیدیۆ دابنرێت ئیختیارییە):</label>
+          <div class="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
+            <label class="block text-xs font-bold text-[#361c0c]">دەق و دێڕەکانی شیعر (ئەگەر دەنگ/وێنە/ڤیدیۆ دابنرێت ئیختیارییە):</label>
+            <div class="inline-flex items-center gap-1 p-1 rounded-xl bg-[#efe3d1] border border-[#9c784e]/30" id="editPoemAlignGroup" role="group" aria-label="ئاراستەی نووسین">
+              <button type="button" data-align="right" onclick="setPoemAlign('editPoem', 'right')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 text-[#54371f] hover:bg-amber-500/15 transition cursor-pointer" title="بردنە لای ڕاست">
+                <i class="fa-solid fa-align-right"></i><span>لای ڕاست</span>
+              </button>
+              <button type="button" data-align="center" onclick="setPoemAlign('editPoem', 'center')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 bg-amber-600 text-white shadow-sm transition cursor-pointer" title="ناوەڕاست">
+                <i class="fa-solid fa-align-center"></i><span>ناوەڕاست</span>
+              </button>
+              <button type="button" data-align="left" onclick="setPoemAlign('editPoem', 'left')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 text-[#54371f] hover:bg-amber-500/15 transition cursor-pointer" title="بردنە لای چەپ">
+                <i class="fa-solid fa-align-left"></i><span>لای چەپ</span>
+              </button>
+            </div>
+          </div>
+          <input type="hidden" id="editPoemInputAlign" value="center">
           <textarea
             id="editPoemInputContent"
             rows="6"
             placeholder="دێڕەکانی هۆنراوەکە..."
+            style="text-align: center;"
             class="w-full px-3.5 py-2.5 rounded-xl border border-[#9c784e]/35 bg-[#fbf7f0] text-sm font-serif leading-loose text-[#361c0c] placeholder-[#8c6846] focus:outline-none focus:border-amber-600"
           ></textarea>
         </div>
@@ -456,7 +486,7 @@
   <!-- Shared Poem Media Helper -->
   <script src="/js/poem-media.js?v=1.0&t=1796210000"></script>
   <!-- Dedicated Poems Script -->
-  <script src="/js/poems.js?v=14.0&t=1796220000"></script>
+  <script src="/js/poems.js?v=15.0&t=1796500000"></script>
   <!-- PWA & Android App Installation Controller -->
   <script src="/js/pwa-install.js?v=5.0&t=1795550000"></script>
   <script src="/js/post-comments.js?v=2.0" defer></script>

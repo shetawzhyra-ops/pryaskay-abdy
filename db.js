@@ -83,6 +83,7 @@ function initDb() {
       video_url TEXT NOT NULL DEFAULT '',
       audio_url TEXT NOT NULL DEFAULT '',
       audio_duration INTEGER NOT NULL DEFAULT 0,
+      text_align TEXT NOT NULL DEFAULT 'center',
       likes INTEGER NOT NULL DEFAULT 0,
       created_at INTEGER NOT NULL
     );
@@ -555,6 +556,7 @@ function initDb() {
   try { db.exec("ALTER TABLE poems ADD COLUMN video_url TEXT NOT NULL DEFAULT ''"); } catch (e) {}
   try { db.exec("ALTER TABLE poems ADD COLUMN audio_url TEXT NOT NULL DEFAULT ''"); } catch (e) {}
   try { db.exec("ALTER TABLE poems ADD COLUMN audio_duration INTEGER NOT NULL DEFAULT 0"); } catch (e) {}
+  try { db.exec("ALTER TABLE poems ADD COLUMN text_align TEXT NOT NULL DEFAULT 'center'"); } catch (e) {}
   try { db.exec("ALTER TABLE exam_questions ADD COLUMN correct_answer TEXT NOT NULL DEFAULT ''"); } catch (e) {}
   try {
     db.exec(`
@@ -3830,6 +3832,11 @@ const articlesDb = {
 };
 
 
+function normalizePoemAlign(val) {
+  const s = String(val || '').toLowerCase().trim();
+  return (s === 'right' || s === 'left' || s === 'center') ? s : 'center';
+}
+
 const poemsDb = {
   getAll() {
     try {
@@ -3851,10 +3858,11 @@ const poemsDb = {
     const videoUrl = String((media && media.video_url) || '').trim();
     const audioUrl = String((media && media.audio_url) || '').trim();
     const audioDuration = Math.max(0, Number((media && media.audio_duration) || 0) || 0);
+    const textAlign = normalizePoemAlign(media && media.text_align);
     const cleanContent = String(content || '').trim();
     const res = db.prepare(
-      'INSERT INTO poems (title, content, author, image_url, video_url, audio_url, audio_duration, likes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?)'
-    ).run(title, cleanContent, author, imageUrl, videoUrl, audioUrl, audioDuration, now);
+      'INSERT INTO poems (title, content, author, image_url, video_url, audio_url, audio_duration, text_align, likes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)'
+    ).run(title, cleanContent, author, imageUrl, videoUrl, audioUrl, audioDuration, textAlign, now);
     return {
       id: Number(res.lastInsertRowid),
       title,
@@ -3864,11 +3872,12 @@ const poemsDb = {
       video_url: videoUrl,
       audio_url: audioUrl,
       audio_duration: audioDuration,
+      text_align: textAlign,
       likes: 0,
       created_at: now
     };
   },
-  update(id, { title, content, author, image_url, video_url, audio_url, audio_duration }) {
+  update(id, { title, content, author, image_url, video_url, audio_url, audio_duration, text_align }) {
     try {
       const existing = this.getById(id);
       if (!existing) return null;
@@ -3879,9 +3888,10 @@ const poemsDb = {
       const nextVideo = video_url !== undefined ? String(video_url || '').trim() : (existing.video_url || '');
       const nextAudio = audio_url !== undefined ? String(audio_url || '').trim() : (existing.audio_url || '');
       const nextDuration = audio_duration !== undefined ? (Math.max(0, Number(audio_duration) || 0)) : (Number(existing.audio_duration) || 0);
+      const nextAlign = text_align !== undefined ? normalizePoemAlign(text_align) : normalizePoemAlign(existing.text_align);
       db.prepare(
-        'UPDATE poems SET title = ?, content = ?, author = ?, image_url = ?, video_url = ?, audio_url = ?, audio_duration = ? WHERE id = ?'
-      ).run(nextTitle, nextContent, nextAuthor, nextImage, nextVideo, nextAudio, nextDuration, id);
+        'UPDATE poems SET title = ?, content = ?, author = ?, image_url = ?, video_url = ?, audio_url = ?, audio_duration = ?, text_align = ? WHERE id = ?'
+      ).run(nextTitle, nextContent, nextAuthor, nextImage, nextVideo, nextAudio, nextDuration, nextAlign, id);
       return this.getById(id);
     } catch (e) {
       return null;
