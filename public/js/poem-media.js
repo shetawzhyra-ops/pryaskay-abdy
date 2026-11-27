@@ -15,8 +15,362 @@
       .replace(/'/g, '&#039;');
   }
 
+  function fmtAudioSec(sec) {
+    const s = Math.max(0, Math.floor(Number(sec) || 0));
+    const m = Math.floor(s / 60);
+    const rem = s % 60;
+    return `${String(m).padStart(2, '0')}:${String(rem).padStart(2, '0')}`;
+  }
+
+  function ensurePoemAudioStyles() {
+    if (typeof document === 'undefined' || document.getElementById('poemAudioPlayerStyles')) return;
+    const style = document.createElement('style');
+    style.id = 'poemAudioPlayerStyles';
+    style.textContent = `
+      .pm-audio-card {
+        position: relative;
+        overflow: hidden;
+        padding: 1rem 1.1rem;
+        border-radius: 22px;
+        background: linear-gradient(155deg, rgba(254, 250, 242, 0.98) 0%, rgba(242, 229, 207, 0.96) 100%);
+        border: 1px solid rgba(180, 105, 14, 0.34);
+        box-shadow: 0 14px 32px -14px rgba(54, 28, 12, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+      }
+      .pm-audio-card.is-compact {
+        padding: 0.78rem 0.88rem;
+        border-radius: 18px;
+      }
+      html.dark .pm-audio-card,
+      body.dark-theme .pm-audio-card {
+        background: linear-gradient(155deg, rgba(20, 38, 29, 0.96) 0%, rgba(14, 26, 20, 0.98) 100%);
+        border-color: rgba(251, 191, 36, 0.26);
+        box-shadow: 0 14px 32px -14px rgba(0, 0, 0, 0.55);
+      }
+      .pm-audio-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 16%;
+        right: 16%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(180, 105, 14, 0.55), transparent);
+        pointer-events: none;
+      }
+      .pm-audio-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        margin-bottom: 0.72rem;
+        flex-wrap: wrap;
+      }
+      .pm-audio-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: #78350f;
+      }
+      html.dark .pm-audio-badge,
+      body.dark-theme .pm-audio-badge {
+        color: #fcd34d;
+      }
+      .pm-audio-badge-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, rgba(217, 119, 6, 0.18), rgba(180, 83, 9, 0.26));
+        border: 1px solid rgba(180, 83, 9, 0.28);
+        color: #b45309;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.82rem;
+        flex-shrink: 0;
+      }
+      html.dark .pm-audio-badge-icon,
+      body.dark-theme .pm-audio-badge-icon {
+        color: #fbbf24;
+        border-color: rgba(251, 191, 36, 0.35);
+      }
+      .pm-audio-tools {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .pm-audio-pill-btn {
+        padding: 0.22rem 0.62rem;
+        border-radius: 999px;
+        border: 1px solid rgba(156, 120, 78, 0.35);
+        background: rgba(255, 252, 246, 0.9);
+        color: #54371f;
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        font-size: 0.72rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .pm-audio-pill-btn:hover {
+        border-color: #b45309;
+        color: #b45309;
+      }
+      html.dark .pm-audio-pill-btn,
+      body.dark-theme .pm-audio-pill-btn {
+        background: rgba(15, 29, 22, 0.9);
+        border-color: rgba(251, 191, 36, 0.28);
+        color: #e2e8f0;
+      }
+      .pm-audio-deck {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.62rem 0.78rem;
+        border-radius: 16px;
+        background: rgba(255, 252, 246, 0.86);
+        border: 1px solid rgba(156, 120, 78, 0.24);
+        box-shadow: inset 0 1px 3px rgba(54, 28, 12, 0.06);
+      }
+      html.dark .pm-audio-deck,
+      body.dark-theme .pm-audio-deck {
+        background: rgba(11, 22, 17, 0.72);
+        border-color: rgba(251, 191, 36, 0.18);
+      }
+      .pm-audio-play-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 240, 200, 0.5);
+        background: linear-gradient(135deg, #1b432e 0%, #b4690e 100%);
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.98rem;
+        cursor: pointer;
+        flex-shrink: 0;
+        box-shadow: 0 8px 18px -6px rgba(180, 105, 14, 0.55);
+        transition: transform 0.15s, filter 0.15s, box-shadow 0.2s;
+      }
+      .pm-audio-card.is-compact .pm-audio-play-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 0.88rem;
+      }
+      .pm-audio-play-btn:hover { filter: brightness(1.08); transform: scale(1.04); }
+      .pm-audio-play-btn:active { transform: scale(0.95); }
+      .pm-audio-card.is-playing .pm-audio-play-btn {
+        box-shadow: 0 0 0 5px rgba(180, 105, 14, 0.18), 0 8px 18px -6px rgba(180, 105, 14, 0.6);
+      }
+      .pm-audio-timeline-wrap {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.28rem;
+      }
+      .pm-audio-bars {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2.5px;
+        height: 16px;
+        padding: 0 2px;
+        pointer-events: none;
+        opacity: 0.72;
+      }
+      .pm-audio-bar {
+        flex: 1;
+        border-radius: 999px;
+        background: rgba(156, 120, 78, 0.45);
+        transition: background 0.15s, transform 0.2s;
+      }
+      .pm-audio-bar.is-filled {
+        background: linear-gradient(180deg, #d97706 0%, #1b432e 100%);
+      }
+      html.dark .pm-audio-bar.is-filled,
+      body.dark-theme .pm-audio-bar.is-filled {
+        background: linear-gradient(180deg, #fbbf24 0%, #10b981 100%);
+      }
+      .pm-audio-card.is-playing .pm-audio-bar {
+        animation: pmBarPulse 1.1s ease-in-out infinite alternate;
+      }
+      .pm-audio-card.is-playing .pm-audio-bar:nth-child(odd) {
+        animation-delay: 0.2s;
+      }
+      .pm-audio-card.is-playing .pm-audio-bar:nth-child(3n) {
+        animation-delay: 0.42s;
+      }
+      @keyframes pmBarPulse {
+        from { transform: scaleY(0.75); }
+        to { transform: scaleY(1.18); }
+      }
+      .pm-audio-range {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(156, 120, 78, 0.25);
+        outline: none;
+        cursor: pointer;
+        accent-color: #b4690e;
+      }
+      .pm-audio-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #b4690e;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+        cursor: pointer;
+      }
+      .pm-audio-times {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: 'Plus Jakarta Sans', monospace;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #6e4e34;
+      }
+      html.dark .pm-audio-times,
+      body.dark-theme .pm-audio-times {
+        color: #cbd5e1;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  let _pmAudioDelegationBound = false;
+  function bindPoemAudioDelegation() {
+    if (_pmAudioDelegationBound || typeof document === 'undefined') return;
+    _pmAudioDelegationBound = true;
+    ensurePoemAudioStyles();
+
+    const SPEED_LIST = [1, 1.25, 1.5, 0.75];
+
+    function syncCardProgress(card) {
+      const audioEl = card.querySelector('audio[data-pm-audio]');
+      const rangeEl = card.querySelector('[data-pm-range]');
+      const curEl = card.querySelector('[data-pm-cur]');
+      const durEl = card.querySelector('[data-pm-dur]');
+      const playIcon = card.querySelector('[data-pm-play-icon]');
+      const bars = card.querySelectorAll('.pm-audio-bar');
+      if (!audioEl) return;
+
+      const dur = Number.isFinite(audioEl.duration) && audioEl.duration > 0
+        ? audioEl.duration
+        : Number(audioEl.dataset.initDur || 0);
+      const cur = Number(audioEl.currentTime || 0);
+      if (curEl) curEl.textContent = fmtAudioSec(cur);
+      if (durEl && dur > 0) durEl.textContent = fmtAudioSec(dur);
+      if (rangeEl && dur > 0 && !rangeEl.dataset.dragging) {
+        rangeEl.max = String(dur);
+        rangeEl.value = String(cur);
+      }
+      const pct = dur > 0 ? Math.min(1, Math.max(0, cur / dur)) : 0;
+      const filledCount = Math.round(pct * bars.length);
+      bars.forEach((b, idx) => {
+        b.classList.toggle('is-filled', idx < filledCount);
+      });
+      const playing = !audioEl.paused && !audioEl.ended;
+      card.classList.toggle('is-playing', playing);
+      if (playIcon) playIcon.className = playing ? 'fa-solid fa-pause' : 'fa-solid fa-play';
+    }
+
+    document.addEventListener('click', (e) => {
+      const playBtn = e.target.closest('[data-pm-play]');
+      if (playBtn) {
+        const card = playBtn.closest('.pm-audio-card');
+        const audioEl = card?.querySelector('audio[data-pm-audio]');
+        if (!audioEl) return;
+
+        // Pause any other playing poem audio player cleanly
+        document.querySelectorAll('audio[data-pm-audio]').forEach((other) => {
+          if (other !== audioEl && !other.paused) {
+            other.pause();
+            const otherCard = other.closest('.pm-audio-card');
+            if (otherCard) syncCardProgress(otherCard);
+          }
+        });
+
+        if (audioEl.paused) {
+          audioEl.play().catch(() => {});
+        } else {
+          audioEl.pause();
+        }
+        syncCardProgress(card);
+        return;
+      }
+
+      const speedBtn = e.target.closest('[data-pm-speed]');
+      if (speedBtn) {
+        const card = speedBtn.closest('.pm-audio-card');
+        const audioEl = card?.querySelector('audio[data-pm-audio]');
+        if (!audioEl) return;
+        const curRate = Number(audioEl.playbackRate || 1);
+        const idx = SPEED_LIST.indexOf(curRate);
+        const nextRate = SPEED_LIST[(idx + 1) % SPEED_LIST.length];
+        audioEl.playbackRate = nextRate;
+        speedBtn.textContent = nextRate + 'x';
+        return;
+      }
+
+      const muteBtn = e.target.closest('[data-pm-mute]');
+      if (muteBtn) {
+        const card = muteBtn.closest('.pm-audio-card');
+        const audioEl = card?.querySelector('audio[data-pm-audio]');
+        if (!audioEl) return;
+        audioEl.muted = !audioEl.muted;
+        muteBtn.innerHTML = audioEl.muted
+          ? '<i class="fa-solid fa-volume-xmark"></i>'
+          : '<i class="fa-solid fa-volume-high"></i>';
+      }
+    });
+
+    document.addEventListener('input', (e) => {
+      const range = e.target.closest('[data-pm-range]');
+      if (!range) return;
+      range.dataset.dragging = '1';
+      const card = range.closest('.pm-audio-card');
+      const curEl = card?.querySelector('[data-pm-cur]');
+      if (curEl) curEl.textContent = fmtAudioSec(range.value);
+    });
+
+    document.addEventListener('change', (e) => {
+      const range = e.target.closest('[data-pm-range]');
+      if (!range) return;
+      delete range.dataset.dragging;
+      const card = range.closest('.pm-audio-card');
+      const audioEl = card?.querySelector('audio[data-pm-audio]');
+      if (audioEl) {
+        audioEl.currentTime = Number(range.value || 0);
+        syncCardProgress(card);
+      }
+    });
+
+    ['play', 'pause', 'timeupdate', 'loadedmetadata', 'ended'].forEach((evtName) => {
+      document.addEventListener(evtName, (e) => {
+        const audioEl = e.target;
+        if (!audioEl || !audioEl.matches || !audioEl.matches('audio[data-pm-audio]')) return;
+        const card = audioEl.closest('.pm-audio-card');
+        if (card) syncCardProgress(card);
+      }, true);
+    });
+  }
+
+  if (typeof document !== 'undefined') {
+    ensurePoemAudioStyles();
+    bindPoemAudioDelegation();
+  }
+
   window.renderPoemMediaHtml = function renderPoemMediaHtml(poem, options) {
     if (!poem) return '';
+    ensurePoemAudioStyles();
+    bindPoemAudioDelegation();
     const compact = Boolean(options && options.compact);
     const maxMediaHeight = compact ? 'max-h-[260px]' : 'max-h-[420px]';
     const marginClass = compact ? 'my-2' : 'my-3';
@@ -37,12 +391,37 @@
       `);
     }
     if (poem.audio_url) {
+      const initDur = Math.max(0, Number(poem.audio_duration || 0));
+      const barHeights = [35, 65, 90, 50, 75, 100, 60, 40, 85, 95, 55, 70, 100, 65, 45, 80, 60, 90, 50, 72, 42, 62];
+      const barsHtml = barHeights.map((h) => `<span class="pm-audio-bar" style="height:${h}%"></span>`).join('');
       parts.push(`
-        <div class="${marginClass} p-3 rounded-2xl bg-[#fbf7f0]/95 border border-[#9c784e]/30 shadow-inner space-y-1.5">
-          <div class="flex items-center justify-between text-[11px] font-bold text-[#78350f]">
-            <span class="flex items-center gap-1.5"><i class="fa-solid fa-microphone-lines text-[#b45309]"></i> تۆماری دەنگی / خوێندنەوەی شیعر</span>
+        <div class="${marginClass} pm-audio-card${compact ? ' is-compact' : ''}">
+          <audio src="${esc(poem.audio_url)}" preload="metadata" playsinline data-pm-audio="1" data-init-dur="${initDur}" class="hidden"></audio>
+          <div class="pm-audio-top">
+            <div class="pm-audio-badge">
+              <span class="pm-audio-badge-icon"><i class="fa-solid fa-microphone-lines"></i></span>
+              <span>تۆماری دەنگی / خوێندنەوەی شیعر</span>
+            </div>
+            <div class="pm-audio-tools">
+              <button type="button" class="pm-audio-pill-btn" data-pm-speed="1" title="خێرایی خوێندنەوە" dir="ltr">1x</button>
+              <button type="button" class="pm-audio-pill-btn" data-pm-mute="1" title="کپکردن / دەنگ">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+            </div>
           </div>
-          <audio src="${esc(poem.audio_url)}" controls preload="metadata" class="w-full h-10"></audio>
+          <div class="pm-audio-deck" dir="ltr">
+            <button type="button" class="pm-audio-play-btn" data-pm-play="1" title="لێدان / وەستان">
+              <i class="fa-solid fa-play" data-pm-play-icon="1"></i>
+            </button>
+            <div class="pm-audio-timeline-wrap">
+              <div class="pm-audio-bars" aria-hidden="true">${barsHtml}</div>
+              <input type="range" class="pm-audio-range" min="0" max="${initDur > 0 ? initDur : 100}" value="0" step="0.1" data-pm-range="1" aria-label="کاتی دەنگ">
+              <div class="pm-audio-times">
+                <span data-pm-cur="1">00:00</span>
+                <span data-pm-dur="1">${initDur > 0 ? fmtAudioSec(initDur) : '00:00'}</span>
+              </div>
+            </div>
+          </div>
         </div>
       `);
     }
