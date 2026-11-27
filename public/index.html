@@ -3092,16 +3092,6 @@ Change language here • تغيير لغة الموقع من هنا
 </div>
 <span id="drawerComplaintsBadge" class="hidden px-2.5 py-1 bg-amber-400 text-slate-950 text-xs font-black rounded-full border border-amber-400/40 shadow-sm">نوێ</span>
 </button>
-<!-- AI Security Command Center (Defense Shield / قەڵغانی بەرگری) -->
-<button id="drawerAiSecurityBtn" onclick="closeMainMenuDrawer(); openAiSecurityModal();" class="hidden drawer-tool-btn group">
-<div class="flex items-center gap-3 sm:gap-4 min-w-0">
-<div class="drawer-tool-icon-box">
-<i class="fa-solid fa-shield-virus"></i>
-</div>
-<span class="drawer-tool-title">قەڵغانی بەرگری (AI Guard)</span>
-</div>
-<span id="drawerAiSecurityBadge" class="px-2.5 py-1 bg-rose-500/80 text-white text-xs font-black rounded-full animate-pulse shadow-md">چاودێری</span>
-</button>
 </div><!-- end staff drawer-tools-grid -->
 </div>
 <!-- ================= SECTION: SETTINGS (ڕێکخستن - هەموو چوار بژاردەکە لە یەک شوێن) ================= -->
@@ -4394,11 +4384,11 @@ title="دەستکاریکردنی وەڵام پێش تەواوبوونی کات"
 <span class="admin-tile-label text-[11px] sm:text-xs font-bold truncate max-w-full">یەدەگی داتابەیس</span>
 </button>
 <!-- 6. AI Security -->
-<button id="adminTabAiSecurity" type="button" onclick="openAiSecurityModal()" class="admin-subtab-tile group hover:border-rose-500/50 hover:bg-rose-950/30 text-rose-400 hover:text-rose-200" title="ژووری ئاسایشی AI">
+<button id="adminTabAiSecurity" type="button" onclick="openAiSecurityModal()" class="admin-subtab-tile group hover:border-rose-500/50 hover:bg-rose-950/30 text-rose-400 hover:text-rose-200" title="قەڵغانی بەرگری (AI Guard)">
 <div class="admin-subtab-icon-box w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 transition-transform">
-<i class="fa-solid fa-shield-cat text-xs sm:text-sm"></i>
+<i class="fa-solid fa-shield-virus text-xs sm:text-sm"></i>
 </div>
-<span class="admin-tile-label text-[11px] sm:text-xs font-bold truncate max-w-full">ئاسایشی AI</span>
+<span class="admin-tile-label text-[11px] sm:text-xs font-bold truncate max-w-full">قەڵغانی بەرگری (AI Guard)</span>
 </button>
 <!-- 7. UGC Content Reports -->
 <button id="adminTabReports" type="button" onclick="openAdminReportsModal()" class="admin-subtab-tile group hover:border-amber-500/50 hover:bg-amber-950/30 text-amber-400 hover:text-amber-200" title="ڕاپۆرتەکانی ناوەڕۆک">
@@ -6717,7 +6707,7 @@ onkeydown="if(event.key === 'Enter') sendDreamTextMessage(true)"
 </div>
 </div>
 <!-- ================= MODAL: AI SECURITY COMMAND CENTER (SUPER ADMIN) ================= -->
-<div id="aiSecurityModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md">
+<div id="aiSecurityModal" style="z-index: 92;" class="hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md">
 <div class="w-full max-w-4xl h-[92dvh] sm:max-h-[90vh] bg-slate-900 border border-rose-500/40 rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden">
 <!-- Modal Header -->
 <div class="p-3 sm:p-4 bg-gradient-to-r from-rose-950/70 via-slate-900 to-indigo-950/70 border-b border-rose-500/30 flex items-center justify-between shrink-0">
@@ -8405,7 +8395,7 @@ class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-
 <!-- Shared Poem Media Helper -->
 <script src="/js/poem-media.js?v=2.0&t=1796510000"></script>
 <!-- Main Application Logic -->
-<script src="/js/app.js?v=148.0&t=1796650000"></script>
+<script src="/js/app.js?v=149.0&t=1796700000"></script>
 <!-- Store Compliance (Account Deletion, UGC Report & User Blocking) -->
 <script src="/js/compliance.js?v=1.0&t=1796090000"></script>
   <!-- PWA & Android App Installation Controller -->

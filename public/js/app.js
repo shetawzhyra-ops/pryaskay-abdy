@@ -1222,7 +1222,6 @@ function updateUserUI() {
   const drawerUnansweredBtn = document.getElementById('drawerUnansweredBtn');
   const drawerAdminPanelBtn = document.getElementById('drawerAdminPanelBtn');
   const drawerAiAdvisorBtn = document.getElementById('drawerAiAdvisorBtn');
-  const drawerAiSecurityBtn = document.getElementById('drawerAiSecurityBtn');
   const drawerMembersBtn = document.getElementById('drawerMembersBtn');
   const drawerLibraryBtn = document.getElementById('drawerLibraryBtn');
 
@@ -1250,18 +1249,7 @@ function updateUserUI() {
     }
   }
 
-  // AI Security Operations Center (Super Admin or Black Badge)
-  if (isSuperAdmin || hasBlackBadge) {
-    if (drawerAiSecurityBtn) {
-      drawerAiSecurityBtn.classList.remove('hidden');
-      drawerAiSecurityBtn.classList.add('flex');
-    }
-  } else {
-    if (drawerAiSecurityBtn) {
-      drawerAiSecurityBtn.classList.add('hidden');
-      drawerAiSecurityBtn.classList.remove('flex');
-    }
-  }
+  // Super Admin / System delete account visibility
 
   const drawerDeleteAccountBtn = document.getElementById('drawerDeleteMyAccountBtn');
   if (drawerDeleteAccountBtn) {
